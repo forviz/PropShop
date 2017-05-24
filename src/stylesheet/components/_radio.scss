@@ -1,0 +1,17 @@
+body {
+	.ant-radio-wrapper {
+		font-size: 14px;
+		font-weight: normal;
+	}
+	.ant-radio-checked .ant-radio-inner {
+		border-color: $text-green;
+	}
+	.ant-radio-wrapper:hover .ant-radio .ant-radio-inner, 
+	.ant-radio:hover .ant-radio-inner, 
+	.ant-radio-focused .ant-radio-inner {
+	  border-color: $text-green;
+	}
+	.ant-radio-inner:after {
+		background-color: $text-green;
+	}
+}

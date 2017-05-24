@@ -1,0 +1,58 @@
+#Agent {
+	
+	.search {
+		margin: 25px 0;
+	}
+
+	.persons {
+		margin-top: 10px;
+		.title {
+			margin: 10px 0;
+			.text {
+				font-family: $sukumvit-bold;
+				color: $text-gray;
+				line-height: 30px;
+			}
+			.icon {
+				i {
+					font-size: 30px;
+					color: $text-green;
+				}
+			}
+		}
+		.view_more a {
+			color: $text-green;
+			font-weight: bold;
+		}
+		.AgentItem {
+			margin: 20px 0;
+			border-bottom: 1px solid $border-color;
+			padding-bottom: 20px;
+		}
+	}
+
+	.about {
+		background: $border-color;
+		padding: 40px 0;
+		margin-top: 40px;
+		.topic {
+			font-family: $sukumvit-semibold;
+			font-size: 24px;
+			margin-bottom: 40px;
+			text-align: center;
+		}
+		.items {
+			text-align: center;
+			.image img {
+				width: 120px;
+			}
+			.title {
+				font-family: $sukumvit-bold;
+				font-size: 18px;
+				color: $text-gray;
+				margin-top: 20px;
+			}
+		}
+	}
+
+}

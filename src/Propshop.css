@@ -1,0 +1,1189 @@
+@charset "UTF-8";
+@import url(font/sukhumvitset/stylesheet.css);
+@import url(libraries/font-awesome/4.7.0/css/font-awesome.css);
+/*!
+  Ionicons, v2.0.0
+  Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
+  https://twitter.com/benjsperry  https://twitter.com/ionicframework
+  MIT License: https://github.com/driftyco/ionicons
+
+  Android-style icons originally built by Google’s
+  Material Design Icons: https://github.com/google/material-design-icons
+  used under CC BY http://creativecommons.org/licenses/by/4.0/
+  Modified icons to fit ionicon’s grid from original.
+*/
+@import url(~antd/dist/antd.css);
+@font-face {
+  font-family: "Ionicons";
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.eot?v=2.0.0");
+  src: url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.eot?v=2.0.0#iefix") format("embedded-opentype"), url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.ttf?v=2.0.0") format("truetype"), url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.woff?v=2.0.0") format("woff"), url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/fonts/ionicons.svg?v=2.0.0#Ionicons") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+.image-gallery-fullscreen-button::before,
+.image-gallery-play-button::before,
+.image-gallery-left-nav::before,
+.image-gallery-right-nav::before {
+  display: inline-block;
+  font-family: "Ionicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.image-gallery {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent; }
+  .image-gallery.fullscreen-modal {
+    background: #000;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 5; }
+    .image-gallery.fullscreen-modal .image-gallery-content {
+      top: 50%;
+      transform: translateY(-50%); }
+
+.image-gallery-content {
+  position: relative;
+  line-height: 0;
+  top: 0; }
+  .image-gallery-content.fullscreen {
+    background: #000; }
+    .image-gallery-content.fullscreen .image-gallery-slide {
+      background: #000; }
+
+.image-gallery-slide-wrapper {
+  position: relative; }
+  .image-gallery-slide-wrapper.left, .image-gallery-slide-wrapper.right {
+    display: inline-block;
+    width: calc(100% - 113px); }
+    @media (max-width: 768px) {
+      .image-gallery-slide-wrapper.left, .image-gallery-slide-wrapper.right {
+        width: calc(100% - 84px); } }
+
+.image-gallery-fullscreen-button,
+.image-gallery-play-button,
+.image-gallery-left-nav,
+.image-gallery-right-nav {
+  appearance: none;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  z-index: 4; }
+  .image-gallery-fullscreen-button::before,
+  .image-gallery-play-button::before,
+  .image-gallery-left-nav::before,
+  .image-gallery-right-nav::before {
+    color: #fff;
+    line-height: .7;
+    text-shadow: 0 2px 2px #1a1a1a;
+    transition: color .2s ease-out; }
+  .image-gallery-fullscreen-button:hover::before,
+  .image-gallery-play-button:hover::before,
+  .image-gallery-left-nav:hover::before,
+  .image-gallery-right-nav:hover::before {
+    color: #337ab7; }
+    @media (max-width: 768px) {
+      .image-gallery-fullscreen-button:hover::before,
+      .image-gallery-play-button:hover::before,
+      .image-gallery-left-nav:hover::before,
+      .image-gallery-right-nav:hover::before {
+        color: #fff; } }
+
+.image-gallery-fullscreen-button,
+.image-gallery-play-button {
+  bottom: 0; }
+  .image-gallery-fullscreen-button::before,
+  .image-gallery-play-button::before {
+    font-size: 2.7em;
+    padding: 15px 20px;
+    text-shadow: 0 1px 1px #1a1a1a; }
+    @media (max-width: 768px) {
+      .image-gallery-fullscreen-button::before,
+      .image-gallery-play-button::before {
+        font-size: 2.4em; } }
+    @media (max-width: 480px) {
+      .image-gallery-fullscreen-button::before,
+      .image-gallery-play-button::before {
+        font-size: 2em; } }
+  .image-gallery-fullscreen-button:hover::before,
+  .image-gallery-play-button:hover::before {
+    color: #fff;
+    transform: scale(1.1); }
+    @media (max-width: 768px) {
+      .image-gallery-fullscreen-button:hover::before,
+      .image-gallery-play-button:hover::before {
+        transform: none; } }
+
+.image-gallery-fullscreen-button {
+  right: 0; }
+  .image-gallery-fullscreen-button::before {
+    content: ""; }
+  .image-gallery-fullscreen-button.active::before {
+    content: ""; }
+  .image-gallery-fullscreen-button.active:hover::before {
+    transform: scale(0.9); }
+
+.image-gallery-play-button {
+  left: 0; }
+  .image-gallery-play-button::before {
+    content: ""; }
+  .image-gallery-play-button.active::before {
+    content: ""; }
+
+.image-gallery-left-nav,
+.image-gallery-right-nav {
+  color: #fff;
+  font-size: 5em;
+  padding: 50px 15px;
+  top: 50%;
+  transform: translateY(-50%); }
+  .image-gallery-left-nav[disabled],
+  .image-gallery-right-nav[disabled] {
+    cursor: disabled;
+    opacity: .6;
+    pointer-events: none; }
+  @media (max-width: 768px) {
+    .image-gallery-left-nav,
+    .image-gallery-right-nav {
+      font-size: 3.4em; } }
+  @media (max-width: 480px) {
+    .image-gallery-left-nav,
+    .image-gallery-right-nav {
+      font-size: 2.4em; } }
+
+.image-gallery-left-nav {
+  left: 0; }
+  .image-gallery-left-nav::before {
+    content: ""; }
+
+.image-gallery-right-nav {
+  right: 0; }
+  .image-gallery-right-nav::before {
+    content: ""; }
+
+.image-gallery-slides {
+  line-height: 0;
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap; }
+
+.image-gallery-slide {
+  background: #fff;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%; }
+  .image-gallery-slide.center {
+    position: relative; }
+  .image-gallery-slide img {
+    width: 100%; }
+  .image-gallery-slide .image-gallery-description {
+    background: rgba(0, 0, 0, 0.4);
+    bottom: 70px;
+    color: #fff;
+    left: 0;
+    line-height: 1;
+    padding: 10px 20px;
+    position: absolute;
+    white-space: normal; }
+    @media (max-width: 768px) {
+      .image-gallery-slide .image-gallery-description {
+        bottom: 45px;
+        font-size: .8em;
+        padding: 8px 15px; } }
+
+.image-gallery-bullets {
+  bottom: 20px;
+  left: 0;
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  width: 80%;
+  z-index: 4; }
+  .image-gallery-bullets .image-gallery-bullets-container {
+    margin: 0;
+    padding: 0;
+    text-align: center; }
+  .image-gallery-bullets .image-gallery-bullet {
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 0 #1a1a1a;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 5px;
+    outline: none;
+    padding: 5px; }
+    @media (max-width: 768px) {
+      .image-gallery-bullets .image-gallery-bullet {
+        margin: 0 3px;
+        padding: 3px; } }
+    @media (max-width: 480px) {
+      .image-gallery-bullets .image-gallery-bullet {
+        padding: 2.7px; } }
+    .image-gallery-bullets .image-gallery-bullet.active {
+      background: #fff; }
+
+.image-gallery-thumbnails-wrapper {
+  position: relative; }
+  .image-gallery-thumbnails-wrapper.left, .image-gallery-thumbnails-wrapper.right {
+    display: inline-block;
+    vertical-align: top;
+    width: 108px; }
+    @media (max-width: 768px) {
+      .image-gallery-thumbnails-wrapper.left, .image-gallery-thumbnails-wrapper.right {
+        width: 81px; } }
+    .image-gallery-thumbnails-wrapper.left .image-gallery-thumbnails, .image-gallery-thumbnails-wrapper.right .image-gallery-thumbnails {
+      height: 100%;
+      width: 100%;
+      left: 0;
+      padding: 0;
+      position: absolute;
+      top: 0; }
+      .image-gallery-thumbnails-wrapper.left .image-gallery-thumbnails .image-gallery-thumbnail, .image-gallery-thumbnails-wrapper.right .image-gallery-thumbnails .image-gallery-thumbnail {
+        display: block;
+        margin-right: 0;
+        padding: 0; }
+  .image-gallery-thumbnails-wrapper.left {
+    margin-right: 5px; }
+    @media (max-width: 768px) {
+      .image-gallery-thumbnails-wrapper.left {
+        margin-right: 3px; } }
+  .image-gallery-thumbnails-wrapper.right {
+    margin-left: 5px; }
+    @media (max-width: 768px) {
+      .image-gallery-thumbnails-wrapper.right {
+        margin-left: 3px; } }
+
+.image-gallery-thumbnails {
+  overflow: hidden;
+  padding: 5px 0; }
+  @media (max-width: 768px) {
+    .image-gallery-thumbnails {
+      padding: 3px 0; } }
+  .image-gallery-thumbnails .image-gallery-thumbnails-container {
+    cursor: pointer;
+    text-align: center;
+    transition: transform .45s ease-out;
+    white-space: nowrap; }
+
+.image-gallery-thumbnail {
+  display: inline-block;
+  margin-right: 5px;
+  border: 4px solid transparent;
+  transition: border .3s ease-out;
+  width: 100px; }
+  @media (max-width: 768px) {
+    .image-gallery-thumbnail {
+      border: 3px solid transparent;
+      width: 75px; } }
+  .image-gallery-thumbnail img {
+    vertical-align: middle;
+    width: 100%; }
+  .image-gallery-thumbnail.active {
+    border: 4px solid #337ab7; }
+    @media (max-width: 768px) {
+      .image-gallery-thumbnail.active {
+        border: 3px solid #337ab7; } }
+
+.image-gallery-thumbnail-label {
+  color: #1a1a1a;
+  font-size: 1em; }
+  @media (max-width: 768px) {
+    .image-gallery-thumbnail-label {
+      font-size: .8em; } }
+
+.image-gallery-index {
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  line-height: 1;
+  padding: 10px 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 4; }
+  @media (max-width: 768px) {
+    .image-gallery-index {
+      font-size: .8em;
+      padding: 5px 10px; } }
+
+html,
+body,
+#root,
+.PropShop,
+#Content {
+  min-height: 100%; }
+
+body,
+label {
+  font-size: 14px;
+  color: #484849; }
+
+a,
+a:hover {
+  cursor: pointer; }
+
+a,
+div,
+span {
+  color: #484849;
+  font-family: 'Tahoma'; }
+
+ul {
+  margin: 0;
+  padding: 0; }
+
+li {
+  list-style: none; }
+
+img {
+  width: 100%; }
+
+.text-green {
+  color: #8ebc42 !important; }
+
+.form-inline .form-group {
+  margin: 0 5px; }
+
+.form-inline .form-group:first-child {
+  margin-left: 0; }
+
+.form-inline .form-group:last-child {
+  margin-right: 0; }
+
+#Content {
+  padding-top: 50px; }
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none; }
+
+.vbottom {
+  display: inline-block;
+  vertical-align: bottom;
+  float: none; }
+
+.social-media {
+  padding: 10px 0; }
+
+.social-media ul li {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  line-height: 30px;
+  margin: 0 4px;
+  text-align: center;
+  cursor: pointer; }
+
+.social-media ul li.facebook {
+  background: #3a5897; }
+
+.social-media ul li.google-plus {
+  background: #dd4a39; }
+
+.social-media ul li.twitter {
+  background: #25a6d1; }
+
+.social-media ul li span {
+  color: #ffffff; }
+
+#Home {
+  height: 100%; }
+  #Home > .row {
+    height: 100%;
+    margin: 0; }
+  #Home .layout-left {
+    height: 100%;
+    position: fixed;
+    padding: 0; }
+  #Home .layout-right {
+    padding: 0; }
+  #Home .filter_real_estate {
+    padding: 20px; }
+    #Home .filter_real_estate .ant-tabs-bar {
+      border: 0; }
+    #Home .filter_real_estate .ant-tabs-nav .ant-tabs-tab {
+      font-family: "SukhumvitSet-Bold";
+      color: #999999; }
+    #Home .filter_real_estate .ant-tabs-nav .ant-tabs-tab-active {
+      font-family: "SukhumvitSet-Bold";
+      color: #484849; }
+    #Home .filter_real_estate .ant-tabs-ink-bar {
+      height: 3px;
+      background-color: #87b840; }
+  #Home .filter_advance {
+    margin: 20px 0; }
+    #Home .filter_advance .price_length {
+      margin: 15px; }
+    #Home .filter_advance .property_block {
+      margin-top: 20px; }
+    #Home .filter_advance .room_count {
+      z-index: 10; }
+  #Home .main {
+    padding: 15px; }
+    #Home .main .row > div {
+      padding: 0;
+      padding: 0 8px 8px 0; }
+    #Home .main .row > div:first-child {
+      padding-left: 15px; }
+  #Home .list h3 {
+    font-family: "SukhumvitSet-Bold"; }
+  #Home .result {
+    padding: 15px; }
+    #Home .result .list > div > div {
+      padding: 0;
+      padding: 0 8px 8px 0; }
+
+#Sell {
+  min-height: 100vh; }
+  #Sell .steps {
+    margin: 25px 0; }
+    #Sell .steps .ant-steps-title {
+      font-family: "SukhumvitSet-SemiBold"; }
+    #Sell .steps .ant-steps .ant-steps-item.ant-steps-status-process .ant-steps-head-inner {
+      border-color: #84b43e;
+      background-color: #84b43e; }
+    #Sell .steps .ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner > .ant-steps-icon {
+      color: #ffffff; }
+    #Sell .steps .ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner {
+      border-color: #84b43e;
+      background-color: #84b43e; }
+  #Sell h1 {
+    font-family: "SukhumvitSet-Bold";
+    font-size: 36px;
+    color: #8ebc42;
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 20px; }
+  #Sell .action {
+    margin-top: 40px; }
+  #Sell #Step0 .form .type {
+    margin: 25px 0;
+    text-align: center; }
+    #Sell #Step0 .form .type .ant-radio-wrapper {
+      margin-right: 35px; }
+  #Sell #Step0 .form .input label {
+    font-size: 14px;
+    font-weight: bold; }
+  #Sell #Step1 .SpecialFeature h4 {
+    display: none; }
+  #Sell #Step3 .form {
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    padding: 30px;
+    margin-bottom: 10px; }
+
+#Agent .search {
+  margin: 25px 0; }
+
+#Agent .persons {
+  margin-top: 10px; }
+  #Agent .persons .title {
+    margin: 10px 0; }
+    #Agent .persons .title .text {
+      font-family: "SukhumvitSet-Bold";
+      color: #999999;
+      line-height: 30px; }
+    #Agent .persons .title .icon i {
+      font-size: 30px;
+      color: #8ebc42; }
+  #Agent .persons .view_more a {
+    color: #8ebc42;
+    font-weight: bold; }
+  #Agent .persons .AgentItem {
+    margin: 20px 0;
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 20px; }
+
+#Agent .about {
+  background: #eeeeee;
+  padding: 40px 0;
+  margin-top: 40px; }
+  #Agent .about .topic {
+    font-family: "SukhumvitSet-SemiBold";
+    font-size: 24px;
+    margin-bottom: 40px;
+    text-align: center; }
+  #Agent .about .items {
+    text-align: center; }
+    #Agent .about .items .image img {
+      width: 120px; }
+    #Agent .about .items .title {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 18px;
+      color: #999999;
+      margin-top: 20px; }
+
+#AgentDetail .info .name {
+  font-size: 24px;
+  color: #8ebc42; }
+
+#AgentDetail .info .phone {
+  font-weight: bold;
+  color: #999999; }
+
+#AgentDetail .ant-tabs-bar {
+  border-color: #eeeeee; }
+
+#AgentDetail .ant-tabs-nav .ant-tabs-tab {
+  text-align: center;
+  border-right: 1px solid #eeeeee;
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #409ee1;
+  padding: 8px 30px; }
+
+#AgentDetail .ant-tabs-nav .ant-tabs-tab-active {
+  color: #484849; }
+
+#AgentDetail .ant-tabs-ink-bar {
+  display: none !important; }
+
+#AgentDetail section {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 15px;
+  margin-bottom: 15px; }
+  #AgentDetail section h3 {
+    margin-bottom: 10px; }
+
+#AgentDetail .property_list.odd .address {
+  color: #409ee1; }
+
+#Login {
+  height: 100%; }
+  #Login > .row {
+    height: 100%;
+    margin: 0; }
+  #Login .layout-left {
+    height: 100%;
+    position: fixed;
+    padding: 0; }
+  #Login .layout-right {
+    padding: 0; }
+  #Login .form {
+    margin: 40px 0; }
+    #Login .form > .row {
+      margin: 0; }
+    #Login .form h1 {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 36px;
+      color: #8ebc42;
+      margin-bottom: 40px;
+      text-align: center; }
+    #Login .form .form-group.link {
+      text-align: center; }
+    #Login .form .form-group.link li {
+      margin: 0 14px;
+      display: inline-block;
+      vertical-align: middle;
+      position: relative; }
+    #Login .form .form-group.link li:after {
+      content: '|';
+      color: #4d790a;
+      position: absolute;
+      margin-left: 13px; }
+    #Login .form .form-group.link li:last-child:after {
+      content: ''; }
+    #Login .form .form-group.link li a {
+      color: #8ebc42; }
+    #Login .form .form-group.action {
+      text-align: center;
+      margin-top: 40px; }
+    #Login .form .form-group.action button {
+      margin: 0 10px; }
+  #Login .social_login {
+    text-align: center;
+    margin: 20px 0; }
+    #Login .social_login > div {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 10px; }
+
+#Realestate {
+  padding-bottom: 40px; }
+  #Realestate .content .cover .image {
+    position: relative;
+    max-height: 460px;
+    height: 460px; }
+    #Realestate .content .cover .image > .row,
+    #Realestate .content .cover .image > .row > div {
+      height: 100%; }
+    #Realestate .content .cover .image .open_house {
+      position: absolute;
+      bottom: 30px;
+      border: 1px solid #8ebc42;
+      border-radius: 2px;
+      background: #8ebc42;
+      padding: 3px 13px;
+      color: #ffffff; }
+    #Realestate .content .cover .image .contact_agent {
+      margin: 20px;
+      background: #ffffff; }
+      #Realestate .content .cover .image .contact_agent .price {
+        font-size: 30px;
+        background: #494749;
+        color: #ffffff;
+        padding: 6px 20px;
+        font-family: 'Myriad Pro'; }
+        #Realestate .content .cover .image .contact_agent .price span {
+          font-family: "SukhumvitSet-SemiBold";
+          color: #ffffff; }
+      #Realestate .content .cover .image .contact_agent .detail {
+        padding: 10px; }
+        #Realestate .content .cover .image .contact_agent .detail .name {
+          color: #8ebc42; }
+        #Realestate .content .cover .image .contact_agent .detail .phone {
+          color: #999999;
+          font-weight: bold; }
+      #Realestate .content .cover .image .contact_agent .form {
+        padding: 0 10px 10px 10px; }
+  #Realestate .content .cover .address {
+    max-height: 160px;
+    height: 160px;
+    background: #eeeeee; }
+    #Realestate .content .cover .address > .row {
+      height: 100%; }
+      #Realestate .content .cover .address > .row > div:first-child {
+        height: 100%; }
+      #Realestate .content .cover .address > .row .vbottom {
+        margin-bottom: 17px; }
+    #Realestate .content .cover .address .sell_by {
+      font-family: "SukhumvitSet-SemiBold";
+      font-size: 18px;
+      color: #8ebc42; }
+    #Realestate .content .cover .address .address_1 {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 30px; }
+    #Realestate .content .cover .address .address_2 {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 18px;
+      color: #999999; }
+    #Realestate .content .cover .address .options ul li {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 20px;
+      font-family: "SukhumvitSet-SemiBold";
+      font-size: 18px; }
+    #Realestate .content .cover .address .options ul li:first-child {
+      margin-left: 0; }
+    #Realestate .content .cover .address .options ul li:last-child {
+      margin-right: 0; }
+    #Realestate .content .cover .address .create_date {
+      font-family: "SukhumvitSet-SemiBold";
+      font-size: 18px;
+      margin-right: 20px; }
+  #Realestate .content .description h2 {
+    margin-top: 20px;
+    font-family: "SukhumvitSet-Bold";
+    font-size: 30px;
+    border-bottom: 1px solid #eeeeee;
+    padding-bottom: 7px;
+    margin-bottom: 5px; }
+  #Realestate .content .description h4 {
+    font-family: "SukhumvitSet-Bold";
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 3px; }
+  #Realestate .content .description h2 span,
+  #Realestate .content .description h4 span {
+    font-family: 'Myriad Pro';
+    color: #999999;
+    font-weight: normal; }
+  #Realestate .content .description .calculate {
+    background: #eeeeee;
+    padding: 8px 0 14px 0;
+    margin: 10px 0; }
+    #Realestate .content .description .calculate label {
+      color: #484849;
+      font-weight: bold;
+      margin: 0; }
+
+#Header .container {
+  width: 100%; }
+
+.navbar-default {
+  background: #88b840;
+  box-shadow: none;
+  border: 0;
+  margin: 0; }
+
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+  font-family: "SukhumvitSet-Bold"; }
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a.active {
+  color: #484849; }
+
+.navbar-default .navbar-nav > li > a:after {
+  content: '/';
+  color: #4d790a;
+  position: absolute;
+  margin-left: 13px; }
+
+.navbar-default .navbar-right > li > a:after {
+  content: '|'; }
+
+.navbar-default .navbar-nav > li:last-child > a:after,
+.navbar-default .navbar-right .language.last a:after {
+  content: ''; }
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  background: #ffffff;
+  padding: 11px 15px; }
+
+.navbar-default .navbar-right .login {
+  border-left: 1px solid #4d790a;
+  box-shadow: inset 0px -4px 0px 0px #4d790a; }
+
+.navbar-default .navbar-right .login:hover a,
+.navbar-default .navbar-right .login:hover .fa-user-o {
+  color: #ffffff;
+  background: #484849; }
+
+.navbar-default .navbar-right .login a {
+  padding: 15px 20px; }
+
+.navbar-default .navbar-right .login .fa-user-o {
+  color: #ffffff;
+  margin-right: 6px; }
+
+.navbar-default .navbar-nav > li.login > a:hover,
+.navbar-default .navbar-nav > li.login > a:focus,
+.navbar-default .navbar-nav > li.login > a.active {
+  color: #ffffff;
+  background: #484849; }
+
+@media (max-width: 935px) {
+  .navbar-collapse.collapse {
+    display: none !important; }
+  .navbar-toggle {
+    display: block !important;
+    position: relative;
+    float: right;
+    padding: 9px 10px;
+    margin-top: 8px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px; }
+  .navbar-header {
+    float: none; }
+  .collapse.in {
+    display: block !important; }
+  .navbar-nav > li {
+    float: none; }
+  .navbar-nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px; }
+  .navbar-default .navbar-nav > li > a:after {
+    content: ''; }
+  .navbar-nav {
+    float: none;
+    margin: 0; }
+  .navbar-right {
+    float: none !important;
+    margin: 0; } }
+
+#Footer {
+  background: #494749;
+  padding: 15px 25px 25px 25px; }
+  #Footer a,
+  #Footer span,
+  #Footer div {
+    color: #ffffff; }
+  #Footer a:hover {
+    text-decoration: none; }
+  #Footer .menu-left ul li,
+  #Footer .menu-right ul li {
+    display: inline-block;
+    margin: 0 16px; }
+  #Footer .menu-left ul li:first-child,
+  #Footer .menu-right ul li:first-child {
+    margin-left: 0; }
+  #Footer .menu-left ul li:last-child,
+  #Footer .menu-right ul li:last-child {
+    margin-right: 0; }
+  #Footer .menu-left ul li a {
+    font-family: "SukhumvitSet-Text"; }
+  #Footer .menu-right ul li a {
+    border-bottom: 1px solid #ffffff; }
+  #Footer .menu-right ul li a:after {
+    content: '|';
+    color: #8ebc42;
+    position: absolute;
+    margin-left: 13px; }
+  #Footer .menu-right ul li:last-child a:after {
+    content: ''; }
+  #Footer .row_2 {
+    margin-top: 15px; }
+  #Footer .copyright .logo {
+    display: inline-block;
+    vertical-align: middle; }
+  #Footer .copyright .text {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 15px; }
+
+.BannerRealEstate {
+  height: 100%;
+  padding-bottom: 50px; }
+  .BannerRealEstate .image-gallery,
+  .BannerRealEstate .image-gallery-content,
+  .BannerRealEstate .image-gallery-slide-wrapper,
+  .BannerRealEstate .image-gallery-swipe,
+  .BannerRealEstate .image-gallery-slides,
+  .BannerRealEstate .image-gallery-slide,
+  .BannerRealEstate .image-gallery-image {
+    height: 100%; }
+  .BannerRealEstate .image-gallery-image {
+    position: relative; }
+  .BannerRealEstate .image-gallery-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 70%;
+    background: linear-gradient(to bottom, transparent, #000000);
+    z-index: 1; }
+  .BannerRealEstate .image-gallery-bullets .image-gallery-bullet {
+    border-radius: 0;
+    padding: 8px;
+    box-shadow: none;
+    border: 2px solid #ffffff; }
+  .BannerRealEstate .image-gallery-bullets .image-gallery-bullet.active {
+    background: #ac1a00; }
+  .BannerRealEstate .image-gallery-bullets .image-gallery-bullets-container {
+    text-align: right; }
+  .BannerRealEstate .image-gallery-bullets {
+    bottom: 25px;
+    width: 93%; }
+  .BannerRealEstate .image-gallery-slide .image-gallery-description {
+    left: 0;
+    bottom: 0;
+    background: none;
+    padding: 30px;
+    z-index: 2;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 30px; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description div {
+      color: #ffffff; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .price {
+      font-size: 24px;
+      color: #88b840; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option {
+      margin-top: 5px; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li {
+      list-style: none;
+      display: inline-block;
+      margin: 0 6px; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:first-child {
+      margin-left: 0; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:last-child {
+      margin-right: 0; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li span {
+      color: #ffffff;
+      margin: 0 10px; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li span.fa {
+      font-size: 24px; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:first-child span {
+      margin-left: 0; }
+    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:last-child span {
+      margin-right: 0; }
+
+.SpecialFeature .head h4 {
+  font-family: "SukhumvitSet-SemiBold";
+  font-size: 16px; }
+
+.SpecialFeature .list {
+  border: 1px solid #999999;
+  border-radius: 4px;
+  margin: 5px 0;
+  padding: 15px; }
+  .SpecialFeature .list .title {
+    color: #999999;
+    font-weight: bold;
+    margin-bottom: 8px; }
+
+.SpecialFeature .foot .remark {
+  font-size: 12px;
+  color: #999999; }
+
+body .btn {
+  padding: 6px 20px; }
+
+body .btn-danger {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 16px; }
+
+body .btn-default,
+body .btn-default:active,
+body .btn-default:hover,
+body .btn-default:focus,
+body .btn-default:visited {
+  background: #484849;
+  border-color: #484849;
+  font-family: "SukhumvitSet-Bold";
+  font-size: 16px;
+  text-shadow: none;
+  color: #ffffff; }
+
+body .btn-primary,
+body .btn-primary:active,
+body .btn-primary:hover,
+body .btn-primary:focus,
+body .btn-primary:visited {
+  background: none;
+  background-image: linear-gradient(to top, #89b941, #95c251);
+  border-color: #79a13d;
+  font-family: "SukhumvitSet-Bold";
+  font-size: 16px; }
+
+body .ant-btn,
+body .ant-btn:active,
+body .ant-btn:hover,
+body .ant-btn:focus,
+body .ant-btn:visited {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 16px;
+  background-image: linear-gradient(to top, #ececec, #ffffff);
+  width: 60px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  padding: 0 !important;
+  box-shadow: none;
+  border-color: #cccccc; }
+
+body .ant-btn:hover {
+  border-color: #8ebc42; }
+
+body .ant-btn-default,
+body .ant-btn-default:active,
+body .ant-btn-default:hover,
+body .ant-btn-default:focus,
+body .ant-btn-default:visited {
+  background: #484849;
+  border-color: #484849; }
+
+body .ant-btn-primary,
+body .ant-btn-primary:active,
+body .ant-btn-primary:hover,
+body .ant-btn-primary:focus,
+body .ant-btn-primary:visited {
+  background: #484849;
+  background-image: linear-gradient(to top, #89b941, #95c251);
+  border: 1px solid #79a13d; }
+
+body .ant-btn-clicked:after {
+  display: none; }
+
+body .ant-btn span,
+body .ant-btn span {
+  font-size: 14px;
+  color: #333333; }
+
+body .ant-btn i,
+body .ant-btn i:hover {
+  font-size: 12px;
+  color: #333333; }
+
+body .ant-btn-default span,
+body .ant-btn-primary span {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 16px;
+  color: #ffffff; }
+
+body .btn-filter_advance.active {
+  background: #484849; }
+
+body .btn-filter_advance.active i,
+body .btn-filter_advance.active span {
+  color: #ffffff; }
+
+body input.form-control {
+  height: 36px; }
+
+body .ant-input {
+  font-size: 14px;
+  height: 38px;
+  line-height: 39px;
+  padding: 0 10px;
+  border-color: #cccccc; }
+
+body .ant-input:active,
+body .ant-input:hover,
+body .ant-input:focus,
+body .ant-input:visited {
+  border-color: #8ebc42;
+  box-shadow: none; }
+
+body .ant-select-selection--single {
+  font-size: 14px;
+  height: 38px;
+  border-color: #cccccc;
+  background-image: linear-gradient(to top, #ececec, #ffffff); }
+
+body .ant-select-selection--single:active,
+body .ant-select-selection--single:hover,
+body .ant-select-selection--single:focus,
+body .ant-select:visited {
+  border-color: #8ebc42;
+  box-shadow: none; }
+
+body .ant-select-selection__rendered {
+  margin: 0 10px;
+  line-height: 37px; }
+
+body .ant-select-selection__placeholder,
+body .ant-select-search__field__placeholder {
+  color: #333333; }
+
+body .ant-select-arrow {
+  color: #333333;
+  font-size: 14px !important; }
+
+body .ant-checkbox-wrapper {
+  font-size: 14px;
+  font-weight: normal; }
+
+body .ant-checkbox-inner {
+  width: 18px;
+  height: 18px;
+  border-color: #cccccc; }
+
+body .ant-checkbox-checked .ant-checkbox-inner:after {
+  left: 5px;
+  top: 3px; }
+
+body .ant-checkbox-checked .ant-checkbox-inner, body .ant-checkbox-indeterminate .ant-checkbox-inner {
+  background-color: #8ebc42;
+  border-color: #8ebc42; }
+
+body .ant-checkbox-wrapper:hover .ant-checkbox-inner, body .ant-checkbox:hover .ant-checkbox-inner, body .ant-checkbox-input:focus + .ant-checkbox-inner {
+  border-color: #8ebc42; }
+
+body .ant-radio-wrapper {
+  font-size: 14px;
+  font-weight: normal; }
+
+body .ant-radio-checked .ant-radio-inner {
+  border-color: #8ebc42; }
+
+body .ant-radio-wrapper:hover .ant-radio .ant-radio-inner,
+body .ant-radio:hover .ant-radio-inner,
+body .ant-radio-focused .ant-radio-inner {
+  border-color: #8ebc42; }
+
+body .ant-radio-inner:after {
+  background-color: #8ebc42; }
+
+body .rating .ant-rate {
+  font-size: 18px; }
+
+body .rating .ant-rate-disabled .ant-rate-star {
+  margin: 0;
+  cursor: default; }
+
+body .rating span {
+  margin-left: 5px;
+  vertical-align: middle; }
+
+.RealEstateItem .background {
+  height: 150px;
+  position: relative; }
+  .RealEstateItem .background .gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 90%;
+    background: linear-gradient(to bottom, transparent, #000000);
+    z-index: 1; }
+  .RealEstateItem .background .content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    padding: 10px; }
+    .RealEstateItem .background .content .price {
+      font-size: 14px;
+      color: #88b840;
+      font-weight: bold; }
+    .RealEstateItem .background .content .place {
+      font-size: 12px;
+      color: #ffffff; }
+    .RealEstateItem .background .content .option {
+      margin-top: 3px; }
+    .RealEstateItem .background .content .option ul li {
+      display: inline-block;
+      margin: 0 5px; }
+    .RealEstateItem .background .content .option ul li:first-child {
+      margin-left: 0; }
+    .RealEstateItem .background .content .option ul li:last-child {
+      margin-right: 0; }
+    .RealEstateItem .background .content .option ul li span {
+      font-size: 12px;
+      color: #ffffff;
+      font-weight: bold;
+      margin: 0 4px; }
+    .RealEstateItem .background .content .option ul li span:first-child {
+      font-size: 14px; }
+
+.RealEstateItem.detail {
+  margin: 20px 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eeeeee; }
+  .RealEstateItem.detail .address {
+    font-weight: bold;
+    font-size: 18px; }
+  .RealEstateItem.detail .option {
+    margin-top: 4px; }
+    .RealEstateItem.detail .option ul li {
+      display: inline-block;
+      margin: 0 6px; }
+    .RealEstateItem.detail .option ul li:first-child {
+      margin-left: 0; }
+    .RealEstateItem.detail .option ul li:last-child {
+      margin-right: 0; }
+    .RealEstateItem.detail .option ul li span {
+      margin-right: 5px; }
+  .RealEstateItem.detail .for {
+    color: #ffffff;
+    padding: 7px 14px;
+    border-radius: 3px; }
+  .RealEstateItem.detail .for.sell,
+  .RealEstateItem.detail .for.rent {
+    background: #8ebc42; }
+  .RealEstateItem.detail .for.sold_out {
+    background: #e10019; }
+  .RealEstateItem.detail .price {
+    font-weight: bold;
+    font-size: 18px; }

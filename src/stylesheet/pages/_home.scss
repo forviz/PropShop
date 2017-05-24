@@ -1,0 +1,77 @@
+#Home {
+
+	height: 100%;
+
+	> .row {
+		height: 100%;
+		margin: 0;
+	}
+
+	.layout-left {
+		height: 100%;
+		position: fixed;
+		padding: 0;
+	}
+	.layout-right {
+		padding: 0;
+	}
+
+	.filter_real_estate {
+		padding: 20px;
+
+		.ant-tabs-bar {
+			border: 0;
+		}
+		.ant-tabs-nav .ant-tabs-tab {
+			font-family: $sukumvit-bold;
+			color: #999999;
+		}
+		.ant-tabs-nav .ant-tabs-tab-active {
+			font-family: $sukumvit-bold;
+			color: $text-default;
+		}
+		.ant-tabs-ink-bar {
+			height: 3px;
+    	background-color: #87b840;
+		}
+	}
+
+	.filter_advance {
+		margin: 20px 0;
+		.price_length {
+			margin: 15px;
+		}
+		.property_block {
+			margin-top: 20px;
+		}
+		.room_count {
+			z-index: 10;
+		}
+	}
+
+	.main {
+		padding: 15px;
+		.row > div {
+			padding: 0;
+			padding: 0 8px 8px 0;
+		}
+		.row > div:first-child {
+			padding-left: 15px;
+		}
+	}
+
+	.list {
+		h3 {
+			font-family: $sukumvit-bold;
+		}
+	}
+
+	.result {
+		padding: 15px;
+		.list > div > div {
+			padding: 0;
+			padding: 0 8px 8px 0;
+		}
+	}
+
+}

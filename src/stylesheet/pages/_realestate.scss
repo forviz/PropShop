@@ -1,0 +1,139 @@
+#Realestate {
+
+	padding-bottom: 40px;
+
+	.content {
+
+		.cover {
+			
+			.image {
+				position: relative;
+				max-height: 460px;
+				height: 460px;
+				> .row,
+				> .row > div {
+					height: 100%;
+				}
+				.open_house {
+					position: absolute;
+			    bottom: 30px;
+			    border: 1px solid #8ebc42;
+			    border-radius: 2px;
+			    background: #8ebc42;
+			    padding: 3px 13px;
+			    color: #ffffff;
+				}
+				.contact_agent {
+					margin: 20px;
+			    background: #ffffff;
+			    .price {
+			    	font-size: 30px;
+				    background: #494749;
+				    color: #ffffff;
+				    padding: 6px 20px;
+				    font-family: 'Myriad Pro';
+				    span {
+				    	font-family: $sukumvit-semibold;
+				    	color: #ffffff;
+				    }
+			    }
+			    .detail {
+			    	padding: 10px;
+			    	.name {
+			    		color: $text-green;
+			    	}
+			    	.phone {
+			    		color: $text-gray;
+			    		font-weight: bold;
+			    	}
+			    }
+			    .form {
+			    	padding: 0 10px 10px 10px;
+			    }
+				}
+
+			}
+			.address {
+				max-height: 160px;
+				height: 160px;
+				background: $border-color;
+				> .row {
+					height: 100%;
+					> div:first-child {
+						height: 100%;
+					}
+					.vbottom {
+						margin-bottom: 17px;
+					}
+				}
+				.sell_by {
+					font-family: $sukumvit-semibold;
+					font-size: 18px;
+					color: $text-green;
+				}
+				.address_1 {
+					font-family: $sukumvit-bold;
+					font-size: 30px;
+				}
+				.address_2 {
+					font-family: $sukumvit-bold;
+					font-size: 18px;
+					color: $text-gray;
+				}
+				.options ul li {
+					display: inline-block;
+					vertical-align: middle;
+					margin: 0 20px;
+					font-family: $sukumvit-semibold;
+					font-size: 18px;
+				}
+				.options ul li:first-child {
+					margin-left: 0;
+				}
+				.options ul li:last-child {
+					margin-right: 0;
+				}
+				.create_date {
+					font-family: $sukumvit-semibold;
+					font-size: 18px;
+					margin-right: 20px;
+				}
+			}
+		}
+
+		.description {
+			h2 {
+				margin-top: 20px;
+				font-family: $sukumvit-bold;
+				font-size: 30px;
+				border-bottom: 1px solid $border-color;
+				padding-bottom: 7px;
+				margin-bottom: 5px;
+			}
+			h4 {
+				font-family: $sukumvit-bold;
+				font-size: 18px;
+				margin-top: 20px;
+				margin-bottom: 3px;
+			}
+			h2 span,
+			h4 span {
+				font-family: 'Myriad Pro';
+				color: $text-gray;
+				font-weight: normal;
+			}
+			.calculate {
+				background: #eeeeee;
+    		padding: 8px 0 14px 0;
+    		margin: 10px 0;
+    		label {
+    			color: $text-default;
+    			font-weight: bold;
+    			margin: 0;
+    		}
+			}
+		}
+
+	}
+
+}

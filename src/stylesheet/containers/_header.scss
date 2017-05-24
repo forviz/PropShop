@@ -1,0 +1,101 @@
+#Header .container {
+	width: 100%;
+}
+.navbar-default {
+	background: $main-bg;
+	box-shadow: none;
+	border: 0;
+	margin: 0;
+}
+.navbar-default .navbar-nav > li > a {
+	color: #ffffff;
+	font-family: $sukumvit-bold;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a.active {
+	color: $text-default;
+}
+.navbar-default .navbar-nav > li > a:after {
+	content: '/';
+	color: #4d790a;
+	position: absolute;
+	margin-left: 13px;
+}
+.navbar-default .navbar-right > li > a:after {
+	content: '|';
+}
+.navbar-default .navbar-nav > li:last-child > a:after,
+.navbar-default .navbar-right .language.last a:after {
+	content: '';
+}
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover, 
+.navbar-default .navbar-brand:focus {
+	background: #ffffff;
+	padding: 11px 15px;
+}
+.navbar-default .navbar-right .login {
+	border-left: 1px solid #4d790a;
+  box-shadow: inset 0px -4px 0px 0px #4d790a;
+}
+.navbar-default .navbar-right .login:hover a,
+.navbar-default .navbar-right .login:hover .fa-user-o {
+	color: #ffffff;
+	background: $text-default;
+}
+.navbar-default .navbar-right .login a {
+	padding: 15px 20px;
+}
+.navbar-default .navbar-right .login .fa-user-o {
+	color: #ffffff;
+  margin-right: 6px;
+}
+.navbar-default .navbar-nav > li.login > a:hover, 
+.navbar-default .navbar-nav > li.login > a:focus, 
+.navbar-default .navbar-nav > li.login > a.active {
+  color: #ffffff;
+  background: $text-default;
+}
+@media (max-width: 935px) {
+	.navbar-collapse.collapse {
+    display: none !important;
+	}
+	.navbar-toggle {
+		display: block !important;
+		position: relative;
+    float: right;
+    padding: 9px 10px;
+    margin-top: 8px;
+    margin-right: 15px;
+    margin-bottom: 8px;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+	}
+	.navbar-header {
+    float: none;
+	}
+	.collapse.in {
+		display: block !important;
+	}
+	.navbar-nav > li {
+    float: none;
+	}
+	.navbar-nav > li > a {
+		padding-top: 10px;
+    padding-bottom: 10px;
+	}
+	.navbar-default .navbar-nav > li > a:after {
+		content: '';
+	}
+	.navbar-nav {
+    float: none;
+    margin: 0;
+	}
+	.navbar-right {
+		float: none !important;
+    margin: 0;
+	}
+}

@@ -1,0 +1,81 @@
+html,
+body,
+#root,
+.PropShop,
+#Content {
+	min-height: 100%;
+}
+body,
+label {
+	font-size: 14px;
+	color: $text-default;
+}
+a,
+a:hover {
+	cursor: pointer;
+}
+a,
+div,
+span {
+	color: $text-default;
+	font-family: 'Tahoma';
+}
+ul {
+	margin: 0;
+	padding: 0;
+}
+li {
+	list-style: none;
+}
+img {
+	width: 100%;
+}
+.text-green {
+	color: $text-green !important;
+}
+.form-inline .form-group {
+	margin: 0 5px;
+}
+.form-inline .form-group:first-child {
+	margin-left: 0;
+}
+.form-inline .form-group:last-child {
+	margin-right: 0;
+}
+#Content {
+	padding-top: 50px;
+}
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+.vbottom {
+  display: inline-block;
+  vertical-align: bottom;
+  float: none;
+}
+.social-media {
+	padding: 10px 0;
+}
+.social-media ul li {
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	line-height: 30px;
+	margin: 0 4px;
+	text-align: center;
+	cursor: pointer;
+}
+.social-media ul li.facebook {
+	background: #3a5897;
+}
+.social-media ul li.google-plus {
+	background: #dd4a39;
+}
+.social-media ul li.twitter {
+	background: #25a6d1;
+}
+.social-media ul li span {
+	color: #ffffff;
+}

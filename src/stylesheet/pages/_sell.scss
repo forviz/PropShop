@@ -1,0 +1,71 @@
+#Sell {
+
+	min-height: 100vh;
+
+	.steps {
+		margin: 25px 0;
+		.ant-steps-title {
+			font-family: $sukumvit-semibold;
+		}
+		.ant-steps .ant-steps-item.ant-steps-status-process .ant-steps-head-inner {
+			border-color: #84b43e;
+    	background-color: #84b43e;
+		}
+		.ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner > .ant-steps-icon {
+    	color: #ffffff;
+		}
+		.ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner {
+	    border-color: #84b43e;
+	    background-color: #84b43e;
+		}
+	}
+
+	h1 {
+		font-family: $sukumvit-bold;
+		font-size: 36px;
+		color: $text-green;
+		text-align: center;
+		margin-top: 60px;
+		margin-bottom: 20px;
+	}
+
+	.action {
+		margin-top: 40px;
+	}
+
+	#Step0 {
+		.form {
+			.type {
+				margin: 25px 0;
+				text-align: center;
+				.ant-radio-wrapper {
+					margin-right: 35px;
+				}
+			}
+			.input {
+				label {
+					font-size: 14px;
+					font-weight: bold;
+				}
+			}
+		}
+	}
+		
+	#Step1 {
+		.SpecialFeature {
+			h4 {
+				display: none;
+			}
+		}
+	}
+
+	#Step3 {
+		.form {
+			border: 1px solid #cccccc;
+	    border-radius: 4px;
+	    padding: 30px;
+	    margin-bottom: 10px;
+		}
+	}
+	
+}

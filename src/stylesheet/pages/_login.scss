@@ -1,0 +1,74 @@
+#Login {
+
+	height: 100%;
+
+	> .row {
+		height: 100%;
+		margin: 0;
+	}
+
+	.layout-left {
+		height: 100%;
+		position: fixed;
+		padding: 0;
+	}
+	.layout-right {
+		padding: 0;
+	}
+
+	.form {
+		> .row {
+			margin: 0;
+		}
+		margin: 40px 0;
+		h1 {
+			font-family: $sukumvit-bold;
+			font-size: 36px;
+			color: $text-green;
+			margin-bottom: 40px;
+			text-align: center;
+		}
+		.form-group.link {
+			text-align: center;
+		}
+		.form-group.link li {
+			margin: 0 14px;
+			display: inline-block;
+			vertical-align: middle;
+			position: relative;
+		}
+		.form-group.link li:after {
+			content: '|';
+			color: #4d790a;
+			position: absolute;
+			margin-left: 13px;
+		}
+		.form-group.link li:last-child:after {
+			content: '';
+		}
+		.form-group.link li a {
+			color: $text-green;
+		}
+		.form-group.action {
+			text-align: center;
+			margin-top: 40px;
+		}
+		.form-group.action button {
+			margin: 0 10px;
+		}
+	}
+
+	.social_login {
+		text-align: center;
+		margin: 20px 0;
+		> div {
+			display: inline-block;
+			vertical-align: middle;
+			margin: 0 10px;
+		}
+		.icon {
+			
+		}
+	}
+	
+}

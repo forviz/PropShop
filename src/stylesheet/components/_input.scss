@@ -1,0 +1,19 @@
+body {
+	input.form-control {
+		height: 36px;
+	}
+	.ant-input {
+		font-size: 14px;
+		height: 38px;
+		line-height: 39px;
+		padding: 0 10px;
+		border-color: #cccccc;
+	}
+	.ant-input:active,
+	.ant-input:hover,
+	.ant-input:focus,
+	.ant-input:visited {
+		border-color: $text-green;
+		box-shadow: none;
+	}
+}

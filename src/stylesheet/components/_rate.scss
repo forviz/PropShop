@@ -1,0 +1,15 @@
+body {
+	.rating {
+		.ant-rate {
+			font-size: 18px;
+		}
+		.ant-rate-disabled .ant-rate-star {
+			margin: 0;
+			cursor: default;
+		}
+		span {
+			margin-left: 5px;
+			vertical-align: middle;
+		}
+	}
+}

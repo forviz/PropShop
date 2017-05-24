@@ -1,0 +1,54 @@
+#AgentDetail {
+
+	.info {
+		.name {
+			font-size: 24px;
+			color: $text-green;
+		}
+		.rating {
+
+		}
+		.phone {
+			font-weight: bold;
+			color: $text-gray;
+		}
+	}
+
+	.ant-tabs-bar {
+		border-color: $border-color;
+	}
+	.ant-tabs-nav .ant-tabs-tab {
+    text-align: center;
+    border-right: 1px solid $border-color;
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #409ee1;
+    padding: 8px 30px;
+	}
+	.ant-tabs-nav .ant-tabs-tab-active {
+		color: $text-default;
+	}
+	.ant-tabs-ink-bar {
+		display: none !important;
+	}
+
+	section {
+		border-bottom: 1px solid $border-color;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+		h3 {
+			margin-bottom: 10px;
+		}
+	}
+
+	.property_list {
+		
+	}
+	.property_list.odd {
+		.address {
+			color: #409ee1;
+		}
+	}
+
+}
