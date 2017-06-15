@@ -1,16 +1,28 @@
 import React, { Component } from 'react';
+import { Menu, Dropdown, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withTranslate, IntlActions } from 'react-redux-multilingual';
-
 import FontAwesome from 'react-fontawesome';
-
 import logo from '../../images/logo.png';
+import * as firebase from '../../api/firebase';
 
 class Header extends Component {
 
 	state = {
+		user: {},
 		showMobileMenu: false,
+	}
+
+	componentDidMount() {
+		const _self = this;
+		firebase.core().auth().onAuthStateChanged(function(user) {
+		  if (user) {
+		  	_self.setState(prevState => ({
+		      user: user,
+		    }));
+		  }
+		});
 	}
 
 	handleMobileMenu = () => {
@@ -19,8 +31,52 @@ class Header extends Component {
     }));
 	}
 
+	logout = () => {
+		const _self = this;
+		firebase.core().auth().signOut().then(function() {
+		  _self.setState(prevState => ({
+	      user: {},
+	    }));
+		}).catch(function(error) {
+		  console.log('error', error);
+		});
+	}
+
+	handleMenuClick = (value) => {
+		if ( value.key === 'logout' ) {
+			this.logout();
+		}
+	}
+
   render() {
+
+  	const { user, showMobileMenu } = this.state;
   	const { translate, dispatch } = this.props;
+
+  	let loginLabel = 
+  										<NavLink exact to="/login">
+				            		<FontAwesome name='user-o' />
+				            		{translate('เข้าสู่ระบบ')}
+				            	</NavLink>
+
+		if ( user.email ) {
+			const menu = (
+			  <Menu onClick={this.handleMenuClick}>
+			    <Menu.Item key="profile">
+			    	<NavLink exact to="/">Profile</NavLink>
+			    </Menu.Item>
+			    <Menu.Divider />
+			    <Menu.Item key="logout">Logout</Menu.Item>
+			  </Menu>
+			);
+			loginLabel = 	
+									<Dropdown overlay={menu} trigger={['click']}>
+								    <a className="ant-dropdown-link" href="#">
+								      {user.email} <Icon type="down" />
+								    </a>
+								  </Dropdown>
+		}
+
     return (
       <nav id="Header" className="navbar navbar-default navbar-fixed-top">
 	      <div className="container">
@@ -35,9 +91,9 @@ class Header extends Component {
 	          	<img src={logo} alt="PropShop" />
 	          </NavLink>
 	        </div>
-	        <div id="navbar" className={"navbar-collapse collapse " + (this.state.showMobileMenu ? 'in' : '')}>
+	        <div id="navbar" className={"navbar-collapse collapse " + (showMobileMenu ? 'in' : '')}>
 	          <ul className="nav navbar-nav">
-	            <li><NavLink exact to="/">{translate('หน้าแรก')}</NavLink></li>
+	            <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
 	            <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
 	            <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li>
 	            <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
@@ -47,10 +103,7 @@ class Header extends Component {
 	            <li className="language"><a onClick={(e) => { dispatch(IntlActions.setLocale('th')) }}>ไทย</a></li>
 	            <li className="language last"><a onClick={(e) => { dispatch(IntlActions.setLocale('en')) }}>ENG</a></li>
 	            <li className="login">
-	            	<NavLink exact to="/login">
-	            		<FontAwesome name='user-o' />
-	            		{translate('เข้าสู่ระบบ')}
-	            	</NavLink>
+	            	{loginLabel}
 	            </li>
 	          </ul>
 	        </div>

@@ -1,19 +1,33 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Spin } from 'antd';
 import numeral from 'numeral';
 import _ from 'lodash';
 import ImageGallery from 'react-image-gallery';
 import FontAwesome from 'react-fontawesome';
 
-import realEstateData from '../../../public/data/realEstateData.json';
-
+import * as BannerActions from '../../actions/banner-actions';
 
 class BannerRealEstate extends Component {
+
+  // componentWillReceiveProps (nextProps) {
+  //   this.setState({
+  //     value: nextProps.initialValue,
+  //   })
+  // }
+
+  componentDidMount() {
+    const { fetchBanners } = this.props.actions;
+    fetchBanners();
+  }
 
 	renderSlide = (item) => {
 
     const backgroundStyle = {
       'background': `url(${item.mainImage})`,
       'backgroundSize': 'cover',
+      'backgroundPosition': 'center',
     }
 
     return (
@@ -35,14 +49,14 @@ class BannerRealEstate extends Component {
 
   render() {
 
-    const realEstateDatas = _.filter(realEstateData, (value) => { 
-      return value.id === 15 || value.id === 16 || value.id === 17 || value.id === 18; 
-    });
+    const { banners, loading } = this.props;
+
+    if (loading === true) return <Spin />;
 
     return (
       <div className="BannerRealEstate">
         <ImageGallery
-          items={realEstateDatas}
+          items={banners}
           slideInterval={2000}
           showThumbnails={false}
           showFullscreenButton={false}
@@ -56,4 +70,36 @@ class BannerRealEstate extends Component {
   }
 }
 
-export default BannerRealEstate;
+const mapStateToProps = state => {
+  return {
+    loading: state.banners.loading,
+    banners: state.banners.main,
+    // banners: _.map(state.banners.main, (bannerId) => {
+    //   const property = state.banners.entities[bannerId];
+    //   return {
+    //     mainImage: property.mainImage.fields.file.url,
+    //     price: property.price,
+    //     address: {
+    //       street: property.street,
+    //       province: property.province,
+    //     },
+    //     room: {
+    //       bedroom: property.bedroom,
+    //       bathroom: property.bathroom,
+    //     },
+    //   }
+    // }),
+  };
+}
+
+const actions = {
+  fetchBanners: BannerActions.fetchBanners,
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BannerRealEstate);

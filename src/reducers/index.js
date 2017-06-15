@@ -1,6 +1,16 @@
 import { combineReducers } from 'redux';
-import auth from './auth';
+import { IntlReducer as Intl } from 'react-redux-multilingual';
+// import user from './user';
+import config from './config';
+import banners from './banners';
+import realestates from './realestates';
+import sell from './sell';
 
 export default combineReducers({
-	auth: auth,
+	Intl,
+	config,
+	// user,
+	banners,
+	realestates,
+	sell,
 });

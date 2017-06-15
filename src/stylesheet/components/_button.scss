@@ -89,12 +89,20 @@ body {
 		color: #ffffff;
 	}
 
-	.btn-filter_advance.active {
-		background: $text-default;
-	}
-	.btn-filter_advance.active i,
-	.btn-filter_advance.active span {
-		color: #ffffff;
+	.btn-main, 
+	.btn-main.active,
+	.btn-main:active,
+	.btn-main:hover,
+	.btn-main:focus,
+	.btn-main:visited {
+		background-image: linear-gradient(to top, #7eab3b, #87b740);
+		border-color: #79a13d;
+		box-shadow: inset 0px -1px 0px #000000;
+		span {
+			font-family: $sukumvit-bold;
+			font-size: 14px;
+			color: #ffffff;
+		}
 	}
 
 }

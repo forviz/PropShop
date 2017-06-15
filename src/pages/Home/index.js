@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Select, Icon, Button, Slider } from 'antd';
+import { Tabs, Input, Select, Button, Slider } from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import queryString from 'query-string';
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -8,183 +11,224 @@ const Option = Select.Option;
 import BannerRealEstate from '../../containers/BannerRealEstate';
 import SpecialFeature from '../../containers/SpecialFeature';
 
-import ButtonBuyRent from '../../components/ButtonBuyRent';
+import LoadingComponent from '../../components/Loading';
 import RealEstateItem from '../../components/RealEstateItem';
+import SelectSellType from '../../components/SelectSellType';
+import SelectResidentialType from '../../components/SelectResidentialType';
+import SelectRoom from '../../components/SelectRoom';
 
-import realEstateData from '../../../public/data/realEstateData.json';
-import specialFeatureData from '../../../public/data/specialFeatureData.json';
+import * as RealestateActions from '../../actions/realestate-actions';
+import * as ConfigActions from '../../actions/config-actions';
 
 class Home extends Component {
 
-  state = {
-    defaultValue: {
-      price: {
-        min: 0,
-        max: 100000000,
-      },
-      realEstate: realEstateData,
-    },
-    filterValue: {
-      type: 'rent', // buy, rent
-      input: '',
-      residentialType: '',
-      price: {
-        min: 0,
-        max: 100000000,
-      },
-      room: {
-        bedroom: '',
-        bathroom: '',
-      },
-      specialFeature: specialFeatureData,
-      realEstate: {},
+  headerHeight: 0;
+
+  constructor(props) {
+    super(props);
+
+    console.log('HOME constructor', props);
+
+    // const { configRealestate } = this.props;
+
+    this.state = {
       advanceExpand: false,
-    },
-    filter: false,
+      // filter: {
+      //   for: '',
+      //   query: '',
+      //   price: {
+      //     min: configRealestate.data.priceMin,
+      //     max: configRealestate.data.priceMax,
+      //   },
+      //   residentialType: '',
+      //   room: {
+      //     bedroom: '',
+      //     bathroom: '',
+      //   },
+      //   specialFeature: {},
+      // },
+    }
   }
 
-  handleFilterType = (type) => {
-    this.setState(prevState => ({
-      filterValue: { ...prevState.filterValue, type: type },
-    }));
+  componentWillMount() {
+
+  }
+
+  componentDidMount() {
+    const { fetchConfigs } = this.props.actions;
+    fetchConfigs();
+
+    const { location } = this.props;
+    this.goFilter(location);
+    
+    document.getElementById("Footer").style.visibility = "hidden";
+    document.addEventListener('scroll', this.handleScroll);
+    this.headerHeight = document.getElementById('Header').clientHeight;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location !== this.props.location) {
+      this.goFilter(nextProps.location);
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('scroll', this.handleScroll);
+  }
+
+  handleScroll = (event) => {
+    const scroolHeight = document.body.scrollTop + window.innerHeight;
+    const bodyHeight = document.getElementsByClassName('layout-right')[0].clientHeight + this.headerHeight;
+    if (scroolHeight >= bodyHeight) {
+      document.getElementsByClassName("PropShop")[0].classList.add('end');
+    } else {
+      if (document.getElementsByClassName("PropShop")[0].classList.contains('end')) {
+        document.getElementsByClassName("PropShop")[0].classList.remove('end');
+        // document.getElementById('Footer').style.top = '100px';
+      }
+    }    
+  }
+
+  goFilter = (location) => {
+    const search = location.search;
+    if (search) {
+      const { fetchRealestates } = this.props.actions;
+      fetchRealestates(queryString.parse(search));
+    } else {
+      this.props.realestate.filter = false;
+    }
+  }
+
+  delay = (() => {
+    let timer = 0;
+    return (callback, ms) => {
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
+
+  handleFilterFor = (value) => {
+    this.filter('for', value);
   }
 
   handleFilterInput = (e) => {
-    const input = e.target.value;
-    this.setState(prevState => ({
-      filterValue: { ...prevState.filterValue, input: `${input}` },
-    }));
-  }
-
-  handleFilterResidentialType = (value) => {
-    this.setState(prevState => ({
-      filterValue: { ...prevState.filterValue, residentialType: value },
-    }));
-  }
-
-  handleFilterAdvance = (e) => {
-    this.setState(prevState => ({
-      filterValue: { ...prevState.filterValue, advanceExpand: !prevState.filterValue.advanceExpand },
-    }));
+    const value = e.target.value;
+    this.delay(() => {
+      this.filter('query', value);
+    }, 1000 );
   }
 
   handleFilterPrice = (value) => {
-    this.setState(prevState => ({
-      filterValue: {
-        ...prevState.filterValue, 
-        price: {
-          min: parseInt(value[0], 10),
-          max: parseInt(value[1], 10),
-        }
-      },
-    }));
+    this.delay(() => {
+      this.filter('priceMin', value[0]);
+      this.filter('priceMax', value[1]);
+    }, 1000 );
+  }
+
+  handleFilterResidentialType = (value) => {
+    this.filter('residentialType', value);
   }
 
   handleFilterBedRoom = (value) => {
-    this.setState(prevState => ({
-      filterValue: {
-        ...prevState.filterValue, 
-        room: {
-          ...prevState.filterValue.room,
-          bedroom: value,
-        }
-      },
-    }));
+    this.filter('bedroom', value);
   }
 
   handleFilterBathRoom = (value) => {
-    this.setState(prevState => ({
-      filterValue: {
-        ...prevState.filterValue, 
-        room: {
-          ...prevState.filterValue.room,
-          bathroom: value,
-        }
-      },
-    }));
+    this.filter('bathroom', value);
   }
 
   handleFilterSpecialFeature = (data) => {
+    const { location } = this.props;
+
+    let search = {};
+
+    const param = location.search;
+    if (param) {
+      search = queryString.parse(param);
+    }
+
+    search['specialFeatureView'] = data.specialFeatureView.join();
+    search['specialFeatureFacilities'] = data.specialFeatureFacilities.join();
+    search['specialFeatureNearbyPlaces'] = data.specialFeatureNearbyPlaces.join();
+    search['specialFeaturePrivate'] = data.specialFeaturePrivate.join();
+
+    this.setAdvanceExpand();
+
+    const stringified = queryString.stringify(search);
+    this.setUrl(stringified);
+  }
+
+  filter = (key, value) => {
+    const stringified = this.convertObjectToQueryString(key, value);
+    this.setUrl(stringified);
+  }
+
+  convertObjectToQueryString = (key, value) => {
+    const { location } = this.props;
+
+    let search = {};
+
+    const param = location.search;
+    if (param) {
+      search = queryString.parse(param);
+    }
+
+    search[key] = value;
+
+    return queryString.stringify(search);
+  }
+
+  setUrl = (stringified) => {
+    const { history } = this.props;
+    history.push({
+      pathname: '/',
+      search: '?'+decodeURIComponent(stringified),
+    });
+  }
+
+  handleAdvanceExpand = (e) => {
+    this.setAdvanceExpand();
+  }
+
+  setAdvanceExpand = () => {
     this.setState(prevState => ({
-      filterValue: { ...prevState.filterValue, specialFeature: data },
+      advanceExpand: !prevState.advanceExpand,
     }));
   }
 
-  handleFilter = (value) => {
-    const { defaultValue, filterValue } = this.state;
-
-    // Filter Type
-    let filterRealEstateData = _.filter(defaultValue.realEstate, ['type', filterValue.type === 'buy' ? 'sell' : filterValue.type]);
-    
-    // Filter Input
-    if ( filterValue.input !== '' ) {
-      filterRealEstateData = _.filter(filterRealEstateData, (data) => { 
-        const stringToSearch = JSON.stringify(_.pick(data, ['project', 'address']));
-        const regex = new RegExp(filterValue.input, "i");
-        return regex.test(stringToSearch);
-      });
+  renderSelectOption = (limit) => {
+    const data = [];
+    for (let i = 1; i <= limit; i++) { 
+      data.push(<Option key={i.toString(36)} value={i.toString(36)}>{i.toString(36)}</Option>);
     }
-
-    // Filter PropertyType
-    if ( filterValue.residentialType !== '' ) {
-      filterRealEstateData = _.filter(filterRealEstateData, ['residentialType', filterValue.residentialType]);
-    }
-
-    // Filter Price
-    filterRealEstateData = _.filter(filterRealEstateData, (data) => {
-      return data.price >= filterValue.price.min && data.price <= filterValue.price.max;
-    });
-
-    // Filter BedRoom
-    if ( filterValue.room.bedroom !== '' ) {
-      filterRealEstateData = _.filter(filterRealEstateData, (data) => {
-        return data.room.bedroom >= filterValue.room.bedroom;
-      });
-    }
-
-    // Filter BathRoom
-    if ( filterValue.room.bathroom !== '' ) {
-      filterRealEstateData = _.filter(filterRealEstateData, (data) => {
-        return data.room.bathroom >= filterValue.room.bathroom;
-      });
-    }
-
-    // Filter SpecialFeature
-    let filterSpecialFeature = false;
-
-    _.forEach(filterValue.specialFeature, (value, key) => {
-      _.forEach(value, (value2, key2) => {
-        if ( value2 === 1 ) {
-          filterSpecialFeature = true;
-        }
-      });
-    });
-
-    if ( filterSpecialFeature === true ) {
-      filterRealEstateData = _.filter(filterRealEstateData, (data) => { 
-        // const specialFeature = _.pick(data, ['specialFeature']);
-        return true;
-      });
-    }
-    
-    this.setState(prevState => ({
-      filter: true,
-      filterValue: { ...prevState.filterValue, realEstate: filterRealEstateData },
-    }));
+    return data;
   }
 
   render() {
 
-    const { defaultValue, filterValue, filter } = this.state;
+    const { banner, realestate, configRealestate, history, location } = this.props;
+    const { advanceExpand } = this.state;
 
     const stepMarks = {
-      0: {
+      [configRealestate.data.priceMin]: {
         style: {
           color: '#484849',
         },
         label: '0 บ.',
       },
-      100000000: {
+      [configRealestate.data.priceMax]: {
         style: {
           color: '#484849',
         },
@@ -192,9 +236,34 @@ class Home extends Component {
       },
     };
 
-    const stepDefaultValue = [];
-    stepDefaultValue.push(defaultValue.price.min);
-    stepDefaultValue.push(defaultValue.price.max);
+    // const selectBedroom = this.renderSelectOption(configRealestate.data.bedroom);
+    // const selectBathroom = this.renderSelectOption(configRealestate.data.bathroom);
+
+    let search = [];
+    const param = location.search;
+    if (param) {
+      search = queryString.parse(param);
+    }
+
+    const defaultSelected = {
+      for: search.for ? search.for : [],
+      query: search.query ? search.query : [],
+      price: {
+        min: search.priceMin ? parseInt(search.priceMin, 10) : configRealestate.data.priceMin,
+        max: search.priceMax ? parseInt(search.priceMax, 10) : configRealestate.data.priceMax,
+      },
+      residentialType: search.residentialType ? search.residentialType : [],
+      room: {
+        bedroom: search.bedroom ? search.bedroom : [],
+        bathroom: search.bathroom ? search.bathroom : [],
+      },
+      specialFeature: {
+        specialFeatureView: search.specialFeatureView ? search.specialFeatureView.split(',') : [],
+        specialFeatureFacilities: search.specialFeatureFacilities ? search.specialFeatureFacilities.split(',') : [],
+        specialFeatureNearbyPlaces: search.specialFeatureNearbyPlaces ? search.specialFeatureNearbyPlaces.split(',') : [],
+        specialFeaturePrivate: search.specialFeaturePrivate ? search.specialFeaturePrivate.split(',') : [],
+      }
+    };
 
     return (
       <div id="Home">
@@ -203,131 +272,212 @@ class Home extends Component {
       			<BannerRealEstate />
       		</div>
       		<div className="col-md-6 col-md-offset-6 layout-right">
-            <div className="filter_real_estate">
-              <Tabs defaultActiveKey="1">
-                <TabPane tab="เลือกจากทำเล" key="1">
-                  <div className="form-inline">
-                    <div className="form-group">
-                      <ButtonBuyRent type={filterValue.type} onSelect={this.handleFilterType} />
+            {configRealestate.loading === true ? (
+              <LoadingComponent />
+            ) : (
+              <div className="filter_real_estate">
+                <Tabs defaultActiveKey="1">
+                  <TabPane tab="เลือกจากทำเล / โครงการ" key="1">
+                    <div className="row row_1">
+                      <div className="col-md-3">
+                        <div style={{ width: '100%' }}>
+                          <SelectSellType placeholder="ซื้อ / เช่า" defaultValue={defaultSelected.for} onChange={this.handleFilterFor} />
+                        </div>
+                      </div>
+                      <div className="col-md-9">
+                        <Input placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ" defaultValue={defaultSelected.query} style={{ width: '100%' }} onChange={this.handleFilterInput} />
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <Input placeholder="ค้นหา" style={{ width: 120 }} onChange={this.handleFilterInput} />
+                    <div className="row row_2">
+                      <div className="col-md-4">
+                        <div className="price_length">
+                          <Slider range marks={stepMarks} defaultValue={[defaultSelected.price.min, defaultSelected.price.max]} min={configRealestate.data.priceMin} max={configRealestate.data.priceMax} onChange={this.handleFilterPrice} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-residential-type">
+                        <div style={{ width: '100%' }} >
+                          <SelectResidentialType placeholder="ประเภทอสังหาฯ" defaultValue={defaultSelected.residentialType} onChange={this.handleFilterResidentialType} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-room">
+                        <div style={{ width: '100%' }} >
+                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.room.bedroom} onChange={this.handleFilterBedRoom} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-room">
+                        <div style={{ width: '100%' }} >
+                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.room.bathroom} onChange={this.handleFilterBathRoom} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-advance">
+                        <Button style={{ width: '100%' }} className={"btn-main " + (advanceExpand === true ? 'active' : '')} onClick={this.handleAdvanceExpand}>ตัวเลือกเพิ่มเติม</Button>
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <Select placeholder="ประเภทที่อยู่อาศัย" style={{ width: 150 }} onChange={this.handleFilterResidentialType} >
-                        <Option value="condo">Condo</Option>
-                        <Option value="house">House</Option>
-                      </Select>
-                    </div>
-                    <div className="form-group">
-                      <Button style={{ width: 150 }} className={"btn-filter_advance " + (filterValue.advanceExpand ? 'active' : '')} onClick={this.handleFilterAdvance}>
-                        ตัวเลือกเพิ่มเติม <Icon type={filterValue.advanceExpand ? 'up' : 'down'} />
-                      </Button>
-                    </div>
-                    <div className="form-group">
-                      <Button type="primary" style={{ width: 80 }} onClick={this.handleFilter} >ค้นหา</Button>
-                    </div>
-                  </div>
-                  {filterValue.advanceExpand === true &&
-                    <div className="row">
-                      <div className="col-md-12">
-                        <div className="filter_advance">
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="price_length">
-                                <Slider range marks={stepMarks} defaultValue={stepDefaultValue} min={defaultValue.price.min} max={defaultValue.price.max} onChange={this.handleFilterPrice} />
-                              </div>
-                            </div>
-                            <div className="col-md-6 room_count">
-                              <div className="room_count">
-                                <div className="row">
-                                  <div className="col-md-6">
-                                    <div>จำนวนห้องนอน</div>
-                                    <Select style={{ width: '100%' }} onChange={this.handleFilterBedRoom} placeholder="--">
-                                      <Option value="1">1</Option>
-                                      <Option value="2">2</Option>
-                                    </Select>
-                                  </div>
-                                  <div className="col-md-6">
-                                    <div>จำนวนห้องน้ำ</div>
-                                    <Select style={{ width: '100%' }} onChange={this.handleFilterBathRoom} placeholder="--">
-                                      <Option value="1">1</Option>
-                                      <Option value="2">2</Option>
-                                    </Select>
-                                  </div>
+                    {advanceExpand === true &&
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="filter_advance">
+                            <div className="row">
+                              <div className="col-md-12">
+                                <div className="property_block">
+                                  <SpecialFeature items={configRealestate.data.specialFeature} defaultValue={defaultSelected.specialFeature} onSelect={this.handleFilterSpecialFeature} />
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-md-12">
-                              <div className="property_block">
-                                <SpecialFeature items={filterValue.specialFeature} onSelect={this.handleFilterSpecialFeature} />
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  }
-                </TabPane>
-                <TabPane tab="ใกล้สถานีรถไฟฟ้า" key="2">Content of Tab Pane 2</TabPane>
-                <TabPane tab="ชื่อโครงการ" key="3">Content of Tab Pane 3</TabPane>
-              </Tabs>
-            </div>
-            <hr />
-            {filter === true ? (
-              <div className="result">
-                <div className="list">
-                  <h3>{filterValue.realEstate.length} ผลการค้นหา</h3>
-                  <div>
-                    {
-                      _.map(filterValue.realEstate, (item, key) => {
-                        return (
-                          <div className="col-md-4"><RealEstateItem item={item} type="sell" /></div>
-                        );
-                      })
                     }
+                  </TabPane>
+                  <TabPane tab="ใกล้สถานีรถไฟฟ้า" key="2">
+                    <div className="row row_1">
+                      <div className="col-md-3">
+                        <div style={{ width: '100%' }}>
+                          <SelectSellType placeholder="ซื้อ / เช่า" defaultValue={defaultSelected.for} onChange={this.handleFilterFor} />
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <Select placeholder="ประเภทรถไฟฟ้า" style={{ width: '100%' }} >
+                          <Option value="xxxxxxxxxxxxxxxxx">xxxxxxxxxxxxxxxxx</Option>
+                        </Select>
+                      </div>
+                      <div className="col-md-3">
+                        <Select placeholder="สถานีรภไฟฟ้า" style={{ width: '100%' }} >
+                          <Option value="xxxxxxxxxxxxxxxxx">xxxxxxxxxxxxxxxxx</Option>
+                        </Select>
+                      </div>
+                      <div className="col-md-3">
+                        <Select placeholder="รัศมีการเดินทาง" style={{ width: '100%' }} >
+                          <Option value="xxxxxxxxxxxxxxxxx">xxxxxxxxxxxxxxxxx</Option>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="row row_2">
+                      <div className="col-md-4">
+                        <div className="price_length">
+                          <Slider range marks={stepMarks} defaultValue={[defaultSelected.price.min, defaultSelected.price.max]} min={configRealestate.data.priceMin} max={configRealestate.data.priceMax} onChange={this.handleFilterPrice} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-residential-type">
+                        <div style={{ width: '100%' }} >
+                          <SelectResidentialType placeholder="ประเภทอสังหาฯ" defaultValue={defaultSelected.residentialType} onChange={this.handleFilterResidentialType} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-room">
+                        <div style={{ width: '100%' }} >
+                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.room.bedroom} onChange={this.handleFilterBedRoom} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-room">
+                        <div style={{ width: '100%' }} >
+                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.room.bathroom} onChange={this.handleFilterBathRoom} />
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-advance">
+                        <Button style={{ width: '100%' }} className={"btn-main " + (advanceExpand === true ? 'active' : '')} onClick={this.handleAdvanceExpand}>ตัวเลือกเพิ่มเติม</Button>
+                      </div>
+                    </div>
+                    {advanceExpand === true &&
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="filter_advance">
+                            <div className="row">
+                              <div className="col-md-12">
+                                <div className="property_block">
+                                  <SpecialFeature items={configRealestate.data.specialFeature} defaultValue={defaultSelected.specialFeature} onSelect={this.handleFilterSpecialFeature} />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </TabPane>
+                </Tabs>
+              </div>
+            )}
+            <hr />
+            {realestate.filter === true ? (
+              <div className="result">
+                {realestate.loading === true ? (
+                  <LoadingComponent />
+                ) : (
+                  <div className="list">
+                    <h3>{realestate.data.length} ผลการค้นหา</h3>
+                    <ul>
+                      {
+                        _.map(realestate.data, (item, index) => {
+                          return (
+                            <li key={index} className="item col-md-4"><RealEstateItem item={item} type="sell" /></li>
+                          );
+                        })
+                      }
+                    </ul>
                   </div>
-                </div>
+                )}
               </div>
             ) : (
-              <div className="main">
-                <div className="list">
-                  <h3>คอนโด</h3>
-                  <div className="row">
-                    <div className="col-md-4"><RealEstateItem item={defaultValue.realEstate[0]} type="sell" /></div>
-                    <div className="col-md-4"><RealEstateItem item={defaultValue.realEstate[1]} type="banner" /></div>
-                    <div className="col-md-4"><RealEstateItem item={defaultValue.realEstate[2]} type="sell" /></div>
+              <div className="result">
+                {Object.keys(banner.condo).length > 0 &&
+                    <div className="list">
+                      <h3>คอนโด</h3>
+                      <ul>
+                        {
+                          _.map(banner.condo, (row, index) => {
+                            const rowMD = 12 / Object.keys(row).length;
+                            return (
+                              <li key={index}>
+                                <ul>
+                                  {
+                                    _.map(row, (item, index2) => {
+                                      return (
+                                        <li key={index2} className={"item col-md-"+rowMD}><RealEstateItem item={item} type="sell" /></li>
+                                      );
+                                    })
+                                  }
+                                </ul>
+                              </li>
+                            );
+                          })
+                        }
+                      </ul>
+                    </div>
+                  }
+                  {Object.keys(banner.house).length > 0 &&
+                    <div className="list">
+                      <h3>บ้าน</h3>
+                      <ul>
+                        {
+                          _.map(banner.house, (row, index) => {
+                            const rowMD = 12 / Object.keys(row).length;
+                            return (
+                              <li key={index}>
+                                <ul>
+                                  {
+                                    _.map(row, (item, index2) => {
+                                      return (
+                                        <li key={index2} className={"item col-md-"+rowMD}><RealEstateItem item={item} type="sell" /></li>
+                                      );
+                                    })
+                                  }
+                                </ul>
+                              </li>
+                            );
+                          })
+                        }
+                      </ul>
+                    </div>
+                  }
+                  {/*
+                  <div className="list news">
+                    <h3>ข่าวสารและบทความ</h3>
+                    <div className="row">
+                      <div className="col-md-4"></div>
+                      <div className="col-md-4"></div>
+                      <div className="col-md-4"></div>
+                    </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[3]} type="sell" /></div>
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[4]} type="sell" /></div>
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[5]} type="sell" /></div>
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[7]} type="banner" /></div>
-                  </div>
-                </div>
-                <div className="list">
-                  <h3>บ้าน</h3>
-                  <div className="row">
-                    <div className="col-md-6"><RealEstateItem item={defaultValue.realEstate[8]} type="banner" /></div>
-                    <div className="col-md-6"><RealEstateItem item={defaultValue.realEstate[9]} type="sell" /></div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[10]} type="sell" /></div>
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[11]} type="sell" /></div>
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[12]} type="sell" /></div>
-                    <div className="col-md-3"><RealEstateItem item={defaultValue.realEstate[13]} type="sell" /></div>
-                  </div>
-                </div>
-                <div className="list news">
-                  <h3>ข่าวสารและบทความ</h3>
-                  <div className="row">
-                    <div className="col-md-4"></div>
-                    <div className="col-md-4"></div>
-                    <div className="col-md-4"></div>
-                  </div>
-                </div>
+                  */}
               </div>
             )}
       		</div>
@@ -337,4 +487,24 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => {
+  console.log('mapStateToProps', state);
+  return {
+    banner: state.banners,
+    realestate: state.realestates,
+    configRealestate: state.config,
+  };
+}
+
+const actions = {
+  fetchRealestates: RealestateActions.fetchRealestates,
+  fetchConfigs: ConfigActions.fetchConfigs,
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

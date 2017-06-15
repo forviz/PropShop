@@ -1,99 +1,88 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { Checkbox } from 'antd';
+import { Checkbox, Button } from 'antd';
 
 const CheckboxGroup = Checkbox.Group;
 
 class SpecialFeature extends Component {
 
+  constructor(props) {
+    super(props);
+    if ( Object.keys(props.defaultValue).length > 0 ) {
+      this.state.selected = props.defaultValue;
+    }
+  }
+
+  static defaultProps = {
+    items: {},
+    defaultValue: {
+      specialFeatureView: [],
+      specialFeatureFacilities: [],
+      specialFeatureNearbyPlaces: [],
+      specialFeaturePrivate: [],
+    }
+  }
+
   state = {
     checkAll: false,
+    selected: {
+      specialFeatureView: [],
+      specialFeatureFacilities: [],
+      specialFeatureNearbyPlaces: [],
+      specialFeaturePrivate: [],
+    }
   }
 
-  onPropertyViewChange = (checkedValues) => {
-    this.setItemsData('view', this.props.items.view, checkedValues);
+  onSpecialFeatureViewChange = (checkedValues) => {
+    this.setSelected('specialFeatureView', checkedValues);
   }
 
-  onPropertyFacilitiesChange = (checkedValues) => {
-    this.setItemsData('facilities', this.props.items.facilities, checkedValues);
+  onSpecialFeatureFacilitiesChange = (checkedValues) => {
+    this.setSelected('specialFeatureFacilities', checkedValues);
   }
  
-  onPropertyNearbyPlacesChange = (checkedValues) => {
-    this.setItemsData('nearbyPlaces', this.props.items.nearbyPlaces, checkedValues);
+  onSpecialFeatureNearbyPlacesChange = (checkedValues) => {
+    this.setSelected('specialFeatureNearbyPlaces', checkedValues);
   }
 
-  onPropertyPrivateChange = (checkedValues) => {
-    this.setItemsData('private', this.props.items.private, checkedValues);
+  onSpecialFeaturePrivateChange = (checkedValues) => {
+    this.setSelected('specialFeaturePrivate', checkedValues);
   }
 
-  setItemsData = (label, item, checkedValues) => {
-    _.forEach(item, (value, key) => {
-      if ( _.includes(checkedValues, key) ) {
-        item[key] = 1;
-      } else {
-        item[key] = 0;
-      }
+  setSelected = (key, value) => {
+    this.setState({selected: { ...this.state.selected, [key]: value }}, () => {
+      this.props.onChange(this.state.selected);
     });
-    this.props.items[label] = item;
-    this.props.onSelect(this.props.items);
   }
 
-  handleCheckAll = () => {
-    const { checkAll } = this.state;
-    checkAll === false ? this.checkAll() : this.cancelCheckAll();
+  handleFilter = () => {
+    this.props.onSelect(this.state.selected);
   }
 
-  checkAll = () => {
-    const { items } = this.props;
-
-    _.forEach(items, (value, key) => {
-      _.forEach(value, (value2, key2) => {
-        items[key][key2] = 1;
-      });
-    });
-
-    this.setState(prevState => ({
-      checkAll: true,
-    }));
-
-    this.props.onSelect(items);
-  }
-
-  cancelCheckAll = () => {
-    const { items } = this.props;
-
-    _.forEach(items, (value, key) => {
-      _.forEach(value, (value2, key2) => {
-        items[key][key2] = 0;
-      });
-    });
-
-    this.setState(prevState => ({
-      checkAll: false,
-    }));
-
-    this.props.onSelect(items);
-  }
+  // handleCheckAll = () => {
+  //   const { items } = this.props;
+  //   this.onSpecialFeatureViewChange(items.specialFeatureView.data);
+  //   this.onSpecialFeatureFacilitiesChange(items.specialFeatureFacilities.data);
+  //   this.onSpecialFeatureNearbyPlacesChange(items.specialFeatureNearbyPlaces.data);
+  //   this.onSpecialFeaturePrivateChange(items.specialFeaturePrivate.data);
+  //   this.setState(prevState => ({
+  //     checkAll: !prevState.checkAll,
+  //   }));
+  // }
 
   render() {
 
-    const { items } = this.props;
+    const { items, defaultValue } = this.props;
+    const { selected } = this.state;
 
-    const dataOptions = {};
-    const dataValue = {};
+    if ( !items ) return <div></div>;
 
-    _.forEach(items, (value, key) => {
-      const forOptions = [];
-      const forValue = [];
-      _.forEach(value, (value2, key2) => {
-        forOptions.push(key2);
-        if (value2 === 1) {
-          forValue.push(key2);
-        }
-      });
-      dataOptions[key] = forOptions;
-      dataValue[key] = forValue;
-    });
+    const setValue = {
+      specialFeatureView: selected.specialFeatureView.length > 0 ? selected.specialFeatureView : defaultValue.specialFeatureView,
+      specialFeatureFacilities: selected.specialFeatureFacilities.length > 0 ? selected.specialFeatureFacilities : defaultValue.specialFeatureFacilities,
+      specialFeatureNearbyPlaces: selected.specialFeatureNearbyPlaces.length > 0 ? selected.specialFeatureNearbyPlaces : defaultValue.specialFeatureNearbyPlaces,
+      specialFeaturePrivate: selected.specialFeaturePrivate.length > 0 ? selected.specialFeaturePrivate : defaultValue.specialFeaturePrivate,
+    }
 
     return (
       <div className="SpecialFeature">
@@ -103,34 +92,34 @@ class SpecialFeature extends Component {
               <h4>คุณสมบัติพิเศษ</h4>
             </div>
             <div className="pull-right">
-              <Checkbox checked={this.state.checkAll} onChange={this.handleCheckAll}>เลือกทั้งหมด</Checkbox>
+              {/*<Checkbox checked={checkAll} onChange={this.handleCheckAll}>เลือกทั้งหมด</Checkbox>*/}
             </div>
           </div>
         </div>
         <div className="list">
           <div className="row">
             <div className="col-md-3">
-              <div className="title">ประเภทวิว</div>
+              <div className="title">{items.specialFeatureView.name}</div>
               <div className="filter">
-                <CheckboxGroup options={dataOptions.view} value={dataValue.view} onChange={this.onPropertyViewChange} />
+                <CheckboxGroup options={items.specialFeatureView.data} value={setValue.specialFeatureView} onChange={this.onSpecialFeatureViewChange} />
               </div>
             </div>
             <div className="col-md-3">
-              <div className="title">สิ่งอำนวยความสะดวก</div>
+              <div className="title">{items.specialFeatureFacilities.name}</div>
               <div className="filter">
-                <CheckboxGroup options={dataOptions.facilities} value={dataValue.facilities} onChange={this.onPropertyFacilitiesChange} />
+                <CheckboxGroup options={items.specialFeatureFacilities.data} value={setValue.specialFeatureFacilities} onChange={this.onSpecialFeatureFacilitiesChange} />
               </div>
             </div>
             <div className="col-md-3">
-              <div className="title">สถานที่ใกล้เคียง</div>
+              <div className="title">{items.specialFeatureNearbyPlaces.name}</div>
               <div className="filter">
-                <CheckboxGroup options={dataOptions.nearbyPlaces} value={dataValue.nearbyPlaces} onChange={this.onPropertyNearbyPlacesChange} />
+                <CheckboxGroup options={items.specialFeatureNearbyPlaces.data} value={setValue.specialFeatureNearbyPlaces} onChange={this.onSpecialFeatureNearbyPlacesChange} />
               </div>
             </div>
             <div className="col-md-3">
-              <div className="title">ส่วนตัว</div>
+              <div className="title">{items.specialFeaturePrivate.name}</div>
               <div className="filter">
-                <CheckboxGroup options={dataOptions.private} value={dataValue.private} onChange={this.onPropertyPrivateChange} />
+                <CheckboxGroup options={items.specialFeaturePrivate.data} value={setValue.specialFeaturePrivate} onChange={this.onSpecialFeaturePrivateChange} />
               </div>
             </div>
           </div>
@@ -141,7 +130,7 @@ class SpecialFeature extends Component {
               <span className="remark">*สามารถเลือกได้หลายข้อ</span>
             </div>
             <div className="pull-right">
-              <a onClick={this.cancelCheckAll}><b className="text-green">ยกเลิกทั้งหมด</b></a>
+              <Button className="btn-main" onClick={this.handleFilter} style={{width:100}} >ตกลง</Button>
             </div>
           </div>
         </div>

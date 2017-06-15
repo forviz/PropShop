@@ -1,3 +1,18 @@
+.PropShop.end {
+	#Home {
+		.layout-left {
+			position: absolute;
+			bottom: 0;
+			.BannerRealEstate  {
+				padding: 0;
+			}
+		}
+	}
+	#Footer {
+		visibility: visible !important;
+	}
+}
+
 #Home {
 
 	height: 100%;
@@ -5,6 +20,7 @@
 	> .row {
 		height: 100%;
 		margin: 0;
+		position: relative;
 	}
 
 	.layout-left {
@@ -18,7 +34,6 @@
 
 	.filter_real_estate {
 		padding: 20px;
-
 		.ant-tabs-bar {
 			border: 0;
 		}
@@ -34,30 +49,58 @@
 			height: 3px;
     	background-color: #87b840;
 		}
+		.ant-tabs-tabpane .row {
+			margin-bottom: 10px;
+		}
+		.ant-tabs-tabpane .row > div {
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		.ant-tabs-tabpane .row > div:first-child {
+			padding-left: 15px;
+		}
+		.ant-tabs-tabpane .row > div:last-child {
+			padding-right: 15px;
+		}
+		.price_length {
+			.ant-slider {
+				width: 80%;
+		    text-align: center;
+		    margin: 10px auto;
+			}
+	    .ant-slider-track {
+	    	background: #4d790a;
+	    }
+	    .ant-slider-handle {
+	    	background: #82b23e;
+   		 	border-color: #4d790a;
+	    }
+	    .ant-slider:hover .ant-slider-handle {
+	    	background: #82b23e;
+	    }
+	    .ant-slider:hover .ant-slider-track {
+	    	background: #4d790a;
+	    }
+	    .ant-slider-handle:active {
+	    	box-shadow: none;
+	    }
+		}
+		.col-residential-type {
+			width: 18%;
+		}
+		.col-room {
+			width: 13%;
+		}
+		.col-advance {
+			width: 22.67%;
+			.btn-filter_advance.active {
+				background: $text-default;
+			}
+		}
 	}
 
 	.filter_advance {
-		margin: 20px 0;
-		.price_length {
-			margin: 15px;
-		}
-		.property_block {
-			margin-top: 20px;
-		}
-		.room_count {
-			z-index: 10;
-		}
-	}
-
-	.main {
-		padding: 15px;
-		.row > div {
-			padding: 0;
-			padding: 0 8px 8px 0;
-		}
-		.row > div:first-child {
-			padding-left: 15px;
-		}
+		margin-top: 20px;
 	}
 
 	.list {
@@ -68,9 +111,15 @@
 
 	.result {
 		padding: 15px;
-		.list > div > div {
-			padding: 0;
-			padding: 0 8px 8px 0;
+		position: relative;
+		.list {
+			li.item {
+				padding: 0;
+				padding: 0 8px 8px 0;
+			}
+			li.item:first-child {
+				// padding-left: 15px;
+			}
 		}
 	}
 

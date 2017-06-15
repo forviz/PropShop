@@ -33,6 +33,15 @@ img {
 .text-green {
 	color: $text-green !important;
 }
+.text-red {
+	color: $text-red !important;
+}
+.text-gray {
+	color: $text-gray !important;
+}
+.visibility-hidden {
+	visibility: hidden;
+}
 .form-inline .form-group {
 	margin: 0 5px;
 }
@@ -78,4 +87,10 @@ img {
 }
 .social-media ul li span {
 	color: #ffffff;
+}
+.ant-spin {
+	position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
 }

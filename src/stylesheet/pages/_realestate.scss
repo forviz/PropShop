@@ -2,135 +2,124 @@
 
 	padding-bottom: 40px;
 
+	.action {
+		.backhome {
+			display: inline-block;
+	    background-image: linear-gradient(to top, rgb(236, 236, 236), rgb(255, 255, 255));
+	    border: 1px solid rgb(204, 204, 204);
+	    border-radius: 4px;
+	    padding: 8px 16px;
+	    cursor: pointer;
+	    .fa {
+	    	font-size: 16px;
+		    font-weight: bold;
+		    vertical-align: text-bottom;
+		    margin-right: 4px;
+	    }
+		}
+		.address {
+			display: inline-block;
+    	margin-left: 15px;
+		}
+	}
+
 	.content {
 
 		.cover {
-			
-			.image {
-				position: relative;
-				max-height: 460px;
-				height: 460px;
-				> .row,
-				> .row > div {
-					height: 100%;
-				}
-				.open_house {
-					position: absolute;
-			    bottom: 30px;
-			    border: 1px solid #8ebc42;
-			    border-radius: 2px;
-			    background: #8ebc42;
-			    padding: 3px 13px;
-			    color: #ffffff;
-				}
-				.contact_agent {
-					margin: 20px;
-			    background: #ffffff;
-			    .price {
-			    	font-size: 30px;
-				    background: #494749;
-				    color: #ffffff;
-				    padding: 6px 20px;
-				    font-family: 'Myriad Pro';
-				    span {
-				    	font-family: $sukumvit-semibold;
-				    	color: #ffffff;
-				    }
-			    }
-			    .detail {
-			    	padding: 10px;
-			    	.name {
-			    		color: $text-green;
-			    	}
-			    	.phone {
-			    		color: $text-gray;
-			    		font-weight: bold;
-			    	}
-			    }
-			    .form {
-			    	padding: 0 10px 10px 10px;
-			    }
-				}
+			border: 1px solid $border-color;
+		}
 
+		.main-info {
+			border: 1px solid $border-color;
+    	border-top: 0;
+		}
+
+		.detail-block {
+			border-bottom: 1px solid $border-color;
+		}
+		
+		.price-block {
+			padding: 15px;
+			.for {
+				font-family: $sukumvit-bold;
+				font-size: 18px;
+				color: #4d790a;
 			}
-			.address {
-				max-height: 160px;
-				height: 160px;
-				background: $border-color;
-				> .row {
-					height: 100%;
-					> div:first-child {
-						height: 100%;
-					}
-					.vbottom {
-						margin-bottom: 17px;
-					}
-				}
-				.sell_by {
-					font-family: $sukumvit-semibold;
-					font-size: 18px;
-					color: $text-green;
-				}
-				.address_1 {
-					font-family: $sukumvit-bold;
-					font-size: 30px;
-				}
-				.address_2 {
-					font-family: $sukumvit-bold;
-					font-size: 18px;
-					color: $text-gray;
-				}
-				.options ul li {
+			.price {
+				font-family: 'Myriad Pro';
+				font-size: 48px;
+			}
+			.create_date {
+				font-family: $sukumvit-bold;
+				font-size: 18px;
+			}
+		}
+
+		.address-block {
+			padding: 15px;
+			border-left: 1px solid $border-color;
+			.address_1 {
+				font-family: $sukumvit-bold;
+				font-size: 30px;
+			}
+			.address_2 {
+				font-family: $sukumvit-bold;
+				font-size: 18px;
+				color: $text-gray;
+			}
+			.options {
+				ul li {
 					display: inline-block;
-					vertical-align: middle;
-					margin: 0 20px;
-					font-family: $sukumvit-semibold;
+					margin: 0 10px;
+					font-family: $sukumvit-bold;
 					font-size: 18px;
 				}
-				.options ul li:first-child {
+				ul li:first-child {
 					margin-left: 0;
 				}
-				.options ul li:last-child {
+				ul li:last-child {
 					margin-right: 0;
-				}
-				.create_date {
-					font-family: $sukumvit-semibold;
-					font-size: 18px;
-					margin-right: 20px;
 				}
 			}
 		}
 
-		.description {
+		section.info {
+			padding: 15px;
+			border: 1px solid $border-color;
+    	border-top: 0;
 			h2 {
-				margin-top: 20px;
 				font-family: $sukumvit-bold;
 				font-size: 30px;
-				border-bottom: 1px solid $border-color;
-				padding-bottom: 7px;
-				margin-bottom: 5px;
+				margin-bottom: 10px;
 			}
 			h4 {
 				font-family: $sukumvit-bold;
-				font-size: 18px;
+				font-style: 18px;
 				margin-top: 20px;
-				margin-bottom: 3px;
 			}
-			h2 span,
-			h4 span {
-				font-family: 'Myriad Pro';
+		}
+
+		section.info.detail {
+			border-right: 0;
+			border-bottom: 0;
+			min-height: 263px;
+		}
+
+		.contact-block {
+			background: #f6f6f6;
+    	padding: 25px;
+		}
+
+		.agent-block {
+			margin-bottom: 20px;
+		}
+		.agent-info {
+			.name {
+				color: $text-green;
+			}
+			.phone {
 				color: $text-gray;
-				font-weight: normal;
-			}
-			.calculate {
-				background: #eeeeee;
-    		padding: 8px 0 14px 0;
-    		margin: 10px 0;
-    		label {
-    			color: $text-default;
-    			font-weight: bold;
-    			margin: 0;
-    		}
+				font-weight: bold;
 			}
 		}
 

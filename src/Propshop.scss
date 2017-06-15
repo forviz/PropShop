@@ -1,6 +1,7 @@
 // Font
 @import 'font/sukhumvitset/stylesheet.css';
 @import 'libraries/font-awesome/4.7.0/css/font-awesome.css';
+@import 'libraries/font-propshop/css/Glyphter.css';
 
 // Variable
 @import 'stylesheet/variable';
@@ -19,14 +20,16 @@
 @import 'stylesheet/pages/sell';
 @import 'stylesheet/pages/agent';
 @import 'stylesheet/pages/agent-detail';
-@import 'stylesheet/pages/login';
 @import 'stylesheet/pages/realestate';
+@import 'stylesheet/pages/login';
+@import 'stylesheet/pages/register';
 
 // Containers
 @import 'stylesheet/containers/header';
 @import 'stylesheet/containers/footer';
 @import 'stylesheet/containers/banner_real_estate';
 @import 'stylesheet/containers/property_list';
+@import 'stylesheet/containers/nearby-place';
 
 // Components
 @import 'stylesheet/components/button';

@@ -1,13 +1,15 @@
 body {
-	input.form-control {
-		height: 36px;
-	}
 	.ant-input {
 		font-size: 14px;
+		border-color: #cccccc;
+	}
+	.ant-input[type="text"] {
 		height: 38px;
 		line-height: 39px;
 		padding: 0 10px;
-		border-color: #cccccc;
+	}
+	.ant-input[type="textarea"] {
+		padding: 6px 10px;
 	}
 	.ant-input:active,
 	.ant-input:hover,

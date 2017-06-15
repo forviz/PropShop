@@ -15,7 +15,7 @@ class Footer extends Component {
       	<div className="row_1 clearfix menu">
       		<div className="menu-left pull-left">
 		        <ul>
-		        	<li><NavLink exact to="/">{translate('หน้าแรก')}</NavLink></li>
+		        	<li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
 	            <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
 	            <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li>
 	            <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>

@@ -1,9 +1,29 @@
 import React, { Component } from 'react';
-import { Radio } from 'antd';
+import { Checkbox } from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as SellActions from '../../actions/sell-actions';
 
 class Step3 extends Component {
 
+	setData = (newData) => {
+  	const { saveStep } = this.props.actions;
+  	return saveStep('step3', newData);
+  }
+
+	handleAcceptTerms = (e) => {
+		const value = e.target.checked;
+		const newData = {
+  		...this.props.data,
+  		'acceptTerms': value
+  	}
+  	this.setData(newData);
+	}
+
   render() {
+
+  	const { data } = this.props;
+
     return (
       <div id="Step3">
         <div className="container">
@@ -15,7 +35,7 @@ class Step3 extends Component {
 								ด้านล่างของหน้านี้คือท่อนมาตรฐานของ Lorem Ipsum ที่ใช้กันมาตั้งแต่คริสตศตวรรษที่ 16ที่ได้รับการสร้างขึ้นใหม่สำหรับผู้ที่สนใจ ประกอบไปด้วย ตอนที่ 1.10.32 และ 1.10.33 จากเรื่อง "de Finibus Bonorum et Malorum" โดยซิเซโร ก็ได้รับการผลิตขึ้นใหม่ด้วยเช่นกันในรูปแบบที่ตรงกับต้นฉบับ ตามมาด้วยเวอร์ชั่นภาษาอังกฤษจากการแปลของ เอช แร็คแคม เมื่อปี ค.ศ. 1914
 	        		</div>
 	        		<center>
-	        			<Radio defaultChecked={true}>ฉันยอมรับข้อตกลงนี้</Radio>
+	        			<Checkbox checked={data.acceptTerms} onChange={this.handleAcceptTerms}>ฉันยอมรับข้อตกลงนี้</Checkbox>
 	        		</center>
 	        	</div>
 	        </div>
@@ -25,4 +45,20 @@ class Step3 extends Component {
   }
 }
 
-export default Step3;
+const mapStateToProps = state => {
+  return {
+    data: state.sell.step3,
+  };
+}
+
+const actions = {
+  saveStep: SellActions.saveStep,
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Step3);
