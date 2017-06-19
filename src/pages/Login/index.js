@@ -27,6 +27,9 @@ class Login extends Component {
   }
 
   componentDidMount() {
+    const xx = firebase.core().auth();
+    console.log('xx', xx);
+    return;
     const { history } = this.props;
     const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
@@ -98,6 +101,10 @@ class Login extends Component {
     }
   }
 
+  handleFacebookLogin = () => {
+    firebase.signInWithFacebook();
+  }
+
   render() {
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
@@ -142,9 +149,9 @@ class Login extends Component {
       				<div className="text">เข้าสู่ระบบด้วย</div>
       				<div className="social-media">
       					<ul>
-      						<li className="facebook"><a href="#" target="_blank"><FontAwesome name="facebook" /></a></li>
-			      			<li className="google-plus"><a><FontAwesome name="google-plus" /></a></li>
-			      			<li className="twitter"><a href="#" target="_blank"><FontAwesome name="twitter" /></a></li>
+      						<li className="facebook" onClick={this.handleFacebookLogin}><FontAwesome name="facebook" /></li>
+			      			<li className="google-plus"><FontAwesome name="google-plus" /></li>
+			      			<li className="twitter"><FontAwesome name="twitter" /></li>
       					</ul>
       				</div>
       			</div>

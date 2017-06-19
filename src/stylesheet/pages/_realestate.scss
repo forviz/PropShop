@@ -125,4 +125,12 @@
 
 	}
 
+	.nearby_place {
+		border: 1px solid $border-color;
+  	border-top: 0;
+  	.place-list {
+  		padding: 15px;
+  	}
+	}
+
 }

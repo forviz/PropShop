@@ -3,7 +3,8 @@ body {
 		font-size: 14px;
 		border-color: #cccccc;
 	}
-	.ant-input[type="text"] {
+	.ant-input[type="text"],
+	.ant-input[type="password"] {
 		height: 38px;
 		line-height: 39px;
 		padding: 0 10px;

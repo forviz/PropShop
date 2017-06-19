@@ -7,7 +7,7 @@
 @import 'stylesheet/variable';
 
 // Image Gallery
-@import "node_modules/react-image-gallery/styles/scss/image-gallery.scss";
+@import "node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss";
 
 // Ant Design
 @import '~antd/dist/antd.css';
@@ -27,9 +27,10 @@
 // Containers
 @import 'stylesheet/containers/header';
 @import 'stylesheet/containers/footer';
-@import 'stylesheet/containers/banner_real_estate';
-@import 'stylesheet/containers/property_list';
+@import 'stylesheet/containers/banner-realEstate';
+@import 'stylesheet/containers/property-list';
 @import 'stylesheet/containers/nearby-place';
+@import 'stylesheet/containers/social-login';
 
 // Components
 @import 'stylesheet/components/button';

@@ -154,7 +154,21 @@ export const getRealEstate = (search) => {
   // 'fields.specialFeatureView[all]': 'วิวทะเล'
 };
 
+const existUser = (uid) => {
+  client.getEntries({
+    content_type: 'agent',
+    'fields.uid': 'uid'
+  })
+  .then((response) => {
+    return response;
+  })
+  .catch(console.error)
+}
+
 export const createUser = (user) => {
+  const xx = existUser(user.uid);
+  console.log('existUser', xx);
+  return;
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
   .then((space) => space.createEntry('agent', {
     fields: {

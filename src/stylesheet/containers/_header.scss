@@ -57,7 +57,18 @@
   color: #ffffff;
   background: $text-default;
 }
-@media (max-width: 935px) {
+@media (max-width: 992px) {
+	.navbar-default .navbar-toggle {
+		background: #ffffff;
+	}
+	.navbar-default .navbar-toggle[aria-expanded=true],
+	.navbar-default .navbar-toggle:hover {
+		border-color: $text-default;
+		background: $text-default;
+		.icon-bar {
+			background: #ffffff;
+		}
+	}
 	.navbar-collapse.collapse {
     display: none !important;
 	}
@@ -97,5 +108,9 @@
 	.navbar-right {
 		float: none !important;
     margin: 0;
+	}
+	.navbar-default .navbar-right .login {
+		border: 0;
+  	box-shadow: none;
 	}
 }

@@ -3,6 +3,9 @@ body {
 	.btn {
 		padding: 6px 20px;
 	}
+	.btn:focus {
+		outline: none;
+	}
 	.btn-danger {
 		font-family: $sukumvit-bold;
 		font-size: 16px;
@@ -23,6 +26,7 @@ body {
 	.btn-primary,
 	.btn-primary:active,
 	.btn-primary:hover,
+	.btn-primary:active:hover,
 	.btn-primary:focus,
 	.btn-primary:visited {
 		background: none;
@@ -30,6 +34,15 @@ body {
 		border-color: #79a13d;
 		font-family: $sukumvit-bold;
 		font-size: 16px;
+	}
+
+	.btn-primary:active,
+	.btn-primary:hover,
+	.btn-primary:active:hover,
+	.btn-primary:focus,
+	.btn-primary:visited {
+		background-image: linear-gradient(to top, #7eab3c, #8bb54c);
+		box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
 	}
 
 	.ant-btn,

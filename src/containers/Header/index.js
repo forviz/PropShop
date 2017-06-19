@@ -81,7 +81,7 @@ class Header extends Component {
       <nav id="Header" className="navbar navbar-default navbar-fixed-top">
 	      <div className="container">
 	        <div className="navbar-header">
-	          <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" onClick={this.handleMobileMenu}>
+	          <button type="button" className={"navbar-toggle " + (showMobileMenu ? '' : 'collapsed')} data-toggle="collapse" data-target="#navbar" aria-expanded={showMobileMenu ? 'true' : 'false'} aria-controls="navbar" onClick={this.handleMobileMenu}>
 	            <span className="sr-only">Toggle navigation</span>
 	            <span className="icon-bar"></span>
 	            <span className="icon-bar"></span>

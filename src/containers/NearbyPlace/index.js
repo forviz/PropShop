@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import { Spin } from 'antd';
+import { withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
+import withScriptjs from "react-google-maps/lib/async/withScriptjs";
 import _ from 'lodash';
+
+const spinDiv = <Spin />
 
 const typeList = [
   { key: 'school', name: 'School' },
@@ -8,6 +13,26 @@ const typeList = [
   { key: 'shopping_mall', name: 'Shopping' },
   { key: 'train_station', name: 'Transport' },
 ]
+
+const AsyncGettingStartedExampleGoogleMap = withScriptjs(
+  withGoogleMap((props) => {
+    return (
+      <GoogleMap
+        ref={props.onMapLoad}
+        zoom={props.zoom}
+        center={props.center}
+        onClick={props.onMapClick}
+      >
+        {props.markers.map(marker => (
+          <Marker
+            {...marker}
+            onClick={() => props.onMarkerClick(marker)}
+          />
+        ))}
+      </GoogleMap>
+    )
+  })
+);
 
 class NearbyPlace extends Component {
 
@@ -18,7 +43,10 @@ class NearbyPlace extends Component {
   }
 
   state = {
+    loading: true,
     currentSelect: 'school',
+    results: [],
+    markers: [],
   }
 
   componentDidMount() {
@@ -26,23 +54,99 @@ class NearbyPlace extends Component {
     this.fetchNearbyPlace(currentSelect);
   }
 
+  handleMapLoad = this.handleMapLoad.bind(this);
+  handleMapClick = this.handleMapClick.bind(this);
+  handleMarkerClick = this.handleMarkerClick.bind(this);
+
+  handleMapLoad(map) {
+    this._mapComponent = map;
+    if (map) {
+      console.log('handleMapLoad', map);
+    }
+  }
+
+  handleMapClick(event) {
+    console.log('handleMapClick', event);
+  }
+
+  handleMarkerClick(targetMarker) {
+    console.log('targetMarker', targetMarker);
+    console.log('markers', this.state.markers);
+    
+    const updatedMarkers = _.map(this.state.markers, marker => {
+      if (marker.key === targetMarker.key) {
+        return {
+          ...marker,
+          label: marker.label ? '' : marker.title,
+        }
+      }
+      return marker;
+    })
+    
+    this.setState({
+      markers: updatedMarkers,
+    });
+  }
+
   handleType = (key) => {
     this.setState({
       currentSelect: key,
     });
+    this.fetchNearbyPlace(key);
+  }
+
+  getDistance = async (desLat, desLng) => {
+      const { lat, lng } = this.props;
+      const url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='+lat+','+lng+'&destinations='+desLat+','+desLng;
+
+      const result = await fetch(url); 
+      const resultJSON = await result.json();
+      return resultJSON;
+  }
+
+  setNearbyData = async (data) => {
+    const newData = await Promise.all(data.map(async (value, index) => {
+      const distance = await this.getDistance(value.geometry.location.lat, value.geometry.location.lng);
+      return {
+        ...value,
+        distance: distance.rows[0].elements[0].distance.text,
+      }
+    }));
+
+    this.setState({
+      loading: false,
+      results: newData,
+      markers: this.setMarker(newData),
+    });
+  }
+
+  setMarker = (data) => {
+    const markers = _.map(data, (result) => {
+      return {
+        position: {
+          lat: result.geometry.location.lat,
+          lng: result.geometry.location.lng,
+        },
+        title: result.name,
+        label: '',
+        // icon: '<div>a</div>',
+        key: result.place_id,
+        defaultAnimation: 2,
+      }
+    });
+    return markers;
   }
 
   fetchNearbyPlace = (type) => {
+
+    this.setState({
+      loading: true,
+    });
+
     const { lat, lng, radius } = this.props;
     const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+lat+','+lng+'&radius='+radius+'&type='+type+'&key='+process.env.REACT_APP_APIKEY;
     
-    const header = new Headers({
-      'Access-Control-Allow-Origin':'*',
-    });
-
-    fetch(url, {
-      headers: header,
-    })  
+    fetch(url)  
     .then((response) => {  
         if (response.status !== 200) {  
           console.log('Looks like there was a problem. Status Code: ' +  
@@ -50,7 +154,7 @@ class NearbyPlace extends Component {
           return;  
         }
         response.json().then((data) => {  
-          console.log(data);  
+          this.setNearbyData(data.results);
         });  
       }  
     )  
@@ -61,8 +165,10 @@ class NearbyPlace extends Component {
 
   render() {
 
-    const { currentSelect } = this.state;
-    
+    const { currentSelect, results, loading, markers } = this.state;
+
+    console.log('results', results);
+
     return (
       <div className="NearbyPlace">
         <div className="row">
@@ -83,20 +189,43 @@ class NearbyPlace extends Component {
                 }
               </div>
               <div className="result-lists">
-                <div className="clearfix">
-                  <div className="pull-left">asdsadsad</div>
-                  <div className="pull-right">1.3 km</div>
-                </div>
-                <div className="clearfix">
-                  <div className="pull-left">asdsadsad</div>
-                  <div className="pull-right">1.3 km</div>
-                </div>
+                {loading === true ? (
+                  <center><Spin /></center>
+                ) : (
+                  <div>
+                    {
+                      _.map(results, (result, index) => {
+                        return (
+                          <div key={index} className="clearfix">
+                            <div className="pull-left">{result.name}</div>
+                            <div className="pull-right">{result.distance}</div>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                )}
               </div>
             </div>
           </div>
           <div className="col-md-6">
             <div className="place-map">
-
+              <AsyncGettingStartedExampleGoogleMap
+                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp"
+                loadingElement={<Spin />}
+                containerElement={
+                  <div style={{ height: `100%` }} />
+                }
+                mapElement={
+                  <div style={{ height: `100%` }} />
+                }
+                zoom={15}
+                center={{ lat: this.props.lat, lng: this.props.lng }}
+                onMapLoad={this.handleMapLoad}
+                onMapClick={this.handleMapClick}
+                markers={markers}
+                onMarkerClick={this.handleMarkerClick}
+              />
             </div>
           </div>
         </div>
