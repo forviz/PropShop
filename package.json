@@ -15,6 +15,7 @@
     "google-maps": "^3.2.1",
     "lodash": "^4.17.4",
     "numeral": "^2.0.6",
+    "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.0",
@@ -32,7 +33,8 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.6",
     "redux-react-firebase": "^2.6.1",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "styled-components": "^2.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
