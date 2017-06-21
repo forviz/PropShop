@@ -56,24 +56,25 @@ class Step0 extends Component {
   })();
 
   getProvince = (id) => {
-    return _.find(provinceJSON, (province) => { return province.PROVINCE_ID === this.props.data.province });
+    return _.find(provinceJSON, (province) => { return province.PROVINCE_ID === id });
   }
 
   getAmphur = (id) => {
-    return _.find(amphurJSON, (amphur) => { return amphur.AMPHUR_ID === this.props.data.amphur });
+    return _.find(amphurJSON, (amphur) => { return amphur.AMPHUR_ID === id });
   }
 
   getDistrict = (id) => {
-    return _.find(districtJSON, (district) => { return district.DISTRICT_ID === this.props.data.district });
+    return _.find(districtJSON, (district) => { return district.DISTRICT_ID === id });
   }
 
   setLocation = () => {
+    console.log('setLocation', this.props.data);
     let address = '';
-    address = this.props.data.province ? this.getProvince(this.props.data.province).PROVINCE_NAME : '';
+    address = this.props.data.province ? this.getProvince(this.props.data.provinceId).PROVINCE_NAME : '';
     if ( this.props.data.district ) {
-      address += '+'+this.getDistrict(this.props.data.district).DISTRICT_NAME;
+      address += '+'+this.getDistrict(this.props.data.districtId).DISTRICT_NAME;
     } else if ( this.props.data.amphur ) {
-      address += '+'+this.getAmphur(this.props.data.amphur).AMPHUR_NAME;
+      address += '+'+this.getAmphur(this.props.data.amphurId).AMPHUR_NAME;
     }
     const url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+address;
     fetch(url)
@@ -346,11 +347,11 @@ class Step0 extends Component {
     this.setData(newData);
   }
 
-  handleSelectProvince = (value, label) => {
+  handleSelectProvince = (value) => {
     const newData = {
       ...this.props.data,
       'provinceId': value,
-      'province': label,
+      'province': this.getProvince(value).PROVINCE_NAME,
       'amphur': '',
       'district': '',
     }
@@ -359,11 +360,11 @@ class Step0 extends Component {
     });
   }
 
-  handleSelectAmphur = (value, label) => {
+  handleSelectAmphur = (value) => {
     const newData = {
       ...this.props.data,
       'amphurId': value,
-      'amphur': label,
+      'amphur': this.getAmphur(value).AMPHUR_NAME,
       'district': '',
     }
     this.setData(newData).then(() => {
@@ -371,11 +372,11 @@ class Step0 extends Component {
     });
   }
 
-  handleSelectDistrict = (value, label) => {
+  handleSelectDistrict = (value) => {
     const newData = {
       ...this.props.data,
       'districtId': value,
-      'district': label,
+      'district': this.getDistrict(value).DISTRICT_NAME,
     }
     this.setData(newData).then(() => {
       this.setLocation();
