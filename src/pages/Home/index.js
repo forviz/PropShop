@@ -3,6 +3,7 @@ import { Tabs, Input, Select, Button, Slider } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import numeral from 'numeral';
 import queryString from 'query-string';
 
 const TabPane = Tabs.TabPane;
@@ -20,14 +21,14 @@ import SelectRoom from '../../components/SelectRoom';
 import * as RealestateActions from '../../actions/realestate-actions';
 import * as ConfigActions from '../../actions/config-actions';
 
+import * as helpers from '../../helpers';
+
 class Home extends Component {
 
   headerHeight: 0;
 
   constructor(props) {
     super(props);
-
-    console.log('HOME constructor', props);
 
     // const { configRealestate } = this.props;
 
@@ -216,6 +217,10 @@ class Home extends Component {
     return data;
   }
 
+  tipFormatter = (value) => {
+    return numeral(value).format('0,0') + ' บาท';
+  }
+
   render() {
 
     const { banner, realestate, configRealestate, history, location } = this.props;
@@ -226,13 +231,13 @@ class Home extends Component {
         style: {
           color: '#484849',
         },
-        label: '0 บ.',
+        label: helpers.convertRealestatePrice(configRealestate.data.priceMin),
       },
       [configRealestate.data.priceMax]: {
         style: {
           color: '#484849',
         },
-        label: '100 ล.บ.',
+        label: helpers.convertRealestatePrice(configRealestate.data.priceMax),
       },
     };
 
@@ -279,37 +284,41 @@ class Home extends Component {
                 <Tabs defaultActiveKey="1">
                   <TabPane tab="เลือกจากทำเล / โครงการ" key="1">
                     <div className="row row_1">
-                      <div className="col-md-3">
+                      <div className="col-sm-3">
                         <div style={{ width: '100%' }}>
                           <SelectSellType placeholder="ซื้อ / เช่า" defaultValue={defaultSelected.for} onChange={this.handleFilterFor} />
                         </div>
                       </div>
-                      <div className="col-md-9">
+                      <div className="col-sm-9">
                         <Input placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ" defaultValue={defaultSelected.query} style={{ width: '100%' }} onChange={this.handleFilterInput} />
                       </div>
                     </div>
                     <div className="row row_2">
-                      <div className="col-md-4">
+                      <div className="col-md-4" style={{ minWidth: 250 }} >
                         <div className="price_length">
-                          <Slider range marks={stepMarks} defaultValue={[defaultSelected.price.min, defaultSelected.price.max]} min={configRealestate.data.priceMin} max={configRealestate.data.priceMax} onChange={this.handleFilterPrice} />
+                          <div className="clearfix">
+                            <div className="pull-left text-gray" style={{ fontSize: 12 }} >ขั้นต่ำ</div>
+                            <div className="pull-right text-gray" style={{ fontSize: 12 }} >ไม่เกิน</div>
+                          </div>
+                          <Slider range marks={stepMarks} defaultValue={[defaultSelected.price.min, defaultSelected.price.max]} min={configRealestate.data.priceMin} max={configRealestate.data.priceMax} onChange={this.handleFilterPrice} tipFormatter={this.tipFormatter} />
                         </div>
                       </div>
-                      <div className="col-md-2 col-residential-type">
+                      <div className="col-md-2 col-residential-type" style={{ minWidth: 135 }} >
                         <div style={{ width: '100%' }} >
                           <SelectResidentialType placeholder="ประเภทอสังหาฯ" defaultValue={defaultSelected.residentialType} onChange={this.handleFilterResidentialType} />
                         </div>
                       </div>
-                      <div className="col-md-2 col-room">
+                      <div className="col-md-2 col-room" style={{ minWidth: 93 }} >
                         <div style={{ width: '100%' }} >
                           <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.room.bedroom} onChange={this.handleFilterBedRoom} />
                         </div>
                       </div>
-                      <div className="col-md-2 col-room">
+                      <div className="col-md-2 col-room" style={{ minWidth: 93 }} >
                         <div style={{ width: '100%' }} >
                           <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.room.bathroom} onChange={this.handleFilterBathRoom} />
                         </div>
                       </div>
-                      <div className="col-md-2 col-advance">
+                      <div className="col-md-2 col-advance" style={{ minWidth: 130 }} >
                         <Button style={{ width: '100%' }} className={"btn-main " + (advanceExpand === true ? 'active' : '')} onClick={this.handleAdvanceExpand}>ตัวเลือกเพิ่มเติม</Button>
                       </div>
                     </div>
@@ -353,7 +362,7 @@ class Home extends Component {
                       </div>
                     </div>
                     <div className="row row_2">
-                      <div className="col-md-4">
+                      <div className="col-md-4" style={{ minWidth: 250 }} >
                         <div className="price_length">
                           <Slider range marks={stepMarks} defaultValue={[defaultSelected.price.min, defaultSelected.price.max]} min={configRealestate.data.priceMin} max={configRealestate.data.priceMax} onChange={this.handleFilterPrice} />
                         </div>
@@ -488,7 +497,6 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('mapStateToProps', state);
   return {
     banner: state.banners,
     realestate: state.realestates,

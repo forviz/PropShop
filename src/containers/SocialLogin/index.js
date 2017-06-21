@@ -4,13 +4,13 @@ import FontAwesome from 'react-fontawesome';
 
 class SocialLogin extends Component {
 
-  handleFacebookLogin = () => {
-    const error = firebase.signInWithFacebook();
+  handleFacebookLogin = async () => {
+    const error = await firebase.signInWithFacebook();
     this.props.error(error);
   }
 
-  handleGoogleLogin = () => {
-    const error = firebase.signInWithGoogle();
+  handleGoogleLogin = async () => {
+    const error = await firebase.signInWithGoogle();
     this.props.error(error);
   }
 

@@ -17,6 +17,9 @@ const mapRegisterErrorMessage = (errorMessage) => {
 	const data = [];
 	data['The email address is already in use by another account.'] = 'คุณเคยสมัครอีเมลนี้แล้ว';
 	data['Password should be at least 6 characters'] = 'รหัสผ่านควรมี 6 ตัวอักษรขึ้นไป';
+	data['auth/user-not-found'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+	data['The password is invalid or the user does not have a password.'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+	data['There is no user record corresponding to this identifier. The user may have been deleted.'] = 'ไม่พบอีเมลนี้';
 	return data[errorMessage] ? data[errorMessage] : errorMessage;
 }
 
@@ -27,7 +30,7 @@ export const core = () => {
 export const createUser = (email, password) => {
 	return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
 	  contentful.createUser(user).then((userContentful) => {
-	  	// window.location = "/";
+	  	window.location = "/";
 	    // user.sendEmailVerification().then(function() {
 	    //   window.location = "/";
 	    // }, function(error) {
@@ -40,8 +43,18 @@ export const createUser = (email, password) => {
 }
 
 export const signIn = (email, password) => {
-	return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-	  return error;
+	return firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+	  window.location = "/";
+	}).catch(function(error) {
+	  return mapRegisterErrorMessage(error.message);
+	});
+}
+
+export const forgotpassword = (email) => {
+	return firebase.auth().sendPasswordResetEmail(email).then(function() {
+	  return false;
+	}, function(error) {
+	  return mapRegisterErrorMessage(error.message);
 	});
 }
 
@@ -65,60 +78,49 @@ const getProviderForProviderId = (providerId) => {
 	return provider;
 }
 
-const differentCredential = (provider, error) => {
+const differentCredential = async (provider, error) => {
 	if (error.code === 'auth/account-exists-with-different-credential') {
     const pendingCred = error.credential;
     const email = error.email;
-    firebase.auth().fetchProvidersForEmail(email).then(function(providers) {
+     return await firebase.auth().fetchProvidersForEmail(email).then(function(providers) {
       if (providers[0] === 'password') {
       	return {
       		type: 'auth/account-exists-with-different-credential',
+      		message: 'คุณเคยสมัครอีเมลนี้แล้ว',
       		email: email,
       	};
-        // const password = prompt("Please enter your password");
-        // firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-        // 	console.log('user', user);
-        // 	console.log('pendingCred', pendingCred);
-        //   // return user.link(pendingCred);
-        // }).then(function() {
-        // 	console.log('goToApp 1');
-        //   // goToApp();
-        // });
-        // return;
       }
-
    		const provider = getProviderForProviderId(providers[0]);
    		signInWithProvider(provider);
     });
   }
 }
 
-const signInWithProvider = (provider) => {
-	return firebase.auth().signInWithPopup(provider).then(function(result) {
+const signInWithProvider = async (provider) => {
+	return await firebase.auth().signInWithPopup(provider).then(function(result) {
 	  // const token = result.credential.accessToken;
 	  const user = result.user;
-	  console.log('result', result);
-	  console.log('user', user);
 	  contentful.createUser(user).then((userContentful) => {
-	  	// window.location = "/";
-	    
+	  	window.location = "/";
 	  });
 	}).catch(function(error) {
-		return differentCredential(provider, error);
+		return differentCredential(provider, error).then((errorMessage) => {
+	  	return errorMessage;
+	  });
 	});
 }
 
-export const signInWithFacebook = () => {
+export const signInWithFacebook = async () => {
 	const provider = getProviderForProviderId('facebook.com');
-	return signInWithProvider(provider);
+	return await signInWithProvider(provider);
 }
 
-export const signInWithGoogle = () => {
+export const signInWithGoogle = async () => {
 	const provider = getProviderForProviderId('google.com');
-	return signInWithProvider(provider);
+	return await signInWithProvider(provider);
 }
 
-export const signInWithTwitter = () => {
+export const signInWithTwitter = async () => {
 	const provider = getProviderForProviderId('twitter.com');
-	return signInWithProvider(provider);
+	return await signInWithProvider(provider);
 }

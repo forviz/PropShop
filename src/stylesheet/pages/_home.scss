@@ -123,4 +123,22 @@
 		}
 	}
 
+	@media (max-width: 1537px) {
+		.col-advance {
+			margin-top: 10px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.filter_real_estate .ant-tabs-tabpane .row > div {
+			margin-bottom: 10px;
+		}
+		.filter_real_estate .ant-tabs-tabpane .row > div:first-child {
+			padding-right: 15px;
+		}
+		.filter_real_estate .ant-tabs-tabpane .row > div:last-child {
+			padding-left: 15px;
+		}
+	}
+
 }

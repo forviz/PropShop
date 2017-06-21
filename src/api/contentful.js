@@ -1,7 +1,6 @@
 import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
-import logo from '../images/logo.png';
 const cuid = require('cuid');
 
 const client = contentful.createClient({
@@ -155,35 +154,36 @@ export const getRealEstate = (search) => {
 };
 
 const existUser = (uid) => {
-  client.getEntries({
+  return client.getEntries({
     content_type: 'agent',
-    'fields.uid': 'uid'
+    'fields.uid': uid
   })
   .then((response) => {
-    return response;
+    return response.total === 0 ? false : true;
   })
   .catch(console.error)
 }
 
 export const createUser = (user) => {
-  const xx = existUser(user.uid);
-  console.log('existUser', xx);
-  return;
-  return clientManagement.getSpace(process.env.REACT_APP_SPACE)
-  .then((space) => space.createEntry('agent', {
-    fields: {
-      email: {
-        'en-US': user.email,
-      },
-      uid: {
-        'en-US': user.uid,
-      },
+  return existUser(user.uid).then((user) => {
+    if ( !user ) {
+      return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+      .then((space) => space.createEntry('agent', {
+        fields: {
+          email: {
+            'en-US': user.email,
+          },
+          uid: {
+            'en-US': user.uid,
+          },
+        }
+      }))
+      .then((entry) => {
+        return publishEntry(entry.sys.id);
+      })
+      .catch(console.error)
     }
-  }))
-  .then((entry) => {
-    return publishEntry(entry.sys.id);
-  })
-  .catch(console.error)
+  });
 };
 
 export const publishEntry = (entry_id) => {
@@ -313,7 +313,6 @@ export async function createRealEstate(data, user) {
     }
   }))
   .then((entry) => {
-    console.log('createRealEstate', entry);
     return entry;
   })
   .catch(console.error)
@@ -456,12 +455,6 @@ export async function uploadFile(fileName = '', fileType = '', file = '') {
   }))
   .then((asset) => asset.processForAllLocales())
   .then((asset) => asset.publish())
-  .catch(console.error)
-}
-
-export const getAgent = () => {
-  client.getEntry('2nZoqsONfCSmOaKMqWY2Ii')
-  .then((entry) => console.log('getAgent',entry))
   .catch(console.error)
 }
 

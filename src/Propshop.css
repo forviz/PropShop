@@ -414,6 +414,16 @@ img {
     #Home .result .list li.item {
       padding: 0;
       padding: 0 8px 8px 0; }
+  @media (max-width: 1537px) {
+    #Home .col-advance {
+      margin-top: 10px; } }
+  @media (max-width: 767px) {
+    #Home .filter_real_estate .ant-tabs-tabpane .row > div {
+      margin-bottom: 10px; }
+    #Home .filter_real_estate .ant-tabs-tabpane .row > div:first-child {
+      padding-right: 15px; }
+    #Home .filter_real_estate .ant-tabs-tabpane .row > div:last-child {
+      padding-left: 15px; } }
 
 #Sell {
   min-height: 100vh; }
@@ -738,6 +748,56 @@ img {
       vertical-align: middle;
       margin: 0 10px; }
 
+#Forgotpassword {
+  height: 100%; }
+  #Forgotpassword > .row {
+    height: 100%;
+    margin: 0; }
+  #Forgotpassword .layout-left {
+    height: 100%;
+    position: fixed;
+    padding: 0; }
+  #Forgotpassword .layout-right {
+    padding: 0; }
+  #Forgotpassword .form {
+    margin: 40px 0; }
+    #Forgotpassword .form > .row {
+      margin: 0; }
+    #Forgotpassword .form h1 {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 36px;
+      color: #8ebc42;
+      margin-bottom: 40px;
+      text-align: center; }
+    #Forgotpassword .form .form-group.link {
+      text-align: center; }
+    #Forgotpassword .form .form-group.link li {
+      margin: 0 14px;
+      display: inline-block;
+      vertical-align: middle;
+      position: relative; }
+    #Forgotpassword .form .form-group.link li:after {
+      content: '|';
+      color: #4d790a;
+      position: absolute;
+      margin-left: 13px; }
+    #Forgotpassword .form .form-group.link li:last-child:after {
+      content: ''; }
+    #Forgotpassword .form .form-group.link li a {
+      color: #8ebc42; }
+    #Forgotpassword .form .form-group.action {
+      text-align: center;
+      margin-top: 20px; }
+    #Forgotpassword .form .form-group.action button {
+      margin: 0 10px; }
+  #Forgotpassword .social_login {
+    text-align: center;
+    margin: 20px 0; }
+    #Forgotpassword .social_login > div {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 10px; }
+
 #Header .container {
   width: 100%; }
 
@@ -797,7 +857,7 @@ img {
   color: #ffffff;
   background: #484849; }
 
-@media (max-width: 992px) {
+@media (max-width: 1100px) {
   .navbar-default .navbar-toggle {
     background: #ffffff; }
   .navbar-default .navbar-toggle[aria-expanded=true],
