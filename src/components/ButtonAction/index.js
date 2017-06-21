@@ -1,35 +1,47 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
+import styled from 'styled-components';
 import FontAwesome from 'react-fontawesome';
+
+const ButtonWrapper = styled.div`
+  background: #4d790a;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+const ButtonIcon = styled(FontAwesome)`
+  color: #ffffff;
+  margin-right: 4px;
+  font-size: 18;
+  verticalAlign: middle;
+`;
 
 class ButtonAction extends Component {
 
-	handleOnClick = () => {
-		this.props.onClick();
-	}
+  static propTypes = {
+    font: T.string,
+    text: T.string,
+    onClick: T.func,
+  }
+
+  static defaultProps = {
+    font: '',
+    text: '',
+    onClick: undefined,
+  }
+
+  handleOnClick = () => {
+    this.props.onClick();
+  }
 
   render() {
-
-  	const { font, text } = this.props;
-
-  	const styleButton = {
-  		background: '#4d790a',
-	    color: '#ffffff',
-	    padding: '8px 16px',
-	    borderRadius: 4,
-      cursor: 'pointer',
-  	}
-
-  	const styleIcon = {
-  		color: '#ffffff',
-	    marginRight: 4,
-	    fontSize: 18,
-	    verticalAlign: 'middle',
-  	}
-
+    const { font, text } = this.props;
     return (
-      <div className="ButtonAction" onClick={this.handleOnClick} style={styleButton} >
-      	<FontAwesome name={font} style={styleIcon} /> {text}
-      </div>
+      <ButtonWrapper className="ButtonAction" onClick={this.handleOnClick}>
+        <ButtonIcon name={font} /> {text}
+      </ButtonWrapper>
     );
   }
 }
