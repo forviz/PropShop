@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
 const initalState = {
-	step: 0,
-	step0: {
-		requiredField: ['for','residentialType','topic','announcementDetails','areaSize','bedroom','bathroom','price','fee','province','amphur','district','location'],
+  step: 0,
+  step0: {
+    requiredField: ['for', 'residentialType', 'topic','announcementDetails','areaSize','bedroom','bathroom','price','fee','province','amphur','district','location'],
 		for: '',
 		residentialType: '',
 		topic: '',
@@ -20,8 +20,11 @@ const initalState = {
 		pricePerUnit: '',
 		fee: '',
 		project: '',
+		provinceId: '',
 		province: '',
+		amphurId: '',
 		amphur: '',
+		districtId: '',
 		district: '',
 		address: '',
 		street: '',
