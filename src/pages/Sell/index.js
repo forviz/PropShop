@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Steps, Spin } from 'antd';
+import { Steps, Spin, notification } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
@@ -13,6 +13,14 @@ import Step0 from './step0';
 import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
+
+const openNotificationWithIcon = (type, message, description) => {
+	const data = {};
+	data['message'] = message;
+	if ( description ) data['description'] = description;
+
+  notification[type](data);
+};
 
 const Step = Steps.Step;
 
@@ -45,6 +53,7 @@ class Sell extends Component {
 	        }));
 		  	});
       } else {
+      	openNotificationWithIcon('error', 'กรุณาเข้าสู่ระบบก่อน');
       	history.push({
 		      pathname: '/login',
 		    });
@@ -192,8 +201,15 @@ class Sell extends Component {
 
   render() {
 
-  	const { sell } = this.props;
-  	const { step, step0, step1, step2, step3, sendingData } = sell;
+  	const { sell, history } = this.props;
+  	const { step, step0, step1, step2, step3, sendingData, sendData } = sell;
+
+  	if ( sendData === true ) {
+  		openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
+    	history.push({
+	      pathname: '/',
+	    });
+  	}
 
   	let renderStep = null;
   	switch(step) {

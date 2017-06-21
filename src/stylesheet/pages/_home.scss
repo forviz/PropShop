@@ -123,21 +123,75 @@
 		}
 	}
 
-	@media (max-width: 1537px) {
+	@media (min-width: 992px) and (max-width: 1537px) {
 		.col-advance {
 			margin-top: 10px;
 		}
 	}
 
+	@media (min-width: 992px) and (max-width: 1178px) {
+		.col-bathroom {
+			margin-top: 10px;
+		}
+	}
+
+	@media (max-width: 991px) {
+		.filter_real_estate {
+			.col-room {
+				width: 11%;
+			}
+			.col-residential-type,
+			.col-room,
+			.col-advance {
+				margin-top: 12px;
+			}
+		}
+	}
+
 	@media (max-width: 767px) {
-		.filter_real_estate .ant-tabs-tabpane .row > div {
-			margin-bottom: 10px;
+		.filter_real_estate {
+			.price_length .ant-slider {
+				width: 90%;
+			}
+			.col-residential-type {
+				margin-left: 10px;
+			}
+			.col-advance {
+				min-width: 140px !important;
+    		padding: 0 !important;
+    		margin-right: 15px;
+			}
+			.col-residential-type,
+			.col-room,
+			.col-advance {
+				margin-top: 20px;
+			}
+			.ant-tabs-tabpane .row > div {
+				margin-bottom: 10px;
+			}
+			.ant-tabs-tabpane .row > div:first-child {
+				padding-right: 15px;
+			}
+			.ant-tabs-tabpane .row > div:last-child {
+				padding-left: 15px;
+			}
+		} 
+
+	}
+
+	@media (min-width: 400px) and (max-width: 767px) {
+		.result .list .item {
+			width: 50%;
+			float: left;
 		}
-		.filter_real_estate .ant-tabs-tabpane .row > div:first-child {
-			padding-right: 15px;
-		}
-		.filter_real_estate .ant-tabs-tabpane .row > div:last-child {
-			padding-left: 15px;
+	}
+
+	@media (max-width: 510px) {
+		.filter_real_estate {
+			.col-advance {
+				margin-left: 15px;
+				margin-top: 0;
+			}
 		}
 	}
 

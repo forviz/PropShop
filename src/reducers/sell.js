@@ -48,7 +48,7 @@ const initalState = {
 		acceptTerms: false,
 	},
 	sendingData: false,
-	redirect: false,
+	sendData: false,
 }
 
 const reducers = (state = initalState, action) => {
@@ -71,8 +71,7 @@ const reducers = (state = initalState, action) => {
 			}
 		};
 		case 'SELL/DATA/SENDING': return {...state, sendingData: true };
-		case 'SELL/DATA/SEND/SUCCESS': return {...state, sendingData: false };
-		case 'SELL/REDIRECT': return {...state, redirect: true };
+		case 'SELL/DATA/SEND/SUCCESS': return {...state, sendData: true };
 		default:
 			return state;
 	}

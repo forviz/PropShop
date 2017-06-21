@@ -31,7 +31,7 @@ const AsyncGettingStartedExampleGoogleMap = withScriptjs(
         {props.markers.map(marker => (
           <Marker
             {...marker}
-            icon="https://material.io/guidelines/static/spec/images/callouts/default.svg"
+            // icon="https://material.io/guidelines/static/spec/images/callouts/default.svg"
             // onRightClick={() => props.onMarkerRightClick(marker)}
           />
         ))}
@@ -341,10 +341,10 @@ class Step0 extends Component {
   	this.setData(newData);
   }
 
-  handleSelectProvince = (value) => {
+  handleSelectProvince = (value, label) => {
   	const newData = {
   		...this.props.data,
-  		'province': value,
+  		'province': label,
   		'amphur': '',
   		'district': '',
   	}
@@ -353,10 +353,10 @@ class Step0 extends Component {
 		});
   }
 
-  handleSelectAmphur = (value) => {
+  handleSelectAmphur = (value, label) => {
   	const newData = {
   		...this.props.data,
-  		'amphur': value,
+  		'amphur': label,
   		'district': '',
   	}
   	this.setData(newData).then(() => {
@@ -364,10 +364,10 @@ class Step0 extends Component {
 		});
   }
 
-  handleSelectDistrict = (value) => {
+  handleSelectDistrict = (value, label) => {
   	const newData = {
   		...this.props.data,
-  		'district': value,
+  		'district': label,
   	}
   	this.setData(newData).then(() => {
     	this.setLocation();

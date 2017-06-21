@@ -98,25 +98,25 @@ class SpecialFeature extends Component {
         </div>
         <div className="list">
           <div className="row">
-            <div className="col-md-3">
+            <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeatureView.name}</div>
               <div className="filter">
                 <CheckboxGroup options={items.specialFeatureView.data} value={setValue.specialFeatureView} onChange={this.onSpecialFeatureViewChange} />
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeatureFacilities.name}</div>
               <div className="filter">
                 <CheckboxGroup options={items.specialFeatureFacilities.data} value={setValue.specialFeatureFacilities} onChange={this.onSpecialFeatureFacilitiesChange} />
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeatureNearbyPlaces.name}</div>
               <div className="filter">
                 <CheckboxGroup options={items.specialFeatureNearbyPlaces.data} value={setValue.specialFeatureNearbyPlaces} onChange={this.onSpecialFeatureNearbyPlacesChange} />
               </div>
             </div>
-            <div className="col-md-3">
+            <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeaturePrivate.name}</div>
               <div className="filter">
                 <CheckboxGroup options={items.specialFeaturePrivate.data} value={setValue.specialFeaturePrivate} onChange={this.onSpecialFeaturePrivateChange} />
