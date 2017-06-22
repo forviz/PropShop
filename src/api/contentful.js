@@ -1,8 +1,6 @@
 import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
-import logo from '../images/logo.png';
-const cuid = require('cuid');
 
 const client = contentful.createClient({
   space: process.env.REACT_APP_SPACE,
@@ -11,7 +9,7 @@ const client = contentful.createClient({
 
 const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.REACT_APP_ACCESSTOKEN_MANAGEMENT,
-})
+});
 
 const mapContentFulRealestateToMyField = (data) => {
   return _.reduce(data, (acc, elem, index) => {
@@ -31,69 +29,72 @@ const mapContentFulRealestateToMyField = (data) => {
           bathroom: elem.fields.bathroom,
         },
       },
-    }
+    };
   }, {});
-}
+};
 
 const convertBanner = (entry, string) => {
   let datas = {};
   let i;
-  for (i = 0; i < 5; i++) { 
+  for (i = 0; i < 5; i++) {
     const row = string+(i+1).toString();
-    if ( entry.items[0].fields[row] ) {
+    if (entry.items[0].fields[row]) {
       const items = entry.items[0].fields[row];
       const data = mapContentFulRealestateToMyField(items);
       datas[i] = data;
     }
   }
   return datas;
-}
+};
 
 const mapContentFulBannerToMyField = (entry) => {
   return {
     main: _.map(mapContentFulRealestateToMyField(entry.items[0].fields.main), main => main),
-    condo: convertBanner(entry,'condoRow'),
-    house: convertBanner(entry,'houseRow'),
+    condo: convertBanner(entry, 'condoRow'),
+    house: convertBanner(entry, 'houseRow'),
   };
 };
 
 const getConfigSpecialFeature = (contentType) => {
-  let specialFeature = _.filter(contentType.fields, (item) => { 
-    return item.id === 'specialFeatureView' || item.id === 'specialFeatureFacilities' || item.id === 'specialFeatureNearbyPlaces' || item.id === 'specialFeaturePrivate'; 
+  let specialFeature = _.filter(contentType.fields, (item) => {
+    return item.id === 'specialFeatureView'
+           || item.id === 'specialFeatureFacilities'
+           || item.id === 'specialFeatureNearbyPlaces'
+           || item.id === 'specialFeaturePrivate';
   });
-  specialFeature = _.reduce(specialFeature, (acc, elem, index) => {
+  specialFeature = _.reduce(specialFeature, (acc, elem) => {
     return {
       ...acc,
       [elem.id]: {
         name: elem.name,
         data: elem.items.validations[0].in,
-      }
-    }
+      },
+    };
   }, {});
   return specialFeature;
-}
+};
 
 // const getConfigFor = (contentType) => {
-//   const _for = _.find(contentType.fields, (item) => { 
-//     return item.id === 'for'; 
+//   const _for = _.find(contentType.fields, (item) => {
+//     return item.id === 'for';
 //   });
 //   return _for.items.validations[0].in;
 // }
 
 async function getConfigPriceOrder(order) {
-  const results = await client.getEntries({ 
-    content_type: 'realEstate', 
-    order: order === 'max' ? '-fields.price' : 'fields.price', 
-    limit: 1, 
+  const results = await client.getEntries({
+    content_type: 'realEstate',
+    order: order === 'max' ? '-fields.price' : 'fields.price',
+    limit: 1,
   });
   return results.items[0].fields.price;
 }
 
 // async function getRoomOrder(room, order) {
-//   const results = await client.getEntries({ 
-//     content_type: 'realEstate', 
-//     order: order === 'max' ? `-fields.${room}` : `fields.${room}`, 
-//     limit: 1, 
+//   const results = await client.getEntries({
+//     content_type: 'realEstate',
+//     order: order === 'max' ? `-fields.${room}` : `fields.${room}`,
+//     limit: 1,
 //   });
 //   return results.items[0].fields[room];
 // }
@@ -107,14 +108,14 @@ async function mapConfigRealEstate() {
     priceMax: await getConfigPriceOrder('max'),
     // bedroom: await getRoomOrder('bedroom','max'),
     // bathroom: await getRoomOrder('bathroom','max'),
-  }
+  };
   return data;
 }
 
 export const getBannerRealEstate = () => {
   return client.getEntries({
     'sys.id': process.env.REACT_APP_CONTENTFUL_BANNER,
-    'include': 1,
+    include: 1,
   }).then((entry) => {
     return mapContentFulBannerToMyField(entry);
   });
@@ -125,20 +126,19 @@ export const getConfigRealEstate = () => {
 };
 
 export const getRealEstate = (search) => {
-  console.log('search', search);
-  let searchEntries = {};
-  searchEntries['content_type'] = 'realEstate';
-  if ( search.for ) searchEntries['fields.for[in]'] = search.for;
-  if ( search.query ) searchEntries['query'] = search.query;
-  if ( search.residentialType ) searchEntries['fields.residentialType'] = search.residentialType;
-  if ( search.bedroom ) searchEntries['fields.bedroom'] = parseInt(search.bedroom, 10);
-  if ( search.bathroom ) searchEntries['fields.bathroom'] = parseInt(search.bathroom, 10);
-  if ( search.priceMin ) searchEntries['fields.price[gte]'] = parseInt(search.priceMin, 10);
-  if ( search.priceMax ) searchEntries['fields.price[lte]'] = parseInt(search.priceMax, 10);
-  if ( search.specialFeatureView ) searchEntries['fields.specialFeatureView[all]'] = search.specialFeatureView;
-  if ( search.specialFeatureFacilities ) searchEntries['fields.specialFeatureFacilities[all]'] = search.specialFeatureFacilities;
-  if ( search.specialFeatureNearbyPlaces ) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
-  if ( search.specialFeaturePrivate ) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
+  const searchEntries = {};
+  searchEntries.content_type = 'realEstate';
+  if (search.for) searchEntries['fields.for[in]'] = search.for;
+  if (search.query) searchEntries.query = search.query;
+  if (search.residentialType) searchEntries['fields.residentialType'] = search.residentialType;
+  if (search.bedroom) searchEntries['fields.bedroom'] = parseInt(search.bedroom, 10);
+  if (search.bathroom) searchEntries['fields.bathroom'] = parseInt(search.bathroom, 10);
+  if (search.priceMin) searchEntries['fields.price[gte]'] = parseInt(search.priceMin, 10);
+  if (search.priceMax) searchEntries['fields.price[lte]'] = parseInt(search.priceMax, 10);
+  if (search.specialFeatureView) searchEntries['fields.specialFeatureView[all]'] = search.specialFeatureView;
+  if (search.specialFeatureFacilities) searchEntries['fields.specialFeatureFacilities[all]'] = search.specialFeatureFacilities;
+  if (search.specialFeatureNearbyPlaces) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
+  if (search.specialFeaturePrivate) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
   return client.getEntries(searchEntries).then((entry) => {
     return _.map(mapContentFulRealestateToMyField(entry.items), item => item);
   });
@@ -198,7 +198,7 @@ export const publishEntry = (entry_id) => {
 
 export async function createRealEstate(data, user) {
   const assetsMainImage = await uploadFile(data.step2.mainImage.name, data.step2.mainImage.type, data.step2.mainImage);
-  
+
   let imageData = {};
   let images = [];
 
@@ -213,7 +213,7 @@ export async function createRealEstate(data, user) {
     }
     images.push(imageData);
   }));
-  
+
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
   .then((space) => space.createEntry('realEstate', {
     fields: {
@@ -336,7 +336,7 @@ export async function createRealEstate(data, user) {
 //   //       }
 //   //     }
 //   //   }
-//   // } 
+//   // }
 
 //   // var url = 'https://upload.contentful.com/spaces/zucfr6asi8cw/uploads';
 //   // var http = new XMLHttpRequest();
@@ -356,8 +356,8 @@ export async function createRealEstate(data, user) {
 //   //       'en-US': {
 //   //         contentType: fileType,
 //   //         fileName: fileName,
-//   //         "uploadFrom":{  
-//   //           "sys":{  
+//   //         "uploadFrom":{
+//   //           "sys":{
 //   //             "type":"Link",
 //   //             "linkType":"Upload",
 //   //             "id":result.sys.id
@@ -366,7 +366,7 @@ export async function createRealEstate(data, user) {
 //   //       }
 //   //     }
 //   //   }
-//   // } 
+//   // }
 
 //   // var url = 'https://api.contentful.com/spaces/zucfr6asi8cw/assets';
 //   // var http = new XMLHttpRequest();
@@ -399,7 +399,7 @@ export async function createRealEstate(data, user) {
 
 //   // clientManagement.getSpace(process.env.REACT_APP_SPACE)
 //   // .then((space) => space.createAsset({
-//   //     fields: {  
+//   //     fields: {
 //   //         title: {
 //   //             'en-US': 'Playsam Streamliner'
 //   //         },
@@ -440,7 +440,7 @@ export async function createRealEstate(data, user) {
 
 export async function uploadFile(fileName = '', fileType = '', file = '') {
   return await clientManagement.getSpace(process.env.REACT_APP_SPACE)
-  .then((space) => space.createAssetFromFiles({
+  .then(space => space.createAssetFromFiles({
     fields: {
       title: {
         'en-US': fileName
@@ -454,8 +454,8 @@ export async function uploadFile(fileName = '', fileType = '', file = '') {
       }
     }
   }))
-  .then((asset) => asset.processForAllLocales())
-  .then((asset) => asset.publish())
+  .then(asset => asset.processForAllLocales())
+  .then(asset => asset.publish())
   .catch(console.error)
 }
 
