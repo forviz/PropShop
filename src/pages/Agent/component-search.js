@@ -12,6 +12,12 @@ class SearchAgent extends Component {
     area: '',
   }
 
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      this.handleSearchAgent();
+    }
+  }
+
   handleSearchAgent = () => {
     const { searchText, area } = this.state;
     const { onSearch } = this.props;
@@ -35,6 +41,7 @@ class SearchAgent extends Component {
                       onChange={e => this.setState({ searchText: e.target.value })}
                       placeholder="ค้นหาจากชื่อนายหน้า, ชื่อโครงการ, ชื่อบริษัท"
                       style={{ width: '100%' }}
+                      onKeyDown={this.handleKeyDown}
                     />
                   </div>
                   <button type="button" className="btn btn-primary" onClick={this.handleSearchAgent}>ค้นหา</button>

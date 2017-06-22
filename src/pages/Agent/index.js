@@ -58,9 +58,9 @@ const actions = {
           ids: _.map(response.items, item => item.sys.id),
         });
       });
-    }
-  }
-}
+    };
+  },
+};
 
 const mapDispatchToProps = (dispatch) => {
   return { actions: bindActionCreators(actions, dispatch) };
@@ -96,23 +96,12 @@ class Agent extends Component {
     searchResult: [],
   }
 
-  // componentDidMount() {
-  //   const { search, area } = this.props.searchQuery;
-  //   const { searchAgents } = this.props.actions;
-  //   searchAgents(search, area);
-  // }
-  //
-  // componentWillReceiveProps(nextProps) {
-  //   if (!_.isEqual(nextProps.searchQuery, this.props.searchQuery)) {
-  //     const { search, area } = this.props.searchQuery;
-  //     const { searchAgents } = this.props.actions;
-  //     searchAgents(search, area);
-  //   }
-  // }
-
   handleSearchAgent = (search, area) => {
     const { history } = this.props;
-    history.push(`?search=${search}&area=${area}`);
+    history.push({
+      pathname: '/agent',
+      search: `?search=${search}&area=${area}`,
+    });
   }
 
   render() {

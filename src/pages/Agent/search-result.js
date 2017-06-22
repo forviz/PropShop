@@ -54,12 +54,12 @@ class AgentSearchResult extends Component {
   render() {
     const { searchResult } = this.props;
 
-    const agentItems = _.map(searchResult, agent => <AgentItem item={agent} />)
+    const agentItems = _.map(searchResult, agent => <AgentItem item={agent} />);
     return (
       <div className="container">
         <div className="row">
           <div className="col-md-10 col-md-offset-1">
-            <SearchSummary>แสดง {_.size(searchResult)} ผลลัพธ์การค้นหา {this.state.query.search}</SearchSummary>
+            <SearchSummary>แสดง {_.size(searchResult)} ผลลัพธ์การค้นหา {this.props.searchQuery.search}</SearchSummary>
             {agentItems}
           </div>
         </div>
