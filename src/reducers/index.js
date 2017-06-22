@@ -6,11 +6,23 @@ import banners from './banners';
 import realestates from './realestates';
 import sell from './sell';
 
+// Entities
+import agents from './entities/agents';
+
+// Domain
+import agentSearch from './domain/agent-search';
+
 export default combineReducers({
-	Intl,
-	config,
-	// user,
-	banners,
-	realestates,
-	sell,
+  Intl,
+  config,
+  // user,
+  banners,
+  realestates,
+  sell,
+  entities: combineReducers({
+    agents,
+  }),
+  domain: combineReducers({
+    agentSearch,
+  }),
 });

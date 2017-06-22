@@ -1,121 +1,158 @@
 import React, { Component } from 'react';
-import { Icon } from 'antd';
+import T from 'prop-types';
+import { connect } from 'react-redux';
+import queryString from 'query-string';
+import _ from 'lodash';
+import { bindActionCreators } from 'redux';
+import { Route } from 'react-router-dom';
 
-import AgentItem from '../../components/AgentItem';
+import AgentSearchResult from './search-result';
+import AgentDetail from '../AgentDetail';
 
-import agentData from '../../../public/data/agentData.json';
+import AgentSearch from './component-search';
+import AgentSectionHome from './section-home';
+import AgentFooter from './section-footer';
 
-import imgExpert from '../../images/pages/agent/expert.png';
-import imgReview from '../../images/pages/agent/review.png';
-import imgWebboard from '../../images/pages/agent/webboard.png';
+import { getAgents } from '../../api/agent';
 
-class Agent extends Component {
+import { receiveAgentEntity } from '../../actions/agent-actions';
 
-	state = {
+const mapStateToProps = (state, ownProps) => {
+  const urlParam = _.get(ownProps, 'location.search');
+  const { search, area } = queryString.parse(urlParam);
+  const domain = _.get(state, 'domain.agentSearch');
 
-	}
+  // Get Search Result ID from domain agentSearch
+  const searchResultIDs = domain.searchResult;
 
-  render() {
-    return (
-      <div id="Agent">
-      	<div className="container">
-      		<div className="row">
-	        	<div className="col-md-8 col-md-offset-2">
-	        		<div className="search">
-	        			<form className="form-inline">
-								  <div className="form-group" style={{ width: '70%' }}>
-								    <input type="text" className="form-control" placeholder="ค้นหาจากชื่อนายหน้า, ชื่อโครงการ, ชื่อบริษัท" style={{ width: '100%' }} />
-								  </div>
-								  <button type="button" className="btn btn-primary">ค้นหา</button>
-								</form>
-	        		</div>
-	        	</div>
-	        </div>
-      	</div>
-        <hr/>
-        <div className="container">
-      		<div className="row">
-	        	<div className="col-md-10 col-md-offset-1">
-	        		<div className="persons">
-	        			<div className="row">
-	        				<div className="col-md-4">
-	        					<div className="title clearfix">
-	        						<div className="text pull-left">ผู้เชี่ยวชาญอสังหาริมทรัพย์ในท้องถิ่น</div>
-		        					<div className="icon pull-right"><Icon type="right-circle" /></div>
-	        					</div>
-	        					<hr/>
-	        					<div className="detail">
-	        						<AgentItem item={agentData[0]} />
-	        						<AgentItem item={agentData[1]} />
-	        					</div>
-	        					<div className="view_more">
-	        						<a>ค้นหาเพิ่มเติม</a>
-	        					</div>
-	        				</div>
-	        				<div className="col-md-4">
-	        					<div className="title clearfix">
-	        						<div className="text pull-left">ผู้ขายที่มียอดขายสูงสุดในปีนี้</div>
-		        					<div className="icon pull-right"><Icon type="right-circle" /></div>
-	        					</div>
-	        					<hr/>
-	        					<div className="detail">
-	        						<AgentItem item={agentData[2]} />
-	        						<AgentItem item={agentData[3]} />
-	        					</div>
-	        					<div className="view_more">
-	        						<a>ค้นหาเพิ่มเติม</a>
-	        					</div>
-	        				</div>
-	        				<div className="col-md-4">
-	        					<div className="title clearfix">
-	        						<div className="text pull-left">ผู้เชี่ยวชาญการโยกย้ายถิ่นฐาน</div>
-		        					<div className="icon pull-right"><Icon type="right-circle" /></div>
-	        					</div>
-	        					<hr/>
-	        					<div className="detail">
-	        						<AgentItem item={agentData[4]} />
-	        						<AgentItem item={agentData[5]} />
-	        					</div>
-	        					<div className="view_more">
-	        						<a>ค้นหาเพิ่มเติม</a>
-	        					</div>
-	        				</div>
-	        			</div>
-	        		</div>
-	        	</div>
-	        </div>
-      	</div>
-      	<div className="about">
-      		<div className="container">
-	      		<div className="row">
-		        	<div className="col-md-8 col-md-offset-2">
-		        		<h3 className="topic">ดูข้อมูลที่จำเป็นที่คุณต้องการในศูนย์ตัวแทน</h3>
-		        		<div className="items">
-		        			<div className="row">
-			        			<div className="col-md-4 vbottom">
-			        				<div className="image"><img src={imgReview} alt="รีวิว" /></div>
-			        				<div className="title">รีวิว</div>
-			        				<div className="detail">ดูบทวิจารณ์ที่เป็นกลางจากก่อนหน้านี้ลูกค้าและคนที่คุณไว้วางใจ</div>
-			        			</div>
-			        			<div className="col-md-4 vbottom">
-			        				<div className="image"><img src={imgExpert} alt="ประสบการณ์ที่เกี่ยวข้อง" /></div>
-			        				<div className="title">ประสบการณ์ที่เกี่ยวข้อง</div>
-			        				<div className="detail">ดูความชำนาญและทักษะของเอเจนซีและบ้านที่พวกเขาขายใกล้บ้านคุณ</div>
-			        			</div>
-			        			<div className="col-md-4 vbottom">
-			        				<div className="image"><img src={imgWebboard} alt="ความเชี่ยวชาญในตลาดท้องถิ่น" /></div>
-			        				<div className="title">ความเชี่ยวชาญในตลาดท้องถิ่น</div>
-			        				<div className="detail">ดูคำถามคำตอบและบล็อกของตัวแทนในพื้นที่ชุมชน <span className="text-green">เว็บบอร์ด</span> ของเรา</div>
-			        			</div>
-			        		</div>
-		        		</div>
-		        	</div>
-		        </div>
-	      	</div>
-      	</div>
-      </div>
-    );
+  // Convert ID to Entity
+  const searchResultAgents = _.map(searchResultIDs, (id) => {
+    const entity = _.get(state, `entities.agents.entities.${id}`);
+    return {
+      id: _.get(entity, 'sys.id'),
+      name: _.get(entity, 'fields.name'),
+      image: _.get(entity, 'fields.image.fields.file.url'),
+      rate: {
+        rating: _.get(entity, 'fields.rating'),
+        count: 10,
+      },
+    };
+  });
+
+  return {
+    showSearchResult: !_.isEmpty(urlParam),
+    searchQuery: {
+      search,
+      area,
+    },
+    searchResult: searchResultAgents,
+  };
+};
+
+const actions = {
+  searchAgents: (text, area) => {
+    return (dispatch) => {
+      getAgents({ text, area })
+      .then((response) => {
+        // Save/Update Agent Entities
+        const agents = _.get(response, 'items', []);
+        _.forEach(agents, (agent) => {
+          dispatch(receiveAgentEntity(agent.sys.id, agent));
+        });
+
+        // Save Agent Search Result
+        dispatch({
+          type: 'DOMAIN/AGENT_SEARCH/RESULT_RECEIVED',
+          ids: _.map(response.items, item => item.sys.id),
+        });
+      });
+    }
   }
 }
 
-export default Agent;
+const mapDispatchToProps = (dispatch) => {
+  return { actions: bindActionCreators(actions, dispatch) };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+class Agent extends Component {
+
+  static propTypes = {
+    history: T.shape({
+      push: T.func,
+    }).isRequired,
+    showSearchResult: T.bool.isRequired,
+    searchQuery: T.shape({
+      search: T.string,
+      area: T.string,
+    }),
+    searchResult: T.arrayOf(T.shape({
+      id: T.string,
+      name: T.string,
+    })),
+    actions: T.shape({
+      searchAgents: T.func.isRequired,
+    }).isRequired,
+  }
+
+  static defaultProps = {
+    showSearchResult: false,
+    searchQuery: {
+      search: '',
+      area: '',
+    },
+    searchResult: [],
+  }
+
+  componentDidMount() {
+    const { search, area } = this.props.searchQuery;
+    const { searchAgents } = this.props.actions;
+    searchAgents(search, area);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(nextProps.searchQuery, this.props.searchQuery)) {
+      const { search, area } = this.props.searchQuery;
+      const { searchAgents } = this.props.actions;
+      searchAgents(search, area);
+    }
+  }
+
+  handleSearchAgent = (search, area) => {
+    const { history } = this.props;
+    history.push(`?search=${search}&area=${area}`);
+  }
+
+  render() {
+    const { showSearchResult, searchResult } = this.props;
+    return (
+      <div id="Agent">
+        <AgentSearch onSearch={this.handleSearchAgent} />
+        <div className="container">
+          <div className="row">
+            <div className="col-md-10 col-md-offset-1">
+              <Route
+                key="agent-home"
+                path="/agent"
+                exact
+                render={() => {
+                  if (showSearchResult) {
+                    return (<AgentSearchResult result={searchResult} />);
+                  }
+                  return (<AgentSectionHome />);
+                }}
+              />
+              <Route
+                key="agent-detail"
+                path="/agent/:id"
+                exact
+                component={AgentDetail}
+              />
+            </div>
+          </div>
+        </div>
+        <AgentFooter />
+      </div>
+    );
+  }
+});
