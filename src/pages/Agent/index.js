@@ -6,15 +6,15 @@ import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { Route } from 'react-router-dom';
 
+import { mapEntryToAgent } from './agent-helper';
 import AgentSearchResult from './search-result';
-import AgentDetail from '../AgentDetail';
+import AgentDetail from './section-detail';
 
 import AgentSearch from './component-search';
 import AgentSectionHome from './section-home';
 import AgentFooter from './section-footer';
 
-import { getAgents } from '../../api/agent';
-
+import { getAgentEntries } from '../../api/agent';
 import { receiveAgentEntity } from '../../actions/agent-actions';
 
 const mapStateToProps = (state, ownProps) => {
@@ -28,15 +28,7 @@ const mapStateToProps = (state, ownProps) => {
   // Convert ID to Entity
   const searchResultAgents = _.map(searchResultIDs, (id) => {
     const entity = _.get(state, `entities.agents.entities.${id}`);
-    return {
-      id: _.get(entity, 'sys.id'),
-      name: _.get(entity, 'fields.name'),
-      image: _.get(entity, 'fields.image.fields.file.url'),
-      rate: {
-        rating: _.get(entity, 'fields.rating'),
-        count: 10,
-      },
-    };
+    return mapEntryToAgent(entity);
   });
 
   return {
@@ -52,7 +44,7 @@ const mapStateToProps = (state, ownProps) => {
 const actions = {
   searchAgents: (text, area) => {
     return (dispatch) => {
-      getAgents({ text, area })
+      getAgentEntries({ text, area })
       .then((response) => {
         // Save/Update Agent Entities
         const agents = _.get(response, 'items', []);
@@ -104,19 +96,19 @@ class Agent extends Component {
     searchResult: [],
   }
 
-  componentDidMount() {
-    const { search, area } = this.props.searchQuery;
-    const { searchAgents } = this.props.actions;
-    searchAgents(search, area);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(nextProps.searchQuery, this.props.searchQuery)) {
-      const { search, area } = this.props.searchQuery;
-      const { searchAgents } = this.props.actions;
-      searchAgents(search, area);
-    }
-  }
+  // componentDidMount() {
+  //   const { search, area } = this.props.searchQuery;
+  //   const { searchAgents } = this.props.actions;
+  //   searchAgents(search, area);
+  // }
+  //
+  // componentWillReceiveProps(nextProps) {
+  //   if (!_.isEqual(nextProps.searchQuery, this.props.searchQuery)) {
+  //     const { search, area } = this.props.searchQuery;
+  //     const { searchAgents } = this.props.actions;
+  //     searchAgents(search, area);
+  //   }
+  // }
 
   handleSearchAgent = (search, area) => {
     const { history } = this.props;
@@ -124,7 +116,8 @@ class Agent extends Component {
   }
 
   render() {
-    const { showSearchResult, searchResult } = this.props;
+    const { showSearchResult, searchQuery, searchResult } = this.props;
+    const { searchAgents } = this.props.actions;
     return (
       <div id="Agent">
         <AgentSearch onSearch={this.handleSearchAgent} />
@@ -135,11 +128,17 @@ class Agent extends Component {
                 key="agent-home"
                 path="/agent"
                 exact
-                render={() => {
+                render={(routerProp) => {
                   if (showSearchResult) {
-                    return (<AgentSearchResult result={searchResult} />);
+                    return (
+                      <AgentSearchResult
+                        searchResult={searchResult}
+                        searchQuery={searchQuery}
+                        onSearch={searchAgents}
+                      />
+                    );
                   }
-                  return (<AgentSectionHome />);
+                  return (<AgentSectionHome {...routerProp} />);
                 }}
               />
               <Route

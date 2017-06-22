@@ -6,7 +6,13 @@ const client = contentful.createClient({
   accessToken: process.env.REACT_APP_ACCESSTOKEN,
 });
 
-export const getAgents = ({ text, area }) => {
+export const getAgentEntry = (agentId) => {
+  return client.getEntries({ 'sys.id': agentId }).then((response) => {
+    return _.head(response.items);
+  });
+};
+
+export const getAgentEntries = ({ text, area }) => {
   const query = {
     content_type: 'agent',
     query: text,
