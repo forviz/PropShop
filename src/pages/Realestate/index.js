@@ -14,7 +14,7 @@ import * as helpers from '../../helpers';
 import ButtonAction from '../../components/ButtonAction';
 import ContactAgent from '../../components/ContactAgent';
 import MapComponent from '../../components/Map/MapWithStreetView';
-import NearbyPlace from '../../components/Map/MapWithMarkers';
+import NearbyPlace from '../../components/Map/MapNearbyPlace';
 import realEstateData from '../../../public/data/realEstateData.json';
 import agentData from '../../../public/data/agentData.json';
 import advertising1 from '../../images/advertising/1.jpg';
