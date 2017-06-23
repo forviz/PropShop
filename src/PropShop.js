@@ -6,6 +6,10 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 
 import { IntlProvider } from 'react-redux-multilingual';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+
 import rootReducer from './reducers';
 
 import translations from './translations';
@@ -17,13 +21,11 @@ import Home from './pages/Home';
 import Realestate from './pages/Realestate';
 import Sell from './pages/Sell';
 import Agent from './pages/Agent';
-import AgentDetail from './pages/AgentDetail';
+
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Forgotpassword from './pages/Forgotpassword';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
 import './Propshop.css';
 
 const loggerMiddleware = createLogger();
@@ -33,13 +35,11 @@ const store = createStore(
   applyMiddleware(
     loggerMiddleware,
     thunk,
-  )
+  ),
 );
 
 class PropShop extends Component {
-
   render() {
-
     const routes = [
       { path: '/',
         exact: true,
@@ -65,12 +65,18 @@ class PropShop extends Component {
         content: Agent,
         footer: Footer,
       },
-      { path: '/agent/:id',
-        exact: false,
-        header: Header,
-        content: AgentDetail,
-        footer: Footer,
-      },
+      // { path: '/agent-search',
+      //   exact: false,
+      //   header: Header,
+      //   content: AgentSearchResult,
+      //   footer: Footer,
+      // },
+      // { path: '/agent/:id',
+      //   exact: true,
+      //   header: Header,
+      //   content: AgentDetail,
+      //   footer: Footer,
+      // },
       { path: '/login',
         exact: false,
         header: Header,
@@ -89,31 +95,31 @@ class PropShop extends Component {
     ]
 
     return (
-      <Provider store={store} locale='th'>
+      <Provider store={store} locale="th">
         <IntlProvider translations={translations}>
           <Router>
             <div className="PropShop">
-              {routes.map((route, index) => (
+              {routes.map(route => (
                 <Route
-                  key={index}
+                  key={route.path}
                   path={route.path}
                   exact={route.exact}
                   component={route.header}
                 />
               ))}
               <div id="Content">
-                {routes.map((route, index) => (
+                {routes.map(route => (
                   <Route
-                    key={index}
+                    key={route.path}
                     path={route.path}
                     exact={route.exact}
                     component={route.content}
                   />
                 ))}
               </div>
-              {routes.map((route, index) => (
+              {routes.map(route => (
                 <Route
-                  key={index}
+                  key={route.path}
                   path={route.path}
                   exact={route.exact}
                   component={route.footer}

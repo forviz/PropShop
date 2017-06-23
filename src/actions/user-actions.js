@@ -1,19 +1,18 @@
 import * as firebase from '../api/firebase';
-import { handleError } from './errors';
 
 export const userServiceReturnWithSuccess = (user) => {
-	return {
-	  type: 'USER/RECEIVED/SUCCESS',
-		user: user
-	}
+  return {
+    type: 'USER/RECEIVED/SUCCESS',
+    user,
+  };
 };
 
 export const fetchUser = () => {
-	return dispatch => {
-    firebase.core().auth().onAuthStateChanged(function(user) {
+  return (dispatch) => {
+    firebase.core().auth().onAuthStateChanged((user) => {
       if (user) {
         dispatch(userServiceReturnWithSuccess(user));
       }
     });
-	}
+  };
 };
