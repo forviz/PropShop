@@ -27,6 +27,46 @@
 
 		.cover {
 			border: 1px solid $border-color;
+			.google-map {
+				width: 29%;
+		    float: right;
+		    padding-top: 8px;
+		    img {
+		    	cursor: pointer;
+		    }
+			}
+			.image-gallery-slide img {
+				height: 500px;
+			}
+			.image-gallery-thumbnail {
+		    width: 140px;
+		    img {
+		    	height: 100px;
+		    }
+			}
+			.image-gallery-thumbnails-wrapper {
+				width: 70%;
+				float: left;
+			}
+			.image-gallery-content.fullscreen {
+				.image-gallery-slide {
+					text-align: center;
+					img {
+						width: 65%;
+						height: inherit;
+					}
+				}
+				.image-gallery-thumbnail {
+					width: 100px;
+					img {
+						height: 70px;
+					}
+				}
+				.image-gallery-thumbnails-wrapper {
+					width: inherit;
+    			float: none;
+				}
+			} 
 		}
 
 		.main-info {
@@ -35,11 +75,14 @@
 		}
 
 		.detail-block {
+			border-top: 1px solid $border-color;
 			border-bottom: 1px solid $border-color;
+			margin-top: 20px;
 		}
 		
 		.price-block {
 			padding: 15px;
+			border-right: 1px solid $border-color;
 			.for {
 				font-family: $sukumvit-bold;
 				font-size: 18px;
@@ -57,7 +100,6 @@
 
 		.address-block {
 			padding: 15px;
-			border-left: 1px solid $border-color;
 			.address_1 {
 				font-family: $sukumvit-bold;
 				font-size: 30px;

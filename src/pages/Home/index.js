@@ -310,12 +310,12 @@ class Home extends Component {
                       </div>
                       <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bedroom" style={{ minWidth: 92 }} >
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.room.bedroom} onChange={this.handleFilterBedRoom} />
+                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.bedroom} onChange={this.handleFilterBedRoom} />
                         </div>
                       </div>
                       <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bathroom" style={{ minWidth: 92 }} >
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.room.bathroom} onChange={this.handleFilterBathRoom} />
+                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.bathroom} onChange={this.handleFilterBathRoom} />
                         </div>
                       </div>
                       <div className="col-xs-2 col-sm-2 col-md-2 col-advance" style={{ minWidth: 130 }} >
@@ -378,12 +378,12 @@ class Home extends Component {
                       </div>
                       <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bedroom" style={{ minWidth: 92 }} >
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.room.bedroom} onChange={this.handleFilterBedRoom} />
+                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.bedroom} onChange={this.handleFilterBedRoom} />
                         </div>
                       </div>
                       <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bathroom" style={{ minWidth: 92 }} >
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.room.bathroom} onChange={this.handleFilterBathRoom} />
+                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.bathroom} onChange={this.handleFilterBathRoom} />
                         </div>
                       </div>
                       <div className="col-xs-2 col-sm-2 col-md-2 col-advance" style={{ minWidth: 130 }} >

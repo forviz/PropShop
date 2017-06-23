@@ -25,15 +25,15 @@ class RealEstateItem extends Component {
               <div className="gradient"></div>
               <div className="content">
                 <div className="price">{numeral(item.price).format('0,0')} บาท</div>
-                <div className="place">{item.address.street} - {item.address.province}</div>
-                {(item.room.bedroom > 0 || item.room.bathroom > 0 ) &&
+                <div className="place">{item.street} - {item.province}</div>
+                {(item.bedroom > 0 || item.bathroom > 0 ) &&
                   <div className="option">
                     <ul>
-                      {item.room.bedroom > 0 &&
-                        <li><FontAwesome name="bed" /><span>{item.room.bedroom}</span></li>
+                      {item.bedroom > 0 &&
+                        <li><FontAwesome name="bed" /><span>{item.bedroom}</span></li>
                       }
-                      {item.room.bathroom > 0 &&
-                        <li><FontAwesome name="bath" /><span>{item.room.bathroom}</span></li>
+                      {item.bathroom > 0 &&
+                        <li><FontAwesome name="bath" /><span>{item.bathroom}</span></li>
                       }
                     </ul>
                   </div>
@@ -64,15 +64,15 @@ class RealEstateItem extends Component {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="address">{item.address.street} - {item.address.province}</div>
-              {(item.room.bedroom > 0 || item.room.bathroom > 0 ) &&
+              <div className="address">{item.street} - {item.province}</div>
+              {(item.bedroom > 0 || item.bathroom > 0 ) &&
                 <div className="option">
                   <ul>
-                    {item.room.bedroom > 0 &&
-                      <li><FontAwesome name="bed" /><span>{item.room.bedroom}</span></li>
+                    {item.bedroom > 0 &&
+                      <li><FontAwesome name="bed" /><span>{item.bedroom}</span></li>
                     }
-                    {item.room.bathroom > 0 &&
-                      <li><FontAwesome name="bath" /><span>{item.room.bathroom}</span></li>
+                    {item.bathroom > 0 &&
+                      <li><FontAwesome name="bath" /><span>{item.bathroom}</span></li>
                     }
                   </ul>
                 </div>

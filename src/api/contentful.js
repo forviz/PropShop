@@ -19,16 +19,14 @@ const mapContentFulRealestateToMyField = (data) => {
       [index]: {
         ...elem.fields,
         id: elem.sys.id,
+        createdAt: elem.sys.createdAt,
+        updatedAt: elem.sys.updatedAt,
         mainImage: elem.fields.mainImage.fields.file.url,
+        images: _.map(elem.fields.images, (image) => {
+          return image.fields.file.url;
+        }),
         price: elem.fields.price,
-        address: {
-          street: elem.fields.street,
-          province: elem.fields.province,
-        },
-        room: {
-          bedroom: elem.fields.bedroom,
-          bathroom: elem.fields.bathroom,
-        },
+        agentId: elem.fields.agent.sys.id,
       },
     }
   }, {});
@@ -127,6 +125,7 @@ export const getRealEstate = (search) => {
   console.log('search', search);
   let searchEntries = {};
   searchEntries['content_type'] = 'realEstate';
+  if ( search.id ) searchEntries['sys.id'] = search.id;
   if ( search.for ) searchEntries['fields.for[in]'] = search.for;
   if ( search.query ) searchEntries['query'] = search.query;
   if ( search.residentialType ) searchEntries['fields.residentialType'] = search.residentialType;
@@ -139,7 +138,10 @@ export const getRealEstate = (search) => {
   if ( search.specialFeatureNearbyPlaces ) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
   if ( search.specialFeaturePrivate ) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
   return client.getEntries(searchEntries).then((entry) => {
-    return _.map(mapContentFulRealestateToMyField(entry.items), item => item);
+    console.log('entry', entry);
+    const xx = _.map(mapContentFulRealestateToMyField(entry.items), item => item);
+    console.log('xx', xx);
+    return xx;
   });
   // 'fields.for[in]': 'Sell'
   // 'fields.residentialType': 'House',
@@ -165,8 +167,8 @@ const existUser = (uid) => {
 }
 
 export const createUser = (user) => {
-  return existUser(user.uid).then((user) => {
-    if ( !user ) {
+  return existUser(user.uid).then((hasUser) => {
+    if ( !hasUser ) {
       return clientManagement.getSpace(process.env.REACT_APP_SPACE)
       .then((space) => space.createEntry('agent', {
         fields: {

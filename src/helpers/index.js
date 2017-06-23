@@ -118,3 +118,9 @@ export const convertRealestatePrice = (price) => {
       return numeral(price).format('0,0') + ' บ.';
   }
 }
+
+export const diffDay = (timestamp1, timestamp2) => {
+  const difference = timestamp1 - timestamp2;
+  const daysDifference = Math.floor(difference/1000/60/60/24) + 1;
+  return daysDifference;
+}

@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 import withScriptjs from "react-google-maps/lib/async/withScriptjs";
 import _ from 'lodash';
+import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
 
 import SelectSellType from '../../components/SelectSellType';
@@ -170,11 +171,8 @@ class Step0 extends Component {
 
     const { addRequiredField, removeRequiredField } = this.props.actions;
     const lists = ["Town-home", "House", "Land"];
-    if ( lists.includes(value) ) {
-      addRequiredField('landSize');
-    } else {
-      removeRequiredField('landSize');
-    }
+    lists.includes(value) ? addRequiredField('landSize') : removeRequiredField('landSize');
+    value === 'Land' ? removeRequiredField('areaSize') : addRequiredField('areaSize');
   }
 
   handleInputTopic = (e) => {
@@ -202,7 +200,9 @@ class Step0 extends Component {
         ...this.props.data,
         'areaSize': sumAreaSize
       }
-      this.setData(newData);
+      this.setData(newData).then(() => {
+        this.findPricePerUnit();
+      });
     }
   }
 
@@ -210,7 +210,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'areaSize0': value
+      'areaSize0': value.replace(/\D/g, '')
     }
     this.setData(newData).then(() => {
       this.sumAreaSize();
@@ -221,7 +221,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'areaSize1': value
+      'areaSize1': value.replace(/\D/g, '')
     }
     this.setData(newData).then(() => {
       this.sumAreaSize();
@@ -229,8 +229,9 @@ class Step0 extends Component {
   }
 
   findPricePerUnit = () => {
-    if ( this.props.data.sumAreaSize && this.props.data.price ) {
-      const pricePerUnit = this.props.data.price/this.props.data.sumAreaSize;
+    const size = this.props.data.residentialType === 'Land' ? this.props.data.landSize * 4 : this.props.data.areaSize;
+    if ( size && this.props.data.price ) {
+      const pricePerUnit = this.props.data.price / size;
       const newData = {
         ...this.props.data,
         'pricePerUnit': pricePerUnit
@@ -243,22 +244,25 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'areaSize': value
+      'areaSize': value.replace(/\D/g, ''),
+      'areaSize0': '',
+      'areaSize1': '',
     }
     this.setData(newData).then(() => {
       this.findPricePerUnit();
     });
-   
   }
 
   sumLandSize = () => {
     if ( this.props.data.landSize0 && this.props.data.landSize1 ) {
-      const sumLandSize = this.props.data.landSize0*this.props.data.landSize1;
+      const sumLandSize = Math.round(this.props.data.landSize0 * this.props.data.landSize1 / 4);
       const newData = {
         ...this.props.data,
         'landSize': sumLandSize
       }
-      this.setData(newData);
+      this.setData(newData).then(() => {
+        this.findPricePerUnit();
+      });
     }
   }
 
@@ -266,7 +270,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'landSize0': value
+      'landSize0': value.replace(/\D/g, '')
     }
     this.setData(newData).then(() => {
       this.sumLandSize();
@@ -277,7 +281,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'landSize1': value
+      'landSize1': value.replace(/\D/g, '')
     }
     this.setData(newData).then(() => {
       this.sumLandSize();
@@ -288,9 +292,13 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'landSize': value
+      'landSize': value.replace(/\D/g, ''),
+      'landSize0': '',
+      'landSize1': '',
     }
-    this.setData(newData);
+    this.setData(newData).then(() => {
+      this.findPricePerUnit();
+    });
   }
 
   handleSelectBedRoom = (value) => {
@@ -313,7 +321,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'price': value
+      'price': value.replace(/\D/g, ''),
     }
     this.setData(newData).then(() => {
       this.findPricePerUnit();
@@ -333,7 +341,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'fee': value
+      'fee': value.replace(/\D/g, '')
     }
     this.setData(newData);
   }
@@ -405,7 +413,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'zipcode': value
+      'zipcode': value.replace(/\D/g, ''),
     }
     this.setData(newData);
   }
@@ -476,7 +484,7 @@ class Step0 extends Component {
                           }
                           หัวข้อประกาศ
                         </label>
-                        <Input defaultValue={data.topic} onChange={this.handleInputTopic} />
+                        <Input value={data.topic} onChange={this.handleInputTopic} />
                       </div>
                       <div className="form-group">
                         <label>
@@ -485,16 +493,16 @@ class Step0 extends Component {
                           }
                           รายละเอียดเกี่ยวกับประกาศ
                         </label>
-                        <Input type="textarea" rows={4} defaultValue={data.announcementDetails ? data.announcementDetails : []} onChange={this.handleInputAnnouncementDetails} />
+                        <Input type="textarea" rows={4} value={data.announcementDetails ? data.announcementDetails : []} onChange={this.handleInputAnnouncementDetails} />
                       </div>
                       <div className="row">
                         <div className="col-md-3">
                           <div className="form-group">
                             <label>ขนาดพื้นที่</label>
                             <div>
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.areaSize0} onChange={this.handleInputAreaSize0} />
+                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.areaSize0} onChange={this.handleInputAreaSize0} disabled={!data.requiredField.includes('areaSize')} />
                               &nbsp;<span>X</span>&nbsp;
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.areaSize1} onChange={this.handleInputAreaSize1} /> ม.
+                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.areaSize1} onChange={this.handleInputAreaSize1} disabled={!data.requiredField.includes('areaSize')} /> ม.
                             </div>
                           </div>
                         </div>
@@ -507,7 +515,7 @@ class Step0 extends Component {
                               พื้นที่ใช้สอย
                             </label>
                             <div>
-                              <Input type="text" style={{ width: '80%', display: 'inline-block' }} value={data.areaSize} onChange={this.handleInputSumAreaSize} /> ตร.ม.
+                              <Input type="text" style={{ width: '80%', display: 'inline-block' }} value={data.areaSize} onChange={this.handleInputSumAreaSize} disabled={!data.requiredField.includes('areaSize')} /> ตร.ม.
                             </div>
                           </div>
                         </div>
@@ -515,9 +523,9 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>ขนาดที่ดิน</label>
                             <div>
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} onChange={this.handleInputLandSize0} disabled={!data.requiredField.includes('landSize')} />
+                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.landSize0} onChange={this.handleInputLandSize0} disabled={!data.requiredField.includes('landSize')} />
                               &nbsp;<span>X</span>&nbsp;
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} onChange={this.handleInputLandSize1} disabled={!data.requiredField.includes('landSize')} /> ม.
+                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.landSize1} onChange={this.handleInputLandSize1} disabled={!data.requiredField.includes('landSize')} /> ม.
                             </div>
                           </div>
                         </div>
@@ -530,11 +538,14 @@ class Step0 extends Component {
                               จำนวนที่ดิน
                             </label>
                             <div>
-                              <Input type="text" style={{ width: '49%', display: 'inline-block' }} value={data.landSize} onChange={this.handleInputSumLandSize} disabled={!data.requiredField.includes('landSize')} />
-                              &nbsp;
+                              <Input type="text" style={{ width: '49%', display: 'inline-block' }} value={data.landSize} onChange={this.handleInputSumLandSize} disabled={!data.requiredField.includes('landSize')} /> ตร.ว.
+                              {/*
                               <Select defaultValue="ตร.ว." style={{ width: '48%', display: 'inline-block' }} disabled={!data.requiredField.includes('landSize')} >
                                 <Option value="ตร.ว.">ตร.ว.</Option>
+                                <Option value="งาน">งาน</Option>
+                                <Option value="ไร่">ไร่</Option>
                               </Select>
+                              */}
                             </div>
                           </div>
                         </div>
@@ -582,7 +593,7 @@ class Step0 extends Component {
                         <div className="col-md-3">
                           <div className="form-group">
                             <label>ราคาต่อหน่วย</label>
-                            <Input type="text" value={data.pricePerUnit} onChange={this.handleInputPricePerUnit} disabled={true} />
+                            <Input type="text" value={numeral(data.pricePerUnit).format('0,0.00')} onChange={this.handleInputPricePerUnit} disabled={true} />
                           </div>
                         </div>
                         <div className="col-md-3">
@@ -695,7 +706,7 @@ class Step0 extends Component {
                               }
                               เลขที่
                             </label>
-                            <Input type="text" defaultValue={data.address} onChange={this.handleAddress} />
+                            <Input type="text" value={data.address} onChange={this.handleAddress} />
                           </div>
                         </div>
                         <div className="col-md-3">
@@ -706,7 +717,7 @@ class Step0 extends Component {
                               }
                               ถนน
                             </label>
-                            <Input type="text" defaultValue={data.street} onChange={this.handleStreet} />
+                            <Input type="text" value={data.street} onChange={this.handleStreet} />
                           </div>
                         </div>
                         <div className="col-md-3">
@@ -717,7 +728,7 @@ class Step0 extends Component {
                               }
                               รหัสไปรษณีย์
                             </label>
-                            <Input type="text" defaultValue={data.zipcode} onChange={this.handleZipcode} />
+                            <Input type="text" value={data.zipcode} onChange={this.handleZipcode} maxLength="5" />
                           </div>
                         </div>
                         <div className="col-md-3">

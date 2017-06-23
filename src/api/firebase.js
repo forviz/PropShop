@@ -79,6 +79,7 @@ const getProviderForProviderId = (providerId) => {
 }
 
 const differentCredential = async (provider, error) => {
+	console.log('differentCredential', error);
 	if (error.code === 'auth/account-exists-with-different-credential') {
     const pendingCred = error.credential;
     const email = error.email;
@@ -97,13 +98,16 @@ const differentCredential = async (provider, error) => {
 }
 
 const signInWithProvider = async (provider) => {
+	console.log('signInWithProvider');
 	return await firebase.auth().signInWithPopup(provider).then(function(result) {
+		console.log('result', result);
 	  // const token = result.credential.accessToken;
 	  const user = result.user;
 	  contentful.createUser(user).then((userContentful) => {
 	  	window.location = "/";
 	  });
 	}).catch(function(error) {
+		console.log('error', error);
 		return differentCredential(provider, error).then((errorMessage) => {
 	  	return errorMessage;
 	  });
