@@ -11,9 +11,12 @@ import * as SellActions from '../../actions/sell-actions';
 
 class Step2 extends Component {
 
+  state = {
+    currentEdit: '',
+  }
+
   setMainImage = (accepted, rejected) => {
     if ( accepted.length > 0 ) {
-      console.log('accepted',accepted[0]);
       const { defaultValue } = this.props;
       const data = {
         ...defaultValue,
@@ -35,15 +38,26 @@ class Step2 extends Component {
     if ( accepted.length > 0 ) {
       const { defaultValue } = this.props;
       let images = defaultValue.images;
-      _.map(accepted, (accept, index) => {
-        images.push(accept);
-      });
+
+      if ( this.state.currentEdit !== '' ) {
+        images[this.state.currentEdit] = accepted[0];
+      } else {
+        _.map(accepted, (accept, index) => {
+          images.push(accept);
+        });
+      }
+        
       const data = {
         ...defaultValue,
         images: images
       }
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
+
+      this.setState({
+        currentEdit: '',
+      });
+
     } else {
       alert('นามสกุลไฟล์ต้องเป็น jpg,png หรือ video เท่านั้น และขนาดไฟล์ไม่เกิน 4 MB');
       return false;
@@ -60,7 +74,18 @@ class Step2 extends Component {
     saveStep('step2', data);
   }
 
+  handleEditImages = (index) => {
+    this.setState({
+      currentEdit: index,
+    });
+    this.dropzoneRefImages.open();
+  }
+
   handleDeleteImages = (index) => {
+    this.deleteImages(index);
+  }
+
+  deleteImages = (index) => {
     const { defaultValue } = this.props;
     let images = defaultValue.images;
     images.splice(index, 1);
@@ -73,9 +98,6 @@ class Step2 extends Component {
   }
 
   render() {
-
-    let dropzoneRefMainImage;
-    let dropzoneRefImages;
 
     const { defaultValue } = this.props;
 
@@ -105,7 +127,7 @@ class Step2 extends Component {
                   <div className="row">
                     <div className={"col-md-" + (hasMainImage ? 6 : 12) }>
                       <div style={{ textAlign: 'center' }} >
-                        <Dropzone accept="image/jpeg, image/png, video/*" maxSize={4000000} multiple={false} name="mainImage" ref={(node) => { dropzoneRefMainImage = node; }} onDrop={(accepted, rejected) => { this.setMainImage(accepted, rejected) }} style={dropzoneStyle} >
+                        <Dropzone accept="image/jpeg, image/png, video/*" maxSize={4000000} multiple={false} name="mainImage" ref={(node) => { this.dropzoneRefMainImage = node; }} onDrop={(accepted, rejected) => { this.setMainImage(accepted, rejected) }} style={dropzoneStyle} >
                           <p><Icon type="plus" style={{ fontSize: 80, color: '#cccccc' }} /></p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >ลากไฟล์มาวาง</p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >เพื่ออัพโหลดรูปภาพหลัก</p>
@@ -128,7 +150,7 @@ class Step2 extends Component {
                           <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                             <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
                               <div className="edit text-center">
-                                <a onClick={() => { dropzoneRefMainImage.open() }}><Icon type="edit" /></a>
+                                <a onClick={() => { this.dropzoneRefMainImage.open() }}><Icon type="edit" /></a>
                               </div>
                             </div>
                             <div className="pull-right" style={{ width: '50%', border: '1px solid #cccccc', borderLeft: 0 }} >
@@ -146,7 +168,7 @@ class Step2 extends Component {
                   <div className="row">
                     <div className={"col-md-" + (hasImages ? 6 : 12) }>
                       <div style={{ textAlign: 'center' }} >
-                        <Dropzone accept="image/jpeg, image/png, video/*" maxSize={4000000} multiple={true} name="images" ref={(node) => { dropzoneRefImages = node; }} onDrop={(accepted, rejected) => { this.setImages(accepted, rejected) }} style={dropzoneStyle} >
+                        <Dropzone accept="image/jpeg, image/png, video/*" maxSize={4000000} multiple={true} name="images" ref={(node) => { this.dropzoneRefImages = node; }} onDrop={(accepted, rejected) => { this.setImages(accepted, rejected) }} style={dropzoneStyle} >
                           <p><Icon type="plus" style={{ fontSize: 80, color: '#cccccc' }} /></p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >ลากไฟล์มาวาง</p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >เพื่ออัพโหลดรูปภาพประกอบ</p>
@@ -163,7 +185,7 @@ class Step2 extends Component {
                           {
                             _.map(defaultValue.images, (image, index) => {
                               return (
-                                <div key={index} className="col-md-6">
+                                <div key={index} className="col-md-6" draggable="true">
                                   <div className="main-image">
                                     <div className="image">
                                       <img src={image.preview} alt={image.name} />
@@ -175,7 +197,7 @@ class Step2 extends Component {
                                     <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                                       <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
                                         <div className="edit text-center">
-                                          <a onClick={() => { dropzoneRefImages.open() }}><Icon type="edit" /></a>
+                                          <a onClick={() => this.handleEditImages(index)}><Icon type="edit" /></a>
                                         </div>
                                       </div>
                                       <div className="pull-right" style={{ width: '50%', border: '1px solid #cccccc', borderLeft: 0 }} >

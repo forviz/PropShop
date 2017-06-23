@@ -1,6 +1,7 @@
 import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
+const cuid = require('cuid');
 
 const client = contentful.createClient({
   space: process.env.REACT_APP_SPACE,
@@ -18,16 +19,14 @@ const mapContentFulRealestateToMyField = (data) => {
       [index]: {
         ...elem.fields,
         id: elem.sys.id,
+        createdAt: elem.sys.createdAt,
+        updatedAt: elem.sys.updatedAt,
         mainImage: elem.fields.mainImage.fields.file.url,
+        images: _.map(elem.fields.images, (image) => {
+          return image.fields.file.url;
+        }),
         price: elem.fields.price,
-        address: {
-          street: elem.fields.street,
-          province: elem.fields.province,
-        },
-        room: {
-          bedroom: elem.fields.bedroom,
-          bathroom: elem.fields.bathroom,
-        },
+        agentId: elem.fields.agent.sys.id,
       },
     };
   }, {});
@@ -126,21 +125,27 @@ export const getConfigRealEstate = () => {
 };
 
 export const getRealEstate = (search) => {
-  const searchEntries = {};
-  searchEntries.content_type = 'realEstate';
-  if (search.for) searchEntries['fields.for[in]'] = search.for;
-  if (search.query) searchEntries.query = search.query;
-  if (search.residentialType) searchEntries['fields.residentialType'] = search.residentialType;
-  if (search.bedroom) searchEntries['fields.bedroom'] = parseInt(search.bedroom, 10);
-  if (search.bathroom) searchEntries['fields.bathroom'] = parseInt(search.bathroom, 10);
-  if (search.priceMin) searchEntries['fields.price[gte]'] = parseInt(search.priceMin, 10);
-  if (search.priceMax) searchEntries['fields.price[lte]'] = parseInt(search.priceMax, 10);
-  if (search.specialFeatureView) searchEntries['fields.specialFeatureView[all]'] = search.specialFeatureView;
-  if (search.specialFeatureFacilities) searchEntries['fields.specialFeatureFacilities[all]'] = search.specialFeatureFacilities;
-  if (search.specialFeatureNearbyPlaces) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
-  if (search.specialFeaturePrivate) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
+
+  console.log('search', search);
+  let searchEntries = {};
+  searchEntries['content_type'] = 'realEstate';
+  if ( search.id ) searchEntries['sys.id'] = search.id;
+  if ( search.for ) searchEntries['fields.for[in]'] = search.for;
+  if ( search.query ) searchEntries['query'] = search.query;
+  if ( search.residentialType ) searchEntries['fields.residentialType'] = search.residentialType;
+  if ( search.bedroom ) searchEntries['fields.bedroom'] = parseInt(search.bedroom, 10);
+  if ( search.bathroom ) searchEntries['fields.bathroom'] = parseInt(search.bathroom, 10);
+  if ( search.priceMin ) searchEntries['fields.price[gte]'] = parseInt(search.priceMin, 10);
+  if ( search.priceMax ) searchEntries['fields.price[lte]'] = parseInt(search.priceMax, 10);
+  if ( search.specialFeatureView ) searchEntries['fields.specialFeatureView[all]'] = search.specialFeatureView;
+  if ( search.specialFeatureFacilities ) searchEntries['fields.specialFeatureFacilities[all]'] = search.specialFeatureFacilities;
+  if ( search.specialFeatureNearbyPlaces ) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
+  if ( search.specialFeaturePrivate ) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
   return client.getEntries(searchEntries).then((entry) => {
-    return _.map(mapContentFulRealestateToMyField(entry.items), item => item);
+    console.log('entry', entry);
+    const xx = _.map(mapContentFulRealestateToMyField(entry.items), item => item);
+    console.log('xx', xx);
+    return xx;
   });
   // 'fields.for[in]': 'Sell'
   // 'fields.residentialType': 'House',
@@ -155,35 +160,36 @@ export const getRealEstate = (search) => {
 };
 
 const existUser = (uid) => {
-  client.getEntries({
+  return client.getEntries({
     content_type: 'agent',
-    'fields.uid': 'uid'
+    'fields.uid': uid
   })
   .then((response) => {
-    return response;
+    return response.total === 0 ? false : true;
   })
   .catch(console.error)
 }
 
 export const createUser = (user) => {
-  const xx = existUser(user.uid);
-  console.log('existUser', xx);
-  return;
-  return clientManagement.getSpace(process.env.REACT_APP_SPACE)
-  .then((space) => space.createEntry('agent', {
-    fields: {
-      email: {
-        'en-US': user.email,
-      },
-      uid: {
-        'en-US': user.uid,
-      },
+  return existUser(user.uid).then((hasUser) => {
+    if ( !hasUser ) {
+      return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+      .then((space) => space.createEntry('agent', {
+        fields: {
+          email: {
+            'en-US': user.email,
+          },
+          uid: {
+            'en-US': user.uid,
+          },
+        }
+      }))
+      .then((entry) => {
+        return publishEntry(entry.sys.id);
+      })
+      .catch(console.error)
     }
-  }))
-  .then((entry) => {
-    return publishEntry(entry.sys.id);
-  })
-  .catch(console.error)
+  });
 };
 
 export const publishEntry = (entry_id) => {
@@ -313,7 +319,6 @@ export async function createRealEstate(data, user) {
     }
   }))
   .then((entry) => {
-    console.log('createRealEstate', entry);
     return entry;
   })
   .catch(console.error)
@@ -456,12 +461,6 @@ export async function uploadFile(fileName = '', fileType = '', file = '') {
   }))
   .then(asset => asset.processForAllLocales())
   .then(asset => asset.publish())
-  .catch(console.error)
-}
-
-export const getAgent = () => {
-  client.getEntry('2nZoqsONfCSmOaKMqWY2Ii')
-  .then((entry) => console.log('getAgent',entry))
   .catch(console.error)
 }
 

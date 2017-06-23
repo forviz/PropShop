@@ -56,11 +56,11 @@ export const removeRequiredField = (field) => {
 };
 
 export const doCreateRealEstate = (sell, user) => {
-  return (dispatch) => {
-    dispatch(sendingData());
-    createRealEstate(sell, user).then(() => {
-      dispatch(sendDataSuccess());
-      dispatch(redirect());
-    });
-  };
-};
+
+	return dispatch => {
+		dispatch(sendingData());
+		createRealEstate(sell, user).then(result => {
+			dispatch(sendDataSuccess());
+		});
+	}
+}

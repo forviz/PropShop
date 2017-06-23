@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
 const initalState = {
-	step: 0,
-	step0: {
-		requiredField: ['for','residentialType','topic','announcementDetails','areaSize','bedroom','bathroom','price','fee','province','amphur','district','location'],
+  step: 0,
+  step0: {
+    requiredField: ['for', 'residentialType', 'topic', 'announcementDetails', 'areaSize', 'bedroom', 'bathroom', 'price', 'province', 'amphur', 'district', 'location', 'address', 'street', 'zipcode'],
 		for: '',
 		residentialType: '',
 		topic: '',
@@ -20,8 +20,11 @@ const initalState = {
 		pricePerUnit: '',
 		fee: '',
 		project: '',
+		provinceId: '',
 		province: '',
+		amphurId: '',
 		amphur: '',
+		districtId: '',
 		district: '',
 		address: '',
 		street: '',
@@ -48,7 +51,7 @@ const initalState = {
 		acceptTerms: false,
 	},
 	sendingData: false,
-	redirect: false,
+	sendData: false,
 }
 
 const reducers = (state = initalState, action) => {
@@ -71,8 +74,7 @@ const reducers = (state = initalState, action) => {
 			}
 		};
 		case 'SELL/DATA/SENDING': return {...state, sendingData: true };
-		case 'SELL/DATA/SEND/SUCCESS': return {...state, sendingData: false };
-		case 'SELL/REDIRECT': return {...state, redirect: true };
+		case 'SELL/DATA/SEND/SUCCESS': return {...state, sendData: true };
 		default:
 			return state;
 	}

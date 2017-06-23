@@ -97,7 +97,7 @@ class NearbyPlace extends Component {
 
   getDistance = async (desLat, desLng) => {
       const { lat, lng } = this.props;
-      const url = 'http://maps.googleapis.com/maps/api/distancematrix/json?origins='+lat+','+lng+'&destinations='+desLat+','+desLng;
+      const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?key='+process.env.REACT_APP_APIKEY+'&origins='+lat+','+lng+'&destinations='+desLat+','+desLng;
 
       const result = await fetch(url); 
       const resultJSON = await result.json();
@@ -107,6 +107,7 @@ class NearbyPlace extends Component {
   setNearbyData = async (data) => {
     const newData = await Promise.all(data.map(async (value, index) => {
       const distance = await this.getDistance(value.geometry.location.lat, value.geometry.location.lng);
+      console.log('distance', distance);
       return {
         ...value,
         distance: distance.rows[0].elements[0].distance.text,
@@ -211,7 +212,7 @@ class NearbyPlace extends Component {
           <div className="col-md-6">
             <div className="place-map">
               <AsyncGettingStartedExampleGoogleMap
-                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp"
+                googleMapURL={"https://maps.googleapis.com/maps/api/js?v=3.exp&key="+process.env.REACT_APP_APIKEY}
                 loadingElement={<Spin />}
                 containerElement={
                   <div style={{ height: `100%` }} />

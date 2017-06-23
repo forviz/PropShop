@@ -4,7 +4,6 @@ import { NavLink, Redirect } from 'react-router-dom';
 import FontAwesome from 'react-fontawesome';
 
 import * as firebase from '../../api/firebase';
-import * as contentful from '../../api/contentful';
 import * as helpers from '../../helpers';
 
 import BannerRealEstate from '../../containers/BannerRealEstate';
@@ -31,20 +30,17 @@ class Register extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-    const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
       if (user) {
-        // console.log('user', user);
-        // history.push({
-        //   pathname: '/',
-        // });
+        history.push({
+          pathname: '/',
+        });
       }
     });
   }
 
   handleInputEmail = (e) => {
     const value = e.target.value;
-    console.log('value', value);
     this.setState(prevState => ({
       email: {
         ...prevState.email,
@@ -145,15 +141,19 @@ class Register extends Component {
 
   handleSocialError = (error) => {
     if (  error.type === 'auth/account-exists-with-different-credential' ) {
-      
+      this.setState({
+        errorMessage: error.message,
+        email: {
+          ...this.state.email,
+          value: error.email,
+        }
+      });
     }
   }
 
   render() {
 
     const { submit } = this.state; 
-
-    console.log('state', this.state);
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
     const password1ErrorMessage = this.state.password1.errorMessage ? <span className="text-red">({this.state.password1.errorMessage})</span> : '';
@@ -172,15 +172,15 @@ class Register extends Component {
                   }
                   <div className="form-group">
                     <label><span className="text-red">*</span> อีเมล {emailErrorMessage}</label>
-                    <Input onKeyUp={this.handleInputEmail} defaultValue={this.state.email.value} />
+                    <Input onChange={this.handleInputEmail} value={this.state.email.value} />
                   </div>
                   <div className="form-group">
                     <label><span className="text-red">*</span> รหัสผ่าน {password1ErrorMessage}</label>
-                    <Input type="password" onKeyUp={this.handleInputPassword1} defaultValue={this.state.password1.value} />
+                    <Input type="password" onChange={this.handleInputPassword1} value={this.state.password1.value} />
                   </div>
                   <div className="form-group">
                     <label><span className="text-red">*</span> ยืนยันรหัสผ่าน {password2ErrorMessage}</label>
-                    <Input type="password" onKeyUp={this.handleInputPassword2} defaultValue={this.state.password2.value} />
+                    <Input type="password" onChange={this.handleInputPassword2} value={this.state.password2.value} />
                   </div>
                   <div className="form-group action">
                     <button className="btn btn-primary" onClick={this.submit} >ตกลง</button>
