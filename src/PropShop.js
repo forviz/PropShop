@@ -20,6 +20,7 @@ import Agent from './pages/Agent';
 import AgentDetail from './pages/AgentDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Forgotpassword from './pages/Forgotpassword';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
@@ -79,6 +80,11 @@ class PropShop extends Component {
         exact: false,
         header: Header,
         content: Register,
+      },
+      { path: '/forgotpassword',
+        exact: false,
+        header: Header,
+        content: Forgotpassword,
       },
     ]
 

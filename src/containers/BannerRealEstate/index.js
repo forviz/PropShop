@@ -38,8 +38,8 @@ class BannerRealEstate extends Component {
           <div className="place">{item.address.street} - {item.address.province}</div>
           <div className="option clearfix">
             <ul>
-              <li><FontAwesome name="bed" /><span>{item.room.bedroom}</span></li>
-              <li><FontAwesome name="bath" /><span>{item.room.bathroom}</span></li>
+              <li><FontAwesome name="bed" /><span>{item.bedroom}</span></li>
+              <li><FontAwesome name="bath" /><span>{item.bathroom}</span></li>
             </ul>
           </div>
          </div>

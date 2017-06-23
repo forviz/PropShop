@@ -61,7 +61,6 @@ export const doCreateRealEstate = (sell, user) => {
 		dispatch(sendingData());
 		createRealEstate(sell, user).then(result => {
 			dispatch(sendDataSuccess());
-			dispatch(redirect());
 		});
 	}
 }

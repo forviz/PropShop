@@ -2,24 +2,40 @@ import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
 import { NavLink } from 'react-router-dom';
 import ImageGallery from 'react-image-gallery';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import queryString from 'query-string';
 import numeral from 'numeral';
 import { Rate } from 'antd';
 import _ from 'lodash';
+import * as helpers from '../../helpers';
 
-import NearbyPlace from '../../containers/NearbyPlace';
+// import NearbyPlace from '../../containers/NearbyPlace';
 import ButtonAction from '../../components/ButtonAction';
 import ContactAgent from '../../components/ContactAgent';
+import MapComponent from '../../components/Map/MapWithStreetView';
+import NearbyPlace from '../../components/Map/MapWithMarkers';
 import realEstateData from '../../../public/data/realEstateData.json';
 import agentData from '../../../public/data/agentData.json';
 import advertising1 from '../../images/advertising/1.jpg';
 
+import * as RealestateActions from '../../actions/realestate-actions';
+
 class Realestate extends Component {
 
-	state = {
+  constructor(props) {
+    super(props);
+    const { match } = this.props;
+    const id = match.params.id;
+    const { fetchRealestates } = this.props.actions;
+    fetchRealestates({ id: id });
+  }
 
+	state = {
+    showStreetView: false,
 	}
 
-  handleWishLish = () => {
+  handleWishList = () => {
 
   }
 
@@ -34,25 +50,39 @@ class Realestate extends Component {
     });
   }
 
+  handleStreerView = () => {
+    this.setState({
+      showStreetView: !this.state.showStreetView,
+    });
+  }
+
   render() {
 
-    const { match } = this.props;
+    console.log('render', this.props);
 
-    const id = parseInt(match.params.id, 10);
-    const item = _.find(realEstateData, ['id', id]);
-    const agent = _.find(agentData, ['id', item.agentId]);
+    const { match, realestate } = this.props;
+    const { loading } = realestate;
+    const data = realestate.data[0];
 
-    console.log('item', item);
+    if ( !data ) return <div />;
 
-    const images = _.map(item.images, (image) => {
-      return {
-        original: image,
-        thumbnail: image,
-      }
+    let images = [];
+    images.push({
+      original: data.mainImage,
+      thumbnail: data.mainImage,
     });
 
+    if ( data.images ) {
+      images = _.map(data.images, (image) => {
+        return {
+          original: image,
+          thumbnail: image,
+        }
+      });
+    }
+
     const imageBackground = {
-      background: `url(${item.mainImage})`,
+      background: `url(${data.mainImage})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     }
@@ -70,13 +100,13 @@ class Realestate extends Component {
                         <FontAwesome name="angle-left" /> กลับไปที่ค้นหา
                       </div>
                       <div className="address">
-                        <b>สำหรับขาย > กรุงเทพฯ > สวนหลวง > ซอยอนามัย > </b> <span className="text-gray">5/90 ซอยอนามัย ถนนศรีนครินทร์</span>
+                        <b>สำหรับ{data.for} > {data.province} > {data.amphur} > {data.district} > </b> <span className="text-gray">{data.address} ถนน{data.street}</span>
                       </div>
                     </div>
                   </div>
                   <div className="pull-right">
                     <div style={{ display: 'inline-block', marginRight: 8 }} >
-                      <ButtonAction font="heart-o" text="บันทึก" onClick={this.handleWishLish} />
+                      <ButtonAction font="heart-o" text="บันทึก" onClick={this.handleWishList} />
                     </div>
                     <div style={{ display: 'inline-block' }} >
                       <ButtonAction font="envelope-o" text="แบ่งปัน" onClick={this.handleShare} />
@@ -97,18 +127,32 @@ class Realestate extends Component {
                     items={images}
                     slideInterval={2000}
                     showPlayButton={false}
+                    showFullscreenButton={true}
                   />
                   <div className="google-map">
-                    <div className="map-view">
-
-                    </div>
-                    <div className="street-view">
-
+                    <div className="clearfix">
+                      <div className="pull-left text-center">
+                        <img src="images/static/googlemap/map-mark.jpg" alt="Map View" onClick={this.handleStreerView} />
+                        <div>Map View</div>
+                      </div>
+                      <div className="pull-right text-center">
+                        <img src="images/static/googlemap/map-street.jpg" alt="Street View" onClick={this.handleStreerView} />
+                        <div>Street View</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            {this.state.showStreetView === true &&
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="street-view">
+                    <MapComponent center={{ lat: data.location.lat, lng: data.location.lon }} />
+                  </div>
+                </div>
+              </div>
+            }
             <div className="row">
               <div className="col-md-12">
                 <div className="detail-block">
@@ -120,19 +164,19 @@ class Realestate extends Component {
                             <div className="row">
                               <div className="col-md-5">
                                 <div className="price-block">
-                                  <div className="for">ขายหลังโอนกรรมสิทธิ์</div>
-                                  <div className="price">฿5,000,000</div>
-                                  <div className="create_date">อยู่ในพรอพช็อปมาแล้ว 3 วัน</div>
+                                  <div className="for">{data.for}</div>
+                                  <div className="price">฿{numeral(data.price).format('0,0')}</div>
+                                  <div className="create_date">อยู่ในพรอพช็อปมาแล้ว {helpers.diffDay(new Date().getTime(data.createdAt), new Date().getTime())} วัน</div>
                                 </div>
                               </div>
                               <div className="col-md-7">
                                 <div className="address-block">
-                                  <div className="address_1">5/90 บ้านกลางเมือง</div>
-                                  <div className="address_2">ซอยอนามัย ถนนศรีนครินทร์ เขตสวนหลัง กรุงเทพฯ 10250</div>
+                                  <div className="address_1">{data.address}</div>
+                                  <div className="address_2">ถนน{data.street} เขต{data.amphur} {data.province} {data.zipcode}</div>
                                   <div className="options">
                                     <ul>
-                                      <li><FontAwesome name="bed" /> {item.room.bedroom} ห้องนอน</li>
-                                      <li><FontAwesome name="bath" /> {item.room.bathroom} ห้องน้ำ</li>
+                                      <li><FontAwesome name="bed" /> {data.bedroom} ห้องนอน</li>
+                                      <li><FontAwesome name="bath" /> {data.bathroom} ห้องน้ำ</li>
                                     </ul>
                                   </div>
                                 </div>
@@ -146,7 +190,9 @@ class Realestate extends Component {
                           <section className="info detail">
                             <h2>รายละเอียด</h2>
                             <div className="announcementDetails">
-                              {item.detail}
+                              {data.announcementDetails.split('\n').map((item, key) => {
+                                return <span key={key}>{item}<br/></span>
+                              })}
                             </div>
                           </section>
                         </div>
@@ -154,6 +200,7 @@ class Realestate extends Component {
                     </div>
                     <div className="col-md-4" style={{ paddingLeft: 0 }} >
                       <div className="contact-block">
+                        {/*
                         <div className="agent-block">
                           <div className="row">
                             <div className="col-md-4 vcenter">
@@ -173,6 +220,7 @@ class Realestate extends Component {
                             </div>
                           </div>
                         </div>
+                        */}
                         <ContactAgent />
                       </div>
                     </div>
@@ -184,16 +232,13 @@ class Realestate extends Component {
               <div className="col-md-12">
                 <section className="info features">
                   <h2>คุณสมบัติต่างๆ</h2>
-                  <div>ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ 29/3/2017 12:00 AM:</div>
+                  <div>ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ {data.updatedAt}:</div>
                   <div className="row">
-                    <div className="col-md-3">ราคา: 5,000,000 บาท</div>
-                    <div className="col-md-3">สถานะ: สำหรับขาย</div>
-                    <div className="col-md-3">พื้นที่ใช้สอย: 40 ตร.ว.</div>
-                    <div className="col-md-3">ย่าน: ซอยอนามัย</div>
-                    <div className="col-md-3">2 ห้องนอน</div>
-                    <div className="col-md-3">2 ห้องน้ำ</div>
-                    <div className="col-md-3">ที่จอดรถส่วนตัว</div>
-                    <div className="col-md-3">ห้องครัว built in</div>
+                    <div className="col-md-3">ราคา: {numeral(data.price).format('0,0')} บาท</div>
+                    <div className="col-md-3">สถานะ: สำหรับ{data.for}</div>
+                    <div className="col-md-3">พื้นที่ใช้สอย: {data.areaSize} ตร.ว.</div>
+                    <div className="col-md-3">{data.bedroom} ห้องนอน</div>
+                    <div className="col-md-3">{data.bathroom} ห้องน้ำ</div>
                   </div>
                   <div className="facilities-block">
                     <h4>สิ่งอำนวยความสะดวก:</h4>
@@ -206,7 +251,7 @@ class Realestate extends Component {
                     <div className="col-md-12">
                       <div className="fee-block">
                         <h4>ค่าธรรมเนียมและภาษี:</h4>
-                        <div className="text-gray">ประมาณ 15,000 บาท</div>
+                        <div className="text-gray">ประมาณ {numeral(data.fee).format('0,0')} บาท</div>
                       </div>
                     </div>
                   </div>
@@ -305,4 +350,20 @@ class Realestate extends Component {
   }
 }
 
-export default Realestate;
+const mapStateToProps = state => {
+  return {
+    realestate: state.realestates,
+  };
+}
+
+const actions = {
+  fetchRealestates: RealestateActions.fetchRealestates,
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Realestate);
