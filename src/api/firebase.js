@@ -74,6 +74,7 @@ const getProviderForProviderId = (providerId) => {
       break;
     default:
       provider = new firebase.auth.FacebookAuthProvider();
+      provider.addScope('email');
 	}
 	return provider;
 }
@@ -98,7 +99,7 @@ const differentCredential = async (provider, error) => {
 }
 
 const signInWithProvider = async (provider) => {
-	console.log('signInWithProvider');
+	console.log('signInWithProvider', provider);
 	return await firebase.auth().signInWithPopup(provider).then(function(result) {
 		console.log('result', result);
 	  // const token = result.credential.accessToken;

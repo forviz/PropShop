@@ -21,6 +21,8 @@ import advertising1 from '../../images/advertising/1.jpg';
 
 import * as RealestateActions from '../../actions/realestate-actions';
 
+import * as contentful from '../../api/contentful';
+
 class Realestate extends Component {
 
   constructor(props) {
@@ -34,6 +36,17 @@ class Realestate extends Component {
 	state = {
     showStreetView: false,
 	}
+
+  componentDidMount() { 
+
+  }
+
+  getAgent = (id) => {
+    console.log('getAgent', id);
+    return contentful.getAgent(id).then((agent) => {
+      return agent;
+    });
+  }
 
   handleWishList = () => {
 
@@ -58,13 +71,16 @@ class Realestate extends Component {
 
   render() {
 
-    console.log('render', this.props);
-
     const { match, realestate } = this.props;
     const { loading } = realestate;
     const data = realestate.data[0];
 
     if ( !data ) return <div />;
+
+    // const agent = this.getAgent(data.agentId);
+
+    console.log('data', data);
+    // console.log('agent', agent);
 
     let images = [];
     images.push({

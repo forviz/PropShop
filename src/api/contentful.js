@@ -13,7 +13,9 @@ const clientManagement = contentfulManagement.createClient({
 })
 
 const mapContentFulRealestateToMyField = (data) => {
+  console.log('mapContentFulRealestateToMyField', data);
   return _.reduce(data, (acc, elem, index) => {
+    console.log('elem', elem);
     return {
       ...acc,
       [index]: {
@@ -26,7 +28,7 @@ const mapContentFulRealestateToMyField = (data) => {
           return image.fields.file.url;
         }),
         price: elem.fields.price,
-        agentId: elem.fields.agent.sys.id,
+        agentId: elem.fields.agent ? elem.fields.agent.sys.id : '',
       },
     }
   }, {});
@@ -113,7 +115,10 @@ export const getBannerRealEstate = () => {
     'sys.id': process.env.REACT_APP_CONTENTFUL_BANNER,
     'include': 1,
   }).then((entry) => {
-    return mapContentFulBannerToMyField(entry);
+    console.log('getBannerRealEstate', entry);
+    const xx = mapContentFulBannerToMyField(entry);
+    console.log('xx', xx);
+    return xx;
   });
 };
 
@@ -469,4 +474,51 @@ export const getUserData = (uid) => {
     return response.items[0];
   })
   .catch(console.error)
+}
+
+const mapFieldAgent = (data) => {
+  console.log('mapFieldAgent', data);
+  return _.reduce(data, (acc, elem, index) => {
+    console.log('elem', elem);
+    return {
+      ...acc,
+      [index]: {
+        ...elem.fields,
+        id: elem.sys.id,
+        createdAt: elem.sys.createdAt,
+        updatedAt: elem.sys.updatedAt,
+        name: elem.fields.name ? elem.fields.name : '',
+        lastname: elem.fields.lastname ? elem.fields.lastname : '',
+        image: elem.fields.image ? elem.fields.image.fields.file.url : '',
+        rating: elem.fields.rating ? elem.fields.rating : '',
+        phone: elem.fields.phone ? elem.fields.phone : '',
+        company: elem.fields.company ? elem.fields.company : '',
+        specialization: elem.fields.specialization ? elem.fields.specialization : '',
+        licenseNumber: elem.fields.licenseNumber ? elem.fields.licenseNumber : '',
+        about: elem.fields.about ? elem.fields.about : '',
+      },
+    }
+  }, {});
+}
+
+export const getAgent = (id) => {
+  console.log('getAgent', id);
+  client.getEntries({
+    content_type: 'agent',
+    'sys.id': id
+  })
+  .then((response) => {
+    console.log('getAgent', response);
+  })
+  .catch(console.error)
+
+  // console.log('getAgent', id);
+  // return client.getEntry(id)
+  // .then((entry) => {
+  //   console.log('entry', entry);
+  //   const xx = mapFieldAgent(entry);
+  //   console.log('xx', xx);
+  //   return xx;
+  // })
+  // .catch(console.error)
 }
