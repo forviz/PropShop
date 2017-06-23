@@ -1,6 +1,6 @@
 export const handleError = (error) => {
-	return {
-		type: 'ERROR/SHOW',
-		error: error,
-	};
+  return {
+    type: 'ERROR/SHOW',
+    error,
+  };
 };

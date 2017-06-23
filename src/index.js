@@ -5,5 +5,5 @@ import './index.css';
 
 ReactDOM.render(
   <PropShop />,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
