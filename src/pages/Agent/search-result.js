@@ -21,10 +21,10 @@ class AgentSearchResult extends Component {
       id: T.string,
       name: T.string,
       image: T.string,
-      rate: {
+      rate: T.shape({
         rating: T.number,
         count: T.number,
-      },
+      }),
     }),
     onSearch: T.func.isRequired,
   }

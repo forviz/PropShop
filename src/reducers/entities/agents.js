@@ -21,6 +21,48 @@ const agents = (state = initialState, action) => {
       };
     }
 
+    case 'ENTITY/AGENT/REFERENCES/RECEIVED': {
+      const agentId = action.agentId;
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [agentId]: {
+            ...state.entities[agentId],
+            references: action.ids,
+          },
+        },
+      };
+    }
+
+    case 'ENTITY/AGENT/PROPERTIES/RECEIVED': {
+      const agentId = action.agentId;
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [agentId]: {
+            ...state.entities[agentId],
+            properties: action.ids,
+          },
+        },
+      };
+    }
+
+    case 'ENTITY/AGENT/ACTIVITIES/RECEIVED': {
+      const agentId = action.agentId;
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [agentId]: {
+            ...state.entities[agentId],
+            activities: action.ids,
+          },
+        },
+      };
+    }
+
     default: return state;
   }
 };

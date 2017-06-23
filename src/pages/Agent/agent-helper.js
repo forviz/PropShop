@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 export const mapEntryToAgent = (entity) => {
+  console.log('mapEntry', entity);
   return {
     id: _.get(entity, 'sys.id'),
     name: _.get(entity, 'fields.name'),

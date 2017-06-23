@@ -5,3 +5,11 @@ export const receiveAgentEntity = (agentId, agent) => {
     agent,
   };
 };
+
+export const receiveReferenceEntity = (referenceId, reference) => {
+  return {
+    type: 'ENTITY/REFERENCE/RECEIVED',
+    referenceId,
+    reference,
+  };
+};

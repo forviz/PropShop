@@ -7,7 +7,10 @@ import realestates from './realestates';
 import sell from './sell';
 
 // Entities
+import properties from './entities/properties';
 import agents from './entities/agents';
+import references from './entities/references';
+import activities from './entities/activities';
 
 // Domain
 import agentSearch from './domain/agent-search';
@@ -20,7 +23,10 @@ export default combineReducers({
   realestates,
   sell,
   entities: combineReducers({
+    properties,
     agents,
+    references,
+    activities,
   }),
   domain: combineReducers({
     agentSearch,

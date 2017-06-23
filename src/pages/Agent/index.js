@@ -6,7 +6,6 @@ import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { Route } from 'react-router-dom';
 
-import { mapEntryToAgent } from './agent-helper';
 import AgentSearchResult from './search-result';
 import AgentDetail from './section-detail';
 
@@ -28,7 +27,7 @@ const mapStateToProps = (state, ownProps) => {
   // Convert ID to Entity
   const searchResultAgents = _.map(searchResultIDs, (id) => {
     const entity = _.get(state, `entities.agents.entities.${id}`);
-    return mapEntryToAgent(entity);
+    return entity;
   });
 
   return {
@@ -49,13 +48,13 @@ const actions = {
         // Save/Update Agent Entities
         const agents = _.get(response, 'items', []);
         _.forEach(agents, (agent) => {
-          dispatch(receiveAgentEntity(agent.sys.id, agent));
+          dispatch(receiveAgentEntity(agent.id, agent));
         });
 
         // Save Agent Search Result
         dispatch({
           type: 'DOMAIN/AGENT_SEARCH/RESULT_RECEIVED',
-          ids: _.map(response.items, item => item.sys.id),
+          ids: _.map(response.items, item => item.id),
         });
       });
     };
@@ -81,6 +80,11 @@ class Agent extends Component {
     searchResult: T.arrayOf(T.shape({
       id: T.string,
       name: T.string,
+      image: T.string,
+      rate: T.shape({
+        rating: T.number,
+        count: T.number,
+      }),
     })),
     actions: T.shape({
       searchAgents: T.func.isRequired,
