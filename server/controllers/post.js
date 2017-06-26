@@ -122,8 +122,8 @@ const extractPostFields = (data, agentEntry, realEstateEntry) => {
         },
       },
     },
-    startDate: { 'en-US': _.get(data, 'startDate', moment().format(contentfulDateFormat)) },
-    endDate: { 'en-US': _.get(data, 'endDate',  moment().add(7, 'days').format(contentfulDateFormat)) },
+    startDate: { 'en-US': _.get(data, 'startDate', moment()) },
+    endDate: { 'en-US': _.get(data, 'endDate',  moment().add(7, 'days')) },
   }
 }
 
