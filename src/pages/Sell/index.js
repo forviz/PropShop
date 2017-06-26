@@ -14,14 +14,6 @@ import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
 
-const openNotificationWithIcon = (type, message, description) => {
-	const data = {};
-	data['message'] = message;
-	if ( description ) data['description'] = description;
-
-  notification[type](data);
-};
-
 const Step = Steps.Step;
 
 const steps = [
@@ -45,7 +37,7 @@ class Sell extends Component {
 		const { history } = this.props;
     const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user && user.emailVerified === true) {
       	contentful.getUserData(user.uid).then((response) => {
       		user['contentful'] = response;
       		_self.setState(prevState => ({
@@ -53,12 +45,19 @@ class Sell extends Component {
 	        }));
 		  	});
       } else {
-      	openNotificationWithIcon('error', 'กรุณาเข้าสู่ระบบก่อน');
+      	_self.openNotificationWithIcon('error', 'กรุณาเข้าสู่ระบบก่อน');
       	history.push({
 		      pathname: '/login',
 		    });
       }
     });
+  }
+
+  openNotificationWithIcon = (type, message, description) => {
+  	const data = {};
+		data['message'] = message;
+		if ( description ) data['description'] = description;
+	  notification[type](data);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -205,7 +204,7 @@ class Sell extends Component {
   	const { step, step0, step1, step2, step3, sendingData, sendData } = sell;
 
   	if ( sendData === true ) {
-  		openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
+  		this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
     	history.push({
 	      pathname: '/',
 	    });

@@ -24,7 +24,7 @@ class Forgotpassword extends Component {
   componentDidMount() {
     const { history } = this.props;
     firebase.core().auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user && user.emailVerified === true) {
         history.push({
           pathname: '/',
         });

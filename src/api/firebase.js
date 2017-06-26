@@ -29,13 +29,14 @@ export const core = () => {
 
 export const createUser = (email, password) => {
 	return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-	  contentful.createUser(user).then((userContentful) => {
-	  	window.location = "/";
-	    // user.sendEmailVerification().then(function() {
-	    //   window.location = "/";
-	    // }, function(error) {
-	    //   return error;
-	    // });
+	  return contentful.createUser(user).then((userContentful) => {
+	  	// window.location = "/";
+	    return user.sendEmailVerification().then(function() {
+	    	return;
+	      // window.location = "/";
+	    }, function(error) {
+	      return error;
+	    });
 	  });
 	}).catch(function(error) {
 		return mapRegisterErrorMessage(error.message);
@@ -74,6 +75,7 @@ const getProviderForProviderId = (providerId) => {
       break;
     default:
       provider = new firebase.auth.FacebookAuthProvider();
+      provider.addScope('email');
 	}
 	return provider;
 }
@@ -98,7 +100,7 @@ const differentCredential = async (provider, error) => {
 }
 
 const signInWithProvider = async (provider) => {
-	console.log('signInWithProvider');
+	console.log('signInWithProvider', provider);
 	return await firebase.auth().signInWithPopup(provider).then(function(result) {
 		console.log('result', result);
 	  // const token = result.credential.accessToken;

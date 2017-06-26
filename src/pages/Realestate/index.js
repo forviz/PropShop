@@ -14,12 +14,14 @@ import * as helpers from '../../helpers';
 import ButtonAction from '../../components/ButtonAction';
 import ContactAgent from '../../components/ContactAgent';
 import MapComponent from '../../components/Map/MapWithStreetView';
-import NearbyPlace from '../../components/Map/MapWithMarkers';
+import NearbyPlace from '../../components/Map/MapNearbyPlace';
 import realEstateData from '../../../public/data/realEstateData.json';
 import agentData from '../../../public/data/agentData.json';
 import advertising1 from '../../images/advertising/1.jpg';
 
 import * as RealestateActions from '../../actions/realestate-actions';
+
+import * as contentful from '../../api/contentful';
 
 class Realestate extends Component {
 
@@ -34,6 +36,17 @@ class Realestate extends Component {
 	state = {
     showStreetView: false,
 	}
+
+  componentDidMount() { 
+
+  }
+
+  getAgent = (id) => {
+    console.log('getAgent', id);
+    return contentful.getAgent(id).then((agent) => {
+      return agent;
+    });
+  }
 
   handleWishList = () => {
 
@@ -58,13 +71,16 @@ class Realestate extends Component {
 
   render() {
 
-    console.log('render', this.props);
-
     const { match, realestate } = this.props;
     const { loading } = realestate;
     const data = realestate.data[0];
 
     if ( !data ) return <div />;
+
+    // const agent = this.getAgent(data.agentId);
+
+    console.log('data', data);
+    // console.log('agent', agent);
 
     let images = [];
     images.push({
