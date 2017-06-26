@@ -1,4 +1,5 @@
 import * as contentful from 'contentful';
+import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 
 // Content Mapper
@@ -10,6 +11,10 @@ import mapPropertyEntryToEntity from './utils/mapPropertyEntryToEntity';
 const client = contentful.createClient({
   space: process.env.REACT_APP_SPACE,
   accessToken: process.env.REACT_APP_ACCESSTOKEN,
+});
+
+const clientManagement = contentfulManagement.createClient({
+  accessToken: process.env.REACT_APP_ACCESSTOKEN_MANAGEMENT,
 });
 
 export const getAgentEntries = ({ text, area }) => {
@@ -77,3 +82,26 @@ export const getAgentActivities = (agentId) => {
     };
   });
 };
+
+
+export const contactAgent = (name, email, mobile, body) => {
+  return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+  .then(space => space.createEntry('contact', {
+    fields: {
+      contactName: {
+        'en-US': name,
+      },
+      contactEmail: {
+        'en-US': email,
+      },
+      contactMobile: {
+        'en-US': mobile,
+      },
+      body: {
+        'en-US': body,
+      },
+    },
+  }))
+  .then(entry => entry.publish())
+  .catch(console.error);
+}
