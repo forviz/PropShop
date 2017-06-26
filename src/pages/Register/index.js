@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Alert, Spin } from 'antd';
+import { Input, Alert, Spin, notification } from 'antd';
 import { NavLink, Redirect } from 'react-router-dom';
 import FontAwesome from 'react-fontawesome';
 
@@ -12,7 +12,8 @@ import SocialLogin from '../../containers/SocialLogin';
 class Register extends Component {
 
   state = {
-    submit: false,
+    submitting: false,
+    registerSuccess: false,
     errorMessage: '',
     email: {
       value: '',
@@ -30,12 +31,26 @@ class Register extends Component {
 
   componentDidMount() {
     const { history } = this.props;
+    const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user && user.emailVerified === true) {
         history.push({
           pathname: '/',
         });
+        // if (user.emailVerified === false) {
+        //   _self.openNotificationEailVerified();
+        // } else {
+        //   history.push({
+        //     pathname: '/',
+        //   });
+        // }
       }
+    });
+  }
+
+  openNotificationEailVerified = () => {
+    notification['warning']({
+      message: 'กรุณายืนยันอีเมลของคุณ',
     });
   }
 
@@ -103,13 +118,13 @@ class Register extends Component {
   }
 
   submit = () => {
-    const { submit } = this.state;
+    const { submitting } = this.state;
 
-    if ( submit === true ) {
+    if ( submitting === true ) {
       return;
     } else {
       this.setState({
-        submit: true,
+        submitting: true,
       });
     }
 
@@ -127,14 +142,19 @@ class Register extends Component {
       firebase.createUser(email, password1).then(function(errorMessage) {
         if ( errorMessage ) {
           _self.setState({
-            submit: false,
+            submitting: false,
             errorMessage: errorMessage,
+          });
+        } else {
+          _self.setState({
+            submitting: false,
+            registerSuccess: true,
           });
         }
       });
     } else {
       this.setState({
-        submit: false,
+        submitting: false,
       });
     }
   }
@@ -153,46 +173,11 @@ class Register extends Component {
 
   render() {
 
-    const { submit } = this.state; 
+    const { submitting } = this.state; 
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
     const password1ErrorMessage = this.state.password1.errorMessage ? <span className="text-red">({this.state.password1.errorMessage})</span> : '';
     const password2ErrorMessage = this.state.password2.errorMessage ? <span className="text-red">({this.state.password2.errorMessage})</span> : '';
-
-    const form = 
-          <div>
-            <div className="form">
-              <div className="row">
-                <div className="col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-                  <h1>สมัครสมาชิก</h1>
-                  {this.state.errorMessage !== '' &&
-                    <div className="form-group">
-                      <Alert message={this.state.errorMessage} type="error" />
-                    </div>
-                  }
-                  <div className="form-group">
-                    <label><span className="text-red">*</span> อีเมล {emailErrorMessage}</label>
-                    <Input onChange={this.handleInputEmail} value={this.state.email.value} />
-                  </div>
-                  <div className="form-group">
-                    <label><span className="text-red">*</span> รหัสผ่าน {password1ErrorMessage}</label>
-                    <Input type="password" onChange={this.handleInputPassword1} value={this.state.password1.value} />
-                  </div>
-                  <div className="form-group">
-                    <label><span className="text-red">*</span> ยืนยันรหัสผ่าน {password2ErrorMessage}</label>
-                    <Input type="password" onChange={this.handleInputPassword2} value={this.state.password2.value} />
-                  </div>
-                  <div className="form-group action">
-                    <button className="btn btn-primary" onClick={this.submit} >ตกลง</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr/>
-            <div className="social_login">
-              <SocialLogin error={this.handleSocialError} />
-            </div>
-          </div>
 
     return (
       <div id="Register">
@@ -201,15 +186,52 @@ class Register extends Component {
       			<BannerRealEstate />
       		</div>
           <div className="col-md-6 col-md-offset-6 layout-right">
-        		{submit === true ? (
-              <Spin tip="Loading...">
-                {form}
-              </Spin>
-            ) : (
-              <div>
-                {form}
+            <Spin tip="Loading..." spinning={submitting}>
+              <div className="form">
+                <div className="row">
+                  <div className="col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+                    <h1>สมัครสมาชิก</h1>
+                    {this.state.errorMessage !== '' &&
+                      <div className="form-group">
+                        <Alert message={this.state.errorMessage} type="error" />
+                      </div>
+                    }
+                    {this.state.registerSuccess === true ? (
+                      <div className="form-group">
+                        <Alert
+                          message="สมัครสมาชิกสำเร็จ"
+                          description="กรุณาตรวจสอบอีเมลเพื่อยืนยันตัวตน"
+                          type="success"
+                          showIcon
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="form-group">
+                          <label><span className="text-red">*</span> อีเมล {emailErrorMessage}</label>
+                          <Input onChange={this.handleInputEmail} value={this.state.email.value} />
+                        </div>
+                        <div className="form-group">
+                          <label><span className="text-red">*</span> รหัสผ่าน {password1ErrorMessage}</label>
+                          <Input type="password" onChange={this.handleInputPassword1} value={this.state.password1.value} />
+                        </div>
+                        <div className="form-group">
+                          <label><span className="text-red">*</span> ยืนยันรหัสผ่าน {password2ErrorMessage}</label>
+                          <Input type="password" onChange={this.handleInputPassword2} value={this.state.password2.value} />
+                        </div>
+                        <div className="form-group action">
+                          <button className="btn btn-primary" onClick={this.submit} >ตกลง</button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            )}
+              <hr/>
+              <div className="social_login">
+                <SocialLogin error={this.handleSocialError} />
+              </div>
+            </Spin>
           </div>
       	</div>
       </div>

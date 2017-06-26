@@ -29,13 +29,14 @@ export const core = () => {
 
 export const createUser = (email, password) => {
 	return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-	  contentful.createUser(user).then((userContentful) => {
-	  	window.location = "/";
-	    // user.sendEmailVerification().then(function() {
-	    //   window.location = "/";
-	    // }, function(error) {
-	    //   return error;
-	    // });
+	  return contentful.createUser(user).then((userContentful) => {
+	  	// window.location = "/";
+	    return user.sendEmailVerification().then(function() {
+	    	return;
+	      // window.location = "/";
+	    }, function(error) {
+	      return error;
+	    });
 	  });
 	}).catch(function(error) {
 		return mapRegisterErrorMessage(error.message);

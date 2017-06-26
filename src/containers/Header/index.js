@@ -17,7 +17,7 @@ class Header extends Component {
 	componentDidMount() {
 		const _self = this;
 		firebase.core().auth().onAuthStateChanged(function(user) {
-		  if (user) {
+		  if (user && user.emailVerified === true) {
 		  	_self.setState(prevState => ({
 		      user: user,
 		    }));

@@ -11,3 +11,38 @@ Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\libraries\font-awes
 Rendering Complete, saving .css file...
 Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
 Wrote 2 CSS files to C:\Users\spyrocash\Desktop\project\propshop\src\
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.scss
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+/c/Program Files/nodejs/npm: line 34:  7008 Hangup                  "$NODE_EXE" "$NPM_CLI_JS" "$@"
+
+> propshop@0.1.0 watch-css C:\Users\spyrocash\Desktop\project\propshop
+> npm run build-css && node-sass src/ -o src/ --watch --recursive
+
+
+> propshop@0.1.0 build-css C:\Users\spyrocash\Desktop\project\propshop
+> node-sass src/ -o src/
+
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\libraries\font-awesome\4.7.0\scss\font-awesome.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Wrote 2 CSS files to C:\Users\spyrocash\Desktop\project\propshop\src\

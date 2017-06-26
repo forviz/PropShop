@@ -3,16 +3,6 @@ import styled from 'styled-components';
 import { Spin } from 'antd';
 import _ from 'lodash';
 
-const Container = styled.div`
-  height: 400px;
-`;
-
-const mapContainerStyle = {
-  float: 'left',
-  height: '100%',
-  width: '100%',
-};
-
 const typeList = [
   { key: 'school', name: 'School' },
   { key: 'bank', name: 'Bank' },
@@ -23,23 +13,20 @@ const typeList = [
 
 class MapNearbyPlace extends Component {
 
-	constructor(props) {
-	  super(props);
-	  const { currentSelect } = this.state;
-    this.fetchNearbyPlace(currentSelect);
-	}
+  constructor(props) {
+    super(props);
+  }
 
-	static defaultProps = {
-		lat: 13.7248946,
+  static defaultProps = {
+    lat: 13.7248946,
     lng: 100.4930246,
     radius: 1000,
-	}
+  }
 
-	state = {
+  state = {
     loading: true,
     currentSelect: 'school',
     results: [],
-    markers: [],
   }
 
   handleType = (key) => {
@@ -50,18 +37,16 @@ class MapNearbyPlace extends Component {
   }
 
   getDistance = async (desLat, desLng) => {
-      const { lat, lng } = this.props;
-      const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?key='+process.env.REACT_APP_APIKEY+'&origins='+lat+','+lng+'&destinations='+desLat+','+desLng;
-
-      const result = await fetch(url); 
-      const resultJSON = await result.json();
-      return resultJSON;
+    const { lat, lng } = this.props;
+    const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?key='+process.env.REACT_APP_APIKEY+'&origins='+lat+','+lng+'&destinations='+desLat+','+desLng;
+    const result = await fetch(url); 
+    const resultJSON = await result.json();
+    return resultJSON;
   }
 
   setNearbyData = async (data) => {
     const newData = await Promise.all(data.map(async (value, index) => {
       const distance = await this.getDistance(value.geometry.location.lat, value.geometry.location.lng);
-      console.log('distance', distance);
       return {
         ...value,
         distance: distance.rows[0].elements[0].distance.text,
@@ -71,31 +56,12 @@ class MapNearbyPlace extends Component {
     this.setState({
       loading: false,
       results: newData,
-      markers: this.setMarker(newData),
+    }, () => {
+      this.initializeMap();
     });
-  }
-
-  setMarker = (data) => {
-    const markers = _.map(data, (result) => {
-      return {
-        position: {
-          lat: result.geometry.location.lat,
-          lng: result.geometry.location.lng,
-        },
-        title: result.name,
-        label: '',
-        // icon: '<div>a</div>',
-        key: result.place_id,
-        defaultAnimation: 2,
-      }
-    });
-    return markers;
   }
 
   fetchNearbyPlace = (type) => {
-
-  	console.log('fetchNearbyPlace', type);
-  	return;
 
     this.setState({
       loading: true,
@@ -111,7 +77,7 @@ class MapNearbyPlace extends Component {
             response.status);  
           return;  
         }
-        response.json().then((data) => {  
+        response.json().then((data) => {
           this.setNearbyData(data.results);
         });  
       }  
@@ -121,32 +87,54 @@ class MapNearbyPlace extends Component {
     });
   }
 
-	/*global google */
-	initializeMap = (lat, lng, radius) => {
+  /*global google */
+  initializeMap = () => {
 
-		const map = new google.maps.Map(this.map, {
-			center: { lat: lat, lng: lng },
-			radius: radius,
-		});
+    const center = new google.maps.LatLng(this.props.lat, this.props.lng);
 
-		var marker = new google.maps.Marker({
-      position: { lat: lat, lng: lng },
-      map: map
+    const map = new google.maps.Map(this.map, {
+      center: center,
+      zoom: 15,
     });
-	}
 
-	componentDidMount() {
-		console.log('componentDidMount');
-		this.initializeMap();
-	}
+    let infowindow = new google.maps.InfoWindow();
+    let marker;
 
-	render() {
+    marker = new google.maps.Marker({
+      position: center,
+      map: map,
+      icon: 'images/static/googlemap/marker.png',
+    });
 
-		const { currentSelect, results, loading, markers } = this.state;
+    _.forEach(this.state.results, function(value, key) {
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(value.geometry.location.lat, value.geometry.location.lng),
+        map: map
+      });
 
-		return (
-			<Container>
-				<div className="row">
+      google.maps.event.addListener(marker, 'click', (function(marker, key) {
+        return function() {
+          infowindow.setContent(value.name);
+          infowindow.open(map, marker);
+        }
+      })(marker, key));
+    });
+
+    marker.setMap(map);
+  }
+
+  componentDidMount() {
+    const { currentSelect } = this.state;
+    this.fetchNearbyPlace(currentSelect);
+  }
+
+  render() {
+
+    const { currentSelect, results, loading } = this.state;
+
+    return (
+      <div className="NearbyPlace">
+        <div className="row">
           <div className="col-md-6">
             <div className="place-list">
               <div className="tabs-block">
@@ -185,13 +173,13 @@ class MapNearbyPlace extends Component {
           </div>
           <div className="col-md-6">
             <div className="place-map">
-              <div ref={c => this.map = c} style={mapContainerStyle} />
+              <div ref={c => this.map = c} style={{ width: '100%', height: '100%' }} />
             </div>
           </div>
         </div>
-			</Container>
-		);
-	}
+      </div>
+    );
+  }
 }
 
 export default MapNearbyPlace;

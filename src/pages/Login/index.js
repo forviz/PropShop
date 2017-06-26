@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Alert, Spin } from 'antd';
+import { Input, Alert, Spin, notification } from 'antd';
 import { NavLink, Redirect } from 'react-router-dom';
 import FontAwesome from 'react-fontawesome';
 
@@ -26,12 +26,26 @@ class Login extends Component {
 
   componentDidMount() {
     const { history } = this.props;
+    const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user && user.emailVerified === true) {
         history.push({
           pathname: '/',
         });
+        // if (user.emailVerified === false) {
+        //   _self.openNotificationEailVerified();
+        // } else {
+        //   history.push({
+        //     pathname: '/',
+        //   });
+        // }
       }
+    });
+  }
+
+  openNotificationEailVerified = () => {
+    notification['warning']({
+      message: 'กรุณายืนยันอีเมลของคุณ',
     });
   }
 
