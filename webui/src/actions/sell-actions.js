@@ -63,19 +63,19 @@ export const removeRequiredField = (field) => {
 };
 
 export const doCreateRealEstate = (sell, user) => {
-
-	return dispatch => {
-		dispatch(sendingData(true));
-		// createRealEstate(sell, user).then(result => {
-		// 	dispatch(sendDataSuccess(true));
+  return (dispatch) => {
+    dispatch(sendingData(true));
+    // createRealEstate(sell, user).then(result => {
+    //   dispatch(sendDataSuccess(true));
     //   dispatch(sendingData(false));
-		// });
+    // });
 
-    createPost(sell, user).then(result => {
+    createPost(sell, user).then((result) => {
+      console.log('create post success', result);
       dispatch(sendDataSuccess());
-    }).catch(error => {
+    }).catch((error) => {
       // dispatch(sendDataSuccess());
       console.log('error', error);
     })
-	}
+  }
 }

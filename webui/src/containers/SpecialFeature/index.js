@@ -40,7 +40,7 @@ class SpecialFeature extends Component {
   onSpecialFeatureFacilitiesChange = (checkedValues) => {
     this.setSelected('specialFeatureFacilities', checkedValues);
   }
- 
+
   onSpecialFeatureNearbyPlacesChange = (checkedValues) => {
     this.setSelected('specialFeatureNearbyPlaces', checkedValues);
   }
@@ -78,10 +78,10 @@ class SpecialFeature extends Component {
     if ( !items ) return <div></div>;
 
     const setValue = {
-      specialFeatureView: selected.specialFeatureView.length > 0 ? selected.specialFeatureView : defaultValue.specialFeatureView,
-      specialFeatureFacilities: selected.specialFeatureFacilities.length > 0 ? selected.specialFeatureFacilities : defaultValue.specialFeatureFacilities,
-      specialFeatureNearbyPlaces: selected.specialFeatureNearbyPlaces.length > 0 ? selected.specialFeatureNearbyPlaces : defaultValue.specialFeatureNearbyPlaces,
-      specialFeaturePrivate: selected.specialFeaturePrivate.length > 0 ? selected.specialFeaturePrivate : defaultValue.specialFeaturePrivate,
+      specialFeatureView: _.size(selected.specialFeatureView) > 0 ? selected.specialFeatureView : defaultValue.specialFeatureView,
+      specialFeatureFacilities: _.size(selected.specialFeatureFacilities) > 0 ? selected.specialFeatureFacilities : defaultValue.specialFeatureFacilities,
+      specialFeatureNearbyPlaces: _.size(selected.specialFeatureNearbyPlaces) > 0 ? selected.specialFeatureNearbyPlaces : defaultValue.specialFeatureNearbyPlaces,
+      specialFeaturePrivate: _.size(selected.specialFeaturePrivate) > 0 ? selected.specialFeaturePrivate : defaultValue.specialFeaturePrivate,
     }
 
     return (

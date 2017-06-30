@@ -270,20 +270,20 @@ export async function createRealEstate(data, user) {
     imageIds.push(assetsImages.sys.id);
   }));
 
-  const realEstateFields = parseRealEstateData(data, assetsMainImage.sys.id, imageIds);
+//   const realEstateFields = parseRealEstateData(data, assetsMainImage.sys.id, imageIds);
+//
+//   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+//   .then((space) => {
+//     space.createEntry('realEstate', {
+//       fields: realEstateFields,
+//     })
+//     .then((entry) => {
+//       return entry;
+//     })
+//     .catch(console.error)
+//   });
+// }
 
-  return clientManagement.getSpace(process.env.REACT_APP_SPACE)
-  .then((space) => {
-    space.createEntry('realEstate', {
-      fields: realEstateFields,
-    })
-    .then((entry) => {
-      return entry;
-    })
-    .catch(console.error)
-  });
-}
-  /*
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
   .then((space) => space.createEntry('realEstate', {
     fields: {
@@ -363,7 +363,7 @@ export async function createRealEstate(data, user) {
         }
       },
       images: {
-        'en-US': images
+        'en-US': imageIds
       },
       sold: {
         'en-US': false,
@@ -383,7 +383,7 @@ export async function createRealEstate(data, user) {
     return entry;
   })
   .catch(console.error)
-};  */
+};
 
 
 // export const uploadFile = (fileName = '', fileType = '', file = '') => {

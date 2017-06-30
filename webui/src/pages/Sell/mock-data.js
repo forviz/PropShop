@@ -79,13 +79,17 @@ export const step1Data = {
 
 export const step2Data = {
   requiredField: [
-    'mainImage'
+    "mainImage"
   ],
   mainImage: {
-    preview: 'https://www.w3schools.com/css/img_fjords.jpg'
+    preview: "https://www.w3schools.com/css/img_fjords.jpg"
   },
-  images: []
-};
+  images: [
+    {
+      preview: "blob:http://localhost:3000/03d71273-4954-4955-adce-52d366ee98b5"
+    }
+  ]
+}
 
 export const step3Data = {
   acceptTerms: true,

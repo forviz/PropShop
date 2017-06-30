@@ -89,6 +89,10 @@ const extractAgentFields = (data) => {
 
 
 const extractPropertyFields = (data) => {
+
+  const mainImage = _.get(data, 'property.mainImage');
+  const images = _.get(data, 'property.images');
+  // const mainImage = _.find(images, image => image.albumCover === true);
   return {
     for: { 'en-US': _.get(data, 'for') },
     residentialType: { 'en-US': _.get(data, 'property.residentialType') },
@@ -110,6 +114,15 @@ const extractPropertyFields = (data) => {
     locationObject: {
       'en-US': _.get(data, 'property.location'),
     },
+    specialFeatureView: {
+      'en-US': _.get(data, 'property.specialFeatureView'),
+    },
+    specialFeatureFacilities: {
+      'en-US': _.get(data, 'property.specialFeatureFacilities'),
+    },
+    specialFeatureNearbyPlaces: {
+      'en-US': _.get(data, 'property.specialFeatureNearbyPlaces'),
+    },
     zipcode: { 'en-US': _.get(data, 'property.location.zipcode') },
     province: { 'en-US': _.get(data, 'property.location.province') },
     amphur: { 'en-US': _.get(data, 'property.location.amphur') },
@@ -120,11 +133,20 @@ const extractPropertyFields = (data) => {
       lat: _.get(data, 'property.location.lat'),
       lon: _.get(data, 'property.location.lng'),
     }},
+    mainImage: mainImage ? {
+      'en-US': {
+        'sys': {
+          'id': mainImage.id,
+          'linkType': 'Asset',
+          'type': 'Link',
+        }
+      }
+    } : undefined,
     images: {
-      'en-US': _.map(_.get(data, 'property.imaages'), image => {
+      'en-US': _.map(images, image => {
         return {
           'sys': {
-            id: image.sys.id,
+            id: image.id,
             linkType: "Asset",
             type: "Link"
           },
@@ -136,7 +158,7 @@ const extractPropertyFields = (data) => {
 
 const extractPostFields = (data, agentEntry, realEstateEntry) => {
   return {
-    title: { 'en-US': _.get(data, 'topic') },
+    topic: { 'en-US': _.get(data, 'topic') },
     detail: { 'en-US': _.get(data, 'detail') },
     for: {
       'en-US': [_.get(data, 'for')]
@@ -167,6 +189,7 @@ const extractPostFields = (data, agentEntry, realEstateEntry) => {
 export const createPost = async (req, res, next) => {
   try {
     const data = req.body;
+    console.log('data', data);
     const space = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
 
     // Create Agent
@@ -204,6 +227,9 @@ export const createPost = async (req, res, next) => {
 
     res.json({
       status: 'SUCCESS',
+      data: {
+        realEstate: realEstateEntry,
+      },
     })
 
   } catch (e) {
