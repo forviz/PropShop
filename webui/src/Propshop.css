@@ -1464,7 +1464,8 @@ body .ant-notification {
 .HotNews {
   padding: 30px;
   border: 1px solid #eeeeee;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  margin-top: 117px; }
 
 .HotNews .title {
   font-family: "SukhumvitSet-SemiBold";

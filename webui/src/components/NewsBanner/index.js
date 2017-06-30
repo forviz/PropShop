@@ -21,7 +21,7 @@ class NewsItem extends Component {
         <div className="content">
           <div className="title">{data.title}</div>
           <div className="description">{data.description}</div>
-          <button className="btn btn-primary" onClick={this.submit} >อ่านเพิ่มเติม</button>
+          <a href={data.redirectURL}><button className="btn btn-primary" onClick={this.submit} >อ่านเพิ่มเติม</button></a>
         </div>
         
       </div>

@@ -50,16 +50,19 @@ class News extends Component {
         image: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
         title: 'ถอดบทเรียน...ไฟไหม้ตึกในลอนดอน สู่อนาคตตึกสูงในกรุงเทพฯ',
         description: 'จากเหตุเพลิงไหม้เกรนเฟลล์ ทาวเวอร์ กรุงลอนดอน ประเทศอังกฤษ สร้างความสะเทือนใจระดับโลก ชี้ให้เห็นว่าอาคารเก่าและตึกสูง ควรตรวจสอบระบบป้องกันอัคคีภัยเพื่อเตรียมความพร้อมอยู่เสมอ และแน่นอนว่าตึกสูงในไทยก็เช่นเดียวกัน',
+        redirectURL: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
       },
       {
         image: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
         title: 'ถอดบทเรียน...ไฟไหม้ตึกในลอนดอน สู่อนาคตตึกสูงในกรุงเทพฯ',
         description: 'จากเหตุเพลิงไหม้เกรนเฟลล์ ทาวเวอร์ กรุงลอนดอน ประเทศอังกฤษ สร้างความสะเทือนใจระดับโลก ชี้ให้เห็นว่าอาคารเก่าและตึกสูง ควรตรวจสอบระบบป้องกันอัคคีภัยเพื่อเตรียมความพร้อมอยู่เสมอ และแน่นอนว่าตึกสูงในไทยก็เช่นเดียวกัน',
+        redirectURL: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
       },
       {
         image: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
         title: 'ถอดบทเรียน...ไฟไหม้ตึกในลอนดอน สู่อนาคตตึกสูงในกรุงเทพฯ',
         description: 'จากเหตุเพลิงไหม้เกรนเฟลล์ ทาวเวอร์ กรุงลอนดอน ประเทศอังกฤษ สร้างความสะเทือนใจระดับโลก ชี้ให้เห็นว่าอาคารเก่าและตึกสูง ควรตรวจสอบระบบป้องกันอัคคีภัยเพื่อเตรียมความพร้อมอยู่เสมอ และแน่นอนว่าตึกสูงในไทยก็เช่นเดียวกัน',
+        redirectURL: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
       },
     ];
 
