@@ -212,23 +212,77 @@ export const publishEntry = (entry_id) => {
   .catch(console.error)
 }
 
+const parseRealEstateData = (data, mainImageId, imageIds) => {
+  return {
+    topic: _.get(data, 'step0.topic'),
+    detail: _.get(data, 'step0.announcementDetails'),
+    for: _.get(data, 'step0.for'),
+    price: _.toNumber(_.get(data, 'step0.price')),
+    agent: {
+      id: 802,
+      name: 'James Bond',
+      email: 'jamesbond@agent.com',
+      phone: '09xxxxxxx'
+    },
+    property: {
+      id: undefined,
+      residentialType: _.get(data, 'step0.residentialType'),
+      usableArea: {
+        size: 36,
+        description: _.toString(_.get(data, 'step0.areaSize')),
+        unit: 'm',
+      },
+      landArea: {
+        size: 60,
+        description: _.toString(_.get(data, 'step0.landSize')),
+        unit: 'm',
+      },
+      bedroom: _.get(data, 'step0.bedroom'),
+      bathroom: _.get(data, 'step0.bathroom'),
+      price: _.toNumber(_.get(data, 'step0.price')),
+      fee: _.toNumber(_.get(data, 'step0.fee')),
+      project: {},
+      location: {
+        addressText: '',
+        areaIds: [],
+        lat: _.get(data, 'step0.googleMap.markers[0].position.lat'),
+        lng: _.get(data, 'step0.googleMap.markers[0].position.lng'),
+        zipcode: _.get(data, 'step0.zipcode'),
+        province: _.get(data, 'step0.province'),
+        amphur: _.get(data, 'step0.amphur'),
+        district: _.get(data, 'step0.district'),
+        street: _.get(data, 'step0.street'),
+      },
+      features: [],
+      images: _.map(imageIds, imgId => ({ id: imgId, caption: '', albumCover: (mainImageId === imgId) })),
+    },
+  };
+};
+
 export async function createRealEstate(data, user) {
   const assetsMainImage = await uploadFile(data.step2.mainImage.name, data.step2.mainImage.type, data.step2.mainImage);
 
   let imageData = {};
-  let images = [];
+  let imageIds = [];
 
   await Promise.all(data.step2.images.map(async (image) => {
     let assetsImages = await uploadFile(image.name, image.type, image);
-    imageData = {
-      'sys': {
-        id: assetsImages.sys.id,
-        linkType: "Asset",
-        type: "Link"
-      },
-    }
-    images.push(imageData);
+    imageIds.push(assetsImages.sys.id);
   }));
+
+//   const realEstateFields = parseRealEstateData(data, assetsMainImage.sys.id, imageIds);
+//
+//   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+//   .then((space) => {
+//     space.createEntry('realEstate', {
+//       fields: realEstateFields,
+//     })
+//     .then((entry) => {
+//       return entry;
+//     })
+//     .catch(console.error)
+//   });
+// }
 
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
   .then((space) => space.createEntry('realEstate', {
@@ -309,7 +363,7 @@ export async function createRealEstate(data, user) {
         }
       },
       images: {
-        'en-US': images
+        'en-US': imageIds
       },
       sold: {
         'en-US': false,
@@ -330,6 +384,7 @@ export async function createRealEstate(data, user) {
   })
   .catch(console.error)
 };
+
 
 // export const uploadFile = (fileName = '', fileType = '', file = '') => {
 
@@ -449,6 +504,7 @@ export async function createRealEstate(data, user) {
 //   .then((asset) => asset.publish())
 //   .catch(console.error)
 // }
+
 
 export async function uploadFile(fileName = '', fileType = '', file = '') {
   return await clientManagement.getSpace(process.env.REACT_APP_SPACE)
@@ -596,7 +652,7 @@ export const updateAgent = async (id, data) => {
         'en-US': entry.fields.uid['en-US']
       },
     }
-    entry.fields = fields; 
+    entry.fields = fields;
     return entry.update();
   })
   .then((entry) => {
