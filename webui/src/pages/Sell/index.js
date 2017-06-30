@@ -38,9 +38,11 @@ class Sell extends Component {
     const { history } = this.props;
     const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
+      console.log('user', user);
       if (user && user.emailVerified === true) {
         contentful.getUserData(user.uid).then((response) => {
           user['contentful'] = response;
+          console.log('user.contentful', response);
           _self.setState(prevState => ({
             user: user,
           }));
