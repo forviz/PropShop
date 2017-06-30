@@ -14,6 +14,43 @@ const clientManagement = contentfulManagement.createClient({
 
 const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.809Z
 
+
+export const uploadFile = async (req, res) => {
+
+  try {
+    const fileName = req.body.fileName;
+    const fileType = req.body.fileType;
+    const file = req.body.file;
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.createAssetFromFiles({
+      fields: {
+        title: {
+          'en-US': fileName
+        },
+        file: {
+          'en-US': {
+            contentType: 'application/octet-stream',
+            fileName: fileName,
+            file: file,
+          }
+        }
+      }
+    }))
+    .then(asset => asset.processForAllLocales())
+    .then(asset => asset.publish());
+
+    res.json(response);
+
+  } catch (e) {
+    console.error(e);
+    res.json({
+      error: e.message,
+    });
+  }
+}
+
+
 export const queryPosts = async (req, res, next) => {
 
   try {

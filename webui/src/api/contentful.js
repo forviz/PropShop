@@ -500,6 +500,7 @@ export async function createRealEstate(data, user) {
 //   .catch(console.error)
 // }
 
+
 export async function uploadFile(fileName = '', fileType = '', file = '') {
   return await clientManagement.getSpace(process.env.REACT_APP_SPACE)
   .then(space => space.createAssetFromFiles({

@@ -70,6 +70,7 @@ const contentDeliveryAuthentication = (req, res, next) => {
 
 const apiPrefix = '/api/v1';
 
+app.post (`${apiPrefix}/media`, postController.uploadFile);
 app.get(`${apiPrefix}/posts`, postController.queryPosts);
 app.post(`${apiPrefix}/posts`, postController.createPost);
 

@@ -1,4 +1,5 @@
 import { createRealEstate } from '../api/contentful';
+import { createPost } from '../api/property';
 
 const goSaveStep = (step, data) => {
   return {
@@ -57,11 +58,18 @@ export const removeRequiredField = (field) => {
 
 export const doCreateRealEstate = (sell, user) => {
 
-	return dispatch => {
-		dispatch(sendingData());
+  return dispatch => {
+    dispatch(sendingData());
     console.log('doCreateRealEstate', sell, user);
-		createRealEstate(sell, user).then(result => {
-			dispatch(sendDataSuccess());
-		});
-	}
+    // createRealEstate(sell, user).then(result => {
+    //   dispatch(sendDataSuccess());
+    // });
+    //
+    createPost(sell, user).then(result => {
+      dispatch(sendDataSuccess());
+    }).catch(error => {
+      // dispatch(sendDataSuccess());
+      console.log('error', error);
+    })
+  }
 }

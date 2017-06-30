@@ -82,7 +82,7 @@ export const step2Data = {
     'mainImage'
   ],
   mainImage: {
-    preview: 'blob:http://localhost:3000/76c46c5d-222f-40c1-8024-3ed3048ba9e0'
+    preview: 'https://www.w3schools.com/css/img_fjords.jpg'
   },
   images: []
 };
