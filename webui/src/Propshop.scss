@@ -24,6 +24,7 @@
 @import 'stylesheet/pages/login';
 @import 'stylesheet/pages/register';
 @import 'stylesheet/pages/forgotpassword';
+@import 'stylesheet/pages/news';
 
 // Containers
 @import 'stylesheet/containers/header';
@@ -42,3 +43,6 @@
 @import 'stylesheet/components/rate';
 @import 'stylesheet/components/real_estate_item';
 @import 'stylesheet/components/notification';
+@import 'stylesheet/components/news-item';
+@import 'stylesheet/components/hot-news';
+@import 'stylesheet/components/news-banner';
