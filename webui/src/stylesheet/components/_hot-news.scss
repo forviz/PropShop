@@ -1,0 +1,22 @@
+.HotNews{
+  padding: 30px;
+  border: 1px solid $border-color;
+  box-sizing: border-box;
+  margin-top: 117px;
+  .title{
+    font-family: $sukumvit-semibold;
+    font-size: 24px;
+    color: $text-default;
+    margin-bottom: 40px;
+  }
+  .list{
+    font-size: 14px;
+    margin-bottom: 40px;
+    .text{
+      color: $text-default;
+    }
+    .date{
+      color: $text-green;
+    }
+  }
+}

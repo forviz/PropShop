@@ -1,0 +1,81 @@
+.NewsBanner{
+  width: 100%;
+  height: 460px;
+  background: $text-gray;
+  color: $text-white;
+  
+  .banner{
+    width: 100%;
+    height: 460px;
+    background-color: black;
+    position: relative;
+
+    .image-dark{
+      width: 100%;
+      height: 460px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .content{
+      padding: 58px;
+      box-sizing: border-box;
+      font-family: $sukumvit-text;
+      position: absolute;
+      z-index: 2;
+      
+      .title{
+        font-size: 48px;
+        line-height: 60px;
+        width: 70%;
+        color: $text-white;
+        z-index: 2;
+        height: auto;
+        white-space: normal;
+        font-family: $sukumvit-text;
+        margin-bottom: 20px;
+        margin-top: -20px;
+      }
+      .description{
+        font-size: 18px;
+        line-height: 30px;
+        color: $text-white;
+        width: 70%;
+        z-index: 2;
+        height: auto;
+        white-space: normal;
+        font-family: $sukumvit-text;
+        margin-bottom: 20px;
+      }
+      button{
+        width: 140px;
+        height: 35px;
+        z-index: 2;
+      }
+    }
+
+  }
+
+  .image-gallery-bullets{
+    width: 100%;
+    padding-right: 25px;
+    box-sizing: border-box;
+    bottom: 30px;
+
+    .image-gallery-bullets-container{ 
+      text-align: right;
+    }
+    .image-gallery-bullet{
+      border-radius: 0%;
+      padding: 8px;
+      border: 2px solid white;
+      box-sizing: border-box;
+      box-shadow: none;
+      
+    }
+    .image-gallery-bullet.active{
+      background: red;
+    }
+  }
+
+}

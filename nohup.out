@@ -46,3 +46,15 @@ Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\libraries\font-awes
 Rendering Complete, saving .css file...
 Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
 Wrote 2 CSS files to C:\Users\spyrocash\Desktop\project\propshop\src\
+npm ERR! missing script: watch-css
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\punchkub147\AppData\Roaming\npm-cache\_logs\2017-06-29T08_56_40_477Z-debug.log
+npm ERR! missing script: watch-css
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\punchkub147\AppData\Roaming\npm-cache\_logs\2017-06-29T09_00_12_316Z-debug.log
+npm ERR! missing script: watch-css
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\punchkub147\AppData\Roaming\npm-cache\_logs\2017-06-29T09_24_16_286Z-debug.log
