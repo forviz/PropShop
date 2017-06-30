@@ -59,6 +59,7 @@ export const doCreateRealEstate = (sell, user) => {
 
 	return dispatch => {
 		dispatch(sendingData());
+    console.log('doCreateRealEstate', sell, user);
 		createRealEstate(sell, user).then(result => {
 			dispatch(sendDataSuccess());
 		});
