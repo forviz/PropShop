@@ -6,11 +6,11 @@ const initalState = {
 
 const reducers = (state = initalState, action) => {
 	switch (action.type) {
-		case 'USER/RECEIVED/SUCCESS': {
+		case 'USER/SET/DATA': {
 		  return {
-		  	...state,
-		  	data: action.user,
-		  };
+        ...state,
+        data: action.user
+      };
 		}
 		default:
 			return state;

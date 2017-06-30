@@ -194,8 +194,19 @@ class Sell extends Component {
 		const { user } = this.state;
 		const { doCreateRealEstate } = this.props.actions;
 		if ( sell.sendingData === false ) {
-			doCreateRealEstate(sell, user.contentful);
+			console.log('sell', sell);
+			// doCreateRealEstate(sell, user.contentful);
 		}
+	}
+
+	success = () => {
+		const { history } = this.props;
+		const { sendDataSuccess } = this.props.actions;
+    sendDataSuccess(false);
+		this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
+  	history.push({
+      pathname: '/',
+    });
 	}
 
   render() {
@@ -204,10 +215,7 @@ class Sell extends Component {
   	const { step, step0, step1, step2, step3, sendingData, sendData } = sell;
 
   	if ( sendData === true ) {
-  		this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
-    	history.push({
-	      pathname: '/',
-	    });
+  		this.success();
   	}
 
   	let renderStep = null;
@@ -297,6 +305,7 @@ const actions = {
 	nextStep: SellActions.nextStep,
 	prevStep: SellActions.prevStep,
 	doCreateRealEstate: SellActions.doCreateRealEstate,
+	sendDataSuccess: SellActions.sendDataSuccess,
 };
 
 const mapDispatchToProps = dispatch => {

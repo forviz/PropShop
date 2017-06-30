@@ -6,7 +6,6 @@ class SocialLogin extends Component {
 
   handleFacebookLogin = async () => {
     const error = await firebase.signInWithFacebook();
-    console.log('handleFacebookLogin', error);
     this.props.error(error);
   }
 

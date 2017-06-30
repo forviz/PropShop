@@ -25,6 +25,7 @@ import Agent from './pages/Agent';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Forgotpassword from './pages/Forgotpassword';
+import Profile from './pages/Profile';
 
 import './Propshop.css';
 
@@ -91,6 +92,11 @@ class PropShop extends Component {
         exact: false,
         header: Header,
         content: Forgotpassword,
+      },
+      { path: '/profile',
+        exact: false,
+        header: Header,
+        content: Profile,
       },
     ]
 

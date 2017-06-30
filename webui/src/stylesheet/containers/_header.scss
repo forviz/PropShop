@@ -114,3 +114,19 @@
   	box-shadow: none;
 	}
 }
+
+#Header {
+	.avatar {
+		position: relative;
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-right: 10px;
+		img {
+			position: absolute;
+	    top: -3px;
+	    right: -1px;
+	    width: 30px;
+		}
+	}
+}

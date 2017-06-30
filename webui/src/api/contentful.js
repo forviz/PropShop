@@ -3,6 +3,8 @@ import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 const cuid = require('cuid');
 
+import mapAgentEntryToEntity from './utils/mapAgentEntryToEntity';
+
 const client = contentful.createClient({
   space: process.env.REACT_APP_SPACE,
   accessToken: process.env.REACT_APP_ACCESSTOKEN,
@@ -181,6 +183,9 @@ export const createUser = (user) => {
       return clientManagement.getSpace(process.env.REACT_APP_SPACE)
       .then((space) => space.createEntry('agent', {
         fields: {
+          username: {
+            'en-US': user.displayName,
+          },
           email: {
             'en-US': user.email,
           },
@@ -312,7 +317,7 @@ export async function createRealEstate(data, user) {
       agent: {
         'en-US': {
           'sys': {
-            id: user.sys.id,
+            id: user.id,
             linkType: "Entry",
             type: "Link"
           },
@@ -466,13 +471,42 @@ export async function uploadFile(fileName = '', fileType = '', file = '') {
   .catch(console.error)
 }
 
+export const deleteEntries = async (id) => {
+  await clientManagement.getSpace(process.env.REACT_APP_SPACE)
+  .then((space) => space.getEntry(id))
+  .then((entry) => entry.delete())
+  .then(() => console.log('Entry deleted.'))
+  .catch(console.error)
+}
+
+export const deleteAsset = async (id) => {
+  await clientManagement.getSpace(process.env.REACT_APP_SPACE)
+  .then((space) => space.getAsset(id))
+  .then((asset) => asset.delete())
+  .then(() => console.log('Asset deleted.'))
+  .catch(console.error)
+}
+
+export const unpublishAsset = async (id) => {
+  await clientManagement.getSpace(process.env.REACT_APP_SPACE)
+  .then((space) => space.getAsset(id))
+  .then((asset) => asset.unpublish())
+  .then((asset) => console.log(`Asset ${asset.sys.id} unpublished.`))
+  .catch(console.error)
+}
+
+export const deleteOldAsset = async (id) => {
+  await unpublishAsset(id);
+  await deleteAsset(id);
+}
+
 export const getUserData = (uid) => {
   return client.getEntries({
     content_type: 'agent',
     'fields.uid': uid
   })
   .then((response) => {
-    return response.items[0];
+    return mapAgentEntryToEntity(response.items[0]);
   })
   .catch(console.error)
 }
@@ -502,24 +536,71 @@ const mapFieldAgent = (data) => {
   }, {});
 }
 
-export const getAgent = (id) => {
-  console.log('getAgent', id);
-  client.getEntries({
-    content_type: 'agent',
-    'sys.id': id
+export const updateAgent = async (id, data) => {
+
+  let image;
+  if (data.image.newImage) {
+    image = await uploadFile(data.image.newImage.name, data.image.newImage.type, data.image.newImage);
+    if (image) {
+      await deleteOldAsset(data.image.sys.id);
+    }
+  }
+
+  return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+  .then((space) => space.getEntry(id))
+  .then((entry) => {
+    const fields = {
+      email: {
+        'en-US': data.email
+      },
+      image: {
+        'en-US': {
+          'sys': {
+            'id': image ? image.sys.id : data.image.sys.id,
+            'linkType': 'Asset',
+            'type': 'Link',
+          }
+        }
+      },
+      username: {
+        'en-US': data.username
+      },
+      prefixName: {
+        'en-US': data.prefixName
+      },
+      name: {
+        'en-US': data.name
+      },
+      lastname: {
+        'en-US': data.lastname
+      },
+      phone: {
+        'en-US': data.prefixPhone+data.phone
+      },
+      rating: {
+        'en-US': data.rating
+      },
+      company: {
+        'en-US': data.company
+      },
+      specialization: {
+        'en-US': data.specialization
+      },
+      licenseNumber: {
+        'en-US': data.licenseNumber
+      },
+      about: {
+        'en-US': data.about
+      },
+      uid: {
+        'en-US': entry.fields.uid['en-US']
+      },
+    }
+    entry.fields = fields; 
+    return entry.update();
   })
-  .then((response) => {
-    console.log('getAgent', response);
+  .then((entry) => {
+    return publishEntry(entry.sys.id);
   })
   .catch(console.error)
-
-  // console.log('getAgent', id);
-  // return client.getEntry(id)
-  // .then((entry) => {
-  //   console.log('entry', entry);
-  //   const xx = mapFieldAgent(entry);
-  //   console.log('xx', xx);
-  //   return xx;
-  // })
-  // .catch(console.error)
 }
