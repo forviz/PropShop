@@ -8,9 +8,7 @@ import _ from 'lodash';
 import * as firebase from '../../api/firebase';
 import * as contentful from '../../api/contentful';
 import * as SellActions from '../../actions/sell-actions';
-import * as UserActions from '../../actions/user-actions';
 
-import DevTool from './DevTool';
 import Step0 from './step0';
 import Step1 from './step1';
 import Step2 from './step2';
@@ -19,129 +17,56 @@ import Step3 from './step3';
 const Step = Steps.Step;
 
 const steps = [
-   { title: 'รายละเอียดทรัพย์สิน' },
-   { title: 'คุณสมบัติพิเศษ' },
-   { title: 'อัพโหลดรูปภาพ' },
-   { title: 'ข้อตกลงและเงื่อนไข' },
+ 	{ title: 'รายละเอียดทรัพย์สิน' },
+ 	{ title: 'คุณสมบัติพิเศษ' },
+ 	{ title: 'อัพโหลดรูปภาพ' },
+ 	{ title: 'ข้อตกลงและเงื่อนไข' },
 ];
 
 class Sell extends Component {
 
-  constructor(props) {
+	constructor(props) {
     super(props);
-    this.getProfile(props);
   }
+
+	state = {
+		user: {},
+	}
 
 	componentDidMount() {
 		const { history } = this.props;
     const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
-      console.log('user', user);
       if (user && user.emailVerified === true) {
-        contentful.getUserData(user.uid).then((response) => {
-          user['contentful'] = response;
-          console.log('user.contentful', response);
-          _self.setState(prevState => ({
-            user: user,
-          }));
-        });
+      	contentful.getUserData(user.uid).then((response) => {
+      		user['contentful'] = response;
+      		_self.setState(prevState => ({
+	          user: user,
+	        }));
+		  	});
       } else {
-        _self.openNotificationWithIcon('error', 'กรุณาเข้าสู่ระบบก่อน');
-        history.push({
-          pathname: '/login',
-        });
+      	_self.openNotificationWithIcon('error', 'กรุณาเข้าสู่ระบบก่อน');
+      	history.push({
+		      pathname: '/login',
+		    });
       }
-    });
-  }
-
-  getProfile = (props) => {
-
-    firebase.core().auth().onAuthStateChanged((user) => {
-
-      if (!user) {
-
-        notification['error']({
-          message: 'กรุณาเข้าสู่ระบบก่อน',
-        });
-
-        const { history } = props;
-        history.push({
-          pathname: '/',
-        });
-
-      }
-
-      const { fetchUserProfile } = this.props.actions;
-      fetchUserProfile(user);
-
     });
   }
 
   openNotificationWithIcon = (type, message, description) => {
-    const data = {};
-    data['message'] = message;
-    if ( description ) data['description'] = description;
-    notification[type](data);
+  	const data = {};
+		data['message'] = message;
+		if ( description ) data['description'] = description;
+	  notification[type](data);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { sell, history } = this.props;
-    if ( sell.redirect === true ) {
-      history.push({
-        pathname: '/',
-      });
-    }
-  }
-
-  prevStep = () => {
-    const { prevStep } = this.props.actions;
-    prevStep();
-  }
-
-  nextStep = () => {
-
-    let errorMessage = this.validateForm();
-    if ( errorMessage ) {
-      alert(errorMessage);
-      return false;
-    }
-
-    const { sell } = this.props;
-    if ( sell.step < steps.length-1 ) {
-      const { nextStep } = this.props.actions;
-      nextStep();
-    } else {
-      this.submit();
-    }
-  }
-
-  validateForm = () => {
-    let errorMessage = '';
-
-    const { sell } = this.props;
-
-    if ( sell.step === 0 ) {
-      errorMessage = this.validateFormStep0();
-    } else if ( sell.step === 2 ) {
-      errorMessage = this.validateFormStep2();
-    } else if ( sell.step === 3 ) {
-      errorMessage = this.validateFormStep3();
-    }
-
-    return errorMessage;
-  }
-
-  checkRequiredField = (step) => {
-    let errorMessage = '';
-
-    const { sell } = this.props;
-    _.forEach(sell[step].requiredField, (value, key) => {
-      if ( sell.step0[value] === '' ) {
-        errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
-      }
-    });
-
-    return errorMessage;
+  	const { sell, history } = this.props;
+  	if ( sell.redirect === true ) {
+  		history.push({
+	      pathname: '/',
+	    });
+  	}
   }
 
 	prevStep = () => {
@@ -235,7 +160,7 @@ class Sell extends Component {
 					errorMessage = '"รหัสไปรษณีย์" ไม่ถูกต้อง';
 				}
 			}
-
+			
 		}
 		return errorMessage;
 	}
@@ -265,10 +190,12 @@ class Sell extends Component {
 	}
 
 	submit = () => {
-		const { sell, user } = this.props;
+		const { sell } = this.props;
+		const { user } = this.state;
 		const { doCreateRealEstate } = this.props.actions;
 		if ( sell.sendingData === false ) {
-			doCreateRealEstate(sell, user);
+			console.log('sell', sell);
+			// doCreateRealEstate(sell, user.contentful);
 		}
 	}
 
@@ -310,55 +237,59 @@ class Sell extends Component {
 
 		let buttonAction = null;
     if ( step === 0 ) {
-      buttonAction =
-                    <div className="row">
-                      <center>
-                        <button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
-                      </center>
-                    </div>;
+      buttonAction = 
+      							<div className="row">
+			        				<center>
+			        					<button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
+			        				</center>
+			        			</div>;
     } else {
-      buttonAction = (
-        <div className="row">
-          <div className="col-md-6 text-right">
-            <button type="button" className="btn btn-default" onClick={this.prevStep}>ย้อนกลับ</button>
-          </div>
-          <div className="col-md-6">
-            <button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
-          </div>
-        </div>);
+    	buttonAction = 
+    								<div className="row">
+	      							<div className="col-md-6 text-right">
+			        					<button type="button" className="btn btn-default" onClick={this.prevStep}>ย้อนกลับ</button>
+			        				</div>
+			        				<div className="col-md-6">
+			        					<button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
+			        				</div>
+			        			</div>;
     }
 
-    let divRender =
+    let divRender = 
     								<div>
-
+    									<div className="container">
+							      		<div className="row">
+								        	<div className="col-md-10 col-md-offset-1">
+								        		<div className="steps">
+								        			<Steps current={step}>
+								        				{ steps.map(item => <Step key={item.title} title={item.title} />) }
+														  </Steps>
+								        		</div>
+								        	</div>
+								        </div>
+							      	</div>
+							        <hr/>
+							        {renderStep}
+							        <div className="container">
+							      		<div className="row">
+								        	<div className="col-md-6 col-md-offset-3">
+								        		<div className="action">
+								        			{buttonAction}
+								        		</div>
+								        	</div>
+								        </div>
+							      	</div>
     								</div>
 
     return (
       <div id="Sell">
-        <Spin tip="Loading..." spinning={sendingData}>
-        	<div className="container">
-	      		<div className="row">
-		        	<div className="col-md-10 col-md-offset-1">
-		        		<div className="steps">
-		        			<Steps current={step}>
-		        				{ steps.map(item => <Step key={item.title} title={item.title} />) }
-								  </Steps>
-		        		</div>
-		        	</div>
-		        </div>
-	      	</div>
-	        <hr/>
-	        {renderStep}
-	        <div className="container">
-	      		<div className="row">
-		        	<div className="col-md-6 col-md-offset-3">
-		        		<div className="action">
-		        			{buttonAction}
-		        		</div>
-		        	</div>
-		        </div>
-	      	</div>
-        </Spin>
+      	{sendingData === true ? (
+	        <Spin tip="Loading...">
+	        	{divRender}
+	        </Spin>
+	      ) : (
+	        <div>{divRender}</div>
+	      )}
       </div>
     );
   }
@@ -366,13 +297,11 @@ class Sell extends Component {
 
 const mapStateToProps = state => {
   return {
-  	user: state.user.data,
     sell: state.sell,
   };
 }
 
 const actions = {
-	fetchUserProfile: UserActions.fetchUserProfile,
 	nextStep: SellActions.nextStep,
 	prevStep: SellActions.prevStep,
 	doCreateRealEstate: SellActions.doCreateRealEstate,

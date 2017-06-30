@@ -18,9 +18,11 @@ import SelectSellType from '../../components/SelectSellType';
 import SelectResidentialType from '../../components/SelectResidentialType';
 import SelectRoom from '../../components/SelectRoom';
 
+import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
 import * as ConfigActions from '../../actions/config-actions';
 
+import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
 
 class Home extends Component {
@@ -29,39 +31,16 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-
-    // const { configRealestate } = this.props;
-
-    this.state = {
-      advanceExpand: false,
-      // filter: {
-      //   for: '',
-      //   query: '',
-      //   price: {
-      //     min: configRealestate.data.priceMin,
-      //     max: configRealestate.data.priceMax,
-      //   },
-      //   residentialType: '',
-      //   room: {
-      //     bedroom: '',
-      //     bathroom: '',
-      //   },
-      //   specialFeature: {},
-      // },
-    }
+    this.getProfile(props);
+    this.getConfig(props);
+    this.goFilter(props.location);
   }
 
-  componentWillMount() {
-
+  state = {
+    advanceExpand: false,
   }
 
   componentDidMount() {
-    const { fetchConfigs } = this.props.actions;
-    fetchConfigs();
-
-    const { location } = this.props;
-    this.goFilter(location);
-    
     document.getElementById("Footer").style.visibility = "hidden";
     document.addEventListener('scroll', this.handleScroll);
     this.headerHeight = document.getElementById('Header').clientHeight;
@@ -73,20 +52,22 @@ class Home extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    
-  }
-
   componentWillUnmount() {
     document.removeEventListener('scroll', this.handleScroll);
+  }
+
+  getProfile = (props) => {
+    firebase.core().auth().onAuthStateChanged((user) => {
+      if (user) {
+        const { fetchUserProfile } = props.actions;
+        fetchUserProfile(user);
+      }
+    });
+  }
+
+  getConfig = (props) => {
+    const { fetchConfigs } = props.actions;
+    fetchConfigs();
   }
 
   handleScroll = (event) => {
@@ -97,7 +78,6 @@ class Home extends Component {
     } else {
       if (document.getElementsByClassName("PropShop")[0].classList.contains('end')) {
         document.getElementsByClassName("PropShop")[0].classList.remove('end');
-        // document.getElementById('Footer').style.top = '100px';
       }
     }    
   }
@@ -223,7 +203,7 @@ class Home extends Component {
 
   render() {
 
-    const { banner, realestate, configRealestate, history, location } = this.props;
+    const { banner, realestate, configRealestate, location } = this.props;
     const { advanceExpand } = this.state;
 
     const stepMarks = {
@@ -240,9 +220,6 @@ class Home extends Component {
         label: helpers.convertRealestatePrice(configRealestate.data.priceMax),
       },
     };
-
-    // const selectBedroom = this.renderSelectOption(configRealestate.data.bedroom);
-    // const selectBathroom = this.renderSelectOption(configRealestate.data.bathroom);
 
     let search = [];
     const param = location.search;
@@ -502,6 +479,7 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
+    user: state.user.data,
     banner: state.banners,
     realestate: state.realestates,
     configRealestate: state.config,
@@ -509,6 +487,7 @@ const mapStateToProps = state => {
 }
 
 const actions = {
+  fetchUserProfile: UserActions.fetchUserProfile,
   fetchRealestates: RealestateActions.fetchRealestates,
   fetchConfigs: ConfigActions.fetchConfigs,
 };

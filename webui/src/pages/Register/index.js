@@ -6,8 +6,9 @@ import FontAwesome from 'react-fontawesome';
 import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
 
-import BannerRealEstate from '../../containers/BannerRealEstate';
-import SocialLogin from '../../containers/SocialLogin';
+// import BannerRealEstate from '../../containers/BannerRealEstate';
+// import SocialLogin from '../../containers/SocialLogin';
+import MemberInfo from '../../containers/MemberInfo';
 
 class Register extends Component {
 
@@ -15,6 +16,10 @@ class Register extends Component {
     submitting: false,
     registerSuccess: false,
     errorMessage: '',
+    username: {
+      value: '',
+      errorMessage: '',
+    },
     email: {
       value: '',
       errorMessage: '',
@@ -54,6 +59,16 @@ class Register extends Component {
     });
   }
 
+  handleInputUsername = (e) => {
+    const value = e.target.value;
+    this.setState(prevState => ({
+      username: {
+        ...prevState.username,
+        value: value,
+      }
+    }));
+  }
+
   handleInputEmail = (e) => {
     const value = e.target.value;
     this.setState(prevState => ({
@@ -82,6 +97,17 @@ class Register extends Component {
         value: value,
       }
     }));
+  }
+
+  checkUsername = (username) => {
+    const errorMessage = username === '' ? 'กรุณากรอกชื่อสมาชิก' : '';
+    this.setState(prevState => ({
+      username: {
+        ...prevState.username,
+        errorMessage: errorMessage,
+      }
+    }));
+    return errorMessage;
   }
 
   checkEmail = (email) => {
@@ -130,16 +156,18 @@ class Register extends Component {
 
     const _self = this;
     
+    const username = this.state.username.value;
     const email = this.state.email.value;
     const password1 = this.state.password1.value;
     const password2 = this.state.password2.value;
 
+    const errorUsername = this.checkUsername(username);
     const errorEmail = this.checkEmail(email);
     this.checkPassword(password1);
     const errorPassword = this.checkConfirmPassword(password1, password2);
 
-    if ( errorEmail === '' && errorPassword === '' ) {
-      firebase.createUser(email, password1).then(function(errorMessage) {
+    if ( errorUsername === '' && errorEmail === '' && errorPassword === '' ) {
+      firebase.createUser(username, email, password1).then(function(errorMessage) {
         if ( errorMessage ) {
           _self.setState({
             submitting: false,
@@ -175,6 +203,7 @@ class Register extends Component {
 
     const { submitting } = this.state; 
 
+    const usernameErrorMessage = this.state.username.errorMessage ? <span className="text-red">({this.state.username.errorMessage})</span> : '';
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
     const password1ErrorMessage = this.state.password1.errorMessage ? <span className="text-red">({this.state.password1.errorMessage})</span> : '';
     const password2ErrorMessage = this.state.password2.errorMessage ? <span className="text-red">({this.state.password2.errorMessage})</span> : '';
@@ -183,7 +212,7 @@ class Register extends Component {
       <div id="Register">
       	<div className="row">
       		<div className="hidden-xs hidden-sm col-md-6 layout-left">
-      			<BannerRealEstate />
+      			<MemberInfo />
       		</div>
           <div className="col-md-6 col-md-offset-6 layout-right">
             <Spin tip="Loading..." spinning={submitting}>
@@ -208,6 +237,10 @@ class Register extends Component {
                     ) : (
                       <div>
                         <div className="form-group">
+                          <label><span className="text-red">*</span> ชื่อสมาชิก {usernameErrorMessage}</label>
+                          <Input onChange={this.handleInputUsername} value={this.state.username.value} />
+                        </div>
+                        <div className="form-group">
                           <label><span className="text-red">*</span> อีเมล {emailErrorMessage}</label>
                           <Input onChange={this.handleInputEmail} value={this.state.email.value} />
                         </div>
@@ -220,17 +253,19 @@ class Register extends Component {
                           <Input type="password" onChange={this.handleInputPassword2} value={this.state.password2.value} />
                         </div>
                         <div className="form-group action">
-                          <button className="btn btn-primary" onClick={this.submit} >ตกลง</button>
+                          <button className="btn btn-primary" onClick={this.submit} >สมัครสมาชิก</button>
                         </div>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
+              {/*
               <hr/>
               <div className="social_login">
                 <SocialLogin error={this.handleSocialError} />
               </div>
+              */}
             </Spin>
           </div>
       	</div>

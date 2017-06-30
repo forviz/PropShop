@@ -73,8 +73,8 @@ const reducers = (state = initalState, action) => {
 				requiredField: _.filter(state.step0.requiredField, (field) => { return field !== action.field; }),
 			}
 		};
-		case 'SELL/DATA/SENDING': return {...state, sendingData: true };
-		case 'SELL/DATA/SEND/SUCCESS': return {...state, sendData: true };
+		case 'SELL/DATA/SENDING': return {...state, sendingData: action.status };
+		case 'SELL/DATA/SEND/SUCCESS': return {...state, sendData: action.status };
 		default:
 			return state;
 	}

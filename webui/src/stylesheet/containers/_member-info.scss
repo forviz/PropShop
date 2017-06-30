@@ -1,0 +1,43 @@
+.MemberInfo {
+
+	height: 100%;
+	background: #f6f6f6;
+
+	.layout {
+		padding: 100px;
+		margin: auto;
+		> .title {
+			font-family: $sukumvit-bold;
+			font-size: 36px;
+			color: $text-green;
+		}
+		> .description {
+			margin-top: 10px;
+		}
+		.info {
+			.block {
+				margin: 20px 0;
+				.image {
+					text-align: center;
+					img {
+						width: 60px;
+					}
+				}
+				.title {
+					font-family: $sukumvit-bold;
+					font-size: 18px;
+				}
+				.description {
+					margin-top: 5px;
+				}
+			}
+		}
+	}
+
+	@media screen and (max-width: 1200px) {
+    .layout {
+    	padding: 60px;
+    }
+	}
+		
+}

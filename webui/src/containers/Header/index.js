@@ -2,27 +2,17 @@ import React, { Component } from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { withTranslate, IntlActions } from 'react-redux-multilingual';
 import FontAwesome from 'react-fontawesome';
 import logo from '../../images/logo.png';
-import * as firebase from '../../api/firebase';
+
+import * as UserActions from '../../actions/user-actions';
 
 class Header extends Component {
 
 	state = {
-		user: {},
 		showMobileMenu: false,
-	}
-
-	componentDidMount() {
-		const _self = this;
-		firebase.core().auth().onAuthStateChanged(function(user) {
-		  if (user && user.emailVerified === true) {
-		  	_self.setState(prevState => ({
-		      user: user,
-		    }));
-		  }
-		});
 	}
 
 	handleMobileMenu = () => {
@@ -32,14 +22,13 @@ class Header extends Component {
 	}
 
 	logout = () => {
-		const _self = this;
-		firebase.core().auth().signOut().then(function() {
-		  _self.setState(prevState => ({
-	      user: {},
-	    }));
-		}).catch(function(error) {
-		  console.log('error', error);
-		});
+		const { history } = this.props;
+    history.push({
+      pathname: '/',
+    });
+
+    const { logout } = this.props.actions;
+    logout();
 	}
 
 	handleMenuClick = (value) => {
@@ -50,31 +39,47 @@ class Header extends Component {
 
   render() {
 
-  	const { user, showMobileMenu } = this.state;
-  	const { translate, dispatch } = this.props;
+  	const { showMobileMenu } = this.state;
+  	const { user, translate, dispatch } = this.props;
 
-  	let loginLabel = 
-  										<NavLink exact to="/login">
-				            		<FontAwesome name='user-o' />
-				            		{translate('เข้าสู่ระบบ')}
-				            	</NavLink>
+  	console.log('Header', user);
 
-		if ( user.email ) {
+  	let loginLabel = null;
+
+		if ( user.username ) {
+
 			const menu = (
 			  <Menu onClick={this.handleMenuClick}>
 			    <Menu.Item key="profile">
-			    	<NavLink exact to="/">Profile</NavLink>
+			    	<NavLink exact to="/profile">การตั้งค่าบัญชีผู้ใช้</NavLink>
 			    </Menu.Item>
 			    <Menu.Divider />
-			    <Menu.Item key="logout">Logout</Menu.Item>
+			    <Menu.Item key="logout">ออกจากระบบ</Menu.Item>
 			  </Menu>
 			);
+
+			let divAvatar = null;
+			if ( user.image ) {
+				divAvatar = 
+									<div className="avatar">
+										<img src={user.image.fields.file.url} alt={user.image.fields.file.fileName} className="img-circle" />
+									</div>
+			} else {
+				divAvatar = <FontAwesome name='user-o' />
+			}
+
 			loginLabel = 	
 									<Dropdown overlay={menu} trigger={['click']}>
-								    <a className="ant-dropdown-link" href="#">
-								      {user.email} <Icon type="down" />
+								    <a className="ant-dropdown-link">
+								    	{divAvatar} {user.username} <Icon type="down" />
 								    </a>
 								  </Dropdown>
+		} else {
+			loginLabel = 
+									<NavLink exact to="/login">
+		            		<FontAwesome name='user-o' />
+		            		{translate('เข้าสู่ระบบ')}
+		            	</NavLink>
 		}
 
     return (
@@ -113,4 +118,20 @@ class Header extends Component {
   }
 }
 
-export default connect()(withTranslate(Header));
+const mapStateToProps = state => {
+  return {
+    user: state.user.data,
+  };
+}
+
+const actions = {
+  logout: UserActions.logout,
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslate(Header));

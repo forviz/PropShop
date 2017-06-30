@@ -20,6 +20,7 @@ const mapRegisterErrorMessage = (errorMessage) => {
 	data['auth/user-not-found'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
 	data['The password is invalid or the user does not have a password.'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
 	data['There is no user record corresponding to this identifier. The user may have been deleted.'] = 'ไม่พบอีเมลนี้';
+	data['createUserWithEmailAndPassword failed: Second argument "password" must be a valid string.'] = 'รหัสผ่านต้องเป็นภาษาอังกฤษเท่านั้น';
 	return data[errorMessage] ? data[errorMessage] : errorMessage;
 }
 
@@ -27,17 +28,25 @@ export const core = () => {
 	return firebase;
 }
 
-export const createUser = (email, password) => {
+export const createUser = (username, email, password) => {
 	return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-	  return contentful.createUser(user).then((userContentful) => {
-	  	// window.location = "/";
-	    return user.sendEmailVerification().then(function() {
-	    	return;
-	      // window.location = "/";
-	    }, function(error) {
-	      return error;
-	    });
-	  });
+
+		return user.updateProfile({
+		  displayName: username,
+		}).then(function() {
+		  // Update successful.
+		  return contentful.createUser(user).then((userContentful) => { // create user to contentful
+		  	// window.location = "/";
+		    return user.sendEmailVerification().then(function() { // firebase send mail verification
+		    	return;
+		      // window.location = "/";
+		    }, function(error) {
+		      return error;
+		    });
+		  });
+		}, function(error) {
+		  // An error happened.
+		});
 	}).catch(function(error) {
 		return mapRegisterErrorMessage(error.message);
 	});
@@ -64,24 +73,26 @@ const getProviderForProviderId = (providerId) => {
 	switch(providerId) {
 		case 'facebook.com':
       provider = new firebase.auth.FacebookAuthProvider();
-      provider.addScope('email');
+      provider.addScope('public_profile');
+			provider.addScope('email');
       break;
     case 'google.com':
       provider = new firebase.auth.GoogleAuthProvider();
-      provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+      provider.addScope('profile');
+			provider.addScope('email');
       break;
     case 'twitter.com':
       provider = new firebase.auth.TwitterAuthProvider();
       break;
     default:
       provider = new firebase.auth.FacebookAuthProvider();
-      provider.addScope('email');
+      provider.addScope('public_profile');
+			provider.addScope('email');
 	}
 	return provider;
 }
 
 const differentCredential = async (provider, error) => {
-	console.log('differentCredential', error);
 	if (error.code === 'auth/account-exists-with-different-credential') {
     const pendingCred = error.credential;
     const email = error.email;
@@ -100,16 +111,13 @@ const differentCredential = async (provider, error) => {
 }
 
 const signInWithProvider = async (provider) => {
-	console.log('signInWithProvider', provider);
 	return await firebase.auth().signInWithPopup(provider).then(function(result) {
-		console.log('result', result);
 	  // const token = result.credential.accessToken;
 	  const user = result.user;
 	  contentful.createUser(user).then((userContentful) => {
-	  	window.location = "/";
+	  	return;
 	  });
 	}).catch(function(error) {
-		console.log('error', error);
 		return differentCredential(provider, error).then((errorMessage) => {
 	  	return errorMessage;
 	  });
@@ -129,4 +137,20 @@ export const signInWithGoogle = async () => {
 export const signInWithTwitter = async () => {
 	const provider = getProviderForProviderId('twitter.com');
 	return await signInWithProvider(provider);
+}
+
+export const verifiedUser = (user) => {
+	let verified = false;
+	if (user) {
+		if (user.providerData[0].providerId === 'password') {
+			if (user.emailVerified === true) {
+				verified = true;
+			}
+		} else {
+			if (user.email) {
+				verified = true;
+			}
+		}
+	}
+	return verified;
 }
