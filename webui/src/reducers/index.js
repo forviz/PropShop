@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { IntlReducer as Intl } from 'react-redux-multilingual';
-// import user from './user';
+import user from './user';
 import config from './config';
 import banners from './banners';
 import realestates from './realestates';
@@ -15,10 +15,13 @@ import activities from './entities/activities';
 // Domain
 import agentSearch from './domain/agent-search';
 
+// Form
+import profile from './form/profile';
+
 export default combineReducers({
   Intl,
   config,
-  // user,
+  user,
   banners,
   realestates,
   sell,
@@ -30,5 +33,8 @@ export default combineReducers({
   }),
   domain: combineReducers({
     agentSearch,
+  }),
+  form: combineReducers({
+    profile,
   }),
 });

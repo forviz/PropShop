@@ -8,12 +8,18 @@ const goSaveStep = (step, data) => {
   };
 };
 
-const sendingData = () => {
-  return { type: 'SELL/DATA/SENDING' };
+const sendingData = (status) => {
+  return { 
+    type: 'SELL/DATA/SENDING',
+    status: status
+  };
 };
 
-const sendDataSuccess = () => {
-  return { type: 'SELL/DATA/SEND/SUCCESS' };
+export const sendDataSuccess = (status) => {
+  return { 
+    type: 'SELL/DATA/SEND/SUCCESS',
+    status: status
+  };
 };
 
 const redirect = () => {
@@ -58,9 +64,10 @@ export const removeRequiredField = (field) => {
 export const doCreateRealEstate = (sell, user) => {
 
 	return dispatch => {
-		dispatch(sendingData());
+		dispatch(sendingData(true));
 		createRealEstate(sell, user).then(result => {
-			dispatch(sendDataSuccess());
+			dispatch(sendDataSuccess(true));
+      dispatch(sendingData(false));
 		});
 	}
 }

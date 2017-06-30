@@ -8,6 +8,7 @@ import _ from 'lodash';
 import * as firebase from '../../api/firebase';
 import * as contentful from '../../api/contentful';
 import * as SellActions from '../../actions/sell-actions';
+import * as UserActions from '../../actions/user-actions';
 
 import Step0 from './step0';
 import Step1 from './step1';
@@ -27,11 +28,8 @@ class Sell extends Component {
 
 	constructor(props) {
     super(props);
+    this.getProfile(props);
   }
-
-	state = {
-		user: {},
-	}
 
 	componentDidMount() {
 		const { history } = this.props;
@@ -50,6 +48,29 @@ class Sell extends Component {
 		      pathname: '/login',
 		    });
       }
+    });
+  }
+
+  getProfile = (props) => {
+
+    firebase.core().auth().onAuthStateChanged((user) => {
+
+      if (!user) {
+
+        notification['error']({
+          message: 'กรุณาเข้าสู่ระบบก่อน',
+        });
+
+        const { history } = props;
+        history.push({
+          pathname: '/',
+        });
+
+      }
+
+      const { fetchUserProfile } = this.props.actions;
+      fetchUserProfile(user);
+
     });
   }
 
@@ -190,12 +211,21 @@ class Sell extends Component {
 	}
 
 	submit = () => {
-		const { sell } = this.props;
-		const { user } = this.state;
+		const { sell, user } = this.props;
 		const { doCreateRealEstate } = this.props.actions;
 		if ( sell.sendingData === false ) {
-			doCreateRealEstate(sell, user.contentful);
+			doCreateRealEstate(sell, user);
 		}
+	}
+
+	success = () => {
+		const { history } = this.props;
+		const { sendDataSuccess } = this.props.actions;
+    sendDataSuccess(false);
+		this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
+  	history.push({
+      pathname: '/',
+    });
 	}
 
   render() {
@@ -204,10 +234,7 @@ class Sell extends Component {
   	const { step, step0, step1, step2, step3, sendingData, sendData } = sell;
 
   	if ( sendData === true ) {
-  		this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
-    	history.push({
-	      pathname: '/',
-	    });
+  		this.success();
   	}
 
   	let renderStep = null;
@@ -249,39 +276,35 @@ class Sell extends Component {
 
     let divRender = 
     								<div>
-    									<div className="container">
-							      		<div className="row">
-								        	<div className="col-md-10 col-md-offset-1">
-								        		<div className="steps">
-								        			<Steps current={step}>
-								        				{ steps.map(item => <Step key={item.title} title={item.title} />) }
-														  </Steps>
-								        		</div>
-								        	</div>
-								        </div>
-							      	</div>
-							        <hr/>
-							        {renderStep}
-							        <div className="container">
-							      		<div className="row">
-								        	<div className="col-md-6 col-md-offset-3">
-								        		<div className="action">
-								        			{buttonAction}
-								        		</div>
-								        	</div>
-								        </div>
-							      	</div>
+    									
     								</div>
 
     return (
       <div id="Sell">
-      	{sendingData === true ? (
-	        <Spin tip="Loading...">
-	        	{divRender}
-	        </Spin>
-	      ) : (
-	        <div>{divRender}</div>
-	      )}
+        <Spin tip="Loading..." spinning={sendingData}>
+        	<div className="container">
+	      		<div className="row">
+		        	<div className="col-md-10 col-md-offset-1">
+		        		<div className="steps">
+		        			<Steps current={step}>
+		        				{ steps.map(item => <Step key={item.title} title={item.title} />) }
+								  </Steps>
+		        		</div>
+		        	</div>
+		        </div>
+	      	</div>
+	        <hr/>
+	        {renderStep}
+	        <div className="container">
+	      		<div className="row">
+		        	<div className="col-md-6 col-md-offset-3">
+		        		<div className="action">
+		        			{buttonAction}
+		        		</div>
+		        	</div>
+		        </div>
+	      	</div>
+        </Spin>
       </div>
     );
   }
@@ -289,14 +312,17 @@ class Sell extends Component {
 
 const mapStateToProps = state => {
   return {
+  	user: state.user.data,
     sell: state.sell,
   };
 }
 
 const actions = {
+	fetchUserProfile: UserActions.fetchUserProfile,
 	nextStep: SellActions.nextStep,
 	prevStep: SellActions.prevStep,
 	doCreateRealEstate: SellActions.doCreateRealEstate,
+	sendDataSuccess: SellActions.sendDataSuccess,
 };
 
 const mapDispatchToProps = dispatch => {
