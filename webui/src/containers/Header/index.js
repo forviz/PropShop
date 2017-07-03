@@ -53,6 +53,9 @@ class Header extends Component {
 			    <Menu.Item key="profile">
 			    	<NavLink exact to="/profile">การตั้งค่าบัญชีผู้ใช้</NavLink>
 			    </Menu.Item>
+			    <Menu.Item key="changepassword">
+			    	<NavLink exact to="/changepassword">เปลี่ยนรหัสผ่าน</NavLink>
+			    </Menu.Item>
 			    <Menu.Divider />
 			    <Menu.Item key="logout">ออกจากระบบ</Menu.Item>
 			  </Menu>
@@ -70,7 +73,7 @@ class Header extends Component {
 
 			loginLabel = 	
 									<Dropdown overlay={menu} trigger={['click']}>
-								    <a className="ant-dropdown-link">
+								    <a className="ant-dropdown-link user-menu">
 								    	{divAvatar} {user.username} <Icon type="down" />
 								    </a>
 								  </Dropdown>

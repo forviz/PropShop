@@ -13,7 +13,7 @@ const config = {
 
 firebase.initializeApp(config);
 
-const mapRegisterErrorMessage = (errorMessage) => {
+export const mapFirebaseErrorMessage = (errorMessage) => {
 	const data = [];
 	data['The email address is already in use by another account.'] = 'คุณเคยสมัครอีเมลนี้แล้ว';
 	data['Password should be at least 6 characters'] = 'รหัสผ่านควรมี 6 ตัวอักษรขึ้นไป';
@@ -48,7 +48,7 @@ export const createUser = (username, email, password) => {
 		  // An error happened.
 		});
 	}).catch(function(error) {
-		return mapRegisterErrorMessage(error.message);
+		return mapFirebaseErrorMessage(error.message);
 	});
 }
 
@@ -56,7 +56,7 @@ export const signIn = (email, password) => {
 	return firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
 	  window.location = "/";
 	}).catch(function(error) {
-	  return mapRegisterErrorMessage(error.message);
+	  return mapFirebaseErrorMessage(error.message);
 	});
 }
 
@@ -64,7 +64,7 @@ export const forgotpassword = (email) => {
 	return firebase.auth().sendPasswordResetEmail(email).then(function() {
 	  return false;
 	}, function(error) {
-	  return mapRegisterErrorMessage(error.message);
+	  return mapFirebaseErrorMessage(error.message);
 	});
 }
 
@@ -153,4 +153,12 @@ export const verifiedUser = (user) => {
 		}
 	}
 	return verified;
+}
+
+export const updatePassword = (newPassword) => {
+	return firebase.auth().currentUser.updatePassword(newPassword).then(function() {
+	  return;
+	}, function(error) {
+		return error;
+	});
 }

@@ -31,46 +31,20 @@ class Sell extends Component {
     this.getProfile(props);
   }
 
-	componentDidMount() {
-		const { history } = this.props;
-    const _self = this;
-    firebase.core().auth().onAuthStateChanged(function(user) {
-      if (user && user.emailVerified === true) {
-      	contentful.getUserData(user.uid).then((response) => {
-      		user['contentful'] = response;
-      		_self.setState(prevState => ({
-	          user: user,
-	        }));
-		  	});
-      } else {
-      	_self.openNotificationWithIcon('error', 'กรุณาเข้าสู่ระบบก่อน');
-      	history.push({
-		      pathname: '/login',
-		    });
-      }
-    });
-  }
-
   getProfile = (props) => {
-
     firebase.core().auth().onAuthStateChanged((user) => {
-
-      if (!user) {
-
-        notification['error']({
+    	if (user) {
+    		const { fetchUserProfile } = props.actions;
+	      fetchUserProfile(user);
+    	} else {
+    		notification['error']({
           message: 'กรุณาเข้าสู่ระบบก่อน',
         });
-
         const { history } = props;
         history.push({
           pathname: '/',
         });
-
-      }
-
-      const { fetchUserProfile } = this.props.actions;
-      fetchUserProfile(user);
-
+    	}
     });
   }
 

@@ -62,7 +62,6 @@ export const removeRequiredField = (field) => {
 };
 
 export const doCreateRealEstate = (sell, user) => {
-
 	return dispatch => {
 		dispatch(sendingData(true));
 		createRealEstate(sell, user).then(result => {

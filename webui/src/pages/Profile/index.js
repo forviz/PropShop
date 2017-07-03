@@ -7,8 +7,8 @@ import Dropzone from 'react-dropzone';
 import _ from 'lodash';
 
 import * as firebase from '../../api/firebase';
-import MemberInfo from '../../containers/MemberInfo';
 import * as UserActions from '../../actions/user-actions';
+import MemberInfo from '../../containers/MemberInfo';
 
 const Option = Select.Option;
 
@@ -214,6 +214,21 @@ class Profile extends Component {
     return errorMessage;
   }
 
+  checkPassword = (password1, password2) => {
+    let errorMessage = '';
+    if ( password1 || password2 ) {
+      if ( password1 !== password2 ) {
+        errorMessage = 'รหัสผ่านไม่ตรงกัน';
+      }
+    }
+    const data = {
+      ...this.props.data.password1,
+      errorMessage: errorMessage,
+    }
+    this.setInput('password1', data);
+    return errorMessage;
+  }
+
   errorMessageTemplate = (message) => {
     if (!message) return message;
     return <span className="text-red">{message}</span>
@@ -238,23 +253,36 @@ class Profile extends Component {
 
     const _self = this;
     const { data, user } = this.props;
-    
+
     // const errorEmail = this.checkEmail(data.email.value);
     const errorUsername = this.checkUsername(data.username.value);
     const errorPrefixName = this.checkPrefixName(data.prefixName.value);
     const errorName = this.checkName(data.name.value);
     const errorLastname = this.checkLastname(data.lastname.value);
     const errorPhone = this.checkPhone(data.phone.value);
+    const errorPassword = this.checkPassword(data.password1.value, data.password2.value);
 
     if ( errorUsername === '' && 
         errorPrefixName === '' && 
         errorName === '' && 
         errorLastname === '' && 
-        errorPhone === '' 
+        errorPhone === '' &&
+        errorPassword === '' 
       ) {
 
       const { updateUserProfile } = this.props.actions;
       updateUserProfile(user.id, this.getOnlyValue(data));
+
+      // if ( data.password1.value && data.password2.value ) {
+      //   firebase.core().auth().currentUser.updatePassword(data.password1.value).then(function() {
+      //     updateUserProfile(user.id, this.getOnlyValue(data));
+      //   }, function(error) {
+      //     console.log('error', error);
+      //   });
+      // } else {
+      //   updateUserProfile(user.id, this.getOnlyValue(data));
+      // }
+
     }
 
   }
@@ -262,7 +290,7 @@ class Profile extends Component {
 
   render() {
 
-    const { data, editing, editSuccess } = this.props;
+    const { user, data, editing, editSuccess } = this.props;
 
     if (Object.keys(data).length === 0) return <div/>;
 
@@ -372,6 +400,7 @@ const mapStateToProps = (state) => {
     editSuccess: state.form.profile.editSuccess,
     errorMessage: state.form.profile.errorMessage,
     data: state.form.profile.data,
+    user: state.user.data,
   };
 };
 

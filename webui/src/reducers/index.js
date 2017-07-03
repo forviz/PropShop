@@ -17,6 +17,7 @@ import agentSearch from './domain/agent-search';
 
 // Form
 import profile from './form/profile';
+import changepassword from './form/changepassword';
 
 export default combineReducers({
   Intl,
@@ -36,5 +37,6 @@ export default combineReducers({
   }),
   form: combineReducers({
     profile,
+    changepassword,
   }),
 });
