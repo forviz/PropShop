@@ -18,9 +18,9 @@
     "build:client": "cd webui && npm run build",
     "prebuild": "npm run build:client",
     "build": "babel server -s -D -d build",
-    "postbuild": "rimraf build/app/webui && ncp webui/build build/app/webui",
-    "start": "node build/app",
-    "start:prod": "NODE_ENV=production node build/app"
+    "postbuild": "rimraf build/webui && ncp webui/build build/webui",
+    "start": "node build",
+    "start:prod": "NODE_ENV=production node build"
   },
   "repository": {
     "type": "git",
