@@ -1,4 +1,5 @@
-import { createRealEstate } from '../api/contentful';
+// import { createRealEstate } from '../api/contentful';
+import { createPost } from '../api/property';
 
 const goSaveStep = (step, data) => {
   return {
@@ -9,21 +10,17 @@ const goSaveStep = (step, data) => {
 };
 
 const sendingData = (status) => {
-  return { 
+  return {
     type: 'SELL/DATA/SENDING',
-    status: status
+    status,
   };
 };
 
 export const sendDataSuccess = (status) => {
-  return { 
+  return {
     type: 'SELL/DATA/SEND/SUCCESS',
-    status: status
+    status,
   };
-};
-
-const redirect = () => {
-  return { type: 'SELL/REDIRECT' };
 };
 
 export const saveStep = (step, data) => (dispatch) => {
@@ -34,13 +31,13 @@ export const saveStep = (step, data) => (dispatch) => {
 export const nextStep = () => {
   return (dispatch) => {
     dispatch({ type: 'SELL/STEP/NEXT' });
-  }
+  };
 };
 
 export const prevStep = () => {
   return (dispatch) => {
     dispatch({ type: 'SELL/STEP/PREV' });
-  }
+  };
 };
 
 export const addRequiredField = (field) => {
@@ -62,11 +59,19 @@ export const removeRequiredField = (field) => {
 };
 
 export const doCreateRealEstate = (sell, user) => {
-	return dispatch => {
-		dispatch(sendingData(true));
-		createRealEstate(sell, user).then(result => {
-			dispatch(sendDataSuccess(true));
-      dispatch(sendingData(false));
-		});
-	}
-}
+  return (dispatch) => {
+    dispatch(sendingData(true));
+    // createRealEstate(sell, user).then(result => {
+    //   dispatch(sendDataSuccess(true));
+    //   dispatch(sendingData(false));
+    // });
+
+    createPost(sell, user).then((result) => {
+      console.log('create post success', result);
+      dispatch(sendDataSuccess());
+    }).catch((error) => {
+      // dispatch(sendDataSuccess());
+      console.log('error', error);
+    });
+  };
+};

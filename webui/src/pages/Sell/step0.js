@@ -147,7 +147,7 @@ class Step0 extends Component {
   //   });
   // }
 
-  
+
 
   setData = (newData) => {
     const { saveStep } = this.props.actions;
@@ -454,7 +454,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('for') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ประกาศประเภท
                             </label>
@@ -467,7 +467,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('residentialType') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ประกาศอสังหาฯ
                             </label>
@@ -480,7 +480,7 @@ class Step0 extends Component {
                       <div className="form-group">
                         <label>
                           {data.requiredField.includes('topic') &&
-                            <span className="text-red">*&nbsp;</span> 
+                            <span className="text-red">*&nbsp;</span>
                           }
                           หัวข้อประกาศ
                         </label>
@@ -489,7 +489,7 @@ class Step0 extends Component {
                       <div className="form-group">
                         <label>
                           {data.requiredField.includes('announcementDetails') &&
-                            <span className="text-red">*&nbsp;</span> 
+                            <span className="text-red">*&nbsp;</span>
                           }
                           รายละเอียดเกี่ยวกับประกาศ
                         </label>
@@ -510,7 +510,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('areaSize') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               พื้นที่ใช้สอย
                             </label>
@@ -533,7 +533,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('landSize') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               จำนวนที่ดิน
                             </label>
@@ -555,7 +555,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('bedroom') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ห้องนอน
                             </label>
@@ -568,7 +568,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('bathroom') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ห้องน้ำ
                             </label>
@@ -581,7 +581,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('price') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ราคา
                             </label>
@@ -608,7 +608,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('fee') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ค่าธรรมเนียมและภาษีโดยประมาณ
                             </label>
@@ -627,7 +627,7 @@ class Step0 extends Component {
                       <div className="form-group">
                         <label>
                           {data.requiredField.includes('project') &&
-                            <span className="text-red">*&nbsp;</span> 
+                            <span className="text-red">*&nbsp;</span>
                           }
                           ชื่อโครงการ
                         </label>
@@ -638,15 +638,15 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('province') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               จังหวัด
                             </label>
-                            <Select 
-                              placeholder="เลือก" 
+                            <Select
+                              placeholder="เลือก"
                               value={data.province ? data.province : []}
                               onChange={this.handleSelectProvince}
-                              style={{ width: '100%' }} 
+                              style={{ width: '100%' }}
                             >
                               {
                                 _.map(provinceJSON, (value, index) => {
@@ -662,16 +662,16 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('amphur') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               อำเภอ/เขต
                             </label>
-                            <Select 
-                              placeholder="เลือกจังหวัด" 
+                            <Select
+                              placeholder="เลือกจังหวัด"
                               value={data.amphur ? data.amphur : []}
-                              disabled={data.province !== '' ? false : true} 
+                              disabled={data.province !== '' ? false : true}
                               onChange={this.handleSelectAmphur}
-                              style={{ width: '100%' }} 
+                              style={{ width: '100%' }}
                             >
                               {amphurData}
                             </Select>
@@ -681,14 +681,14 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('district') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ตำบล/แขวง
                             </label>
-                            <Select 
-                              placeholder="เลือกอำเภอ/เขต" 
+                            <Select
+                              placeholder="เลือกอำเภอ/เขต"
                               value={data.district ? data.district : []}
-                              disabled={data.amphur !== '' ? false : true} 
+                              disabled={data.amphur !== '' ? false : true}
                               onChange={this.handleSelectDistrict}
                               style={{ width: '100%' }}
                             >
@@ -702,7 +702,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('address') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               เลขที่
                             </label>
@@ -713,7 +713,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('street') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               ถนน
                             </label>
@@ -724,7 +724,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('zipcode') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               รหัสไปรษณีย์
                             </label>
@@ -735,7 +735,7 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>
                               {data.requiredField.includes('location') &&
-                                <span className="text-red">*&nbsp;</span> 
+                                <span className="text-red">*&nbsp;</span>
                               }
                               แผนที่
                             </label>
@@ -787,7 +787,22 @@ const mapStateToProps = state => {
   };
 }
 
+const mapStep0DataToSubmitData = (data) => {
+  console.log('data', data);
+  return data;
+};
+
 const actions = {
+  submit: (step, propertyData) => {
+    return (dispatch) => {
+      console.log('propertyData', propertyData);
+      const submitData = mapStep0DataToSubmitData(propertyData);
+      dispatch({
+        type: 'POST/SUBMIT/STEP0',
+        data: submitData,
+      });
+    }
+  },
   saveStep: SellActions.saveStep,
   addRequiredField: SellActions.addRequiredField,
   removeRequiredField: SellActions.removeRequiredField,
