@@ -803,6 +803,29 @@ img {
   padding-left: 38px;
   box-sizing: border-box; }
 
+#News .ant-pagination {
+  margin-bottom: 20px;
+  text-align: center; }
+
+#News .ant-pagination-item-active {
+  background: #8ebc42;
+  border-color: #8ebc42; }
+
+#News .ant-pagination-item:focus, #News .ant-pagination-item:hover {
+  border-color: #8ebc42;
+  color: #8ebc42; }
+
+#News .ant-pagination-prev:active, #News .ant-pagination-next:active, #News .ant-pagination-prev:hover, #News .ant-pagination-next:hover, #News .ant-pagination-prev:focus, #News .ant-pagination-next:focus {
+  border-color: #8ebc42; }
+
+#News .ant-pagination-prev:active a, #News .ant-pagination-next:active a, #News .ant-pagination-prev:hover a, #News .ant-pagination-next:hover a, #News .ant-pagination-prev:focus a, #News .ant-pagination-next:focus a {
+  color: #8ebc42; }
+
+#News .box-spin {
+  width: 100%;
+  padding: 100px;
+  text-align: center; }
+
 #Header .container {
   width: 100%; }
 
@@ -1428,7 +1451,7 @@ body .ant-notification {
   z-index: 2000; }
 
 .NewsItem .list {
-  max-height: 550px;
+  min-height: 520px;
   margin-bottom: 30px; }
 
 .NewsItem .list .image {
@@ -1444,7 +1467,12 @@ body .ant-notification {
   font-size: 18px;
   font-family: "SukhumvitSet-Bold";
   color: #484849;
-  margin: 10px 0; }
+  margin: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; }
 
 .NewsItem .list .date {
   font-size: 14px;
@@ -1454,7 +1482,12 @@ body .ant-notification {
 .NewsItem .list .description {
   font-size: 14px;
   color: #484849;
-  margin: 10px 0; }
+  margin: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical; }
 
 .NewsItem .list .seemore {
   font-size: 14px;

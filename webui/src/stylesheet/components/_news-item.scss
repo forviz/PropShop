@@ -1,6 +1,6 @@
 .NewsItem {
   .list{
-    max-height: 550px;
+    min-height: 520px;
     margin-bottom: 30px;
     .image{
       width: 100%;
@@ -16,6 +16,11 @@
       font-family: $sukumvit-bold;
       color: $text-default;
       margin: 10px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
     .date{
       font-size: 14px;
@@ -26,6 +31,11 @@
       font-size: 14px;
       color: $text-default;
       margin: 10px 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
     }
     .seemore{
       font-size: 14px;

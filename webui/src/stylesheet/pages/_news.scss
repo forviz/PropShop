@@ -44,4 +44,31 @@
     padding-left: 38px;
     box-sizing: border-box; 
   }
+
+  .ant-pagination{
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .ant-pagination-item-active{
+    background: $text-green;
+    border-color: $text-green;
+  }
+  .ant-pagination-item:focus, .ant-pagination-item:hover{
+    border-color: $text-green;
+    color: $text-green;
+  }
+  .ant-pagination-prev:active, .ant-pagination-next:active, .ant-pagination-prev:hover, .ant-pagination-next:hover ,.ant-pagination-prev:focus, .ant-pagination-next:focus{
+    border-color: $text-green;
+    
+    a{
+      color: $text-green;
+    }
+  }
+
+  .box-spin{
+    width: 100%;
+    padding: 100px;
+    text-align: center;
+  }
 }
