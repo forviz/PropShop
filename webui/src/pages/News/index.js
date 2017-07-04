@@ -13,7 +13,7 @@ import NewsBanner from '../../components/NewsBanner';
 import NewsItem from '../../components/NewsItem';
 import HotNews from '../../components/HotNews';
 
-import { getNewsProp } from '../../actions/news-actions';
+import { getNewsProp, getNewsBanner } from '../../actions/news-actions';
 
 const TabPane = Tabs.TabPane;
 
@@ -30,12 +30,15 @@ class News extends Component {
       propNow: T.shape(),
       propTalk: T.shape(),
       propVerdict: T.shape(),
+      newsBanner: T.shape(),
     })).isRequired,
+    fetching: T.boolean().isRequired,
   }
 
   constructor(props) {
     super(props);
     this.props.actions.getNewsProp('prop-now', '1');
+    this.props.actions.getNewsBanner('prop-now');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -81,62 +84,43 @@ class News extends Component {
     if (search) {
       const param = queryString.parse(search);
       this.props.actions.getNewsProp(param.content, param.page);
+      this.props.actions.getNewsBanner(param.content);
     }
   }
 
   render() {
-    const { propNow, propTalk, propVerdict } = this.props.newsItem.entities;
+    const { propNow, propTalk, propVerdict, newsBanner } = this.props.newsItem.entities;
+    const { fetching } = this.props;
 
     if (Object.keys(this.props.newsItem.entities).length === 0) return <div />;
 
-    const newsBanner = [
-      {
-        image: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
-        title: 'ถอดบทเรียน...ไฟไหม้ตึกในลอนดอน สู่อนาคตตึกสูงในกรุงเทพฯ',
-        description: 'จากเหตุเพลิงไหม้เกรนเฟลล์ ทาวเวอร์ กรุงลอนดอน ประเทศอังกฤษ สร้างความสะเทือนใจระดับโลก ชี้ให้เห็นว่าอาคารเก่าและตึกสูง ควรตรวจสอบระบบป้องกันอัคคีภัยเพื่อเตรียมความพร้อมอยู่เสมอ และแน่นอนว่าตึกสูงในไทยก็เช่นเดียวกัน',
-        redirectURL: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
-      },
-      {
-        image: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
-        title: 'ถอดบทเรียน...ไฟไหม้ตึกในลอนดอน สู่อนาคตตึกสูงในกรุงเทพฯ',
-        description: 'จากเหตุเพลิงไหม้เกรนเฟลล์ ทาวเวอร์ กรุงลอนดอน ประเทศอังกฤษ สร้างความสะเทือนใจระดับโลก ชี้ให้เห็นว่าอาคารเก่าและตึกสูง ควรตรวจสอบระบบป้องกันอัคคีภัยเพื่อเตรียมความพร้อมอยู่เสมอ และแน่นอนว่าตึกสูงในไทยก็เช่นเดียวกัน',
-        redirectURL: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
-      },
-      {
-        image: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
-        title: 'ถอดบทเรียน...ไฟไหม้ตึกในลอนดอน สู่อนาคตตึกสูงในกรุงเทพฯ',
-        description: 'จากเหตุเพลิงไหม้เกรนเฟลล์ ทาวเวอร์ กรุงลอนดอน ประเทศอังกฤษ สร้างความสะเทือนใจระดับโลก ชี้ให้เห็นว่าอาคารเก่าและตึกสูง ควรตรวจสอบระบบป้องกันอัคคีภัยเพื่อเตรียมความพร้อมอยู่เสมอ และแน่นอนว่าตึกสูงในไทยก็เช่นเดียวกัน',
-        redirectURL: 'http://www.allapril.com/wp-content/uploads/2016/08/shutterstock_261648890-Child-and-Family-Services.jpg',
-      },
-    ];
-
-    const hotNews = [
-      {
-        text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-        date: '16 มิ.ย. 2560',
-        redirectURL: '###',
-      },
-      {
-        text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-        date: '16 มิ.ย. 2560',
-        redirectURL: '###',
-      },
-      {
-        text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-        date: '16 มิ.ย. 2560',
-        redirectURL: '###',
-      },
-      {
-        text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-        date: '16 มิ.ย. 2560',
-        redirectURL: '###',
-      },
-      {
-        text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-        date: '16 มิ.ย. 2560',
-        redirectURL: '###',
-      },
-    ];
+    // const hotNews = [
+    //   {
+    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
+    //     date: '16 มิ.ย. 2560',
+    //     redirectURL: '###',
+    //   },
+    //   {
+    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
+    //     date: '16 มิ.ย. 2560',
+    //     redirectURL: '###',
+    //   },
+    //   {
+    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
+    //     date: '16 มิ.ย. 2560',
+    //     redirectURL: '###',
+    //   },
+    //   {
+    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
+    //     date: '16 มิ.ย. 2560',
+    //     redirectURL: '###',
+    //   },
+    //   {
+    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
+    //     date: '16 มิ.ย. 2560',
+    //     redirectURL: '###',
+    //   },
+    // ];
 
     return (
       <div id="News">
@@ -149,62 +133,65 @@ class News extends Component {
 
           <div className="row">
             <div className="col-md-12">
-              <NewsBanner datas={newsBanner} />
+              <NewsBanner datas={newsBanner.datas} />
             </div>
           </div>
           <div className="row">
-            <div className="col-md-8">
-              <Tabs defaultActiveKey="prop-now" onChange={this.handleTab}>
-                <TabPane tab="PROP NOW" key="prop-now">
-                  <div className="tap-title">PROP NOW</div>
-                  {
-                    _.isEmpty(propNow) ? <div className="box-spin"><Spin /></div> : ''
-                  }
-                  {propNow &&
-                    <div>
-                      <NewsItem datas={propNow.datas} />
-                      <Pagination
-                        defaultCurrent={1}
-                        total={propNow.total}
-                        onChange={this.handlePage}
-                      />
-                    </div>
-                  }
-                </TabPane>
-                <TabPane tab="PROP TALK" key="prop-talk">
-                  <div className="tap-title">PROP TALK</div>
-                  {
-                    _.isEmpty(propTalk) ? <div className="box-spin"><Spin /></div> : ''
-                  }
-                  {propTalk &&
-                    <div>
-                      <NewsItem datas={propTalk.datas} />
-                      <div className="col-md-12">
-                        <Pagination defaultCurrent={1} total={propTalk.total} onChange={this.handlePage} />
+            <Spin tip="Loading..." spinning={fetching}>
+              <div className="col-md-12">
+                <Tabs defaultActiveKey="prop-now" onChange={this.handleTab}>
+                  <TabPane tab="PROP NOW" key="prop-now">
+                    <div className="tap-title">PROP NOW</div>
+                    {
+                      _.isEmpty(propNow) ? <div className="box-spin"><Spin /></div> : ''
+                    }
+                    {propNow &&
+                      <div>
+                        <NewsItem datas={propNow.datas} />
+                        <Pagination
+                          defaultCurrent={1}
+                          total={propNow.total}
+                          onChange={this.handlePage}
+                        />
                       </div>
-                    </div>
-                  }
-                </TabPane>
-                <TabPane tab="PROP VERDICT" key="prop-verdict">
-                  <div className="tap-title">PROP VERDICT</div>
-                  {
-                    _.isEmpty(propVerdict) ? <div className="box-spin"><Spin /></div> : ''
-                  }
-                  {propVerdict &&
-                    <div>
-                      <NewsItem datas={propVerdict.datas} />
-                      <div className="col-md-12">
-                        <Pagination defaultCurrent={1} total={propVerdict.total} onChange={this.handlePage} />
+                    }
+                  </TabPane>
+                  <TabPane tab="PROP TALK" key="prop-talk">
+                    <div className="tap-title">PROP TALK</div>
+                    {
+                      _.isEmpty(propTalk) ? <div className="box-spin"><Spin /></div> : ''
+                    }
+                    {propTalk &&
+                      <div>
+                        <NewsItem datas={propTalk.datas} />
+                        <div className="col-md-12">
+                          <Pagination defaultCurrent={1} total={propTalk.total} onChange={this.handlePage} />
+                        </div>
                       </div>
-                    </div>
-                  }
-                </TabPane>
-              </Tabs>
-
-            </div>
+                    }
+                  </TabPane>
+                  <TabPane tab="PROP VERDICT" key="prop-verdict">
+                    <div className="tap-title">PROP VERDICT</div>
+                    {
+                      _.isEmpty(propVerdict) ? <div className="box-spin"><Spin /></div> : ''
+                    }
+                    {propVerdict &&
+                      <div>
+                        <NewsItem datas={propVerdict.datas} />
+                        <div className="col-md-12">
+                          <Pagination defaultCurrent={1} total={propVerdict.total} onChange={this.handlePage} />
+                        </div>
+                      </div>
+                    }
+                  </TabPane>
+                </Tabs>
+              </div>
+            </Spin>
+            {/*
             <div className="col-md-4">
               <HotNews datas={hotNews} />
             </div>
+            */}
           </div>
 
         </div>
@@ -217,11 +204,13 @@ const mapStateToProps = (state) => {
   console.log('STATEEEEEEEEEEEEE', state.entities.news);
   return {
     newsItem: state.entities.news,
+    fetching: state.entities.news.fetching,
   };
 };
 
 const actions = {
   getNewsProp,
+  getNewsBanner,
 };
 
 const mapDispatchToProps = (dispatch) => {

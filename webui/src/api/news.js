@@ -3,7 +3,7 @@ export const fetchNewsProp = (tabName, page) => {
   const myInit = {
     method: 'GET',
   };
-  return fetch(`http://propholic.com/wp-json/wp/v2/${tabName}?page=${page}`, myInit)
+  return fetch(`http://propholic.com/wp-json/wp/v2/${tabName}?page=${page}&per_page=9`, myInit)
   .then((res) => {
     total = res.headers.get('X-WP-Total');
 
@@ -19,6 +19,22 @@ export const fetchNewsProp = (tabName, page) => {
       tab,
       data,
       total,
+    };
+    return prop;
+  });
+};
+
+export const fetchNewsBanner = (tabName) => {
+  const myInit = {
+    method: 'GET',
+  };
+  return fetch(`http://propholic.com/wp-json/wp/v2/${tabName}?per_page=5`, myInit)
+  .then((res) => {
+    return res.json();
+  })
+  .then((data) => {
+    const prop = {
+      data,
     };
     return prop;
   });

@@ -5,41 +5,49 @@ import numeral from 'numeral';
 
 import _ from 'lodash';
 
+function strip(html) {
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
 class NewsItem extends Component {
 
   renderSlide = (data) => {
     const backgroundStyle = {
-      'background-image': `url(${data.image})`,
+      'background-image': `url(${data.acf.banner_images.sizes.large})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      opacity: 0.5,
     };
 
+    const title = strip(data.title.rendered);
+    const description = strip(data.acf.content);
+
     return (
-      <div className="banner" >
-        <div className="image-dark" style={backgroundStyle}></div>
+      <div className="banner" style={backgroundStyle}>
+        <a href={data.link} target="_blank"><div className="image-dark" ></div></a>
         <div className="content">
-          <div className="title">{data.title}</div>
-          <div className="description">{data.description}</div>
-          <a href={data.redirectURL}><button className="btn btn-primary" onClick={this.submit} >อ่านเพิ่มเติม</button></a>
+          <a href={data.link} target="_blank"><div className="title">{title}</div></a>
+          {
+            // <div className="description">{description}</div>
+            // <a href={data.link} target="_blank"><button className="btn btn-primary" onClick={this.submit} >อ่านเพิ่มเติม</button></a>
+          }
         </div>
-        
       </div>
     );
   }
 
   render() {
     const { datas } = this.props;
+    console.log('DATABANNER', datas);
 
     return (
       <div className="NewsBanner">
         <ImageGallery
           items={datas}
-          slideInterval={2000}
           showThumbnails={false}
           showFullscreenButton={false}
           showPlayButton={false}
-          showNav={false}
           showBullets
           renderItem={this.renderSlide}
         />

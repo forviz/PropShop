@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Spin } from 'antd';
 import _ from 'lodash';
 import T from 'prop-types';
+import moment from 'moment';
 
 function strip(html) {
   const tmp = document.createElement('DIV');
@@ -21,23 +22,16 @@ class NewsItem extends Component {
 
     if (_.isEmpty(data)) return <Spin />;
 
-    const date = new Date(data.date);
-    // const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-    //   'July', 'August', 'September', 'October', 'November', 'December',
-    // ];
-    const monthNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย', 'พ.ค.', 'มิ.ย.',
-      'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.',
-    ];
-
     const title = strip(data.title.rendered);
     const description = strip(data.acf.content);
-    const getDate = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+    const getDate = moment(data.date).locale('th').format('DD MMM YYYY');
 
     return (
-      <div key={key} className="list col-md-6">
+      <div key={key} className="list col-md-4">
         <div className="image">
           <a href={data.link} target="_blank">
-            <img src={data.acf.banner_images.sizes.medium_large} alt="" />
+            <img src={data.acf.thumbnail_image} alt="" />
           </a>
         </div>
         <div className="title">{title}

@@ -791,7 +791,7 @@ img {
 
 #News .ant-tabs-nav .ant-tabs-tab {
   margin-right: 0px;
-  padding-top: 30px;
+  padding-top: 60px;
   color: #999999; }
 
 #News .ant-tabs-nav .ant-tabs-tab-active {
@@ -1525,7 +1525,6 @@ body .ant-notification {
 .NewsBanner .banner {
   width: 100%;
   height: 460px;
-  background-color: black;
   position: relative; }
 
 .NewsBanner .banner .image-dark {
@@ -1535,23 +1534,33 @@ body .ant-notification {
   z-index: 1; }
 
 .NewsBanner .banner .content {
-  padding: 58px;
+  height: auto;
+  padding: 20px;
   box-sizing: border-box;
   font-family: "SukhumvitSet-Text";
   position: absolute;
-  z-index: 2; }
+  z-index: 2;
+  bottom: 40px;
+  right: 0;
+  background: linear-gradient(to right, transparent, #88b840);
+  width: 100%; }
 
 .NewsBanner .banner .content .title {
-  font-size: 48px;
-  line-height: 60px;
-  width: 70%;
+  width: 50%;
+  float: right;
+  font-size: 32px;
+  line-height: 40px;
   color: #f6f6f6;
+  text-align: left;
   z-index: 2;
   height: auto;
   white-space: normal;
   font-family: "SukhumvitSet-Text";
-  margin-bottom: 20px;
-  margin-top: -20px; }
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical; }
 
 .NewsBanner .banner .content .description {
   font-size: 18px;
@@ -1562,7 +1571,12 @@ body .ant-notification {
   height: auto;
   white-space: normal;
   font-family: "SukhumvitSet-Text";
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical; }
 
 .NewsBanner .banner .content button {
   width: 140px;
@@ -1573,17 +1587,20 @@ body .ant-notification {
   width: 100%;
   padding-right: 25px;
   box-sizing: border-box;
-  bottom: 30px; }
+  bottom: -30px; }
 
 .NewsBanner .image-gallery-bullets .image-gallery-bullets-container {
-  text-align: right; }
+  text-align: center; }
 
 .NewsBanner .image-gallery-bullets .image-gallery-bullet {
   border-radius: 0%;
   padding: 8px;
-  border: 2px solid white;
+  border: 2px solid #999999;
   box-sizing: border-box;
   box-shadow: none; }
 
 .NewsBanner .image-gallery-bullets .image-gallery-bullet.active {
-  background: red; }
+  background: #8ebc42; }
+
+.NewsBanner .image-gallery-left-nav:hover, .NewsBanner .image-gallery-right-nav:hover, .NewsBanner .image-gallery-left-nav:target, .NewsBanner .image-gallery-right-nav:target {
+  color: white; }
