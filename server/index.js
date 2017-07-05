@@ -23,7 +23,7 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
 dotenv.load({ path: '.env' });
 
 const postController = require('./controllers/post');
-
+const propertyController = require('./controllers/property');
 /**
  * Create Express server.
  */
@@ -74,6 +74,7 @@ app.post (`${apiPrefix}/media`, postController.uploadFile);
 app.get(`${apiPrefix}/posts`, postController.queryPosts);
 app.post(`${apiPrefix}/posts`, postController.createPost);
 
+app.get(`${apiPrefix}/properties`, propertyController.queryProperties);
 
 /**
  * CIC App codebase: WEBUI
