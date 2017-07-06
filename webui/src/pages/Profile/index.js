@@ -292,7 +292,7 @@ class Profile extends Component {
 
     const { user, data, editing, editSuccess } = this.props;
 
-    if (Object.keys(data).length === 0) return <div/>;
+    if (Object.keys(data).length === 0) return <div />;
 
     return (
       <div id="Profile">
@@ -361,6 +361,7 @@ class Profile extends Component {
                         </div>
                       </div>
                     </section>
+                    {/*
                     <section>
                       <div className="title">รูปสมาชิก</div>
                       <div className="row">
@@ -380,6 +381,7 @@ class Profile extends Component {
                         </div>
                       </div>
                     </section>
+                    */}
                     <div className="btn-action">
                       <button className="btn btn-primary" onClick={this.submit} >บันทึกการเปลี่ยนแปลง</button>
                     </div>

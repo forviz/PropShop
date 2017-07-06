@@ -505,7 +505,6 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('mapStateToProps', state);
   return {
     user: state.user.data,
     banner: state.banners,

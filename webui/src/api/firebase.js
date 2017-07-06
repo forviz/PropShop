@@ -30,22 +30,15 @@ export const core = () => {
 
 export const createUser = (username, email, password) => {
   return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-
-    return user.updateProfile({
-      displayName: username,
-    }).then(function() {
-      // Update successful.
-      return contentful.createUser(user).then((userContentful) => { // create user to contentful
+    user['username'] = username;
+    return contentful.createUser(user).then((userContentful) => { // create user to contentful
+      // window.location = "/";
+      return user.sendEmailVerification().then(function() { // firebase send mail verification
+        return;
         // window.location = "/";
-        return user.sendEmailVerification().then(function() { // firebase send mail verification
-          return;
-          // window.location = "/";
-        }, function(error) {
-          return error;
-        });
+      }, function(error) {
+        return error;
       });
-    }, function(error) {
-      // An error happened.
     });
   }).catch(function(error) {
     return mapFirebaseErrorMessage(error.message);
@@ -115,6 +108,7 @@ const signInWithProvider = async (provider) => {
     console.log('signInWithProvider', result);
     // const token = result.credential.accessToken;
     const user = result.user;
+    user['username'] = result.displayName;
     contentful.createUser(user).then(() => {
       return false;
     });
@@ -129,7 +123,6 @@ const signInWithProvider = async (provider) => {
 export const signInWithFacebook = async () => {
   const provider = getProviderForProviderId('facebook.com');
   const result = await signInWithProvider(provider);
-  console.log('signInWithFacebook', provider);
   return result;
 };
 

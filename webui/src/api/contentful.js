@@ -192,7 +192,7 @@ export const createUser = (user) => {
       .then(space => space.createEntry('agent', {
         fields: {
           username: {
-            'en-US': user.displayName,
+            'en-US': user.username,
           },
           email: {
             'en-US': user.email,
