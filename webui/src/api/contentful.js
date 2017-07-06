@@ -146,7 +146,7 @@ export const getRealEstate = (search) => {
   if (search.specialFeatureNearbyPlaces) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
   if (search.specialFeaturePrivate) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
   if (search.location) searchEntries['fields.location[within]'] = `${search.location},10`;
-  if (_.size(searchEntries)) {
+  if (_.size(searchEntries) === 0) {
     return false;
   }
   return client.getEntries(searchEntries).then((entry) => {
