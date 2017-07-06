@@ -13,11 +13,6 @@ import MemberInfo from '../../containers/MemberInfo';
 
 class Login extends Component {
 
-  constructor(props) {
-    super(props);
-    this.getProfile(props);
-  }
-
   state = {
     submitting: false,
     errorMessage: '',
@@ -31,10 +26,14 @@ class Login extends Component {
     },
   }
 
-  getProfile = (props) => {
+  componentDidMount() {
+    this.getProfile();
+  }
+
+  getProfile = () => {
     firebase.core().auth().onAuthStateChanged((user) => {
       if (user && firebase.verifiedUser(user)) {
-        const { history } = props;
+        const { history } = this.props;
         history.push({
           pathname: '/',
         });
