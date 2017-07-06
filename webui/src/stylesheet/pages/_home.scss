@@ -123,9 +123,27 @@
 		}
 	}
 
-	@media (min-width: 992px) and (max-width: 1537px) {
-		.col-advance {
+	@media (min-width: 992px) and (max-width: 1463px) {
+		.filter_real_estate .col-advance {
 			margin-top: 10px;
+		}
+	}
+
+	@media (min-width: 1463px) and (max-width: 1489px) {
+		.filter_real_estate .col-advance {
+			width: 20%;
+		}
+	}
+
+	@media (min-width: 1490px) and (max-width: 1517px) {
+		.filter_real_estate .col-advance {
+			width: 21%;
+		}
+	}
+
+	@media (min-width: 1518px) and (max-width: 1537px) {
+		.filter_real_estate .col-advance {
+			width: 22%;
 		}
 	}
 
