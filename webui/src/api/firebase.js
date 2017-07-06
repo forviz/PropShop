@@ -108,7 +108,7 @@ const signInWithProvider = async (provider) => {
     console.log('signInWithProvider', result);
     // const token = result.credential.accessToken;
     const user = result.user;
-    user['username'] = result.displayName;
+    user['username'] = result.displayName ? result.displayName : result.email;
     contentful.createUser(user).then(() => {
       return false;
     });
