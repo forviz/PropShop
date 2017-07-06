@@ -33,7 +33,7 @@ class Login extends Component {
 
   getProfile = (props) => {
     firebase.core().auth().onAuthStateChanged((user) => {
-      if (user && user.emailVerified === true) {
+      if (user && firebase.verifiedUser(user)) {
         const { history } = props;
         history.push({
           pathname: '/',
@@ -47,8 +47,8 @@ class Login extends Component {
     this.setState(prevState => ({
       email: {
         ...prevState.email,
-        value: value,
-      }
+        value,
+      },
     }));
   }
 

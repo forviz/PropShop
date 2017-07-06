@@ -6,9 +6,6 @@ import _ from 'lodash';
 import numeral from 'numeral';
 import queryString from 'query-string';
 
-const TabPane = Tabs.TabPane;
-const Option = Select.Option;
-
 import BannerRealEstate from '../../containers/BannerRealEstate';
 import SpecialFeature from '../../containers/SpecialFeature';
 
@@ -17,6 +14,7 @@ import RealEstateItem from '../../components/RealEstateItem';
 import SelectSellType from '../../components/SelectSellType';
 import SelectResidentialType from '../../components/SelectResidentialType';
 import SelectRoom from '../../components/SelectRoom';
+import SelectElectricTrain from '../../components/SelectElectricTrain';
 
 import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
@@ -24,6 +22,19 @@ import * as ConfigActions from '../../actions/config-actions';
 
 import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
+
+import BTSStationJSON from '../../../public/data/BTSStation.json';
+import MRTStationJSON from '../../../public/data/MRTStation.json';
+import BRTStationJSON from '../../../public/data/BRTStation.json';
+
+const electricTrainStation = {
+  bts: BTSStationJSON,
+  mrt: MRTStationJSON,
+  brt: BRTStationJSON,
+};
+
+const TabPane = Tabs.TabPane;
+const Option = Select.Option;
 
 class Home extends Component {
 
@@ -38,10 +49,11 @@ class Home extends Component {
 
   state = {
     advanceExpand: false,
+    electricTrain: [],
   }
 
   componentDidMount() {
-    document.getElementById("Footer").style.visibility = "hidden";
+    document.getElementById('Footer').style.visibility = 'hidden';
     document.addEventListener('scroll', this.handleScroll);
     this.headerHeight = document.getElementById('Header').clientHeight;
   }
@@ -95,7 +107,7 @@ class Home extends Component {
   delay = (() => {
     let timer = 0;
     return (callback, ms) => {
-      clearTimeout (timer);
+      clearTimeout(timer);
       timer = setTimeout(callback, ms);
     };
   })();
@@ -104,18 +116,28 @@ class Home extends Component {
     this.filter('for', value);
   }
 
+  handleFilterElectricTrain = (value) => {
+    this.setState({
+      electricTrain: value,
+    });
+  }
+
+  handleFilterElectricTrainStation = (value) => {
+    this.filter('location', value);
+  }
+
   handleFilterInput = (e) => {
     const value = e.target.value;
     this.delay(() => {
       this.filter('query', value);
-    }, 1000 );
+    }, 1000);
   }
 
   handleFilterPrice = (value) => {
     this.delay(() => {
       this.filter('priceMin', value[0]);
       this.filter('priceMax', value[1]);
-    }, 1000 );
+    }, 1000);
   }
 
   handleFilterResidentialType = (value) => {
@@ -229,6 +251,7 @@ class Home extends Component {
 
     const defaultSelected = {
       for: search.for ? search.for : [],
+      location: search.location ? search.location : [],
       query: search.query ? search.query : [],
       price: {
         min: search.priceMin ? parseInt(search.priceMin, 10) : configRealestate.data.priceMin,
@@ -244,16 +267,16 @@ class Home extends Component {
         specialFeatureFacilities: search.specialFeatureFacilities ? search.specialFeatureFacilities.split(',') : [],
         specialFeatureNearbyPlaces: search.specialFeatureNearbyPlaces ? search.specialFeatureNearbyPlaces.split(',') : [],
         specialFeaturePrivate: search.specialFeaturePrivate ? search.specialFeaturePrivate.split(',') : [],
-      }
+      },
     };
 
     return (
       <div id="Home">
-      	<div className="row">
-      		<div className="hidden-xs hidden-sm col-md-6 layout-left">
-      			<BannerRealEstate />
-      		</div>
-      		<div className="col-md-6 col-md-offset-6 layout-right">
+        <div className="row">
+          <div className="hidden-xs hidden-sm col-md-6 layout-left">
+            <BannerRealEstate />
+          </div>
+          <div className="col-md-6 col-md-offset-6 layout-right">
             {configRealestate.loading === true ? (
               <LoadingComponent />
             ) : (
@@ -263,7 +286,7 @@ class Home extends Component {
                     <div className="row row_1">
                       <div className="col-sm-3">
                         <div style={{ width: '100%' }}>
-                          <SelectSellType placeholder="ซื้อ / เช่า" defaultValue={defaultSelected.for} onChange={this.handleFilterFor} />
+                          <SelectSellType placeholder="ซื้อ / เช่า" type="buyer" defaultValue={defaultSelected.for} onChange={this.handleFilterFor} />
                         </div>
                       </div>
                       <div className="col-sm-9">
@@ -323,13 +346,17 @@ class Home extends Component {
                         </div>
                       </div>
                       <div className="col-md-3">
-                        <Select placeholder="ประเภทรถไฟฟ้า" style={{ width: '100%' }} >
-                          <Option value="xxxxxxxxxxxxxxxxx">xxxxxxxxxxxxxxxxx</Option>
-                        </Select>
+                        <div style={{ width: '100%' }}>
+                          <SelectElectricTrain value={this.state.electricTrain} onChange={this.handleFilterElectricTrain} />
+                        </div>
                       </div>
                       <div className="col-md-3">
-                        <Select placeholder="สถานีรภไฟฟ้า" style={{ width: '100%' }} >
-                          <Option value="xxxxxxxxxxxxxxxxx">xxxxxxxxxxxxxxxxx</Option>
+                        <Select placeholder="สถานีรถไฟฟ้า" value={defaultSelected.location} disabled={_.size(this.state.electricTrain) ? false : true} style={{ width: '100%' }} onChange={this.handleFilterElectricTrainStation} >
+                          {this.state.electricTrain &&
+                            _.map(electricTrainStation[this.state.electricTrain], (value) => {
+                              return <Option value={value.Position}>{value.StationNameTH}</Option>;
+                            })
+                          }
                         </Select>
                       </div>
                       <div className="col-md-3">
@@ -470,21 +497,22 @@ class Home extends Component {
                   */}
               </div>
             )}
-      		</div>
-      	</div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
+  console.log('mapStateToProps', state);
   return {
     user: state.user.data,
     banner: state.banners,
     realestate: state.realestates,
     configRealestate: state.config,
   };
-}
+};
 
 const actions = {
   fetchUserProfile: UserActions.fetchUserProfile,
@@ -492,10 +520,10 @@ const actions = {
   fetchConfigs: ConfigActions.fetchConfigs,
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    actions: bindActionCreators(actions, dispatch),
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

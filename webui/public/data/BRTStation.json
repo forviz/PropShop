@@ -1,0 +1,50 @@
+[
+  {
+    "StationCode": "BRT001",
+    "StationNameTH": "พญาไท (A8)",
+    "StationName": "Phaya Thai (A8)",
+    "Position": "13.7567096,100.5348795"
+  },
+  {
+    "StationCode": "BRT002",
+    "StationNameTH": "ราชปรารภ (A7)",
+    "StationName": "Ratchaprarop (A7)",
+    "Position": "13.7551324,100.5415401"
+  },
+  {
+    "StationCode": "BRT003",
+    "StationNameTH": "มักกะสัน (A6)",
+    "StationName": "Makkasan (A6)",
+    "Position": "13.7510326,100.5610795"
+  },
+  {
+    "StationCode": "BRT004",
+    "StationNameTH": "รามคำแหง (A5)",
+    "StationName": "Ramkhamhaeng (A5)",
+    "Position": "13.7429352,100.6002833"
+  },
+  {
+    "StationCode": "BRT005",
+    "StationNameTH": "หัวหมาก (A4)",
+    "StationName": "Hua Mak (A4)",
+    "Position": "13.738017,100.645168"
+  },
+  {
+    "StationCode": "BRT006",
+    "StationNameTH": "บ้านทับช้าง (A3)",
+    "StationName": "Ban Thap Chang (A3)",
+    "Position": "13.7327546,100.6913183"
+  },
+  {
+    "StationCode": "BRT007",
+    "StationNameTH": "ลาดกระบัง (A2)",
+    "StationName": "Lat Krabang (A2)",
+    "Position": "13.7277794,100.7484667"
+  },
+  {
+    "StationCode": "BRT008",
+    "StationNameTH": "สุวรรณภูมิ (A1)",
+    "StationName": "Suvarnabhumi (A1)",
+    "Position": "13.6980234,100.7521698"
+  }
+]

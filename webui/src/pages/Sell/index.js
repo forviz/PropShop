@@ -50,7 +50,7 @@ class Sell extends Component {
         });
         const { history } = props;
         history.push({
-          pathname: '/',
+          pathname: '/login',
         });
       }
     });
