@@ -24,6 +24,7 @@ export const realestateServiceReturnWithSuccess = (result) => {
 };
 
 export const propertyServiceReturnWithSuccess = (result) => {
+  console.log('propertyServiceReturnWithSuccess', result);
   return {
     type: 'PROPERTY/RECEIVED/SUCCESS',
     items: result,
@@ -34,15 +35,15 @@ export const fetchRealestates = (search) => {
   return (dispatch) => {
     dispatch(realestateFilter(true));
     dispatch(realestateLoading(true));
-    getRealEstate(search)
-    .then((result) => {
-      console.log('fetchRealestates', result);
-      dispatch(realestateServiceReturnWithSuccess(result));
-      dispatch(realestateLoading(false));
-    })
-    .catch((error) => {
-      dispatch(handleError(error));
-    });
+    // getRealEstate(search)
+    // .then((result) => {
+    //   console.log('fetchRealestates', result);
+    //   dispatch(realestateServiceReturnWithSuccess(result));
+    //   dispatch(realestateLoading(false));
+    // })
+    // .catch((error) => {
+    //   dispatch(handleError(error));
+    // });
 
     getProperties(search)
     .then((result) => {

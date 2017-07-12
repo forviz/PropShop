@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import _ from 'lodash';
 
+/* global google */
+
 let map;
 let marker;
 let markers = [];
@@ -10,21 +12,13 @@ const MarkerWithLabel = require('markerwithlabel')(google.maps);
 class MapLocation extends Component {
 
   static propTypes = {
-    center: T.shape({
-      lat: T.number,
-      lng: T.number,
-    }),
-    zoom: T.number,
-    properties: T.arrayOf(T.shape({
-      id: T.string,
-      label: T.string,
-    })),
+    onDragEnd: T.func
   }
-  
+
   static defaultProps = {
     center: { lat: 13.7245599, lng: 100.492681 },
     zoom: 13,
-    properties: [],
+    onDragEnd: theMap => console.log('map dragEnd', theMap.getBounds.toJSON()),
   }
 
   componentDidMount() {
@@ -35,14 +29,13 @@ class MapLocation extends Component {
     this.setMarker(nextProps.nearby);
   }
 
-  setCenter = (lat, lng) => {
-    this.props.onChange({
-      lat,
-      lng,
-    });
-  }
+  // setCenter = (lat, lng) => {
+  //   this.props.onChange({
+  //     lat,
+  //     lng,
+  //   });
+  // }
 
-  /* global google */
   setMarker = (data) => {
     if (marker) {
       this.deleteMarkers();
@@ -85,7 +78,9 @@ class MapLocation extends Component {
             content: contentString,
           });
 
-          google.maps.event.addListener(marker, 'click', () => { infowindow.open(map, this); });
+          google.maps.event.addListener(marker, 'click', () => {
+            infowindow.open(map, this);
+          });
 
           // marker.addListener('click', () => {
           //   infowindow.open(map, marker);
@@ -115,7 +110,12 @@ class MapLocation extends Component {
     });
 
     map.addListener('dragend', () => {
-      this.setCenter(map.getCenter().lat(), map.getCenter().lng());
+      this.props.onDragEnd(map);
+      // console.log('toJSON', map.getBounds().toJSON());
+      // const ne = map.getBounds().getNorthEast();
+      // console.log('dqwhhduqh 1', ne.lat(), ne.lng());
+      // console.log('dqwhhduqh 2', map.getBounds().getSouthWest());
+      // this.setCenter(map.getCenter().lat(), map.getCenter().lng());
     });
   }
 

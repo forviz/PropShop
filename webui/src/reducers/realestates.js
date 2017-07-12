@@ -18,7 +18,7 @@ const reducers = (state = initalState, action) => {
     case 'PROPERTY/RECEIVED/SUCCESS': {
       return {
         ...state,
-        data: { ...state.data, ...action.items },
+        data: { ...state, ...action.items },
       };
     }
     // case 'REALESTATE/RECEIVED/SUCCESS': {

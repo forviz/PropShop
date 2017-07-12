@@ -11,7 +11,6 @@ import SpecialFeature from '../../containers/SpecialFeature';
 
 import LoadingComponent from '../../components/Loading';
 import RealEstateItem from '../../components/RealEstateItem';
-// import PropertyItem from '../../components/PropertyItem';
 import SelectSellType from '../../components/SelectSellType';
 import SelectPrice from '../../components/SelectPrice';
 import SelectResidentialType from '../../components/SelectResidentialType';
@@ -20,7 +19,6 @@ import SelectElectricTrain from '../../components/SelectElectricTrain';
 import SelectElectricTrainStation from '../../components/SelectElectricTrainStation';
 import SelectRadius from '../../components/SelectRadius';
 import MapLocation from '../../components/Map/MapLocation';
-import SearchInput from '../../containers/SearchInput';
 
 import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
@@ -92,7 +90,7 @@ class Home extends Component {
     const search = location.search;
     if (search) {
       const { fetchRealestates } = this.props.actions;
-      fetchRealestates(queryString.parse(search));
+      fetchRealestates(search);
     } else {
       this.props.realestate.filter = false;
     }
@@ -242,14 +240,18 @@ class Home extends Component {
     return `${numeral(value).format('0,0')} บาท`;
   }
 
-  handleMapLocation = (position) => {
-    const data = `${position.lat},${position.lng}`;
-    this.handleFilterElectricTrainStation(data);
+  handleMapLocation = (map) => {
+    const mapBound = map.getBounds();
+    const ne = mapBound.getNorthEast().toJSON();
+    const sw = mapBound.getSouthWest().toJSON();
+    this.filter('bound', `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`);
   }
 
   render() {
     const { banner, realestate, configRealestate, location } = this.props;
     const { advanceExpand } = this.state;
+
+    console.log('realestate spyrocash', realestate);
 
     let search = [];
     const param = location.search;
@@ -280,14 +282,12 @@ class Home extends Component {
 
     const defaultActiveKey = search.electricTrain ? '2' : '1';
 
-    console.log('realestate sdqw', realestate.data);
-
     return (
       <div id="Home">
         <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
             {_.size(search) > 0 ? (
-              <MapLocation value={defaultSelected.location} nearby={realestate.data} onChange={this.handleMapLocation} />
+              <MapLocation value={defaultSelected.location} nearby={realestate.data} onDragEnd={this.handleMapLocation} />
             ) : (
               <BannerRealEstate />
             )}
@@ -310,14 +310,12 @@ class Home extends Component {
                         </div>
                       </div>
                       <div className="col-sm-9">
-                        <SearchInput />
-                        { /*
                         <Input
                           placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ"
                           defaultValue={defaultSelected.query}
                           style={{ width: '100%' }}
                           onChange={this.handleFilterInput}
-                        /> */ }
+                        />
                       </div>
                     </div>
                     <div className="row row_2">
