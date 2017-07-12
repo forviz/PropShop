@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import _ from 'lodash';
 
 let map;
@@ -8,9 +9,22 @@ const MarkerWithLabel = require('markerwithlabel')(google.maps);
 
 class MapLocation extends Component {
 
+  static propTypes = {
+    center: T.shape({
+      lat: T.number,
+      lng: T.number,
+    }),
+    zoom: T.number,
+    properties: T.arrayOf(T.shape({
+      id: T.string,
+      label: T.string,
+    })),
+  }
+  
   static defaultProps = {
     center: { lat: 13.7245599, lng: 100.492681 },
     zoom: 13,
+    properties: [],
   }
 
   componentDidMount() {

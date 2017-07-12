@@ -11,6 +11,7 @@ import SpecialFeature from '../../containers/SpecialFeature';
 
 import LoadingComponent from '../../components/Loading';
 import RealEstateItem from '../../components/RealEstateItem';
+// import PropertyItem from '../../components/PropertyItem';
 import SelectSellType from '../../components/SelectSellType';
 import SelectPrice from '../../components/SelectPrice';
 import SelectResidentialType from '../../components/SelectResidentialType';
@@ -19,6 +20,7 @@ import SelectElectricTrain from '../../components/SelectElectricTrain';
 import SelectElectricTrainStation from '../../components/SelectElectricTrainStation';
 import SelectRadius from '../../components/SelectRadius';
 import MapLocation from '../../components/Map/MapLocation';
+import SearchInput from '../../containers/SearchInput';
 
 import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
@@ -308,12 +310,14 @@ class Home extends Component {
                         </div>
                       </div>
                       <div className="col-sm-9">
+                        <SearchInput />
+                        { /*
                         <Input
                           placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ"
                           defaultValue={defaultSelected.query}
                           style={{ width: '100%' }}
                           onChange={this.handleFilterInput}
-                        />
+                        /> */ }
                       </div>
                     </div>
                     <div className="row row_2">

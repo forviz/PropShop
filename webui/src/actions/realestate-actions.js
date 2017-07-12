@@ -47,7 +47,7 @@ export const fetchRealestates = (search) => {
     getProperties(search)
     .then((result) => {
       dispatch(propertyServiceReturnWithSuccess(result));
-      dispatch(realestateHideLoading());
+      dispatch(realestateLoading(false));
     })
     .catch((error) => {
       dispatch(handleError(error));
