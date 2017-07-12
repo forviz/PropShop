@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
-import { Select } from 'antd';
-const Option = Select.Option;
 import SelectComponent from '../Select';
 
 class SelectResidentialType extends Component {
 
   static defaultProps = {
-    items: ['Condo','Town-home','House','Commercial Space','Land'],
+    items: ['Condo', 'Town-home', 'House', 'Commercial Space', 'Land'],
     placeholder: [],
     defaultValue: [],
     value: '',

@@ -34,6 +34,9 @@
 
 	.filter_real_estate {
 		padding: 20px;
+		.ant-tabs {
+			overflow: visible;
+		}
 		.ant-tabs-bar {
 			border: 0;
 		}
@@ -85,16 +88,34 @@
 	    	box-shadow: none;
 	    }
 		}
-		.col-residential-type {
-			width: 18%;
-		}
 		.col-room {
-			width: 13%;
+			width: 100px;
 		}
 		.col-advance {
-			width: 22.67%;
+			// width: 22.67%;
 			.btn-filter_advance.active {
 				background: $text-default;
+			}
+		}
+		.Select.active,
+		.SelectRoom.active,
+		.SelectElectricTrain.active,
+		.SelectElectricTrainStation.active,
+		.SelectRadius.active {
+			.ant-select-selection--single {
+				background: none;
+			}
+		}
+		.SelectPrice {
+			.ant-select-selection--single.active {
+				background: none;
+			}
+		}
+		.price-lenght-block {
+			.active {
+				.ant-select-selection--single {
+					background: none;
+				}
 			}
 		}
 	}
@@ -124,77 +145,78 @@
 	}
 
 	@media (min-width: 992px) and (max-width: 1463px) {
-		.filter_real_estate .col-advance {
-			margin-top: 10px;
-		}
+		// .filter_real_estate .col-advance {
+		// 	margin-top: 10px;
+		// }
 	}
 
 	@media (min-width: 1463px) and (max-width: 1489px) {
-		.filter_real_estate .col-advance {
-			width: 20%;
-		}
+		// .filter_real_estate .col-advance {
+		// 	width: 20%;
+		// }
 	}
 
 	@media (min-width: 1490px) and (max-width: 1517px) {
-		.filter_real_estate .col-advance {
-			width: 21%;
-		}
+		// .filter_real_estate .col-advance {
+		// 	width: 21%;
+		// }
 	}
 
 	@media (min-width: 1518px) and (max-width: 1537px) {
-		.filter_real_estate .col-advance {
-			width: 22%;
-		}
+		// .filter_real_estate .col-advance {
+		// 	width: 22%;
+		// }
 	}
 
 	@media (min-width: 992px) and (max-width: 1178px) {
-		.col-bathroom {
-			margin-top: 10px;
-		}
+		// .col-bathroom {
+		// 	margin-top: 10px;
+		// }
 	}
 
 	@media (max-width: 991px) {
-		.filter_real_estate {
-			.col-room {
-				width: 11%;
-			}
-			.col-residential-type,
-			.col-room,
-			.col-advance {
-				margin-top: 12px;
-			}
-		}
+		// .filter_real_estate {
+		// 	.col-room {
+		// 		width: 11%;
+		// 	}
+		// 	.col-residential-type,
+		// 	.col-room,
+		// 	.col-advance {
+		// 		margin-top: 12px;
+		// 	}
+		// }
 	}
 
 	@media (max-width: 767px) {
 		.filter_real_estate {
-			.price_length .ant-slider {
-				width: 90%;
-			}
-			.col-residential-type {
-				margin-left: 10px;
-			}
-			.col-advance {
-				min-width: 140px !important;
-    		padding: 0 !important;
-    		margin-right: 15px;
-			}
-			.col-residential-type,
-			.col-room,
-			.col-advance {
-				margin-top: 20px;
+			// .price_length .ant-slider {
+			// 	width: 90%;
+			// }
+			// .col-residential-type {
+			// 	margin-left: 10px;
+			// }
+			// .col-advance {
+			// 	min-width: 140px !important;
+    		// 	padding: 0 !important;
+    		// 	margin-right: 15px;
+			// }
+			// .col-residential-type,
+			// .col-room,
+			// .col-advance {
+			// 	margin-top: 20px;
+			// }
+			// .ant-tabs-tabpane .row > div {
+			// 	margin-bottom: 10px;
+			// }
+			.ant-tabs-tabpane .row_1 {
+				margin-bottom: 0;
 			}
 			.ant-tabs-tabpane .row > div {
+				padding-right: 15px;
+				padding-left: 15px;
 				margin-bottom: 10px;
 			}
-			.ant-tabs-tabpane .row > div:first-child {
-				padding-right: 15px;
-			}
-			.ant-tabs-tabpane .row > div:last-child {
-				padding-left: 15px;
-			}
 		} 
-
 	}
 
 	@media (min-width: 400px) and (max-width: 767px) {
@@ -205,12 +227,12 @@
 	}
 
 	@media (max-width: 510px) {
-		.filter_real_estate {
-			.col-advance {
-				margin-left: 15px;
-				margin-top: 0;
-			}
-		}
+		// .filter_real_estate {
+		// 	.col-advance {
+		// 		margin-left: 15px;
+		// 		margin-top: 0;
+		// 	}
+		// }
 	}
 
 }

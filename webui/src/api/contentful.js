@@ -137,15 +137,15 @@ export const getRealEstate = (search) => {
   if (search.for) searchEntries['fields.for[in]'] = search.for;
   if (search.query) searchEntries.query = search.query;
   if (search.residentialType) searchEntries['fields.residentialType'] = search.residentialType;
-  if (search.bedroom) searchEntries['fields.bedroom'] = parseInt(search.bedroom, 10);
-  if (search.bathroom) searchEntries['fields.bathroom'] = parseInt(search.bathroom, 10);
+  if (search.bedroom) searchEntries['fields.bedroom[gte]'] = parseInt(search.bedroom, 10);
+  if (search.bathroom) searchEntries['fields.bathroom[gte]'] = parseInt(search.bathroom, 10);
   if (search.priceMin) searchEntries['fields.price[gte]'] = parseInt(search.priceMin, 10);
   if (search.priceMax) searchEntries['fields.price[lte]'] = parseInt(search.priceMax, 10);
   if (search.specialFeatureView) searchEntries['fields.specialFeatureView[all]'] = search.specialFeatureView;
   if (search.specialFeatureFacilities) searchEntries['fields.specialFeatureFacilities[all]'] = search.specialFeatureFacilities;
   if (search.specialFeatureNearbyPlaces) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
   if (search.specialFeaturePrivate) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
-  if (search.location) searchEntries['fields.location[within]'] = `${search.location},10`;
+  if (search.location) searchEntries['fields.location[within]'] = `${search.location},${search.radius}`;
   if (_.size(searchEntries) === 0) {
     return false;
   }

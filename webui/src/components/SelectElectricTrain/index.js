@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Select } from 'antd';
+import _ from 'lodash';
 
 const Option = Select.Option;
 
@@ -11,8 +12,9 @@ class SelectElectricTrain extends Component {
 
   render() {
     const { value } = this.props;
+    const active = _.size(value) === 0 ? '' : 'active';
     return (
-      <div>
+      <div className={`SelectElectricTrain ${active}`}>
         <Select placeholder="ประเภทรถไฟฟ้า" style={{ width: '100%' }} value={value} onChange={this.handleOnChange} >
           <Option value="bts">รถไฟฟ้า BTS</Option>
           <Option value="mrt">รถไฟฟ้า MRT</Option>

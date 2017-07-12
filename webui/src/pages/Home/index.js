@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Select, Button, Slider } from 'antd';
+import { Tabs, Input, Select, Button } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
@@ -12,26 +12,19 @@ import SpecialFeature from '../../containers/SpecialFeature';
 import LoadingComponent from '../../components/Loading';
 import RealEstateItem from '../../components/RealEstateItem';
 import SelectSellType from '../../components/SelectSellType';
+import SelectPrice from '../../components/SelectPrice';
 import SelectResidentialType from '../../components/SelectResidentialType';
 import SelectRoom from '../../components/SelectRoom';
 import SelectElectricTrain from '../../components/SelectElectricTrain';
+import SelectElectricTrainStation from '../../components/SelectElectricTrainStation';
+import SelectRadius from '../../components/SelectRadius';
+import MapLocation from '../../components/Map/MapLocation';
 
 import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
 import * as ConfigActions from '../../actions/config-actions';
 
 import * as firebase from '../../api/firebase';
-import * as helpers from '../../helpers';
-
-import BTSStationJSON from '../../../public/data/BTSStation.json';
-import MRTStationJSON from '../../../public/data/MRTStation.json';
-import BRTStationJSON from '../../../public/data/BRTStation.json';
-
-const electricTrainStation = {
-  bts: BTSStationJSON,
-  mrt: MRTStationJSON,
-  brt: BRTStationJSON,
-};
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -49,7 +42,6 @@ class Home extends Component {
 
   state = {
     advanceExpand: false,
-    electricTrain: [],
   }
 
   componentDidMount() {
@@ -82,16 +74,16 @@ class Home extends Component {
     fetchConfigs();
   }
 
-  handleScroll = (event) => {
+  handleScroll = () => {
     const scroolHeight = document.body.scrollTop + window.innerHeight;
     const bodyHeight = document.getElementsByClassName('layout-right')[0].clientHeight + this.headerHeight;
     if (scroolHeight >= bodyHeight) {
-      document.getElementsByClassName("PropShop")[0].classList.add('end');
+      document.getElementsByClassName('PropShop')[0].classList.add('end');
     } else {
-      if (document.getElementsByClassName("PropShop")[0].classList.contains('end')) {
-        document.getElementsByClassName("PropShop")[0].classList.remove('end');
+      if (document.getElementsByClassName('PropShop')[0].classList.contains('end')) {
+        document.getElementsByClassName('PropShop')[0].classList.remove('end');
       }
-    }    
+    }
   }
 
   goFilter = (location) => {
@@ -112,18 +104,59 @@ class Home extends Component {
     };
   })();
 
+  setUrl = (stringified) => {
+    const { history } = this.props;
+    history.push({
+      search: `?${decodeURIComponent(stringified)}`,
+    });
+  }
+
+  filter = (key, value) => {
+    const stringified = this.convertObjectToQueryString(key, value);
+    this.setUrl(stringified);
+  }
+
   handleFilterFor = (value) => {
     this.filter('for', value);
   }
 
   handleFilterElectricTrain = (value) => {
-    this.setState({
-      electricTrain: value,
-    });
+    const { location } = this.props;
+
+    let search = {};
+
+    const param = location.search;
+    if (param) {
+      search = queryString.parse(param);
+    }
+
+    search.electricTrain = value;
+    delete search.location;
+    delete search.radius;
+
+    const stringified = queryString.stringify(search);
+    this.setUrl(stringified);
   }
 
   handleFilterElectricTrainStation = (value) => {
-    this.filter('location', value);
+    const { location } = this.props;
+
+    let search = {};
+
+    const param = location.search;
+    if (param) {
+      search = queryString.parse(param);
+    }
+
+    search.location = value;
+    search.radius = 10;
+
+    const stringified = queryString.stringify(search);
+    this.setUrl(stringified);
+  }
+
+  handleFilterRadius = (value) => {
+    this.filter('radius', value);
   }
 
   handleFilterInput = (e) => {
@@ -133,11 +166,8 @@ class Home extends Component {
     }, 1000);
   }
 
-  handleFilterPrice = (value) => {
-    this.delay(() => {
-      this.filter('priceMin', value[0]);
-      this.filter('priceMax', value[1]);
-    }, 1000);
+  handleFilterPrice = (key, value) => {
+    this.filter(key, value);
   }
 
   handleFilterResidentialType = (value) => {
@@ -162,19 +192,14 @@ class Home extends Component {
       search = queryString.parse(param);
     }
 
-    search['specialFeatureView'] = data.specialFeatureView.join();
-    search['specialFeatureFacilities'] = data.specialFeatureFacilities.join();
-    search['specialFeatureNearbyPlaces'] = data.specialFeatureNearbyPlaces.join();
-    search['specialFeaturePrivate'] = data.specialFeaturePrivate.join();
+    search.specialFeatureView = data.specialFeatureView.join();
+    search.specialFeatureFacilities = data.specialFeatureFacilities.join();
+    search.specialFeatureNearbyPlaces = data.specialFeatureNearbyPlaces.join();
+    search.specialFeaturePrivate = data.specialFeaturePrivate.join();
 
     this.setAdvanceExpand();
 
     const stringified = queryString.stringify(search);
-    this.setUrl(stringified);
-  }
-
-  filter = (key, value) => {
-    const stringified = this.convertObjectToQueryString(key, value);
     this.setUrl(stringified);
   }
 
@@ -193,15 +218,7 @@ class Home extends Component {
     return queryString.stringify(search);
   }
 
-  setUrl = (stringified) => {
-    const { history } = this.props;
-    history.push({
-      pathname: '/',
-      search: '?'+decodeURIComponent(stringified),
-    });
-  }
-
-  handleAdvanceExpand = (e) => {
+  handleAdvanceExpand = () => {
     this.setAdvanceExpand();
   }
 
@@ -213,35 +230,24 @@ class Home extends Component {
 
   renderSelectOption = (limit) => {
     const data = [];
-    for (let i = 1; i <= limit; i++) { 
-      data.push(<Option key={i.toString(36)} value={i.toString(36)}>{i.toString(36)}</Option>);
+    for (let i = 1; i <= limit; i += 1) {
+      data.push(<Option key={i.toString()} value={i.toString()}>{i.toString()}</Option>);
     }
     return data;
   }
 
   tipFormatter = (value) => {
-    return numeral(value).format('0,0') + ' บาท';
+    return `${numeral(value).format('0,0')} บาท`;
+  }
+
+  handleMapLocation = (position) => {
+    const data = `${position.lat},${position.lng}`;
+    this.handleFilterElectricTrainStation(data);
   }
 
   render() {
-
     const { banner, realestate, configRealestate, location } = this.props;
     const { advanceExpand } = this.state;
-
-    const stepMarks = {
-      [configRealestate.data.priceMin]: {
-        style: {
-          color: '#484849',
-        },
-        label: helpers.convertRealestatePrice(configRealestate.data.priceMin),
-      },
-      [configRealestate.data.priceMax]: {
-        style: {
-          color: '#484849',
-        },
-        label: helpers.convertRealestatePrice(configRealestate.data.priceMax),
-      },
-    };
 
     let search = [];
     const param = location.search;
@@ -251,17 +257,17 @@ class Home extends Component {
 
     const defaultSelected = {
       for: search.for ? search.for : [],
+      electricTrain: search.electricTrain ? search.electricTrain : [],
       location: search.location ? search.location : [],
+      radius: search.radius ? search.radius : [],
       query: search.query ? search.query : [],
       price: {
-        min: search.priceMin ? parseInt(search.priceMin, 10) : configRealestate.data.priceMin,
-        max: search.priceMax ? parseInt(search.priceMax, 10) : configRealestate.data.priceMax,
+        min: search.priceMin ? parseInt(search.priceMin, 10) : [],
+        max: search.priceMax ? parseInt(search.priceMax, 10) : [],
       },
       residentialType: search.residentialType ? search.residentialType : [],
-      room: {
-        bedroom: search.bedroom ? search.bedroom : [],
-        bathroom: search.bathroom ? search.bathroom : [],
-      },
+      bedroom: search.bedroom ? search.bedroom : [],
+      bathroom: search.bathroom ? search.bathroom : [],
       specialFeature: {
         specialFeatureView: search.specialFeatureView ? search.specialFeatureView.split(',') : [],
         specialFeatureFacilities: search.specialFeatureFacilities ? search.specialFeatureFacilities.split(',') : [],
@@ -270,56 +276,78 @@ class Home extends Component {
       },
     };
 
+    const defaultActiveKey = search.electricTrain ? '2' : '1';
+
+    console.log('realestate sdqw', realestate.data);
+
     return (
       <div id="Home">
         <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
-            <BannerRealEstate />
+            {_.size(search) > 0 ? (
+              <MapLocation value={defaultSelected.location} nearby={realestate.data} onChange={this.handleMapLocation} />
+            ) : (
+              <BannerRealEstate />
+            )}
           </div>
           <div className="col-md-6 col-md-offset-6 layout-right">
             {configRealestate.loading === true ? (
               <LoadingComponent />
             ) : (
               <div className="filter_real_estate">
-                <Tabs defaultActiveKey="1">
+                <Tabs defaultActiveKey={defaultActiveKey}>
                   <TabPane tab="เลือกจากทำเล / โครงการ" key="1">
                     <div className="row row_1">
                       <div className="col-sm-3">
-                        <div style={{ width: '100%' }}>
-                          <SelectSellType placeholder="ซื้อ / เช่า" type="buyer" defaultValue={defaultSelected.for} onChange={this.handleFilterFor} />
+                        <div style={{ width: '100%' }} >
+                          <SelectResidentialType
+                            placeholder="ประเภทอสังหาฯ"
+                            value={defaultSelected.residentialType}
+                            onChange={this.handleFilterResidentialType}
+                          />
                         </div>
                       </div>
                       <div className="col-sm-9">
-                        <Input placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ" defaultValue={defaultSelected.query} style={{ width: '100%' }} onChange={this.handleFilterInput} />
+                        <Input
+                          placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ"
+                          defaultValue={defaultSelected.query}
+                          style={{ width: '100%' }}
+                          onChange={this.handleFilterInput}
+                        />
                       </div>
                     </div>
                     <div className="row row_2">
-                      <div className="col-sm-4 col-md-4" style={{ minWidth: 250 }} >
-                        <div className="price_length">
-                          <div className="clearfix">
-                            <div className="pull-left text-gray" style={{ fontSize: 12 }} >ขั้นต่ำ</div>
-                            <div className="pull-right text-gray" style={{ fontSize: 12 }} >ไม่เกิน</div>
-                          </div>
-                          <Slider range marks={stepMarks} defaultValue={[defaultSelected.price.min, defaultSelected.price.max]} min={configRealestate.data.priceMin} max={configRealestate.data.priceMax} onChange={this.handleFilterPrice} tipFormatter={this.tipFormatter} />
+                      <div className="col-sm-3">
+                        <div style={{ width: '100%' }}>
+                          <SelectSellType
+                            type="buyer"
+                            placeholder="ลักษณะการขาย"
+                            value={defaultSelected.for}
+                            onChange={this.handleFilterFor}
+                          />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-residential-type" style={{ minWidth: 135 }} >
+                      <div className="col-sm-2 col-bedroom">
                         <div style={{ width: '100%' }} >
-                          <SelectResidentialType placeholder="ประเภทอสังหาฯ" defaultValue={defaultSelected.residentialType} onChange={this.handleFilterResidentialType} />
+                          <SelectRoom placeholder="ห้องนอน" value={defaultSelected.bedroom} onChange={this.handleFilterBedRoom} />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bedroom" style={{ minWidth: 92 }} >
+                      <div className="col-sm-2 col-bathroom">
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.bedroom} onChange={this.handleFilterBedRoom} />
+                          <SelectRoom placeholder="ห้องน้ำ" value={defaultSelected.bathroom} onChange={this.handleFilterBathRoom} />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bathroom" style={{ minWidth: 92 }} >
+                      <div className="col-sm-3 col-price">
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.bathroom} onChange={this.handleFilterBathRoom} />
+                          <SelectPrice value={defaultSelected.price} onChange={this.handleFilterPrice} />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-advance" style={{ minWidth: 130 }} >
-                        <Button style={{ width: '100%' }} className={"btn-main " + (advanceExpand === true ? 'active' : '')} onClick={this.handleAdvanceExpand}>ตัวเลือกเพิ่มเติม</Button>
+                      <div className="col-sm-2 col-advance">
+                        <Button
+                          style={{ width: '100%' }}
+                          className={`btn-main ${advanceExpand === true ? 'active' : ''}`}
+                          onClick={this.handleAdvanceExpand}
+                        >ตัวเลือกเพิ่มเติม</Button>
                       </div>
                     </div>
                     {advanceExpand === true &&
@@ -329,7 +357,11 @@ class Home extends Component {
                             <div className="row">
                               <div className="col-md-12">
                                 <div className="property_block">
-                                  <SpecialFeature items={configRealestate.data.specialFeature} defaultValue={defaultSelected.specialFeature} onSelect={this.handleFilterSpecialFeature} />
+                                  <SpecialFeature
+                                    items={configRealestate.data.specialFeature}
+                                    defaultValue={defaultSelected.specialFeature}
+                                    onSelect={this.handleFilterSpecialFeature}
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -340,58 +372,73 @@ class Home extends Component {
                   </TabPane>
                   <TabPane tab="ใกล้สถานีรถไฟฟ้า" key="2">
                     <div className="row row_1">
-                      <div className="col-md-3">
-                        <div style={{ width: '100%' }}>
-                          <SelectSellType placeholder="ซื้อ / เช่า" defaultValue={defaultSelected.for} onChange={this.handleFilterFor} />
+                      <div className="col-sm-3">
+                        <div style={{ width: '100%' }} >
+                          <SelectResidentialType
+                            placeholder="ประเภทอสังหาฯ"
+                            value={defaultSelected.residentialType}
+                            onChange={this.handleFilterResidentialType}
+                          />
                         </div>
                       </div>
                       <div className="col-md-3">
                         <div style={{ width: '100%' }}>
-                          <SelectElectricTrain value={this.state.electricTrain} onChange={this.handleFilterElectricTrain} />
+                          <SelectElectricTrain
+                            value={defaultSelected.electricTrain}
+                            onChange={this.handleFilterElectricTrain}
+                          />
                         </div>
                       </div>
                       <div className="col-md-3">
-                        <Select placeholder="สถานีรถไฟฟ้า" value={defaultSelected.location} disabled={_.size(this.state.electricTrain) ? false : true} style={{ width: '100%' }} onChange={this.handleFilterElectricTrainStation} >
-                          {this.state.electricTrain &&
-                            _.map(electricTrainStation[this.state.electricTrain], (value) => {
-                              return <Option value={value.Position}>{value.StationNameTH}</Option>;
-                            })
-                          }
-                        </Select>
+                        <div style={{ width: '100%' }}>
+                          <SelectElectricTrainStation
+                            value={defaultSelected.location}
+                            train={defaultSelected.electricTrain}
+                            onChange={this.handleFilterElectricTrainStation}
+                          />
+                        </div>
                       </div>
                       <div className="col-md-3">
-                        <Select placeholder="รัศมีการเดินทาง" style={{ width: '100%' }} >
-                          <Option value="xxxxxxxxxxxxxxxxx">xxxxxxxxxxxxxxxxx</Option>
-                        </Select>
+                        <div style={{ width: '100%' }}>
+                          <SelectRadius
+                            value={defaultSelected.radius}
+                            onChange={this.handleFilterRadius}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="row row_2">
-                      <div className="col-sm-4 col-md-4" style={{ minWidth: 250 }} >
-                        <div className="price_length">
-                          <div className="clearfix">
-                            <div className="pull-left text-gray" style={{ fontSize: 12 }} >ขั้นต่ำ</div>
-                            <div className="pull-right text-gray" style={{ fontSize: 12 }} >ไม่เกิน</div>
-                          </div>
-                          <Slider range marks={stepMarks} defaultValue={[defaultSelected.price.min, defaultSelected.price.max]} min={configRealestate.data.priceMin} max={configRealestate.data.priceMax} onChange={this.handleFilterPrice} tipFormatter={this.tipFormatter} />
+                      <div className="col-sm-3">
+                        <div style={{ width: '100%' }}>
+                          <SelectSellType
+                            type="buyer"
+                            placeholder="ลักษณะการขาย"
+                            value={defaultSelected.for}
+                            onChange={this.handleFilterFor}
+                          />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-residential-type" style={{ minWidth: 135 }} >
+                      <div className="col-sm-2 col-bedroom">
                         <div style={{ width: '100%' }} >
-                          <SelectResidentialType placeholder="ประเภทอสังหาฯ" defaultValue={defaultSelected.residentialType} onChange={this.handleFilterResidentialType} />
+                          <SelectRoom placeholder="ห้องนอน" value={defaultSelected.bedroom} onChange={this.handleFilterBedRoom} />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bedroom" style={{ minWidth: 92 }} >
+                      <div className="col-sm-2 col-bathroom">
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องนอน" defaultValue={defaultSelected.bedroom} onChange={this.handleFilterBedRoom} />
+                          <SelectRoom placeholder="ห้องน้ำ" value={defaultSelected.bathroom} onChange={this.handleFilterBathRoom} />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-room col-bathroom" style={{ minWidth: 92 }} >
+                      <div className="col-sm-3 col-price">
                         <div style={{ width: '100%' }} >
-                          <SelectRoom placeholder="ห้องน้ำ" defaultValue={defaultSelected.bathroom} onChange={this.handleFilterBathRoom} />
+                          <SelectPrice value={defaultSelected.price} onChange={this.handleFilterPrice} />
                         </div>
                       </div>
-                      <div className="col-xs-2 col-sm-2 col-md-2 col-advance" style={{ minWidth: 130 }} >
-                        <Button style={{ width: '100%' }} className={"btn-main " + (advanceExpand === true ? 'active' : '')} onClick={this.handleAdvanceExpand}>ตัวเลือกเพิ่มเติม</Button>
+                      <div className="col-sm-2 col-advance">
+                        <Button
+                          style={{ width: '100%' }}
+                          className={`btn-main ${advanceExpand === true ? 'active' : ''}`}
+                          onClick={this.handleAdvanceExpand}
+                        >ตัวเลือกเพิ่มเติม</Button>
                       </div>
                     </div>
                     {advanceExpand === true &&
@@ -401,7 +448,11 @@ class Home extends Component {
                             <div className="row">
                               <div className="col-md-12">
                                 <div className="property_block">
-                                  <SpecialFeature items={configRealestate.data.specialFeature} defaultValue={defaultSelected.specialFeature} onSelect={this.handleFilterSpecialFeature} />
+                                  <SpecialFeature
+                                    items={configRealestate.data.specialFeature}
+                                    defaultValue={defaultSelected.specialFeature}
+                                    onSelect={this.handleFilterSpecialFeature}
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -436,65 +487,59 @@ class Home extends Component {
             ) : (
               <div className="result">
                 {Object.keys(banner.condo).length > 0 &&
-                    <div className="list clearfix">
-                      <h3>คอนโด</h3>
-                      <ul>
-                        {
-                          _.map(banner.condo, (row, index) => {
-                            const rowMD = 12 / Object.keys(row).length;
-                            return (
-                              <li key={index}>
-                                <ul>
-                                  {
-                                    _.map(row, (item, index2) => {
-                                      return (
-                                        <li key={index2} className={"item col-sm-"+rowMD+" col-md-6 col-lg-"+rowMD}><RealEstateItem item={item} type="sell" /></li>
-                                      );
-                                    })
-                                  }
-                                </ul>
-                              </li>
-                            );
-                          })
-                        }
-                      </ul>
-                    </div>
-                  }
-                  {Object.keys(banner.house).length > 0 &&
-                    <div className="list clearfix">
-                      <h3>บ้าน</h3>
-                      <ul>
-                        {
-                          _.map(banner.house, (row, index) => {
-                            const rowMD = 12 / Object.keys(row).length;
-                            return (
-                              <li key={index}>
-                                <ul>
-                                  {
-                                    _.map(row, (item, index2) => {
-                                      return (
-                                        <li key={index2} className={"item col-sm-"+rowMD+" col-md-6 col-lg-"+rowMD}><RealEstateItem item={item} type="sell" /></li>
-                                      );
-                                    })
-                                  }
-                                </ul>
-                              </li>
-                            );
-                          })
-                        }
-                      </ul>
-                    </div>
-                  }
-                  {/*
-                  <div className="list news">
-                    <h3>ข่าวสารและบทความ</h3>
-                    <div className="row">
-                      <div className="col-md-4"></div>
-                      <div className="col-md-4"></div>
-                      <div className="col-md-4"></div>
-                    </div>
+                  <div className="list clearfix">
+                    <h3>คอนโด</h3>
+                    <ul>
+                      {
+                        _.map(banner.condo, (row, index) => {
+                          const rowMD = 12 / Object.keys(row).length;
+                          return (
+                            <li key={index}>
+                              <ul>
+                                {
+                                  _.map(row, (item, index2) => {
+                                    return (
+                                      <li key={index2} className={`item col-sm-${rowMD} col-md-6 col-lg-${rowMD}`}>
+                                        <RealEstateItem item={item} type="sell" />
+                                      </li>
+                                    );
+                                  })
+                                }
+                              </ul>
+                            </li>
+                          );
+                        })
+                      }
+                    </ul>
                   </div>
-                  */}
+                }
+                {Object.keys(banner.house).length > 0 &&
+                  <div className="list clearfix">
+                    <h3>บ้าน</h3>
+                    <ul>
+                      {
+                        _.map(banner.house, (row, index) => {
+                          const rowMD = 12 / Object.keys(row).length;
+                          return (
+                            <li key={index}>
+                              <ul>
+                                {
+                                  _.map(row, (item, index2) => {
+                                    return (
+                                      <li key={index2} className={`item col-sm-${rowMD} col-md-6 col-lg-${rowMD}`}>
+                                        <RealEstateItem item={item} type="sell" />
+                                      </li>
+                                    );
+                                  })
+                                }
+                              </ul>
+                            </li>
+                          );
+                        })
+                      }
+                    </ul>
+                  </div>
+                }
               </div>
             )}
           </div>
