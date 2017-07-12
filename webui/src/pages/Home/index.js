@@ -274,7 +274,7 @@ class Home extends Component {
     return `${numeral(value).format('0,0')} บาท`;
   }
 
-  handleMapLocation = (map) => {
+  handleMapBoundChanged = (map) => {
     const mapBound = map.getBounds();
     const ne = mapBound.getNorthEast().toJSON();
     const sw = mapBound.getSouthWest().toJSON();
@@ -284,8 +284,6 @@ class Home extends Component {
   render() {
     const { banner, realestate, configRealestate, location } = this.props;
     const { advanceExpand } = this.state;
-
-    console.log('realestate spyrocash', realestate);
 
     let search = [];
     const param = location.search;
@@ -321,7 +319,7 @@ class Home extends Component {
         <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
             {_.size(search) > 0 ? (
-              <MapLocation value={defaultSelected.location} nearby={realestate.data} onDragEnd={this.handleMapLocation} />
+              <MapLocation value={defaultSelected.location} nearby={realestate.data} onBoundChanged={this.handleMapBoundChanged} />
             ) : (
               <BannerRealEstate />
             )}
