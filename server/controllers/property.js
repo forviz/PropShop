@@ -13,7 +13,7 @@ const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.80
 export const queryProperties = async (req, res, next) => {
   try {
     console.log('req.query', req.query);
-    const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, location } = req.query;
+    const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, location, select } = req.query;
     const _for = req.query.for;
 
     const propertyQuery = _.omitBy({
@@ -31,6 +31,7 @@ export const queryProperties = async (req, res, next) => {
       'fields.priceRentValue[gte]': _for === 'rent' && priceMin ? _.toNumber(priceMin) : undefined,
       'fields.priceRentValue[lte]': _for === 'rent' && priceMax ? _.toNumber(priceMax) : undefined,
       'fields.locationMarker[within]': bound || location,
+      select: select ? select : undefined,
     }, val => val === undefined || val === '' || val === false);
     console.log('propertyQuery', propertyQuery);
     const response = await client.getEntries(propertyQuery);
