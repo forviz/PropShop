@@ -1,12 +1,13 @@
 import _ from 'lodash';
+import queryString from 'query-string';
 import { uploadFile } from './contentful';
 
 const BASEURL = 'http://localhost:4000/api/v1';
 
-const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
+// const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
 
 const mapContentFulPropertyToMyField = (data) => {
-  // console.log('mapContentFulPropertyToMyField', data);
+  console.log('mapContentFulPropertyToMyField', data);
   return _.reduce(data, (acc, elem, index) => {
     const forSale = _.get(elem, 'fields.forSale') === true;
     return {
@@ -55,30 +56,44 @@ const mapContentFulPropertyToMyField = (data) => {
 
 export const getProperties = (search) => {
   console.log('getProperties', search);
-  const searchEntries = {};
-  searchEntries.content_type = 'property';
-  if (search.id) searchEntries['sys.id'] = search.id;
-  if (search.for === 'ขาย' || search.for === 'sale') searchEntries.for = 'sale';
-  if (search.for === 'เช่า' || search.for === 'rent') searchEntries.for = 'rent';
-  if (search.query) searchEntries.query = search.query;
-  if (search.residentialType) searchEntries['fields.residentialType'] = search.residentialType;
-  if (search.bedroom) searchEntries.bedroom = parseInt(search.bedroom, 10);
-  if (search.bathroom) searchEntries.bathroom = parseInt(search.bathroom, 10);
-  if (search.priceMin) searchEntries.priceMin = parseInt(search.priceMin, 10);
-  if (search.priceMax) searchEntries.priceMax = parseInt(search.priceMax, 10);
-  if (search.specialFeatureView) searchEntries.specialFeatureView = search.specialFeatureView;
-  if (search.specialFeatureFacilities) searchEntries.specialFeatureFacilities = search.specialFeatureFacilities;
-  if (search.specialFeatureNearbyPlaces) searchEntries.specialFeatureNearbyPlaces = search.specialFeatureNearbyPlaces;
-  if (search.specialFeaturePrivate) searchEntries.specialFeaturePrivate = search.specialFeaturePrivate;
-  return fetch(`${BASEURL}/properties${convertToURLParam(searchEntries)}`, {
+  // const searchEntries = {};
+  // searchEntries.content_type = 'property';
+  // if (search.id) searchEntries['sys.id'] = search.id;
+  // if (search.for === 'ขาย' || search.for === 'sale') searchEntries.for = 'sale';
+  // if (search.for === 'เช่า' || search.for === 'rent') searchEntries.for = 'rent';
+  // if (search.query) searchEntries.query = search.query;
+  // if (search.residentialType) searchEntries['fields.residentialType'] = search.residentialType;
+  // if (search.bedroom) searchEntries.bedroom = parseInt(search.bedroom, 10);
+  // if (search.bathroom) searchEntries.bathroom = parseInt(search.bathroom, 10);
+  // if (search.priceMin) searchEntries.priceMin = parseInt(search.priceMin, 10);
+  // if (search.priceMax) searchEntries.priceMax = parseInt(search.priceMax, 10);
+  // if (search.specialFeatureView) searchEntries.specialFeatureView = search.specialFeatureView;
+  // if (search.specialFeatureFacilities) searchEntries.specialFeatureFacilities = search.specialFeatureFacilities;
+  // if (search.specialFeatureNearbyPlaces) searchEntries.specialFeatureNearbyPlaces = search.specialFeatureNearbyPlaces;
+  // if (search.specialFeaturePrivate) searchEntries.specialFeaturePrivate = search.specialFeaturePrivate;
+  // // if (search.location) searchEntries['fields.location[within]'] = `${search.location},${search.radius}`;
+  // if (search.bound) searchEntries.bound = search.bound;
+  // return fetch(`${BASEURL}/properties${convertToURLParam(searchEntries)}`, {
+  //   'Content-Type': 'application/json',
+  // })
+  return fetch(`${BASEURL}/properties${search}`, {
     'Content-Type': 'application/json',
   })
   .then(response => response.json())
   .then((response) => {
-    const xx = mapContentFulPropertyToMyField(response.items);
-    return xx;
+    let mapResult = mapContentFulPropertyToMyField(response.items);
+
+    const searchObj = queryString.parse(search);
+
+    if (searchObj.select) {
+      mapResult = _.map(mapResult, (value) => {
+        return _.pick(value, searchObj.select.split(','));
+      });
+    }
+
+    return mapResult;
   });
-}
+};
 
 const parseRealEstateData = (data, mainImageId, imageIds) => {
   return {

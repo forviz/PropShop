@@ -18,14 +18,14 @@ var client = contentful.createClient({
 });
 
 const updateEntry = (space, entry) => {
-  if (entry.fields.priceSale) _.set(entry, 'fields.priceSaleValue.en-US', entry.fields.priceSale['en-US'].value);
-  if (entry.fields.priceRent) _.set(entry, 'fields.priceRentValue.en-US', entry.fields.priceRent['en-US'].value);
-  _.set(entry, 'fields.projectName.en-US', _.replace(entry.fields.nameEn['en-US'].value, `Unit ${_.get(entry, 'fields.location.en-US.unitNo')}`, ''));
-  _.set(entry, 'fields.areaSize.en-US', _.toNumber(entry.fields.areaUsable['en-US'].value));
-  _.set(entry, 'fields.province.en-US', entry.fields.location['en-US'].province);
-  _.set(entry, 'fields.locationMarker.en-US', { lat: entry.fields.location['en-US'].latitude, lon: entry.fields.location['en-US'].longitude });
+  // if (entry.fields.priceSale) _.set(entry, 'fields.priceSaleValue.en-US', entry.fields.priceSale['en-US'].value);
+  // if (entry.fields.priceRent) _.set(entry, 'fields.priceRentValue.en-US', entry.fields.priceRent['en-US'].value);
+  // _.set(entry, 'fields.projectName.en-US', _.replace(entry.fields.nameEn['en-US'].value, `Unit ${_.get(entry, 'fields.location.en-US.unitNo')}`, ''));
+  // _.set(entry, 'fields.areaSize.en-US', _.toNumber(entry.fields.areaUsable['en-US'].value));
+  // _.set(entry, 'fields.province.en-US', entry.fields.location['en-US'].province);
+  // _.set(entry, 'fields.locationMarker.en-US', { lat: entry.fields.location['en-US'].latitude, lon: entry.fields.location['en-US'].longitude });
   console.log('Updated', entry.sys.id);
-  return entry.update();
+  return entry.update().publish();
 }
 
 client.getSpace(process.env.CONTENTFUL_SPACE)
