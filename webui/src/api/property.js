@@ -81,17 +81,7 @@ export const getProperties = (search) => {
   })
   .then(response => response.json())
   .then((response) => {
-    let mapResult = mapContentFulPropertyToMyField(response.items);
-
-    const searchObj = queryString.parse(search);
-
-    if (searchObj.select) {
-      mapResult = _.map(mapResult, (value) => {
-        return _.pick(value, searchObj.select.split(','));
-      });
-    }
-
-    return mapResult;
+    return mapContentFulPropertyToMyField(response.items);
   });
 };
 
