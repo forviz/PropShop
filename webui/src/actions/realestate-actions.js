@@ -2,20 +2,18 @@ import { getRealEstate } from '../api/contentful';
 import { getProperties } from '../api/property';
 import { handleError } from './errors';
 
-export const realestateFilterYes = () => {
-  return { type: 'REALESTATE/FILTER/YES' };
+export const realestateFilter = (filter) => {
+  return {
+    type: 'REALESTATE/FILTER',
+    filter,
+  };
 };
 
-export const realestateFilterNo = () => {
-  return { type: 'REALESTATE/FILTER/NO' };
-};
-
-export const realestateShowLoading = () => {
-  return { type: 'REALESTATE/LOADING/SHOW' };
-};
-
-export const realestateHideLoading = () => {
-  return { type: 'REALESTATE/LOADING/HIDE' };
+export const realestateLoading = (loading) => {
+  return {
+    type: 'REALESTATE/LOADING',
+    loading,
+  };
 };
 
 export const realestateServiceReturnWithSuccess = (result) => {
@@ -34,13 +32,13 @@ export const propertyServiceReturnWithSuccess = (result) => {
 
 export const fetchRealestates = (search) => {
   return (dispatch) => {
-    dispatch(realestateFilterYes());
-    dispatch(realestateShowLoading());
-
+    dispatch(realestateFilter(true));
+    dispatch(realestateLoading(true));
     getRealEstate(search)
     .then((result) => {
+      console.log('fetchRealestates', result);
       dispatch(realestateServiceReturnWithSuccess(result));
-      dispatch(realestateHideLoading());
+      dispatch(realestateLoading(false));
     })
     .catch((error) => {
       dispatch(handleError(error));

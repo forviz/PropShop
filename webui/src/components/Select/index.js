@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { Select } from 'antd';
+
 const Option = Select.Option;
 
 class SelectComponent extends Component {
@@ -8,8 +9,7 @@ class SelectComponent extends Component {
   static defaultProps = {
     items: [],
     placeholder: [],
-    defaultValue: [],
-    value: '',
+    value: [],
   }
 
   handleOnChange = (value) => {
@@ -17,26 +17,24 @@ class SelectComponent extends Component {
   }
 
   render() {
+    const { items, placeholder, value } = this.props;
 
-    const { items, placeholder, defaultValue, value } = this.props;
+    let itemsOption = null;
+    if (items) {
+      itemsOption = _.map(items, (item, index) => {
+        return (
+          <Option key={index} value={item}>{item}</Option>
+        );
+      });
+    }
 
-    const itemsOption = _.map(items, (item, index) => {
-      return (
-        <Option key={index} value={item}>{item}</Option>
-      );
-    })
+    const className = _.size(value) === 0 ? '' : 'active';
 
     return (
-      <div className="Select">
-        {value !== '' ? (
-          <Select placeholder={placeholder} defaultValue={defaultValue} value={value} style={{ width: '100%' }} onChange={this.handleOnChange} >
-            {itemsOption}
-          </Select>
-        ) : (
-          <Select placeholder={placeholder} defaultValue={defaultValue} style={{ width: '100%' }} onChange={this.handleOnChange} >
-            {itemsOption}
-          </Select>
-        )}
+      <div className={`Select ${className}`}>
+        <Select placeholder={placeholder} value={value} style={{ width: '100%' }} onChange={this.handleOnChange} >
+          {itemsOption}
+        </Select>
       </div>
     );
   }

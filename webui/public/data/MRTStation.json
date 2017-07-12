@@ -1,0 +1,176 @@
+[
+  {
+    "StationCode": "MRT001",
+    "StationName": "Bang Sue",
+    "StationNameTH": "บางซื่่อ",
+    "Position": "13.8034495,100.5358393"
+  },
+  {
+    "StationCode": "MRT002",
+    "StationName": "Chatuchak park",
+    "StationNameTH": "จตุจักร",
+    "Position": "13.8024521,100.5509559"
+  },
+  {
+    "StationCode": "MRT003",
+    "StationName": "Hua Lamphong",
+    "StationNameTH": "หัวลำโพง",
+    "Position": "13.737579,100.517038"
+  },
+  {
+    "StationCode": "MRT004",
+    "StationName": "Huai Khwang",
+    "StationNameTH": "ห้วยขวาง",
+    "Position": "13.7792815,100.5736668"
+  },
+  {
+    "StationCode": "MRT005",
+    "StationName": "Kampaeng Phet",
+    "StationNameTH": "กำแพงเพชร",
+    "Position": "13.7970838,100.5452753"
+  },
+  {
+    "StationCode": "MRT006",
+    "StationName": "Klong Toei",
+    "StationNameTH": "คลองเตย",
+    "Position": "13.72257,100.5516013"
+  },
+  {
+    "StationCode": "MRT007",
+    "StationName": "Lat Phrao",
+    "StationNameTH": "ลาดพร้าว",
+    "Position": "13.8059269,100.5732816"
+  },
+  {
+    "StationCode": "MRT008",
+    "StationName": "Phahon Yothin",
+    "StationNameTH": "พหลโยธิน",
+    "Position": "13.8140074,100.559932"
+  },
+  {
+    "StationCode": "MRT009",
+    "StationName": "Phetchaburi",
+    "StationNameTH": "เพชรบุรี",
+    "Position": "13.7484815,100.5623728"
+  },
+  {
+    "StationCode": "MRT010",
+    "StationName": "Phra Ram 9",
+    "StationNameTH": "พระราม 9",
+    "Position": "13.7579855,100.5644772"
+  },
+  {
+    "StationCode": "MRT011",
+    "StationName": "Queen Sirikit National Convention Centre",
+    "StationNameTH": "ศูยน์ประชุมแห่งชาติสิริกิตติ์",
+    "Position": "13.7235945,100.5599127"
+  },
+  {
+    "StationCode": "MRT012",
+    "StationName": "Ratchadaphisek",
+    "StationNameTH": "รัชดาภิเษก",
+    "Position": "13.7988946,100.574074"
+  },
+  {
+    "StationCode": "MRT013",
+    "StationName": "Sam Yan",
+    "StationNameTH": "สามย่าน",
+    "Position": "13.7322966,100.5298409"
+  },
+  {
+    "StationCode": "MRT014",
+    "StationName": "Si Lom",
+    "StationNameTH": "สีลม",
+    "Position": "13.7292923,100.5362872"
+  },
+  {
+    "StationCode": "MRT015",
+    "StationName": "Sukhumvit",
+    "StationNameTH": "สุขุมวิท",
+    "Position": "13.7385351,100.5612433"
+  },
+  {
+    "StationCode": "MRT016",
+    "StationName": "Sutthisan",
+    "StationNameTH": "สุทธิสาร",
+    "Position": "13.7889135,100.5744877"
+  },
+  {
+    "StationCode": "MRT017",
+    "StationName": "Thailand Cutural Centre",
+    "StationNameTH": "ศูนย์วัฒนธรรมแห่งประเทศไทย",
+    "Position": "13.766475,100.5692652"
+  },
+  {
+    "StationCode": "MRT018",
+    "StationName": "Lumphini",
+    "StationNameTH": "ลุมพินี",
+    "Position": "13.7262868,100.5449736"
+  },
+  {
+    "StationCode": "MRT019",
+    "StationName": "Tao Pun",
+    "StationNameTH": "เตาปูน",
+    "Position": "13.8060192,100.5305132"
+  },
+  {
+    "StationCode": "MRT020",
+    "StationName": "Bang Son",
+    "StationNameTH": "บางซ่อน",
+    "Position": "13.820111,100.5279213"
+  },
+  {
+    "StationCode": "MRT021",
+    "StationName": "Wong Sawang",
+    "StationNameTH": "วงศ์สว่าง",
+    "Position": "13.8295009,100.525545"
+  },
+  {
+    "StationCode": "MRT022",
+    "StationName": "Yaek Tiwanon",
+    "StationNameTH": "แยกติวานนท์",
+    "Position": "13.8391514,100.5143535"
+  },
+  {
+    "StationCode": "MRT023",
+    "StationName": "Ministry of Public Health",
+    "StationNameTH": "กระทรวงสาธารณสุข",
+    "Position": "13.8483149,100.5144074"
+  },
+  {
+    "StationCode": "MRT024",
+    "StationName": "Nonthaburi Civic Center",
+    "StationNameTH": "ศูนย์ราชการจังหวัดนนทบุรี",
+    "Position": "13.8601877,100.5131047"
+  },
+  {
+    "StationCode": "MRT025",
+    "StationName": "Bang Kar Sor",
+    "StationNameTH": "บางกระสอ",
+    "Position": "13.8612608,100.5026598"
+  },
+  {
+    "StationCode": "MRT026",
+    "StationName": "Yake Nonthaburi 1",
+    "StationNameTH": "แยกนนทบุรี 1",
+    "Position": "13.8647639,100.4936002"
+  },
+  {
+    "StationCode": "MRT027",
+    "StationName": "Phra Nang Klao Bridge",
+    "StationNameTH": "สะพานพระนั่งเกล้า",
+    "Position": "13.8703755,100.4798079"
+  },
+  {
+    "StationCode": "MRT028",
+    "StationName": "Sai Ma",
+    "StationNameTH": "ไทรม้า",
+    "Position": "13.8706193,100.4630542"
+  },
+  {
+    "StationCode": "MRT029",
+    "StationName": "Tha It",
+    "StationNameTH": "ท่าอิฐ",
+    "Position": "13.8747302,100.4561062"
+  }
+]

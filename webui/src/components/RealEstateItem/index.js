@@ -1,60 +1,21 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import numeral from 'numeral';
-
 import FontAwesome from 'react-fontawesome';
 
 class RealEstateItem extends Component {
 
   render() {
-
     const { type, item } = this.props;
 
     if (!item) return (<div />);
 
     const background = {
-      'background': `url(${item.mainImage})`,
-      'backgroundSize': 'cover',
-    }
-
-    if (type === 'sell') {
-      return (
-        <div className="RealEstateItem sell">
-          <Link to={'/realestate/'+item.id}>
-            <div className="background" style={background}>
-              <div className="gradient"></div>
-              <div className="content">
-                <div className="price">{numeral(item.price).format('0,0')} บาท</div>
-                <div className="place">{item.street} - {item.province}</div>
-                {(item.bedroom > 0 || item.bathroom > 0 ) &&
-                  <div className="option">
-                    <ul>
-                      {item.bedroom > 0 &&
-                        <li><FontAwesome name="bed" /><span>{item.bedroom}</span></li>
-                      }
-                      {item.bathroom > 0 &&
-                        <li><FontAwesome name="bath" /><span>{item.bathroom}</span></li>
-                      }
-                    </ul>
-                  </div>
-                }
-              </div>
-            </div>
-          </Link>
-        </div>
-      );
-    }
-
-    if (type === 'banner') {
-      return (
-        <div className="RealEstateItem banner">
-          <div className="background" style={background}></div>
-        </div>
-      );
-    }
+      background: `url(${item.mainImage})`,
+      backgroundSize: 'cover',
+    };
 
     if (type === 'detail') {
-      console.log('spyrocash', item);
       return (
         <div className="RealEstateItem detail">
           <div className="row">
@@ -65,7 +26,7 @@ class RealEstateItem extends Component {
             </div>
             <div className="col-md-6">
               <div className="address">{item.street} - {item.province}</div>
-              {(item.bedroom > 0 || item.bathroom > 0 ) &&
+              {(item.bedroom > 0 || item.bathroom > 0) &&
                 <div className="option">
                   <ul>
                     {item.bedroom > 0 &&
@@ -77,7 +38,7 @@ class RealEstateItem extends Component {
                   </ul>
                 </div>
               }
-              <div style={{marginTop: '15px'}}>
+              <div style={{ marginTop: '15px' }}>
                 {item.soldOut === 1 &&
                   <span className="for sold_out">ขายแล้ว</span>
                 }
@@ -96,7 +57,32 @@ class RealEstateItem extends Component {
         </div>
       );
     }
-      
+
+    return (
+      <div className="RealEstateItem sell">
+        <NavLink exact to={`/realestate/${item.id}`}>
+          <div className="background" style={background}>
+            <div className="gradient"></div>
+            <div className="content">
+              <div className="price">{numeral(item.price).format('0,0')} บาท</div>
+              <div className="place">{item.street} - {item.province}</div>
+              {(item.bedroom > 0 || item.bathroom > 0) &&
+                <div className="option">
+                  <ul>
+                    {item.bedroom > 0 &&
+                      <li><FontAwesome name="bed" /><span>{item.bedroom}</span></li>
+                    }
+                    {item.bathroom > 0 &&
+                      <li><FontAwesome name="bath" /><span>{item.bathroom}</span></li>
+                    }
+                  </ul>
+                </div>
+              }
+            </div>
+          </div>
+        </NavLink>
+      </div>
+    );
   }
 }
 

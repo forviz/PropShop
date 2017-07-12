@@ -1,7 +1,7 @@
 import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
+import moment from 'moment';
 import _ from 'lodash';
-const cuid = require('cuid');
 
 import mapAgentEntryToEntity from './utils/mapAgentEntryToEntity';
 
@@ -15,8 +15,8 @@ const clientManagement = contentfulManagement.createClient({
 });
 
 const mapContentFulRealestateToMyField = (data) => {
-  console.log('mapContentFulRealestateToMyField', data);
   return _.reduce(data, (acc, elem, index) => {
+    const inWebsite = moment.duration(moment(new Date()).diff(moment(elem.sys.createdAt))).days() === 0;
     return {
       ...acc,
       [index]: {
@@ -29,7 +29,10 @@ const mapContentFulRealestateToMyField = (data) => {
           return image.fields.file.url;
         }),
         price: elem.fields.price,
-        agentId: elem.fields.agent ? elem.fields.agent.sys.id : '',
+        // agentId: elem.fields.agent ? elem.fields.agent.sys.id : '',
+        agent: elem.fields.agents ? elem.fields.agents[0].fields : '',
+        inWebsite: inWebsite === 0 ? 1 : inWebsite,
+        lastUpdate: `${moment(elem.sys.updatedAt).format('D/MM/YYYY H:mm A')}:`,
       },
     };
   }, {});
@@ -119,10 +122,7 @@ export const getBannerRealEstate = () => {
     'sys.id': process.env.REACT_APP_CONTENTFUL_BANNER,
     include: 1,
   }).then((entry) => {
-    console.log('getBannerRealEstate', entry);
-    const xx = mapContentFulBannerToMyField(entry);
-    console.log('xx', xx);
-    return xx;
+    return mapContentFulBannerToMyField(entry);
   });
 };
 
@@ -131,27 +131,26 @@ export const getConfigRealEstate = () => {
 };
 
 export const getRealEstate = (search) => {
-
-  console.log('search', search);
-  let searchEntries = {};
-  searchEntries['content_type'] = 'realEstate';
-  if ( search.id ) searchEntries['sys.id'] = search.id;
-  if ( search.for ) searchEntries['fields.for[in]'] = search.for;
-  if ( search.query ) searchEntries['query'] = search.query;
-  if ( search.residentialType ) searchEntries['fields.residentialType'] = search.residentialType;
-  if ( search.bedroom ) searchEntries['fields.bedroom'] = parseInt(search.bedroom, 10);
-  if ( search.bathroom ) searchEntries['fields.bathroom'] = parseInt(search.bathroom, 10);
-  if ( search.priceMin ) searchEntries['fields.price[gte]'] = parseInt(search.priceMin, 10);
-  if ( search.priceMax ) searchEntries['fields.price[lte]'] = parseInt(search.priceMax, 10);
-  if ( search.specialFeatureView ) searchEntries['fields.specialFeatureView[all]'] = search.specialFeatureView;
-  if ( search.specialFeatureFacilities ) searchEntries['fields.specialFeatureFacilities[all]'] = search.specialFeatureFacilities;
-  if ( search.specialFeatureNearbyPlaces ) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
-  if ( search.specialFeaturePrivate ) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
+  const searchEntries = {};
+  searchEntries.content_type = 'realEstate';
+  if (search.id) searchEntries['sys.id'] = search.id;
+  if (search.for) searchEntries['fields.for[in]'] = search.for;
+  if (search.query) searchEntries.query = search.query;
+  if (search.residentialType) searchEntries['fields.residentialType'] = search.residentialType;
+  if (search.bedroom) searchEntries['fields.bedroom[gte]'] = parseInt(search.bedroom, 10);
+  if (search.bathroom) searchEntries['fields.bathroom[gte]'] = parseInt(search.bathroom, 10);
+  if (search.priceMin) searchEntries['fields.price[gte]'] = parseInt(search.priceMin, 10);
+  if (search.priceMax) searchEntries['fields.price[lte]'] = parseInt(search.priceMax, 10);
+  if (search.specialFeatureView) searchEntries['fields.specialFeatureView[all]'] = search.specialFeatureView;
+  if (search.specialFeatureFacilities) searchEntries['fields.specialFeatureFacilities[all]'] = search.specialFeatureFacilities;
+  if (search.specialFeatureNearbyPlaces) searchEntries['fields.specialFeatureNearbyPlaces[all]'] = search.specialFeatureNearbyPlaces;
+  if (search.specialFeaturePrivate) searchEntries['fields.specialFeaturePrivate[all]'] = search.specialFeaturePrivate;
+  if (search.location) searchEntries['fields.location[within]'] = `${search.location},${search.radius}`;
+  if (_.size(searchEntries) === 0) {
+    return false;
+  }
   return client.getEntries(searchEntries).then((entry) => {
-    console.log('entry', entry);
-    const xx = _.map(mapContentFulRealestateToMyField(entry.items), item => item);
-    console.log('xx', xx);
-    return xx;
+    return _.map(mapContentFulRealestateToMyField(entry.items), item => item);
   });
   // 'fields.for[in]': 'Sell'
   // 'fields.residentialType': 'House',
@@ -168,22 +167,32 @@ export const getRealEstate = (search) => {
 const existUser = (uid) => {
   return client.getEntries({
     content_type: 'agent',
-    'fields.uid': uid
+    'fields.uid': uid,
   })
   .then((response) => {
     return response.total === 0 ? false : true;
   })
-  .catch(console.error)
-}
+  .catch(console.error);
+};
+
+export const publishEntry = (entryId) => {
+  return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+  .then(space => space.getEntry(entryId))
+  .then(entry => entry.publish())
+  .then((entry) => {
+    return entry;
+  })
+  .catch(console.error);
+};
 
 export const createUser = (user) => {
   return existUser(user.uid).then((hasUser) => {
-    if ( !hasUser ) {
+    if (!hasUser) {
       return clientManagement.getSpace(process.env.REACT_APP_SPACE)
-      .then((space) => space.createEntry('agent', {
+      .then(space => space.createEntry('agent', {
         fields: {
           username: {
-            'en-US': user.displayName,
+            'en-US': user.username,
           },
           email: {
             'en-US': user.email,
@@ -191,25 +200,15 @@ export const createUser = (user) => {
           uid: {
             'en-US': user.uid,
           },
-        }
+        },
       }))
       .then((entry) => {
         return publishEntry(entry.sys.id);
       })
-      .catch(console.error)
+      .catch(console.error);
     }
   });
 };
-
-export const publishEntry = (entry_id) => {
-  return clientManagement.getSpace(process.env.REACT_APP_SPACE)
-  .then((space) => space.getEntry(entry_id))
-  .then((entry) => entry.publish())
-  .then((entry) => {
-    return entry;
-  })
-  .catch(console.error)
-}
 
 const parseRealEstateData = (data, mainImageId, imageIds) => {
   return {
@@ -567,9 +566,7 @@ export const getUserData = (uid) => {
 }
 
 const mapFieldAgent = (data) => {
-  console.log('mapFieldAgent', data);
   return _.reduce(data, (acc, elem, index) => {
-    console.log('elem', elem);
     return {
       ...acc,
       [index]: {

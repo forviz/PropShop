@@ -1,0 +1,224 @@
+[
+  {
+    "StationCode": "BTS037",
+    "StationName": "ERAWAN MUSEUM (E17)",
+    "StationNameTH": "พิพิธภัณฑ์ช้างเอราวัณ (E17)",
+    "Position": "13.6296099,100.5847452"
+  },
+  {
+    "StationCode": "BTS036",
+    "StationName": "PU CHAO SAMING PRAI (E16)",
+    "StationNameTH": "ปู่เจ้าสมิงพราย (E16)",
+    "Position": "13.6416733,100.5915151,17"
+  },
+  {
+    "StationCode": "BTS035",
+    "StationName": "Sam Rong (E15)",
+    "StationNameTH": "สำโรง (E15)",
+    "Position": "13.6456272,100.5944104"
+  },
+  {
+    "StationCode": "BTS030",
+    "StationName": "Bearing (E14)",
+    "StationNameTH": "แบริ่ง (E14)",
+    "Position": "13.66128,100.60187"
+  },
+  {
+    "StationCode": "BTS029",
+    "StationName": "Bang na (E13)",
+    "StationNameTH": "บางนา (E13)",
+    "Position": "13.66812,100.60471"
+  },
+  {
+    "StationCode": "BTS025",
+    "StationName": "Udom Suk (E12)",
+    "StationNameTH": "อุดมสุข (E12)",
+    "Position": "13.67992,100.60948"
+  },
+  {
+    "StationCode": "BTS028",
+    "StationName": "Punnawithi (E11)",
+    "StationNameTH": "ปุณณวิถี (E11)",
+    "Position": "13.68919,100.60914"
+  },
+  {
+    "StationCode": "BTS027",
+    "StationName": "Bang Chak (E10)",
+    "StationNameTH": "บางจาก (E10)",
+    "Position": "13.69656,100.60553"
+  },
+  {
+    "StationCode": "BTS009",
+    "StationName": "On Nut (E9)",
+    "StationNameTH": "อ่อนนุช (E9)",
+    "Position": "13.70543,100.60103"
+  },
+  {
+    "StationCode": "BTS011",
+    "StationName": "Phra Khanong (E8)",
+    "StationNameTH": "พระโขนง (E8)",
+    "Position": "13.71514,100.59137"
+  },
+  {
+    "StationCode": "BTS005",
+    "StationName": "Ekkamai (E7)",
+    "StationNameTH": "เอกมัย (E7)",
+    "Position": "13.71977,100.58479"
+  },
+  {
+    "StationCode": "BTS022",
+    "StationName": "Thong Lo (E6)",
+    "StationNameTH": "ทองหล่อ (E6)",
+    "Position": "13.72416,100.57854"
+  },
+  {
+    "StationCode": "BTS013",
+    "StationName": "Phrom Phong (E5)",
+    "StationNameTH": "พร้อมพงษ์ (E5)",
+    "Position": "13.73081,100.56925"
+  },
+  {
+    "StationCode": "BTS002",
+    "StationName": "Asoke (E4)",
+    "StationNameTH": "อโศก (E4)",
+    "Position": "13.73696,100.56024"
+  },
+  {
+    "StationCode": "BTS007",
+    "StationName": "Nana (E3)",
+    "StationNameTH": "นานา (E3)",
+    "Position": "13.7409028,100.5490779"
+  },
+  {
+    "StationCode": "BTS012",
+    "StationName": "Phloen Chit (E2)",
+    "StationNameTH": "เพลินจิต (E2)",
+    "Position": "13.74307,100.549"
+  },
+  {
+    "StationCode": "BTS003",
+    "StationName": "Chitlom (E1)",
+    "StationNameTH": "ชิดลม (E1)",
+    "Position": "13.74409,100.54309"
+  },
+  {
+    "StationCode": "BTS020",
+    "StationName": "Siam (CEN)",
+    "StationNameTH": "สยาม (CEN)",
+    "Position": "13.74559,100.5343"
+  },
+  {
+    "StationCode": "BTS015",
+    "StationName": "Ratchathewi (N1)",
+    "StationNameTH": "ราชเทวี (N1)",
+    "Position": "13.7517,100.53161"
+  },
+  {
+    "StationCode": "BTS010",
+    "StationName": "Phaya Thai (N2)",
+    "StationNameTH": "พญาไท (N2)",
+    "Position": "13.75689,100.53397"
+  },
+  {
+    "StationCode": "BTS023",
+    "StationName": "Victory Monument (N3)",
+    "StationNameTH": "อนุสาวรีย์ชัยสมรภูมิ (N3)",
+    "Position": "13.76274,100.53692"
+  },
+  {
+    "StationCode": "BTS017",
+    "StationName": "Sanam Pao (N4)",
+    "StationNameTH": "สนามเป้า (N4)",
+    "Position": "13.77252,100.5421"
+  },
+  {
+    "StationCode": "BTS001",
+    "StationName": "Ari (N5)",
+    "StationNameTH": "อารีย์ (N5)",
+    "Position": "13.77974,100.54465"
+  },
+  {
+    "StationCode": "BTS018",
+    "StationName": "Saphan Khwai (N7)",
+    "StationNameTH": "สะพานควาย (N7)",
+    "Position": "13.79381,100.54972"
+  },
+  {
+    "StationCode": "BTS006",
+    "StationName": "Mo Chit  (N8)",
+    "StationNameTH": "หมอชิต (N8)",
+    "Position": "13.8026, 100.55381"
+  },
+  {
+    "StationCode": "BTS008",
+    "StationName": "National Stadium (W1)",
+    "StationNameTH": "สนามกีฬาแห่งชาติ (W1)",
+    "Position": "13.7465,100.52899"
+  },
+  {
+    "StationCode": "BTS014",
+    "StationName": "Ratchadamri (S1)",
+    "StationNameTH": "ราชดำริ (S1)",
+    "Position": "13.73942,100.53957"
+  },
+  {
+    "StationCode": "BTS016",
+    "StationName": "Sala Daeng (S2)",
+    "StationNameTH": "ศาลาแดง (S2)",
+    "Position": "13.72864,100.53438"
+  },
+  {
+    "StationCode": "BTS004",
+    "StationName": "Chong Nonsri (S3)",
+    "StationNameTH": "ช่องนนทรี (S3)",
+    "Position": "13.72371,100.52958"
+  },
+  {
+    "StationCode": "BTS021",
+    "StationName": "Surasak (S5)",
+    "StationNameTH": "สุรศักดิ์ (S5)",
+    "Position": "13.7192,100.52168"
+  },
+  {
+    "StationCode": "BTS019",
+    "StationName": "Saphan Taksin (S6)",
+    "StationNameTH": "สะพานตากสิน (S6)",
+    "Position": "13.71884,100.51417"
+  },
+  {
+    "StationCode": "BTS026",
+    "StationName": "Krung Thon Buri (S7)",
+    "StationNameTH": "กรุงธนบุรี (S7)",
+    "Position": "13.721,100.50247"
+  },
+  {
+    "StationCode": "BTS024",
+    "StationName": "Wongwian Yai (S8)",
+    "StationNameTH": "วงเวียนใหญ่ (S8)",
+    "Position": "13.72112,100.49527"
+  },
+  {
+    "StationCode": "BTS031",
+    "StationName": "Pho Nimit (S9)",
+    "StationNameTH": "โพธิ์นิมิตร (S9)",
+    "Position": "13.71895,100.48473"
+  },
+  {
+    "StationCode": "BTS032",
+    "StationName": "Talat Phlu (S10)",
+    "StationNameTH": "ตลาดพลู (S10)",
+    "Position": "13.71393,100.47634"
+  },
+  {
+    "StationCode": "BTS033",
+    "StationName": "Wutthakat (S11)",
+    "StationNameTH": "วุฒากาศ (S11)",
+    "Position": "13.71307,100.46871"
+  },
+  {
+    "StationCode": "BTS034",
+    "StationName": "Bang Wa (S12)",
+    "StationNameTH": "บางหว้า (S12)",
+    "Position": "13.72069,100.4578"
+  }
+]
