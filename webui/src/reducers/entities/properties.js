@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const initialState = {
   entities: {},
   fetchStatus: {},
@@ -6,6 +8,18 @@ const initialState = {
 
 const properties = (state = initialState, action) => {
   switch (action.type) {
+
+    case 'ENTITY/PROPERTIES/RECEIVED': {
+      return {
+        ...state,
+        entities: _.reduce(action.properties, (acc, property) => {
+          return { ...acc, [property.id]: property };
+        }, state.entities),
+        fetchStatus: _.reduce(action.properties, (acc, property) => {
+          return { ...acc, [property.id]: 'loaded' };
+        }, state.fetchStatus),
+      };
+    }
     case 'ENTITY/PROPERTY/RECEIVED': {
       const propertyId = action.propertyId;
       return {

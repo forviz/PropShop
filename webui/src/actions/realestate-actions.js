@@ -1,5 +1,5 @@
-import { getRealEstate } from '../api/contentful';
-import { getProperties } from '../api/property';
+import _ from 'lodash';
+import { getProperties, getPropertyIDs } from '../api/property';
 import { handleError } from './errors';
 
 export const realestateFilter = (filter) => {
@@ -23,32 +23,48 @@ export const realestateServiceReturnWithSuccess = (result) => {
   };
 };
 
-export const propertyServiceReturnWithSuccess = (result) => {
-  console.log('propertyServiceReturnWithSuccess', result);
-  return {
-    type: 'PROPERTY/RECEIVED/SUCCESS',
-    items: result,
-  };
-};
+// export const propertyServiceReturnWithSuccess = (result) => {
+//   console.log('propertyServiceReturnWithSuccess', result);
+//   return {
+//     // type: 'PROPERTY/RECEIVED/SUCCESS',
+//     type: 'ENTITY/PROPERTY/RECEIVED'
+//     items: result,
+//   };
+// };
 
-export const fetchRealestates = (search) => {
-  return (dispatch) => {
+export const receivePropertySearchResult = (itemIds, total) => {
+  return {
+    type: 'DOMAIN/PROPERTY_SEARCH/RESULT_RECEIVED',
+    total,
+    itemIds,
+  };
+}
+
+export const searchProperties = (search) => {
+  console.log('searchProperties', search);
+  return (dispatch, getState) => {
     dispatch(realestateFilter(true));
     dispatch(realestateLoading(true));
-    // getRealEstate(search)
-    // .then((result) => {
-    //   console.log('fetchRealestates', result);
-    //   dispatch(realestateServiceReturnWithSuccess(result));
-    //   dispatch(realestateLoading(false));
-    // })
-    // .catch((error) => {
-    //   dispatch(handleError(error));
-    // });
 
-    getProperties(search)
+    // Get all properties, with ID Only
+    getPropertyIDs(search)
     .then((result) => {
-      dispatch(propertyServiceReturnWithSuccess(result));
+      dispatch(receivePropertySearchResult(result.itemIds, result.total));
       dispatch(realestateLoading(false));
+      return result.itemIds;
+    })
+    .then((visibleIDs) => {
+
+      const fetchedPropertyIDs = Object.keys(_.pickBy(_.get(getState(), 'entities.properties.fetchStatus'), val => val === 'loaded'));
+      const propertyIDsToFetch = _.difference(visibleIDs, fetchedPropertyIDs);
+      getProperties(`?ids=${_.join(propertyIDsToFetch, ',')}`)
+      .then((properties) => {
+        dispatch({
+          type: 'ENTITY/PROPERTIES/RECEIVED',
+          properties,
+        });
+        dispatch(realestateLoading(false));
+      });
     })
     .catch((error) => {
       dispatch(handleError(error));

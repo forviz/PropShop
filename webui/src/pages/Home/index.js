@@ -19,6 +19,7 @@ import SelectElectricTrain from '../../components/SelectElectricTrain';
 import SelectElectricTrainStation from '../../components/SelectElectricTrainStation';
 import SelectRadius from '../../components/SelectRadius';
 import MapLocation from '../../components/Map/MapLocation';
+import SearchInput from '../../containers/SearchInput';
 
 import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
@@ -29,6 +30,36 @@ import * as firebase from '../../api/firebase';
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 
+const mapStateToProps = (state) => {
+  const propertySearch = _.get(state, 'domain.propertySearch');
+  const visibleIDs = propertySearch.visibleIDs;
+
+  const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
+  return {
+    user: state.user.data,
+    banner: state.banners,
+    // realestate: state.realestates,
+    realestate: {
+      filter: true,
+      data: _.compact(properties),
+      total: propertySearch.total,
+    },
+    configRealestate: state.config,
+  };
+};
+
+const actions = {
+  fetchUserProfile: UserActions.fetchUserProfile,
+  searchProperties: RealestateActions.searchProperties,
+  fetchConfigs: ConfigActions.fetchConfigs,
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+
 class Home extends Component {
 
   headerHeight: 0;
@@ -37,7 +68,7 @@ class Home extends Component {
     super(props);
     this.getProfile(props);
     this.getConfig(props);
-    this.goFilter(props.location);
+    // this.goFilter(props.location);
   }
 
   state = {
@@ -48,11 +79,15 @@ class Home extends Component {
     document.getElementById('Footer').style.visibility = 'hidden';
     document.addEventListener('scroll', this.handleScroll);
     this.headerHeight = document.getElementById('Header').clientHeight;
+
+    const { searchProperties } = this.props.actions;
+    searchProperties(this.props.location.search);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.location !== this.props.location) {
-      this.goFilter(nextProps.location);
+    const { searchProperties, getPropertyEntities } = nextProps.actions;
+    if (!_.isEqual(nextProps.location, this.props.location)) {
+      searchProperties(nextProps.location.search);
     }
   }
 
@@ -86,15 +121,15 @@ class Home extends Component {
     }
   }
 
-  goFilter = (location) => {
-    const search = location.search;
-    if (search) {
-      const { fetchRealestates } = this.props.actions;
-      fetchRealestates(search);
-    } else {
-      this.props.realestate.filter = false;
-    }
-  }
+  // goFilter = (location) => {
+  //   const search = location.search;
+  //   if (search) {
+  //     const { searchProperties } = this.props.actions;
+  //     searchProperties(search);
+  //   } else {
+  //     this.props.realestate.filter = false;
+  //   }
+  // }
 
   delay = (() => {
     let timer = 0;
@@ -159,8 +194,7 @@ class Home extends Component {
     this.filter('radius', value);
   }
 
-  handleFilterInput = (e) => {
-    const value = e.target.value;
+  handleFilterInput = (value) => {
     this.delay(() => {
       this.filter('query', value);
     }, 1000);
@@ -310,7 +344,7 @@ class Home extends Component {
                         </div>
                       </div>
                       <div className="col-sm-9">
-                        <Input
+                        <SearchInput
                           placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ"
                           defaultValue={defaultSelected.query}
                           style={{ width: '100%' }}
@@ -550,26 +584,5 @@ class Home extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    user: state.user.data,
-    banner: state.banners,
-    realestate: state.realestates,
-    configRealestate: state.config,
-  };
-};
-
-const actions = {
-  fetchUserProfile: UserActions.fetchUserProfile,
-  fetchRealestates: RealestateActions.fetchRealestates,
-  fetchConfigs: ConfigActions.fetchConfigs,
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators(actions, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
