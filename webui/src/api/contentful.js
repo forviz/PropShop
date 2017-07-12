@@ -17,7 +17,6 @@ const clientManagement = contentfulManagement.createClient({
 const mapContentFulRealestateToMyField = (data) => {
   console.log('mapContentFulRealestateToMyField', data);
   return _.reduce(data, (acc, elem, index) => {
-    console.log('elem', elem);
     return {
       ...acc,
       [index]: {

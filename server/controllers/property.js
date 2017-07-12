@@ -12,6 +12,7 @@ const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.80
 
 export const queryProperties = async (req, res, next) => {
   try {
+    console.log('req.query', req.query);
     const { id, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax } = req.query;
     const _for = req.query.for;
 
@@ -19,16 +20,17 @@ export const queryProperties = async (req, res, next) => {
       content_type: 'property',
       'sys.id': id,
       query,
-      'fields.forSale': _for === 'sale',
-      'fields.forRent': _for === 'rent',
+      'fields.forSale': _for === 'sale' || _for === 'ขาย',
+      'fields.forRent': _for === 'rent' || _for === 'เช่า',
       'fields.propertyType': propertyType || residentialType,
       'fields.numBedrooms': bedroom ? _.toNumber(bedroom) : undefined,
       'fields.numBathrooms': bathroom ? _.toNumber(bathroom) : undefined,
-      'fields.priceSale.value[gte]': _for === 'sale' ? priceMin : undefined,
-      'fields.priceSale.value[lte]': _for === 'sale' ? priceMax : undefined,
-      'fields.priceRent.value[gte]': _for === 'rent' ? priceMin : undefined,
-      'fields.priceRent.value[lte]': _for === 'rent' ? priceMax : undefined,
+      'fields.priceSaleValue[gte]': _for === 'sale' && priceMin ? _.toNumber(priceMin) : undefined,
+      'fields.priceSaleValue[lte]': _for === 'sale' && priceMax ? _.toNumber(priceMax) : undefined,
+      'fields.priceRentValue[gte]': _for === 'rent' && priceMin ? _.toNumber(priceMin) : undefined,
+      'fields.priceRentValue[lte]': _for === 'rent' && priceMax ? _.toNumber(priceMax) : undefined,
     }, val => val === undefined || val === '' || val === false);
+    console.log('propertyQuery', propertyQuery);
     const response = await client.getEntries(propertyQuery);
     res.json(response);
   } catch (e) {

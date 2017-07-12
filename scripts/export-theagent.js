@@ -79,12 +79,12 @@ const toContentfulPropertyFields = (data) => {
       description: {
         'en-US': data.description,
       },
-      locationMarker: {
+      locationMarker: !_.isEmpty(data.location.latitude) && !_.isEmpty(data.location.longitude) ? {
         'en-US': {
           lat: data.location.latitude,
           lon: data.location.longitude,
         },
-      },
+      } : undefined,
       location: {
         'en-US': data.location,
       },
@@ -201,7 +201,11 @@ const truncateProperties = async (space) => {
   const currentEntries = await space.getEntries({'content_type': 'property'}).then(response => response.items);
 
   for(const entry of currentEntries) {
-    await entry.unpublish().then(entry => entry.delete());
+    if (entry.isPublished()) {
+      await entry.unpublish().then(entry => entry.delete());
+    } else {
+      await entry.delete();
+    }
   }
   console.log('============================================');
   console.log(`     Delete ${_.size(currentEntries)} Done!`);
@@ -217,7 +221,7 @@ const createProperties = async (space, rows, assets) => {
   console.log('============================================');
 };
 
-connection.query('SELECT * from item LEFT JOIN Project ON item.ProjectCode = Project.ProjectCode LIMIT 200', async (err, dbRows, fields) => {
+connection.query('SELECT * from item LEFT JOIN Project ON item.ProjectCode = Project.ProjectCode WHERE Enable = 1 LIMIT 1000', async (err, dbRows, fields) => {
   if (err) {
     console.log('Error while performing Query.', err);
     return;
@@ -225,8 +229,9 @@ connection.query('SELECT * from item LEFT JOIN Project ON item.ProjectCode = Pro
   console.log('Importing ', _.size(dbRows), ' rows');
 
   // const rows = _.take(dbRows, 1);
-  const rows = _.filter(dbRows, row => !/\s|[ก-ฮ]/g.test(row.ItemPathImage2));
-  console.log('filter Item with unformatted image url, importing ', _.size(rows), ' rows');
+  // const rows = _.filter(dbRows, row => !/\s|[ก-ฮ]/g.test(row.ItemPathImage2));
+  const rows = dbRows;
+  // console.log('Filter Item with unformatted image url, importing ', _.size(rows), ' rows');
 
   var properties = _.map(rows, function(row) {
 
@@ -241,8 +246,8 @@ connection.query('SELECT * from item LEFT JOIN Project ON item.ProjectCode = Pro
         th: `Unit ${row.ItemUnitNo} ${row.ProjectNameTH}`,
       },
       description: {
-        en: '',
-        th: row.ItemRemark,
+        en: row.ShortDetailEN,
+        th: row.ShortDetailTH,
       },
       location: {
         summary: {

@@ -21,7 +21,8 @@
     "postbuild": "rimraf build/app/webui && ncp webui/build build/app/webui",
     "start": "node build/app",
     "start:prod": "NODE_ENV=production node build/app",
-    "export:theagent": "babel-node scripts/export-theagent"
+    "export:theagent": "babel-node scripts/export-theagent",
+    "migration:patch": "babel-node scripts/migration-patch-1.1"
   },
   "repository": {
     "type": "git",

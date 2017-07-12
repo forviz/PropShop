@@ -3,6 +3,83 @@ import { uploadFile } from './contentful';
 
 const BASEURL = 'http://localhost:4000/api/v1';
 
+const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
+
+const mapContentFulPropertyToMyField = (data) => {
+  // console.log('mapContentFulPropertyToMyField', data);
+  return _.reduce(data, (acc, elem, index) => {
+    const forSale = _.get(elem, 'fields.forSale') === true;
+    return {
+      ...acc,
+      [index]: {
+        id: elem.sys.id,
+        address: _.get(elem, 'fields.location.full.th'),
+        agentId: '',
+        amphur: _.get(elem, 'fields.location.district'),
+        announceDetails: _.get(elem, 'fields.description.th', ''),
+        areaSize: _.get(elem, 'fields.areaUsable.value'),
+        bathroom: _.get(elem, 'fields.numBedrooms'),
+        bedroom: _.get(elem, 'fields.numBathrooms'),
+        district: _.get(elem, 'fields.location.subDistrict'),
+        fee: 0,
+        for: forSale ? 'ขาย' : 'เช่า',
+        location: {
+          lat: _.get(elem, 'fields.location.latitude'),
+          lon: _.get(elem, 'fields.location.longitude'),
+        },
+        price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
+        project: _.replace(_.get(elem, 'fields.name.eh'), `Unit ${_.get(elem, 'fields.location.unitNo')}`),
+        province: _.get(elem, 'fields.location.province'),
+        residentialType: _.get(elem, 'fields.propertyType'),
+        sold: false,
+        specialFeatureFacilities: _.get(elem, 'fields.tags'),
+        specialFeatureNearbyPlaces: [],
+        street: _.get(elem, 'fields.location.street'),
+        topic: _.get(elem, 'fields.name.th'),
+        zipcode: _.get(elem, 'fields.location.zipcode'),
+        createdAt: elem.sys.createdAt,
+        updatedAt: elem.sys.updatedAt,
+        mainImage: _.get(elem, 'fields.coverImage.fields.file.url'),
+        images: _.map(_.get(elem, 'fields.images'), (image) => {
+          return _.get(image, 'fields.file.url');
+        }),
+        // Extra
+        publicTransports: _.get(elem, 'fields.location.publicTransports'),
+        unitNo: _.get(elem, 'fields.location.unitNo'),
+        floorNo: _.get(elem, 'fields.location.floorNo'),
+        buildingNo: _.get(elem, 'fields.location.buildingNo'),
+      },
+    };
+  }, {});
+};
+
+export const getProperties = (search) => {
+  console.log('getProperties', search);
+  const searchEntries = {};
+  searchEntries.content_type = 'property';
+  if (search.id) searchEntries['sys.id'] = search.id;
+  if (search.for === 'ขาย' || search.for === 'sale') searchEntries.for = 'sale';
+  if (search.for === 'เช่า' || search.for === 'rent') searchEntries.for = 'rent';
+  if (search.query) searchEntries.query = search.query;
+  if (search.residentialType) searchEntries['fields.residentialType'] = search.residentialType;
+  if (search.bedroom) searchEntries.bedroom = parseInt(search.bedroom, 10);
+  if (search.bathroom) searchEntries.bathroom = parseInt(search.bathroom, 10);
+  if (search.priceMin) searchEntries.priceMin = parseInt(search.priceMin, 10);
+  if (search.priceMax) searchEntries.priceMax = parseInt(search.priceMax, 10);
+  if (search.specialFeatureView) searchEntries.specialFeatureView = search.specialFeatureView;
+  if (search.specialFeatureFacilities) searchEntries.specialFeatureFacilities = search.specialFeatureFacilities;
+  if (search.specialFeatureNearbyPlaces) searchEntries.specialFeatureNearbyPlaces = search.specialFeatureNearbyPlaces;
+  if (search.specialFeaturePrivate) searchEntries.specialFeaturePrivate = search.specialFeaturePrivate;
+  return fetch(`${BASEURL}/properties${convertToURLParam(searchEntries)}`, {
+    'Content-Type': 'application/json',
+  })
+  .then(response => response.json())
+  .then((response) => {
+    const xx = mapContentFulPropertyToMyField(response.items);
+    return xx;
+  });
+}
+
 const parseRealEstateData = (data, mainImageId, imageIds) => {
   return {
     topic: _.get(data, 'step0.topic'),
@@ -53,22 +130,6 @@ const parseRealEstateData = (data, mainImageId, imageIds) => {
     },
   };
 };
-
-
-// export const uploadFile = (fileName = '', fileType = '', file = '') => {
-//   return fetch(`${BASEURL}/media`, {
-//     method: 'POST',
-//     body: JSON.stringify({
-//       fileName,
-//       fileType,
-//       file,
-//     }),
-//   })
-//   .then((response) => {
-//     console.log(response);
-//     return response;
-//   })
-// }
 
 export const createPost = async (data) => {
   console.log('createPost', data);
