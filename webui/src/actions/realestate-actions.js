@@ -1,4 +1,5 @@
 import { getRealEstate } from '../api/contentful';
+import { getProperties } from '../api/property';
 import { handleError } from './errors';
 
 export const realestateFilter = (filter) => {
@@ -22,6 +23,13 @@ export const realestateServiceReturnWithSuccess = (result) => {
   };
 };
 
+export const propertyServiceReturnWithSuccess = (result) => {
+  return {
+    type: 'PROPERTY/RECEIVED/SUCCESS',
+    items: result,
+  };
+};
+
 export const fetchRealestates = (search) => {
   return (dispatch) => {
     dispatch(realestateFilter(true));
@@ -31,6 +39,15 @@ export const fetchRealestates = (search) => {
       console.log('fetchRealestates', result);
       dispatch(realestateServiceReturnWithSuccess(result));
       dispatch(realestateLoading(false));
+    })
+    .catch((error) => {
+      dispatch(handleError(error));
+    });
+
+    getProperties(search)
+    .then((result) => {
+      dispatch(propertyServiceReturnWithSuccess(result));
+      dispatch(realestateHideLoading());
     })
     .catch((error) => {
       dispatch(handleError(error));
