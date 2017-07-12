@@ -1,0 +1,51 @@
+.SelectPrice {
+    position: relative;
+    .ant-select-selection--single {
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        height: 38px;
+        line-height: 38px;
+        cursor: pointer;
+        background-image: linear-gradient(to top, #ececec, #ffffff);
+        > .clearfix {
+            padding: 0 10px;
+            .pull-left {
+                overflow: hidden;
+                width: 90%;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+        .icon i {
+            font-size: 11px;
+        }
+    }
+    .price-lenght-block {
+        position: absolute;
+        right: 0;
+        z-index: 100;
+        background: #ffffff;
+        border: 1px solid #cccccc;
+        border-top: 0;
+        padding: 10px;
+        width: 230px;
+        .price-min {
+            width: 47%;
+        }
+        .to {
+            margin: 0 3px;
+        }
+        .price-max {
+            width: 47%;
+        }
+        .ant-select {
+            width: 100%;
+        }
+    }
+}
+
+.SelectPrice.active {
+    .price-lenght-block {
+        border-color: $text-green;
+    }
+}

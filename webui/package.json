@@ -16,6 +16,8 @@
     "google-map-react": "^0.24.0",
     "google-maps": "^3.2.1",
     "lodash": "^4.17.4",
+    "markerwithlabel": "^2.0.0",
+    "moment": "^2.18.1",
     "numeral": "^2.0.6",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
@@ -32,6 +34,7 @@
     "react-redux-multilingual": "^1.0.4",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
+    "react-scripts": "0.9.5",
     "redux": "^3.6.0",
     "redux-logger": "^3.0.6",
     "redux-react-firebase": "^2.6.1",
@@ -47,8 +50,7 @@
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^7.1.0",
-    "node-sass": "^4.5.2",
-    "react-scripts": "0.9.5"
+    "node-sass": "^4.5.2"
   },
   "scripts": {
     "build-css": "node-sass src/ -o src/",

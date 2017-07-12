@@ -78,11 +78,11 @@ app.post(`${apiPrefix}/posts`, postController.createPost);
 /**
  * CIC App codebase: WEBUI
  */
-// app.use(express.static(path.join(__dirname, 'webui')));
-/*
+app.use(express.static(path.join(__dirname, 'webui')));
+
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'webui', 'index.html'));
-});*/
+});
 
 /**
  * Start Express server.

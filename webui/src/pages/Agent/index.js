@@ -13,6 +13,7 @@ import AgentSearch from './component-search';
 import AgentSectionHome from './section-home';
 import AgentFooter from './section-footer';
 
+import * as firebase from '../../api/firebase';
 import { getAgentEntries } from '../../api/agent';
 import { receiveAgentEntity } from '../../actions/agent-actions';
 
@@ -98,6 +99,20 @@ class Agent extends Component {
       area: '',
     },
     searchResult: [],
+  }
+
+  constructor(props) {
+    super(props);
+    this.getProfile(props);
+  }
+
+  getProfile = (props) => {
+    firebase.core().auth().onAuthStateChanged((user) => {
+      if (user) {
+        const { fetchUserProfile } = props.actions;
+        fetchUserProfile(user);
+      }
+    });
   }
 
   handleSearchAgent = (search, area) => {

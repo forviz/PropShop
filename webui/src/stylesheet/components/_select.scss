@@ -11,6 +11,7 @@ body {
 	.ant-select:visited {
 		border-color: $text-green;
 		box-shadow: none;
+		outline: 0;
 	}
 	.ant-select-selection__rendered {
 		margin: 0 10px;

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
-import { Select } from 'antd';
-const Option = Select.Option;
 import SelectComponent from '../Select';
 
 class SelectSellType extends Component {
 
   static defaultProps = {
-    items: ['ขาย','เช่า','ขายใบจอง','ขายดาวน์','ขายหลังโอนกรรมสิทธิ์','ยูนิตของโครงการโดยตรง','ขายเท่าทุ่น','ขายขาดทุน'],
+    type: 'seller',
+    items: {
+      buyer: ['ซื้อ', 'เช่า', 'ขายใบจอง', 'ขายดาวน์', 'ขายหลังโอนกรรมสิทธิ์', 'ยูนิตของโครงการโดยตรง', 'ขายเท่าทุ่น', 'ขายขาดทุน'],
+      seller: ['ขาย', 'เช่า', 'ขายใบจอง', 'ขายดาวน์', 'ขายหลังโอนกรรมสิทธิ์', 'ยูนิตของโครงการโดยตรง', 'ขายเท่าทุ่น', 'ขายขาดทุน'],
+    },
     placeholder: [],
-    defaultValue: [],
-    value: '',
+    value: [],
   }
 
   handleOnChange = (value) => {
@@ -18,9 +18,15 @@ class SelectSellType extends Component {
   }
 
   render() {
-    const { items, placeholder, defaultValue, value } = this.props;
+    const { type, items, placeholder, value } = this.props;
+
     return (
-      <SelectComponent items={items} placeholder={placeholder} defaultValue={defaultValue} value={value} onChange={this.handleOnChange} />
+      <SelectComponent
+        items={items[type]}
+        placeholder={placeholder}
+        value={value}
+        onChange={this.handleOnChange}
+      />
     );
   }
 }

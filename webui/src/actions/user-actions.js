@@ -89,3 +89,52 @@ export const logout = () => {
     });
   }
 }
+
+const setFormChangepassowrd = (key, value) => {
+  return {
+    type: 'PASSWORD/SET/DATA',
+    key,
+    value,
+  };
+};
+
+export const inputFormChangepassowrd = (key, value) => {
+  return (dispatch) => {
+    dispatch(setFormChangepassowrd(key, value));
+  };
+};
+
+const passwordEditing = (editing) => {
+  return {
+    type: 'PASSWORD/EDITING',
+    editing,
+  };
+};
+
+const passwordEditSuccess = (editSuccess) => {
+  return {
+    type: 'PASSWORD/EDIT/SUCCESS',
+    editSuccess,
+  };
+};
+
+export const changePassword = (newPassword) => {
+  return (dispatch) => {
+    dispatch(passwordEditing(true));
+    firebase.core().auth().currentUser.updatePassword(newPassword).then(function() {
+      dispatch(passwordEditSuccess(true));
+      dispatch(passwordEditing(false));
+    }, function(error) {
+      dispatch(passwordEditSuccess(false));
+      dispatch(passwordEditing(false));
+      dispatch(setPasswordError(firebase.mapFirebaseErrorMessage(error.message)));
+    });
+  }
+}
+
+export const setPasswordError = (message) => {
+  return {
+    type: 'PASSWORD/ERROR',
+    message,
+  };
+};

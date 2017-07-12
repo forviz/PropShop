@@ -20,8 +20,12 @@ class SocialLogin extends Component {
         <div className="text">เข้าสู่ระบบด้วย</div>
         <div className="social-media">
           <ul>
-            <li className="facebook" onClick={this.handleFacebookLogin} ><FontAwesome name="facebook" /></li>
-            <li className="google-plus" onClick={this.handleGoogleLogin} ><FontAwesome name="google-plus" /></li>
+            <li className="facebook">
+              <a role="button" tabIndex="0" onClick={this.handleFacebookLogin}><FontAwesome name="facebook" /></a>
+            </li>
+            <li className="google-plus">
+              <a role="button" tabIndex="0" onClick={this.handleGoogleLogin}><FontAwesome name="google-plus" /></a>
+            </li>
           </ul>
         </div>
       </div>

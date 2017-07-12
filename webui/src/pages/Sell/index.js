@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { Steps, Spin, notification } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { NavLink, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 
 import * as firebase from '../../api/firebase';
-import * as contentful from '../../api/contentful';
 import * as SellActions from '../../actions/sell-actions';
 import * as UserActions from '../../actions/user-actions';
 
@@ -32,21 +30,25 @@ class Sell extends Component {
     this.getProfile(props);
   }
 
-  componentDidMount() {
-    const { history } = this.props;
-    const _self = this;
-    firebase.core().auth().onAuthStateChanged(function(user) {
-      console.log('user', user);
-      if (user && user.emailVerified === true) {
-        contentful.getUserData(user.uid).then((response) => {
-          user['contentful'] = response;
-          console.log('user.contentful', response);
-          _self.setState(prevState => ({
-            user: user,
-          }));
-        });
+  componentWillReceiveProps(nextProps) {
+    const { sell, history } = this.props;
+    if (sell.redirect === true) {
+      history.push({
+        pathname: '/',
+      });
+    }
+  }
+
+  getProfile = (props) => {
+    firebase.core().auth().onAuthStateChanged((user) => {
+      if (user) {
+        const { fetchUserProfile } = props.actions;
+        fetchUserProfile(user);
       } else {
-        _self.openNotificationWithIcon('error', 'กรุณาเข้าสู่ระบบก่อน');
+        notification.error({
+          message: 'กรุณาเข้าสู่ระบบก่อน',
+        });
+        const { history } = props;
         history.push({
           pathname: '/login',
         });
@@ -54,43 +56,11 @@ class Sell extends Component {
     });
   }
 
-  getProfile = (props) => {
-
-    firebase.core().auth().onAuthStateChanged((user) => {
-
-      if (!user) {
-
-        notification['error']({
-          message: 'กรุณาเข้าสู่ระบบก่อน',
-        });
-
-        const { history } = props;
-        history.push({
-          pathname: '/',
-        });
-
-      }
-
-      const { fetchUserProfile } = this.props.actions;
-      fetchUserProfile(user);
-
-    });
-  }
-
   openNotificationWithIcon = (type, message, description) => {
     const data = {};
-    data['message'] = message;
-    if ( description ) data['description'] = description;
+    data.message = message;
+    if (description) data.description = description;
     notification[type](data);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { sell, history } = this.props;
-    if ( sell.redirect === true ) {
-      history.push({
-        pathname: '/',
-      });
-    }
   }
 
   prevStep = () => {
