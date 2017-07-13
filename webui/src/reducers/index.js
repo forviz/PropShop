@@ -11,6 +11,7 @@ import properties from './entities/properties';
 import agents from './entities/agents';
 import references from './entities/references';
 import activities from './entities/activities';
+import news from './entities/news';
 
 // Domain
 import propertySearch from './domain/property-search';
@@ -32,6 +33,7 @@ export default combineReducers({
     agents,
     references,
     activities,
+    news,
   }),
   domain: combineReducers({
     agentSearch,

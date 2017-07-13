@@ -706,6 +706,67 @@ img {
     text-align: center;
     margin: 40px 0; }
 
+#News .breadcrumb {
+  height: 100px;
+  padding: 0;
+  background: white;
+  line-height: 100px;
+  margin-bottom: 0; }
+  #News .breadcrumb .breadcrumb-item {
+    font-size: 14px;
+    color: #999999;
+    float: left;
+    margin-right: 5px; }
+    #News .breadcrumb .breadcrumb-item a {
+      color: #484849;
+      text-decoration: none; }
+
+#News .ant-tabs-ink-bar {
+  background: #88b840;
+  height: 4px;
+  width: 120px; }
+
+#News .ant-tabs-bar {
+  margin-left: 38px;
+  box-sizing: border-box;
+  border: none; }
+
+#News .ant-tabs-nav .ant-tabs-tab {
+  margin-right: 0px;
+  padding-top: 60px;
+  color: #999999; }
+
+#News .ant-tabs-nav .ant-tabs-tab-active {
+  color: #484849; }
+
+#News .tap-title {
+  font-size: 30px;
+  font-family: "SukhumvitSet-Bold";
+  padding-left: 38px;
+  box-sizing: border-box; }
+
+#News .ant-pagination {
+  margin-bottom: 20px;
+  text-align: center; }
+
+#News .ant-pagination-item-active {
+  background: #8ebc42;
+  border-color: #8ebc42; }
+
+#News .ant-pagination-item:focus, #News .ant-pagination-item:hover {
+  border-color: #8ebc42;
+  color: #8ebc42; }
+
+#News .ant-pagination-prev:active, #News .ant-pagination-next:active, #News .ant-pagination-prev:hover, #News .ant-pagination-next:hover, #News .ant-pagination-prev:focus, #News .ant-pagination-next:focus {
+  border-color: #8ebc42; }
+  #News .ant-pagination-prev:active a, #News .ant-pagination-next:active a, #News .ant-pagination-prev:hover a, #News .ant-pagination-next:hover a, #News .ant-pagination-prev:focus a, #News .ant-pagination-next:focus a {
+    color: #8ebc42; }
+
+#News .box-spin {
+  width: 100%;
+  padding: 100px;
+  text-align: center; }
+
 #Header .container {
   width: 100%; }
 
@@ -1358,3 +1419,137 @@ body .ant-notification {
     padding: 3px 8px;
     text-align: center;
     text-decoration: none; }
+
+.NewsItem .list {
+  min-height: 520px;
+  margin-bottom: 30px; }
+  .NewsItem .list .image {
+    width: 100%;
+    height: 300px; }
+    .NewsItem .list .image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; }
+  .NewsItem .list .title {
+    font-size: 18px;
+    font-family: "SukhumvitSet-Bold";
+    color: #484849;
+    margin: 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; }
+  .NewsItem .list .date {
+    font-size: 14px;
+    color: #8ebc42;
+    margin: 10px 0; }
+  .NewsItem .list .description {
+    font-size: 14px;
+    color: #484849;
+    margin: 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical; }
+  .NewsItem .list .seemore {
+    font-size: 14px;
+    color: #8ebc42;
+    margin: 10px 0; }
+
+.HotNews {
+  padding: 30px;
+  border: 1px solid #eeeeee;
+  box-sizing: border-box;
+  margin-top: 117px; }
+  .HotNews .title {
+    font-family: "SukhumvitSet-SemiBold";
+    font-size: 24px;
+    color: #484849;
+    margin-bottom: 40px; }
+  .HotNews .list {
+    font-size: 14px;
+    margin-bottom: 40px; }
+    .HotNews .list .text {
+      color: #484849; }
+    .HotNews .list .date {
+      color: #8ebc42; }
+
+.NewsBanner {
+  width: 100%;
+  height: 460px;
+  background: #999999;
+  color: #f6f6f6; }
+  .NewsBanner .banner {
+    width: 100%;
+    height: 460px;
+    position: relative; }
+    .NewsBanner .banner .image-dark {
+      width: 100%;
+      height: 460px;
+      position: absolute;
+      z-index: 1; }
+    .NewsBanner .banner .content {
+      height: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      font-family: "SukhumvitSet-Text";
+      position: absolute;
+      z-index: 2;
+      bottom: 40px;
+      right: 0;
+      background: linear-gradient(to right, transparent, #88b840);
+      width: 100%; }
+      .NewsBanner .banner .content .title {
+        width: 50%;
+        float: right;
+        font-size: 32px;
+        line-height: 40px;
+        color: #f6f6f6;
+        text-align: left;
+        z-index: 2;
+        height: auto;
+        white-space: normal;
+        font-family: "SukhumvitSet-Text";
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical; }
+      .NewsBanner .banner .content .description {
+        font-size: 18px;
+        line-height: 30px;
+        color: #f6f6f6;
+        width: 70%;
+        z-index: 2;
+        height: auto;
+        white-space: normal;
+        font-family: "SukhumvitSet-Text";
+        margin-bottom: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical; }
+      .NewsBanner .banner .content button {
+        width: 140px;
+        height: 35px;
+        z-index: 2; }
+  .NewsBanner .image-gallery-bullets {
+    width: 100%;
+    padding-right: 25px;
+    box-sizing: border-box;
+    bottom: -30px; }
+    .NewsBanner .image-gallery-bullets .image-gallery-bullets-container {
+      text-align: center; }
+    .NewsBanner .image-gallery-bullets .image-gallery-bullet {
+      border-radius: 0%;
+      padding: 8px;
+      border: 2px solid #999999;
+      box-sizing: border-box;
+      box-shadow: none; }
+    .NewsBanner .image-gallery-bullets .image-gallery-bullet.active {
+      background: #8ebc42; }
+  .NewsBanner .image-gallery-left-nav:hover, .NewsBanner .image-gallery-right-nav:hover, .NewsBanner .image-gallery-left-nav:target, .NewsBanner .image-gallery-right-nav:target {
+    color: white; }

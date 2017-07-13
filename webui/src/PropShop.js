@@ -21,7 +21,7 @@ import Home from './pages/Home';
 import Realestate from './pages/Realestate';
 import Sell from './pages/Sell';
 import Agent from './pages/Agent';
-
+import News from './pages/News';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Forgotpassword from './pages/Forgotpassword';
@@ -103,6 +103,12 @@ class PropShop extends Component {
         exact: false,
         header: Header,
         content: Changepassword,
+      },
+      { path: '/news',
+        exact: false,
+        header: Header,
+        content: News,
+        footer: Footer,
       },
     ];
 

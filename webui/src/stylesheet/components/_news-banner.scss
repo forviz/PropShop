@@ -1,0 +1,99 @@
+.NewsBanner{
+  width: 100%;
+  height: 460px;
+  background: $text-gray;
+  color: $text-white;
+  
+  .banner{
+    width: 100%;
+    height: 460px;
+    // background-color: black;
+    position: relative;
+
+    .image-dark{
+      width: 100%;
+      height: 460px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .content{
+      height: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      font-family: $sukumvit-text;
+      position: absolute;
+      z-index: 2;
+      bottom: 40px;
+      right: 0;
+      background: linear-gradient(to right, rgba(0,0,0,0), rgba(136,184,64,1));;
+      width: 100%;
+      
+      .title{
+        width: 50%;
+        float: right;
+        font-size: 32px;
+        line-height: 40px;
+        color: $text-white;
+        text-align: left;
+        z-index: 2;
+        height: auto;
+        white-space: normal;
+        font-family: $sukumvit-text;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
+      .description{
+        font-size: 18px;
+        line-height: 30px;
+        color: $text-white;
+        width: 70%;
+        z-index: 2;
+        height: auto;
+        white-space: normal;
+        font-family: $sukumvit-text;
+        margin-bottom: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+      }
+      button{
+        width: 140px;
+        height: 35px;
+        z-index: 2;
+      }
+    }
+
+  }
+
+  .image-gallery-bullets{
+    width: 100%;
+    padding-right: 25px;
+    box-sizing: border-box;
+    bottom: -30px;
+
+    .image-gallery-bullets-container{ 
+      text-align: center;
+    }
+    .image-gallery-bullet{
+      border-radius: 0%;
+      padding: 8px;
+      border: 2px solid $text-gray;
+      box-sizing: border-box;
+      box-shadow: none;
+      
+    }
+    .image-gallery-bullet.active{
+      background: $text-green;
+    }
+  }
+  .image-gallery-left-nav:hover, .image-gallery-right-nav:hover, .image-gallery-left-nav:target, .image-gallery-right-nav:target{
+    color: white;
+  }
+
+}
