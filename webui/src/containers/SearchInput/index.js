@@ -2,18 +2,8 @@ import React, { Component } from 'react';
 import { Input, Icon, AutoComplete } from 'antd';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 const { Option, OptGroup } = AutoComplete;
-
-const StyledAutoComplete = styled(AutoComplete)`
-  background: white;
-
-  .certain-category-search-dropdown .ant-select-dropdown-menu-item-group-title {
-    color: red;
-    font-weight: bold;
-  }
-`;
 
 const PropertyDetail = styled.span`
   position: absolute;
@@ -50,13 +40,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-
 export default connect(mapStateToProps)(
   class SearchInput extends Component {
 
     handleSearch = (value) => {
       console.log(value);
-
     }
 
     handleFilter = (inputValue, option) => {

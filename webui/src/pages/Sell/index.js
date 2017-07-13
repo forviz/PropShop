@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import { Steps, Spin, notification } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -25,6 +26,11 @@ const steps = [
 
 class Sell extends Component {
 
+  static propTypes = {
+    sell: T.shape({
+      redirect: T.bool,
+    }),
+  }
   constructor(props) {
     super(props);
     this.getProfile(props);
@@ -70,14 +76,14 @@ class Sell extends Component {
 
   nextStep = () => {
 
-    let errorMessage = this.validateForm();
-    if ( errorMessage ) {
+    const errorMessage = this.validateForm();
+    if (errorMessage) {
       alert(errorMessage);
       return false;
     }
 
     const { sell } = this.props;
-    if ( sell.step < steps.length-1 ) {
+    if (sell.step < steps.length-1) {
       const { nextStep } = this.props.actions;
       nextStep();
     } else {
@@ -90,11 +96,11 @@ class Sell extends Component {
 
     const { sell } = this.props;
 
-    if ( sell.step === 0 ) {
+    if (sell.step === 0) {
       errorMessage = this.validateFormStep0();
-    } else if ( sell.step === 2 ) {
+    } else if (sell.step === 2) {
       errorMessage = this.validateFormStep2();
-    } else if ( sell.step === 3 ) {
+    } else if (sell.step === 3) {
       errorMessage = this.validateFormStep3();
     }
 
@@ -106,7 +112,7 @@ class Sell extends Component {
 
     const { sell } = this.props;
     _.forEach(sell[step].requiredField, (value, key) => {
-      if ( sell.step0[value] === '' ) {
+      if (sell.step0[value] === '') {
         errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
       }
     });
@@ -122,13 +128,13 @@ class Sell extends Component {
   nextStep = () => {
 
     let errorMessage = this.validateForm();
-    if ( errorMessage ) {
+    if (errorMessage) {
       alert(errorMessage);
       return false;
     }
 
     const { sell } = this.props;
-    if ( sell.step < steps.length-1 ) {
+    if (sell.step < steps.length - 1) {
       const { nextStep } = this.props.actions;
       nextStep();
     } else {
@@ -141,11 +147,11 @@ class Sell extends Component {
 
     const { sell } = this.props;
 
-    if ( sell.step === 0 ) {
+    if (sell.step === 0) {
       errorMessage = this.validateFormStep0();
-    } else if ( sell.step === 2 ) {
+    } else if (sell.step === 2) {
       errorMessage = this.validateFormStep2();
-    } else if ( sell.step === 3 ) {
+    } else if (sell.step === 3) {
       errorMessage = this.validateFormStep3();
     }
 
@@ -157,7 +163,7 @@ class Sell extends Component {
 
     const { sell } = this.props;
     _.forEach(sell[step].requiredField, (value, key) => {
-      if ( sell.step0[value] === '' ) {
+      if (sell.step0[value] === '') {
         errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
       }
     });
@@ -171,37 +177,37 @@ class Sell extends Component {
 
   validateFormStep0 = () => {
     let errorMessage = this.checkRequiredField('step0');
-    if ( errorMessage ) {
+    if (errorMessage) {
 
       const { sell } = this.props;
 
-      if ( sell.step0.areaSize !== '' ) {
-        if ( !this.isInt(sell.step0.areaSize) ) {
+      if (sell.step0.areaSize !== '') {
+        if (!this.isInt(sell.step0.areaSize)) {
           errorMessage = '"พื้นที่ใช้สอย" ต้องกรอกเป็นตัวเลขเท่านั้น';
         }
       }
 
-      if ( sell.step0.landSize !== '' ) {
-        if ( !this.isInt(sell.step0.landSize) ) {
+      if (sell.step0.landSize !== '') {
+        if (!this.isInt(sell.step0.landSize)) {
           errorMessage = '"จำนวนที่ดิน" ต้องกรอกเป็นตัวเลขเท่านั้น';
         }
       }
 
-      if ( sell.step0.price !== '' ) {
-        if ( !this.isInt(sell.step0.price) ) {
+      if (sell.step0.price !== '') {
+        if (!this.isInt(sell.step0.price)) {
           errorMessage = '"ราคา" ต้องกรอกเป็นตัวเลขเท่านั้น';
         }
       }
 
-      if ( sell.step0.fee !== '' ) {
-        if ( !this.isInt(sell.step0.fee) ) {
+      if (sell.step0.fee !== '') {
+        if (!this.isInt(sell.step0.fee)) {
           errorMessage = '"ค่าธรรมเนียม" ต้องกรอกเป็นตัวเลขเท่านั้น';
         }
       }
 
-      if ( sell.step0.zipcode !== '' ) {
+      if (sell.step0.zipcode !== '') {
         const zipcodeRegExp = /^\d{5}$/;
-        if ( !zipcodeRegExp.test(sell.step0.zipcode) ) {
+        if (!zipcodeRegExp.test(sell.step0.zipcode)) {
           errorMessage = '"รหัสไปรษณีย์" ไม่ถูกต้อง';
         }
       }
@@ -215,7 +221,7 @@ class Sell extends Component {
 
     const { sell } = this.props;
 
-    if ( Object.keys(sell.step2.mainImage).length === 0 ) {
+    if (Object.keys(sell.step2.mainImage).length === 0) {
       errorMessage = 'กรุณาอัพโหลดรูปภาพหลัก';
     }
 
@@ -227,7 +233,7 @@ class Sell extends Component {
 
     const { sell } = this.props;
 
-    if ( sell.step3.acceptTerms === false ) {
+    if (sell.step3.acceptTerms === false) {
       errorMessage = 'กรุณายอมรับข้อตกลงและเงื่อนไข';
     }
 
@@ -237,7 +243,7 @@ class Sell extends Component {
   submit = () => {
     const { sell, user } = this.props;
     const { doCreateRealEstate } = this.props.actions;
-    if ( sell.sendingData === false ) {
+    if (sell.sendingData === false) {
       doCreateRealEstate(sell, user);
     }
   }
@@ -253,16 +259,15 @@ class Sell extends Component {
   }
 
   render() {
+    const { sell } = this.props;
+    const { step, sendingData, sendData } = sell;
 
-    const { sell, history } = this.props;
-    const { step, step0, step1, step2, step3, sendingData, sendData } = sell;
-
-    if ( sendData === true ) {
+    if (sendData === true) {
       this.success();
     }
 
     let renderStep = null;
-    switch(step) {
+    switch (step) {
       case 0:
         renderStep = <Step0 />;
         break;
@@ -279,13 +284,14 @@ class Sell extends Component {
     }
 
     let buttonAction = null;
-    if ( step === 0 ) {
-      buttonAction =
-                    <div className="row">
-                      <center>
-                        <button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
-                      </center>
-                    </div>;
+    if (step === 0) {
+      buttonAction = (
+        <div className="row">
+          <center>
+            <button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
+          </center>
+        </div>
+      );
     } else {
       buttonAction = (
         <div className="row">
@@ -312,7 +318,7 @@ class Sell extends Component {
               </div>
             </div>
           </div>
-          <hr/>
+          <hr />
           {renderStep}
           <div className="container">
             <div className="row">
@@ -330,12 +336,12 @@ class Sell extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.user.data,
     sell: state.sell,
   };
-}
+};
 
 const actions = {
   fetchUserProfile: UserActions.fetchUserProfile,
@@ -345,10 +351,10 @@ const actions = {
   sendDataSuccess: SellActions.sendDataSuccess,
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    actions: bindActionCreators(actions, dispatch),
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sell);

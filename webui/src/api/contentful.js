@@ -210,7 +210,7 @@ export const createUser = (user) => {
   });
 };
 
-const parseRealEstateData = (data, mainImageId, imageIds) => {
+export const parseRealEstateData = (data, mainImageId, imageIds) => {
   return {
     topic: _.get(data, 'step0.topic'),
     detail: _.get(data, 'step0.announcementDetails'),
@@ -260,8 +260,7 @@ const parseRealEstateData = (data, mainImageId, imageIds) => {
 export async function createRealEstate(data, user) {
   const assetsMainImage = await uploadFile(data.step2.mainImage.name, data.step2.mainImage.type, data.step2.mainImage);
 
-  let imageData = {};
-  let imageIds = [];
+  const imageIds = [];
 
   await Promise.all(data.step2.images.map(async (image) => {
     let assetsImages = await uploadFile(image.name, image.type, image);
@@ -565,7 +564,7 @@ export const getUserData = (uid) => {
   .catch(console.error)
 }
 
-const mapFieldAgent = (data) => {
+export const mapFieldAgent = (data) => {
   return _.reduce(data, (acc, elem, index) => {
     return {
       ...acc,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Select, Button } from 'antd';
+import { Tabs, Select, Button } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
@@ -31,7 +31,6 @@ const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 
 const mapStateToProps = (state, ownProps) => {
-  console.log('ownProps', ownProps);
   const propertySearch = _.get(state, 'domain.propertySearch');
   const visibleIDs = propertySearch.visibleIDs;
 

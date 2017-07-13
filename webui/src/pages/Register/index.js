@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Input, Alert, Spin, notification } from 'antd';
-import { NavLink, Redirect } from 'react-router-dom';
-import FontAwesome from 'react-fontawesome';
 
 import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
@@ -31,12 +29,11 @@ class Register extends Component {
     password2: {
       value: '',
       errorMessage: '',
-    }
+    },
   }
 
   componentDidMount() {
     const { history } = this.props;
-    const _self = this;
     firebase.core().auth().onAuthStateChanged(function(user) {
       if (user && user.emailVerified === true) {
         history.push({
@@ -64,8 +61,8 @@ class Register extends Component {
     this.setState(prevState => ({
       username: {
         ...prevState.username,
-        value: value,
-      }
+        value,
+      },
     }));
   }
 
@@ -74,8 +71,8 @@ class Register extends Component {
     this.setState(prevState => ({
       email: {
         ...prevState.email,
-        value: value,
-      }
+        value,
+      },
     }));
   }
 
@@ -84,8 +81,8 @@ class Register extends Component {
     this.setState(prevState => ({
       password1: {
         ...prevState.password1,
-        value: value,
-      }
+        value,
+      },
     }));
   }
 
@@ -94,8 +91,8 @@ class Register extends Component {
     this.setState(prevState => ({
       password2: {
         ...prevState.password2,
-        value: value,
-      }
+        value,
+      },
     }));
   }
 
@@ -104,8 +101,8 @@ class Register extends Component {
     this.setState(prevState => ({
       username: {
         ...prevState.username,
-        errorMessage: errorMessage,
-      }
+        errorMessage,
+      },
     }));
     return errorMessage;
   }
@@ -115,8 +112,8 @@ class Register extends Component {
     this.setState(prevState => ({
       email: {
         ...prevState.email,
-        errorMessage: errorMessage,
-      }
+        errorMessage,
+      },
     }));
     return errorMessage;
   }
@@ -126,8 +123,8 @@ class Register extends Component {
     this.setState(prevState => ({
       password1: {
         ...prevState.password1,
-        errorMessage: errorMessage,
-      }
+        errorMessage,
+      },
     }));
     return errorMessage;
   }
@@ -137,8 +134,8 @@ class Register extends Component {
     this.setState(prevState => ({
       password2: {
         ...prevState.password2,
-        errorMessage: errorMessage,
-      }
+        errorMessage,
+      },
     }));
     return errorMessage;
   }
@@ -146,7 +143,7 @@ class Register extends Component {
   submit = () => {
     const { submitting } = this.state;
 
-    if ( submitting === true ) {
+    if (submitting === true) {
       return;
     } else {
       this.setState({
@@ -155,7 +152,7 @@ class Register extends Component {
     }
 
     const _self = this;
-    
+
     const username = this.state.username.value;
     const email = this.state.email.value;
     const password1 = this.state.password1.value;
@@ -166,12 +163,12 @@ class Register extends Component {
     this.checkPassword(password1);
     const errorPassword = this.checkConfirmPassword(password1, password2);
 
-    if ( errorUsername === '' && errorEmail === '' && errorPassword === '' ) {
+    if (errorUsername === '' && errorEmail === '' && errorPassword === '') {
       firebase.createUser(username, email, password1).then(function(errorMessage) {
-        if ( errorMessage ) {
+        if (errorMessage) {
           _self.setState({
             submitting: false,
-            errorMessage: errorMessage,
+            errorMessage,
           });
         } else {
           _self.setState({
@@ -188,20 +185,19 @@ class Register extends Component {
   }
 
   handleSocialError = (error) => {
-    if (  error.type === 'auth/account-exists-with-different-credential' ) {
+    if (error.type === 'auth/account-exists-with-different-credential') {
       this.setState({
         errorMessage: error.message,
         email: {
           ...this.state.email,
           value: error.email,
-        }
+        },
       });
     }
   }
 
   render() {
-
-    const { submitting } = this.state; 
+    const { submitting } = this.state;
 
     const usernameErrorMessage = this.state.username.errorMessage ? <span className="text-red">({this.state.username.errorMessage})</span> : '';
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
@@ -210,10 +206,10 @@ class Register extends Component {
 
     return (
       <div id="Register">
-      	<div className="row">
-      		<div className="hidden-xs hidden-sm col-md-6 layout-left">
-      			<MemberInfo />
-      		</div>
+        <div className="row">
+          <div className="hidden-xs hidden-sm col-md-6 layout-left">
+            <MemberInfo />
+          </div>
           <div className="col-md-6 col-md-offset-6 layout-right">
             <Spin tip="Loading..." spinning={submitting}>
               <div className="form">
@@ -268,7 +264,7 @@ class Register extends Component {
               */}
             </Spin>
           </div>
-      	</div>
+        </div>
       </div>
     );
   }

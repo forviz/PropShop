@@ -4,10 +4,9 @@ import { bindActionCreators } from 'redux';
 import Dropzone from 'react-dropzone';
 import _ from 'lodash';
 import { Tabs, Icon, Button } from 'antd';
-import * as contentful from '../../api/contentful';
-const TabPane = Tabs.TabPane;
-
 import * as SellActions from '../../actions/sell-actions';
+
+const TabPane = Tabs.TabPane;
 
 class Step2 extends Component {
 
@@ -16,13 +15,13 @@ class Step2 extends Component {
   }
 
   setMainImage = (accepted, rejected) => {
-    if ( accepted.length > 0 ) {
+    if (accepted.length > 0) {
       const { defaultValue } = this.props;
       const data = {
         ...defaultValue,
         mainImage: accepted[0]
       }
-      const file = accepted[0];
+      // const file = accepted[0];
       // contentful.uploadFile(file.name, file.type, file).then((entry) => {
       //   console.log('entry', entry);
       // });
@@ -35,7 +34,7 @@ class Step2 extends Component {
   }
 
   setImages = (accepted, rejected) => {
-    if ( accepted.length > 0 ) {
+    if (accepted.length > 0) {
       const { defaultValue } = this.props;
       let images = defaultValue.images;
 
@@ -46,7 +45,7 @@ class Step2 extends Component {
           images.push(accept);
         });
       }
-        
+
       const data = {
         ...defaultValue,
         images: images
@@ -115,7 +114,7 @@ class Step2 extends Component {
       borderRradius: 5,
       padding: '40px 0',
     }
-                
+
     return (
       <div id="Step2">
         <div className="container">

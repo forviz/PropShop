@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import queryString from 'query-string';
 import { uploadFile } from './contentful';
 
 const BASEURL = 'http://localhost:4000/api/v1';

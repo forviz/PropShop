@@ -1,6 +1,5 @@
 import * as firebase from 'firebase';
 import * as contentful from './contentful';
-import _ from 'lodash';
 
 const config = {
   apiKey: process.env.REACT_APP_APIKEY,
@@ -63,7 +62,7 @@ export const forgotpassword = (email) => {
 
 const getProviderForProviderId = (providerId) => {
   let provider = null;
-  switch(providerId) {
+  switch (providerId) {
     case 'facebook.com':
       provider = new firebase.auth.FacebookAuthProvider();
       provider.addScope('public_profile');
@@ -83,24 +82,6 @@ const getProviderForProviderId = (providerId) => {
       provider.addScope('email');
   }
   return provider;
-}
-
-const differentCredential = async (provider, error) => {
-  if (error.code === 'auth/account-exists-with-different-credential') {
-    const pendingCred = error.credential;
-    const email = error.email;
-     return await firebase.auth().fetchProvidersForEmail(email).then(function(providers) {
-      if (providers[0] === 'password') {
-        return {
-          type: 'auth/account-exists-with-different-credential',
-          message: 'คุณเคยสมัครอีเมลนี้แล้ว',
-          email: email,
-        };
-      }
-       const provider = getProviderForProviderId(providers[0]);
-       signInWithProvider(provider);
-    });
-  }
 }
 
 const signInWithProvider = async (provider) => {
@@ -137,6 +118,25 @@ export const signInWithTwitter = async () => {
   const result = await signInWithProvider(provider);
   return result;
 };
+
+const differentCredential = async (provider, error) => {
+  if (error.code === 'auth/account-exists-with-different-credential') {
+    // const pendingCred = error.credential;
+    const email = error.email;
+     return await firebase.auth().fetchProvidersForEmail(email).then(function(providers) {
+       if (providers[0] === 'password') {
+         return {
+           type: 'auth/account-exists-with-different-credential',
+           message: 'คุณเคยสมัครอีเมลนี้แล้ว',
+           email: email,
+         };
+       }
+       const provider = getProviderForProviderId(providers[0]);
+       signInWithProvider(provider);
+    });
+  }
+}
+
 
 export const verifiedUser = (user) => {
   let verified = false;
