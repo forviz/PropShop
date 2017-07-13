@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Input, Alert, Spin } from 'antd';
-import { NavLink, Redirect } from 'react-router-dom';
-import FontAwesome from 'react-fontawesome';
 
 import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
@@ -47,7 +45,7 @@ class Forgotpassword extends Component {
     this.setState(prevState => ({
       email: {
         ...prevState.email,
-        errorMessage: errorMessage,
+        errorMessage,
       }
     }));
     return errorMessage;
@@ -56,7 +54,7 @@ class Forgotpassword extends Component {
   submit = () => {
     const { loading } = this.state;
 
-    if ( loading === true ) {
+    if (loading === true) {
       return;
     } else {
       this.setState({
@@ -70,12 +68,12 @@ class Forgotpassword extends Component {
 
     const errorEmail = this.checkEmail(email);
 
-    if ( errorEmail === '' ) {
+    if (errorEmail === '') {
       firebase.forgotpassword(email).then(function(errorMessage) {
-        if ( errorMessage ) {
+        if (errorMessage) {
           _self.setState({
             loading: false,
-            errorMessage: errorMessage,
+            errorMessage,
           });
         } else {
           _self.setState({
@@ -93,7 +91,7 @@ class Forgotpassword extends Component {
   }
 
   handleSocialError = (error) => {
-    if (  error.type === 'auth/account-exists-with-different-credential' ) {
+    if (error.type === 'auth/account-exists-with-different-credential') {
       this.setState({
         errorMessage: error.message,
         email: {
@@ -110,40 +108,40 @@ class Forgotpassword extends Component {
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
 
-    const form = 
-          <div>
-            <div className="form">
-              <div className="row">
-                <div className="col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-                  <h1>ลืมรหัสผ่าน</h1>
-                  {this.state.errorMessage !== '' &&
-                    <div className="form-group">
-                      <Alert message={this.state.errorMessage} type="error" />
-                    </div>
-                  }
-                  {submit === true ? (
-                    <div className="form-group">
-                      <label>กรุณาตรวจสอบอีเมล {this.state.email.value}</label>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="form-group">
-                        <label>อีเมล {emailErrorMessage}</label>
-                        <Input onChange={this.handleInputEmail} value={this.state.email.value} />
-                      </div>
-                      <div className="form-group action">
-                        <button className="btn btn-primary" onClick={this.submit} >ลืมรหัสผ่าน</button>
-                      </div>
-                    </div>
-                  )}
+    const form = (
+      <div>
+        <div className="form">
+          <div className="row">
+            <div className="col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+              <h1>ลืมรหัสผ่าน</h1>
+              {this.state.errorMessage !== '' &&
+                <div className="form-group">
+                  <Alert message={this.state.errorMessage} type="error" />
                 </div>
-              </div>
-            </div>
-            <hr/>
-            <div className="social_login">
-              <SocialLogin error={this.handleSocialError} />
+              }
+              {submit === true ? (
+                <div className="form-group">
+                  <label>กรุณาตรวจสอบอีเมล {this.state.email.value}</label>
+                </div>
+              ) : (
+                <div>
+                  <div className="form-group">
+                    <label>อีเมล {emailErrorMessage}</label>
+                    <Input onChange={this.handleInputEmail} value={this.state.email.value} />
+                  </div>
+                  <div className="form-group action">
+                    <button className="btn btn-primary" onClick={this.submit} >ลืมรหัสผ่าน</button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+        </div>
+        <hr />
+        <div className="social_login">
+          <SocialLogin error={this.handleSocialError} />
+        </div>
+      </div>);
 
     return (
       <div id="Forgotpassword">

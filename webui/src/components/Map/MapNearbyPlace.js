@@ -134,7 +134,7 @@ class MapNearbyPlace extends Component {
                     return (
                       <div role="button" tabIndex="0" key={index} className={"type " + (list.key === currentSelect ? 'active' : '')} onClick={() => this.handleType(list.key)} >
                         <div className="item">
-                          <div className={"icon icon-"+list.key}></div>
+                          <div className={`icon icon-${list.key}`}></div>
                           <div className="text">{list.name}</div>
                         </div>
                       </div>

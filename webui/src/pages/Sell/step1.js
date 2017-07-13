@@ -10,36 +10,36 @@ import * as SellActions from '../../actions/sell-actions';
 
 class Step1 extends Component {
 
-	componentDidMount() {
+  componentDidMount() {
     const { fetchConfigs } = this.props.actions;
     fetchConfigs();
   }
 
   handleSpecialFeature = (data) => {
     const { saveStep } = this.props.actions;
-  	saveStep('step1', data);
+    saveStep('step1', data);
   }
 
   render() {
 
-  	const { configRealestate, data, onNext, onPrev } = this.props;
+    const { configRealestate, data } = this.props;
 
     return (
       <div id="Step1">
         <div className="container">
-      		<div className="row">
-	        	<div className="col-md-8 col-md-offset-2">
-	        		<h1>คุณสมบัติพิเศษ</h1>
-	        		<div className="form">
-	        			{configRealestate.loading === true ? (
-					        <Spin />
-					      ) : (
-					        <SpecialFeature items={configRealestate.data.specialFeature} defaultValue={data} onChange={this.handleSpecialFeature}  />
-					      )}
-	        		</div>
-	        	</div>
-	        </div>
-	      </div>
+          <div className="row">
+            <div className="col-md-8 col-md-offset-2">
+              <h1>คุณสมบัติพิเศษ</h1>
+              <div className="form">
+                {configRealestate.loading === true ? (
+                  <Spin />
+                ) : (
+                  <SpecialFeature items={configRealestate.data.specialFeature} defaultValue={data} onChange={this.handleSpecialFeature}  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -54,7 +54,7 @@ const mapStateToProps = state => {
 
 const actions = {
   fetchConfigs: ConfigActions.fetchConfigs,
-	saveStep: SellActions.saveStep,
+  saveStep: SellActions.saveStep,
 };
 
 const mapDispatchToProps = dispatch => {

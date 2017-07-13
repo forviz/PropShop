@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import queryString from 'query-string';
 import { uploadFile } from './contentful';
 
 const BASEURL = 'http://localhost:4000/api/v1';
@@ -55,8 +54,8 @@ const mapContentFulPropertyToMyField = (data) => {
 };
 
 export const getPropertyIDs = (search) => {
-  console.log('getPropertyIDs', search);
-  return fetch(`${BASEURL}/properties${search}&select=id`, {
+  // console.log('getPropertyIDs', search);
+  return fetch(`${BASEURL}/properties${search}&select=sys.id`, {
     'Content-Type': 'application/json',
   })
   .then(response => response.json())
@@ -69,7 +68,7 @@ export const getPropertyIDs = (search) => {
 };
 
 export const getProperties = (search) => {
-  console.log('getProperties', search);
+  // console.log('getProperties', search);
   return fetch(`${BASEURL}/properties${search}`, {
     'Content-Type': 'application/json',
   })

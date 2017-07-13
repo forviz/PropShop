@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Input, Select, Button } from 'antd';
+import { Tabs, Select, Button } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
@@ -30,7 +30,7 @@ import * as firebase from '../../api/firebase';
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const propertySearch = _.get(state, 'domain.propertySearch');
   const visibleIDs = propertySearch.visibleIDs;
 
@@ -38,9 +38,8 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.data,
     banner: state.banners,
-    // realestate: state.realestates,
     realestate: {
-      filter: true,
+      filter: _.get(ownProps, 'location.search') !== '',
       data: _.compact(properties),
       total: propertySearch.total,
     },
@@ -85,7 +84,7 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { searchProperties, getPropertyEntities } = nextProps.actions;
+    const { searchProperties } = nextProps.actions;
     if (!_.isEqual(nextProps.location, this.props.location)) {
       searchProperties(nextProps.location.search);
     }
@@ -319,7 +318,12 @@ class Home extends Component {
         <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
             {_.size(search) > 0 ? (
-              <MapLocation value={defaultSelected.location} nearby={realestate.data} onBoundChanged={this.handleMapBoundChanged} />
+              <MapLocation
+                value={defaultSelected.location}
+                nearby={realestate.data}
+                onDragEnd={this.handleMapBoundChanged}
+                onZoomChanged={this.handleMapBoundChanged}
+              />
             ) : (
               <BannerRealEstate />
             )}
@@ -353,12 +357,21 @@ class Home extends Component {
                     <div className="row row_2">
                       <div className="col-sm-3">
                         <div style={{ width: '100%' }}>
-                          <SelectSellType
+                          { /*<SelectSellType
                             type="buyer"
                             placeholder="ลักษณะการขาย"
                             value={defaultSelected.for}
                             onChange={this.handleFilterFor}
-                          />
+                          />*/ }
+                          <Select
+                            placeholder="ลักษณะการขาย"
+                            value={defaultSelected.for}
+                            style={{ width: '100%' }}
+                            onChange={this.handleFilterFor}
+                          >
+                            <Option value="sale">ขาย</Option>
+                            <Option value="rent">เช่า</Option>
+                          </Select>
                         </div>
                       </div>
                       <div className="col-sm-2 col-bedroom">

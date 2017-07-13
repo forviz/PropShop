@@ -51,6 +51,15 @@ export const inputUserData = (key, value) => {
   };
 };
 
+export const fetchUserProfile = (userFirebase) => {
+  return (dispatch) => {
+    contentful.getUserData(userFirebase.uid).then((userContentful) => {
+      dispatch(setFormData(userContentful));
+      dispatch(setUserData(mapUserData(userFirebase, userContentful)));
+    });
+  };
+};
+
 export const updateUserProfile = (id, data) => {
   return (dispatch) => {
     dispatch(profileEditing(true));
@@ -62,15 +71,6 @@ export const updateUserProfile = (id, data) => {
     });
   };
 }
-
-export const fetchUserProfile = (userFirebase) => {
-  return (dispatch) => {
-    contentful.getUserData(userFirebase.uid).then((userContentful) => {
-      dispatch(setFormData(userContentful));
-      dispatch(setUserData(mapUserData(userFirebase, userContentful)));
-    });
-  };
-};
 
 export const fetchUser = () => {
   return (dispatch) => {
@@ -118,6 +118,14 @@ const passwordEditSuccess = (editSuccess) => {
   };
 };
 
+
+export const setPasswordError = (message) => {
+  return {
+    type: 'PASSWORD/ERROR',
+    message,
+  };
+};
+
 export const changePassword = (newPassword) => {
   return (dispatch) => {
     dispatch(passwordEditing(true));
@@ -131,10 +139,3 @@ export const changePassword = (newPassword) => {
     });
   }
 }
-
-export const setPasswordError = (message) => {
-  return {
-    type: 'PASSWORD/ERROR',
-    message,
-  };
-};

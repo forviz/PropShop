@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Spin, Alert, notification } from 'antd';
+import { Input, Spin, Alert } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -28,7 +28,7 @@ class Changepassword extends Component {
         history.push({
           pathname: '/',
         });
-        
+
       }
 
       const { fetchUser } = this.props.actions;
@@ -78,39 +78,22 @@ class Changepassword extends Component {
 
     const { editing } = this.props;
 
-    if ( editing === true ) {
+    if (editing === true) {
       return;
     }
 
     const _self = this;
-    const { data, user } = this.props;
-
+    const { data } = this.props;
     const errorPassword = this.checkPassword(data.password1.value, data.password2.value);
 
-    if ( errorPassword === '' ) {
-
+    if (errorPassword === '') {
       const { changePassword } = this.props.actions;
       changePassword(data.password1.value);
-
-      // if ( data.password1.value && data.password2.value ) {
-      //   firebase.core().auth().currentUser.updatePassword(data.password1.value).then(function() {
-      //     updateUserProfile(user.id, this.getOnlyValue(data));
-      //   }, function(error) {
-      //     console.log('error', error);
-      //   });
-      // } else {
-      //   updateUserProfile(user.id, this.getOnlyValue(data));
-      // }
-
     }
-
   }
 
   render() {
-
-    const { user, data, editing, editSuccess, errorMessage } = this.props;
-
-    console.log('sdmqiojwdiq', this.props);
+    const { data, editing, editSuccess, errorMessage } = this.props;
 
     return (
       <div id="Changepassword">

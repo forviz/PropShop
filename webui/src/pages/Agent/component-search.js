@@ -25,7 +25,7 @@ class SearchAgent extends Component {
   }
 
   render() {
-    const { search, area } = this.state;
+    const { search } = this.state;
     return (
       <div>
         <div className="container">

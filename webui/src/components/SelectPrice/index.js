@@ -81,7 +81,7 @@ class SelectPrice extends Component {
               <span className="text">
                 {active ? (
                   <span>
-                    {(priceMinActive && !priceMaxActive) || (value.min === value.max) &&
+                    {((priceMinActive && !priceMaxActive) || (value.min === value.max)) &&
                       <span>เริ่มต้น </span>
                     }
                     {!priceMinActive && priceMaxActive &&
@@ -90,7 +90,7 @@ class SelectPrice extends Component {
                     {priceMinActive &&
                       <span>{numeral(value.min).format('0,0')}</span>
                     }
-                    {(priceMinActive && priceMaxActive) && (value.max !== value.min) &&
+                    {((priceMinActive && priceMaxActive) && (value.max !== value.min)) &&
                       <span style={{ margin: '0 2px' }}>-</span>
                     }
                     {(priceMaxActive) && (value.max !== value.min) &&

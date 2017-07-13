@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Select, Input, Spin, Alert, notification } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import FontAwesome from 'react-fontawesome';
-import Dropzone from 'react-dropzone';
 import _ from 'lodash';
 
 import * as firebase from '../../api/firebase';
@@ -24,8 +22,7 @@ class Profile extends Component {
     firebase.core().auth().onAuthStateChanged((userFirebase) => {
 
       if (!userFirebase) {
-
-        notification['error']({
+        notification.error({
           message: 'กรุณาเข้าสู่ระบบก่อน',
         });
 
@@ -33,12 +30,11 @@ class Profile extends Component {
         history.push({
           pathname: '/',
         });
-        
+
       }
 
       const { fetchUserProfile } = this.props.actions;
       fetchUserProfile(userFirebase);
-
     });
   }
 
@@ -262,12 +258,12 @@ class Profile extends Component {
     const errorPhone = this.checkPhone(data.phone.value);
     const errorPassword = this.checkPassword(data.password1.value, data.password2.value);
 
-    if ( errorUsername === '' && 
-        errorPrefixName === '' && 
-        errorName === '' && 
-        errorLastname === '' && 
+    if ( errorUsername === '' &&
+        errorPrefixName === '' &&
+        errorName === '' &&
+        errorLastname === '' &&
         errorPhone === '' &&
-        errorPassword === '' 
+        errorPassword === ''
       ) {
 
       const { updateUserProfile } = this.props.actions;
@@ -286,11 +282,10 @@ class Profile extends Component {
     }
 
   }
-  
+
 
   render() {
-
-    const { user, data, editing, editSuccess } = this.props;
+    const { data, editing, editSuccess } = this.props;
 
     if (Object.keys(data).length === 0) return <div />;
 

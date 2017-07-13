@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Input, Alert, Spin, notification } from 'antd';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Input, Alert, Spin } from 'antd';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import FontAwesome from 'react-fontawesome';
 
 import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
@@ -192,7 +191,7 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
-  
+
 };
 
 const mapDispatchToProps = (dispatch) => {

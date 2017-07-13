@@ -12,13 +12,15 @@ const MarkerWithLabel = require('markerwithlabel')(google.maps);
 class MapLocation extends Component {
 
   static propTypes = {
-    onBoundChanged: T.func
+    onDragEnd: T.func,
+    onZoomChanged: T.func,
   }
 
   static defaultProps = {
     center: { lat: 13.7245599, lng: 100.492681 },
     zoom: 13,
-    onBoundChanged: theMap => console.log('map bound_changed', theMap.getBounds.toJSON()),
+    onDragEnd: theMap => console.log('map dragend', theMap.getBounds.toJSON()),
+    onZoomChanged: theMap => console.log('map zoom_changed', theMap.getBounds.toJSON()),
   }
 
   componentDidMount() {
@@ -108,13 +110,12 @@ class MapLocation extends Component {
       center,
     });
 
-    map.addListener('bounds_changed', () => {
-      this.props.onBoundChanged(map);
-      // console.log('toJSON', map.getBounds().toJSON());
-      // const ne = map.getBounds().getNorthEast();
-      // console.log('dqwhhduqh 1', ne.lat(), ne.lng());
-      // console.log('dqwhhduqh 2', map.getBounds().getSouthWest());
-      // this.setCenter(map.getCenter().lat(), map.getCenter().lng());
+    map.addListener('zoom_changed', () => {
+      this.props.onZoomChanged(map);
+    });
+
+    map.addListener('dragend', () => {
+      this.props.onDragEnd(map);
     });
   }
 
