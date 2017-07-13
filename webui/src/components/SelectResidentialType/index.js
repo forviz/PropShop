@@ -4,7 +4,7 @@ import SelectComponent from '../Select';
 class SelectResidentialType extends Component {
 
   static defaultProps = {
-    items: ['Condo', 'Town-home', 'House', 'Commercial Space', 'Land'],
+    items: ['Condominium', 'Town-home', 'House', 'Commercial Space', 'Land'],
     placeholder: [],
     defaultValue: [],
     value: '',

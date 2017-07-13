@@ -1,13 +1,17 @@
 const initialState = {
-  searchResult: [],
+  visibleIDs: [],
+  total: 0,
+  skip: 0,
+  limit: 0,
 };
 
 const agents = (state = initialState, action) => {
   switch (action.type) {
-    case 'DOMAIN/AGENT_SEARCH/RESULT_RECEIVED': {
+    case 'DOMAIN/PROPERTY_SEARCH/RESULT_RECEIVED': {
       return {
         ...state,
-        searchResult: action.ids,
+        visibleIDs: action.itemIds,
+        total: action.total,
       };
     }
 

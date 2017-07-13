@@ -104,7 +104,7 @@ class PropShop extends Component {
         header: Header,
         content: Changepassword,
       },
-    ]
+    ];
 
     return (
       <Provider store={store} locale="th">

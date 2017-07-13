@@ -12,13 +12,13 @@ const MarkerWithLabel = require('markerwithlabel')(google.maps);
 class MapLocation extends Component {
 
   static propTypes = {
-    onDragEnd: T.func
+    onBoundChanged: T.func
   }
 
   static defaultProps = {
     center: { lat: 13.7245599, lng: 100.492681 },
     zoom: 13,
-    onDragEnd: theMap => console.log('map dragEnd', theMap.getBounds.toJSON()),
+    onBoundChanged: theMap => console.log('map bound_changed', theMap.getBounds.toJSON()),
   }
 
   componentDidMount() {
@@ -26,7 +26,9 @@ class MapLocation extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setMarker(nextProps.nearby);
+    if (!_.isEqual(nextProps.nearby, this.props.nearby)) {
+      this.setMarker(nextProps.nearby);
+    }
   }
 
   // setCenter = (lat, lng) => {
@@ -53,25 +55,22 @@ class MapLocation extends Component {
           });
           markers.push(marker);
 
-          const contentString = '<div id="content">'+
-            '<div id="siteNotice">'+
-            '</div>'+
-            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-            '<div id="bodyContent">'+
+          const contentString = '<div id="content">' +
+            '<div id="siteNotice">' +
+            '</div>' +
+            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+            '<div id="bodyContent">' +
             '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-            'sandstone rock formation in the southern part of the '+
-            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-            'south west of the nearest large town, Alice Springs; 450&#160;km '+
-            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-            'Aboriginal people of the area. It has many springs, waterholes, '+
-            'rock caves and ancient paintings. Uluru is listed as a World '+
-            'Heritage Site.</p>'+
-            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-            '(last visited June 22, 2009).</p>'+
-            '</div>'+
+            'sandstone rock formation in the southern part of the ' +
+            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
+            'south west of the nearest large town, Alice Springs; 450&#160;km ' +
+            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
+            'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
+            'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
+            'Aboriginal people of the area. It has many springs, waterholes, ' +
+            'rock caves and ancient paintings. Uluru is listed as a World ' +
+            'Heritage Site.</p>' +
+            '</div>' +
             '</div>';
 
           const infowindow = new google.maps.InfoWindow({
@@ -109,8 +108,8 @@ class MapLocation extends Component {
       center,
     });
 
-    map.addListener('dragend', () => {
-      this.props.onDragEnd(map);
+    map.addListener('bounds_changed', () => {
+      this.props.onBoundChanged(map);
       // console.log('toJSON', map.getBounds().toJSON());
       // const ne = map.getBounds().getNorthEast();
       // console.log('dqwhhduqh 1', ne.lat(), ne.lng());

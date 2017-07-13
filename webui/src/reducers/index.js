@@ -13,6 +13,7 @@ import references from './entities/references';
 import activities from './entities/activities';
 
 // Domain
+import propertySearch from './domain/property-search';
 import agentSearch from './domain/agent-search';
 
 // Form
@@ -34,6 +35,7 @@ export default combineReducers({
   }),
   domain: combineReducers({
     agentSearch,
+    propertySearch,
   }),
   form: combineReducers({
     profile,
