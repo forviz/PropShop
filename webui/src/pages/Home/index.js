@@ -30,7 +30,8 @@ import * as firebase from '../../api/firebase';
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  console.log('ownProps', ownProps);
   const propertySearch = _.get(state, 'domain.propertySearch');
   const visibleIDs = propertySearch.visibleIDs;
 
@@ -38,9 +39,8 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.data,
     banner: state.banners,
-    // realestate: state.realestates,
     realestate: {
-      filter: true,
+      filter: _.get(ownProps, 'location.search') !== '',
       data: _.compact(properties),
       total: propertySearch.total,
     },
@@ -85,7 +85,7 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { searchProperties, getPropertyEntities } = nextProps.actions;
+    const { searchProperties } = nextProps.actions;
     if (!_.isEqual(nextProps.location, this.props.location)) {
       searchProperties(nextProps.location.search);
     }
@@ -319,7 +319,12 @@ class Home extends Component {
         <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
             {_.size(search) > 0 ? (
-              <MapLocation value={defaultSelected.location} nearby={realestate.data} onBoundChanged={this.handleMapBoundChanged} />
+              <MapLocation
+                value={defaultSelected.location}
+                nearby={realestate.data}
+                onDragEnd={this.handleMapBoundChanged}
+                onZoomChanged={this.handleMapBoundChanged}
+              />
             ) : (
               <BannerRealEstate />
             )}

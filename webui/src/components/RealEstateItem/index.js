@@ -11,7 +11,7 @@ class RealEstateItem extends Component {
     if (!item) return (<div />);
 
     const background = {
-      background: `url(${item.mainImage})`,
+      background: `url(${item.mainImage}?h=150&fit=fill)`,
       backgroundSize: 'cover',
     };
 
@@ -21,7 +21,7 @@ class RealEstateItem extends Component {
           <div className="row">
             <div className="col-md-3">
               <div className="image">
-                <img src={item.mainImage} alt={item.project} />
+                <img src={`${item.mainImage}`} alt={item.project} />
               </div>
             </div>
             <div className="col-md-6">

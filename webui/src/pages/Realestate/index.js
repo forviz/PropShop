@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
+
 import FontAwesome from 'react-fontawesome';
 import ImageGallery from 'react-image-gallery';
 import { connect } from 'react-redux';
@@ -7,26 +9,51 @@ import numeral from 'numeral';
 // import { Rate } from 'antd';
 import _ from 'lodash';
 
-// import NearbyPlace from '../../containers/NearbyPlace';
-import ButtonAction from '../../components/ButtonAction';
 import ContactAgent from '../../components/ContactAgent';
 import MapComponent from '../../components/Map/MapWithStreetView';
 import NearbyPlace from '../../components/Map/MapNearbyPlace';
-// import realEstateData from '../../../public/data/realEstateData.json';
-// import agentData from '../../../public/data/agentData.json';
-// import advertising1 from '../../images/advertising/1.jpg';
 
-import * as RealestateActions from '../../actions/realestate-actions';
+import { getProperties } from '../../api/property';
+import { receivePropertiesEntity } from '../../actions/realestate-actions';
 
-import * as contentful from '../../api/contentful';
+const mapStateToProps = (state, ownProps) => {
+  const propertyId = _.get(ownProps, 'match.params.id');
+  const property = _.get(state, `entities.properties.entities.${propertyId}`);
+  return {
+    propertyId,
+    data: property,
+    loading: state.realestates.loading,
+  };
+};
 
+const actions = {
+  getPropertyEntity: (propertyId) => {
+    return (dispatch) => {
+      getProperties(`?id=${propertyId}`)
+      .then((result) => {
+        dispatch(receivePropertiesEntity(result));
+      });
+    };
+  },
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
 class Realestate extends Component {
 
-  constructor(props) {
-    super(props);
-    const { match } = this.props;
-    const id = match.params.id;
-    this.getRealestates(id);
+  static propTypes = {
+    propertyId: T.string.isRequired,
+    data: T.shape({
+      id: T.string,
+    }),
+    actions: T.shape({
+      getPropertyEntity: T.func,
+    }).isRequired,
   }
 
   state = {
@@ -34,20 +61,14 @@ class Realestate extends Component {
   }
 
   componentDidMount() {
-
-  }
-
-  getRealestates = (id) => {
-    const { fetchRealestates } = this.props.actions;
-    fetchRealestates({
-      id,
-    });
+    const { getPropertyEntity } = this.props.actions;
+    if (this.props.data === undefined) {
+      getPropertyEntity(this.props.propertyId);
+    }
   }
 
   getAgent = (id) => {
-    return contentful.getAgent(id).then((agent) => {
-      return agent;
-    });
+
   }
 
   handleWishList = () => {
@@ -72,11 +93,8 @@ class Realestate extends Component {
   }
 
   render() {
-    let { data } = this.props;
-
+    const { data } = this.props;
     if (_.size(data) === 0) return <div />;
-
-    data = data[0];
 
     let images = [];
     images.push({
@@ -265,7 +283,7 @@ class Realestate extends Component {
                         <span>
                           {
                             _.map(data.specialFeatureView, (value) => {
-                              return <div className="col-md-3">{value}</div>;
+                              return <div className="col-md-3" key={value}>{value}</div>;
                             })
                           }
                         </span>
@@ -274,7 +292,7 @@ class Realestate extends Component {
                         <span>
                           {
                             _.map(data.specialFeatureFacilities, (value) => {
-                              return <div className="col-md-3">{value}</div>;
+                              return <div className="col-md-3" key={value}>{value}</div>;
                             })
                           }
                         </span>
@@ -283,7 +301,7 @@ class Realestate extends Component {
                         <span>
                           {
                             _.map(data.specialFeatureNearbyPlaces, (value) => {
-                              return <div className="col-md-3">{value}</div>;
+                              return <div className="col-md-3" key={value}>{value}</div>;
                             })
                           }
                         </span>
@@ -292,7 +310,7 @@ class Realestate extends Component {
                         <span>
                           {
                             _.map(data.specialFeaturePrivate, (value) => {
-                              return <div className="col-md-3">{value}</div>;
+                              return <div className="col-md-3" key={value}>{value}</div>;
                             })
                           }
                         </span>
@@ -404,23 +422,4 @@ class Realestate extends Component {
       </div>
     );
   }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    data: state.realestates.data,
-    loading: state.realestates.loading,
-  };
-};
-
-const actions = {
-  fetchRealestates: RealestateActions.fetchRealestates,
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators(actions, dispatch),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Realestate);
+});

@@ -23,6 +23,13 @@ export const realestateServiceReturnWithSuccess = (result) => {
   };
 };
 
+export const receivePropertiesEntity = (properties) => {
+  return {
+    type: 'ENTITY/PROPERTIES/RECEIVED',
+    properties,
+  }
+};
+
 // export const propertyServiceReturnWithSuccess = (result) => {
 //   console.log('propertyServiceReturnWithSuccess', result);
 //   return {
@@ -43,26 +50,20 @@ export const receivePropertySearchResult = (itemIds, total) => {
 export const searchProperties = (search) => {
   console.log('searchProperties', search);
   return (dispatch, getState) => {
-    dispatch(realestateFilter(true));
     dispatch(realestateLoading(true));
 
     // Get all properties, with ID Only
     getPropertyIDs(search)
     .then((result) => {
       dispatch(receivePropertySearchResult(result.itemIds, result.total));
-      dispatch(realestateLoading(false));
       return result.itemIds;
     })
     .then((visibleIDs) => {
-
       const fetchedPropertyIDs = Object.keys(_.pickBy(_.get(getState(), 'entities.properties.fetchStatus'), val => val === 'loaded'));
       const propertyIDsToFetch = _.difference(visibleIDs, fetchedPropertyIDs);
       getProperties(`?ids=${_.join(propertyIDsToFetch, ',')}`)
       .then((properties) => {
-        dispatch({
-          type: 'ENTITY/PROPERTIES/RECEIVED',
-          properties,
-        });
+        dispatch(receivePropertiesEntity(properties));
         dispatch(realestateLoading(false));
       });
     })
