@@ -353,12 +353,21 @@ class Home extends Component {
                     <div className="row row_2">
                       <div className="col-sm-3">
                         <div style={{ width: '100%' }}>
-                          <SelectSellType
+                          { /*<SelectSellType
                             type="buyer"
                             placeholder="ลักษณะการขาย"
                             value={defaultSelected.for}
                             onChange={this.handleFilterFor}
-                          />
+                          />*/ }
+                          <Select
+                            placeholder="ลักษณะการขาย"
+                            value={defaultSelected.for}
+                            style={{ width: '100%' }}
+                            onChange={this.handleFilterFor}
+                          >
+                            <Option value="sale">ขาย</Option>
+                            <Option value="rent">เช่า</Option>
+                          </Select>
                         </div>
                       </div>
                       <div className="col-sm-2 col-bedroom">
