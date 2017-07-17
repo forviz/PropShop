@@ -8,8 +8,8 @@ class SelectComponent extends Component {
 
   static defaultProps = {
     items: [],
-    placeholder: [],
-    value: [],
+    placeholder: '',
+    value: '',
   }
 
   handleOnChange = (value) => {

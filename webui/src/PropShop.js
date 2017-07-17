@@ -43,7 +43,7 @@ const store = createStore(
 class PropShop extends Component {
   render() {
     const routes = [
-      { path: '/',
+      { path: '/:propertyType/:for/:area/',
         exact: true,
         header: Header,
         content: Home,

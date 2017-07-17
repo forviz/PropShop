@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import { Tabs, Select, Button } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,7 +20,7 @@ import SelectElectricTrain from '../../components/SelectElectricTrain';
 import SelectElectricTrainStation from '../../components/SelectElectricTrainStation';
 import SelectRadius from '../../components/SelectRadius';
 import MapLocation from '../../components/Map/MapLocation';
-import SearchInput from '../../containers/SearchInput';
+import SearchAreaInput from '../../containers/SearchAreaInput';
 
 import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
@@ -27,17 +28,110 @@ import * as ConfigActions from '../../actions/config-actions';
 
 import * as firebase from '../../api/firebase';
 
+import LandingPage from './LandingPage';
+
+import { convertLocationToLatLngZoom, convertLatLngZoomToLocation, getDistance } from '../../helpers/map-helpers';
+
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
+
+class SearchParameters {
+  area: string;
+  location: string;
+
+  bound: string;
+  bedroom: number;
+  bathroom: number;
+  price: {
+    min: number;
+    max: number;
+  };
+}
+
+const priceListSale = [
+  500000, 1000000, 1500000, 2000000, 2500000,
+  3000000, 3500000, 4000000, 4500000, 5000000,
+  5500000, 6000000, 6500000, 7000000, 7500000,
+  8000000, 8500000, 9000000, 9500000, 10000000,
+  11000000, 12000000, 13000000, 14000000,
+  15000000, 20000000, 50000000];
+
+const priceListRent = [0, 2000, 4000, 6000, 8000, 10000, 12000, 15000, 20000, 25000, 30000, 40000, 50000, 60000];
+
+const convertRouterPropsToParams = (props, areaEntities) => {
+
+  const search = queryString.parse(_.get(props, 'location.search', {}));
+  // console.log('convertRouterPropsToParams', search);
+  const areaSlug = _.get(props, 'match.params.area');
+  return {
+    area: areaSlug,
+    location: _.get(areaEntities, `${areaSlug}.location`),
+    for: _.replace(_.get(props, 'match.params.for'), 'for-', ''),
+    propertyType: _.split(_.get(props, 'match.params.propertyType'), ','),
+
+    // Query Parameters
+    bound: _.get(search, 'bound'),
+    bedroom: _.get(search, 'bedroom') ? _.toNumber(_.get(search, 'bedroom')) : undefined,
+    bathroom: _.get(search, 'bathroom') ? _.toNumber(_.get(search, 'bathroom')) : undefined,
+    price: _.get(search, 'price') ? {
+      min: _.toNumber(_.head(_.split(_.get(search, 'price'), '-'))),
+      max: _.toNumber(_.last(_.split(_.get(search, 'price'), '-'))),
+    } : { min: undefined, max: undefined },
+  };
+};
+
+const convertParamsToLocationObject = (params) => {
+  return {
+    pathname: `/${params.propertyType}/for-${params.for}/${params.area}/`,
+    search: `?${queryString.stringify({
+      bound: _.get(params, 'bound'),
+      bedroom: _.get(params, 'bedroom'),
+      bathroom: _.get(params, 'bathroom'),
+      price: (_.get(params, 'price.min') || _.get(params, 'price.max')) ?
+        `${_.get(params, 'price.min', '0')}-${_.get(params, 'price.max', '')}`
+        :
+        undefined,
+    })}`,
+  };
+};
+
+const convertParamsToSearchAPI = (params) => {
+  console.log('convertParamsToSearchAPI', params, queryString.stringify(params));
+  const str = queryString.stringify({
+    // id: undefined,
+    // ids: undefined,
+    // query,
+    for: params.for,
+    propertyType: _.join(_.get(params, 'propertyType'), ','),
+    bedroom: _.get(params, 'bedroom') ? _.toNumber(_.get(params, 'bedroom')) : undefined,
+    bathroom: _.get(params, 'bathroom') ? _.toNumber(_.get(params, 'bathroom')) : undefined,
+    priceMin: _.get(params, 'price.min') ? _.toNumber(_.get(params, 'price.min')) : undefined,
+    priceMax: _.get(params, 'price.max') ? _.toNumber(_.get(params, 'price.max')) : undefined,
+    bound: _.get(params, 'bound'),
+    location: undefined,
+    // select
+  });
+
+  return `?${str}`;
+};
+
 
 const mapStateToProps = (state, ownProps) => {
   const propertySearch = _.get(state, 'domain.propertySearch');
   const visibleIDs = propertySearch.visibleIDs;
 
   const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
+
+  const areaEntities = _.get(state, 'entities.areas.entities');
   return {
+    searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
+    areas: areaEntities,
+    areaDataSource: _.map(_.groupBy(_.map(areaEntities, (a, key) => ({ ...a, key })), (area) => {
+      return area.category;
+    }), (areas, category) => ({ title: category, children: areas })),
     user: state.user.data,
     banner: state.banners,
+    userDidSearch: true, // _.get(ownProps, 'location.search') !== '',
     realestate: {
       filter: _.get(ownProps, 'location.search') !== '',
       data: _.compact(properties),
@@ -63,6 +157,20 @@ class Home extends Component {
 
   headerHeight: 0;
 
+  static propTypes = {
+    searchParameters: T.instanceOf(SearchParameters),
+    actions: T.shape({
+      searchProperties: T.func,
+    }).isRequired,
+  }
+
+  static defaultProps = {
+    searchParameters: {
+      area: undefined,
+      location: undefined,
+      bound: undefined,
+    },
+  }
   constructor(props) {
     super(props);
     this.getProfile(props);
@@ -80,13 +188,21 @@ class Home extends Component {
     this.headerHeight = document.getElementById('Header').clientHeight;
 
     const { searchProperties } = this.props.actions;
-    searchProperties(this.props.location.search);
+    // searchProperties(this.props.location.search);
+    searchProperties(convertParamsToSearchAPI(this.props.searchParameters));
   }
 
   componentWillReceiveProps(nextProps) {
+    // console.log('componentWillReceiveProps', this.props.searchParameters, nextProps.searchParameters);
+    console.log('isEqual', _.isEqual(nextProps.searchParameters, this.props.searchParameters));
     const { searchProperties } = nextProps.actions;
-    if (!_.isEqual(nextProps.location, this.props.location)) {
-      searchProperties(nextProps.location.search);
+    if (!_.isEqual(nextProps.searchParameters, this.props.searchParameters)) {
+      // const params = queryString.parse(nextProps.location.search);
+
+      // if location is provide, convert to bound
+      // console.log('searchparams', nextProps.searchParameters);
+      // searchProperties(nextProps.location.search);
+      searchProperties(convertParamsToSearchAPI(nextProps.searchParameters));
     }
   }
 
@@ -138,20 +254,25 @@ class Home extends Component {
     };
   })();
 
-  setUrl = (stringified) => {
+  setUrl = (params) => {
     const { history } = this.props;
-    history.push({
-      search: `?${decodeURIComponent(stringified)}`,
-    });
+    console.log('setUrl', params, convertParamsToLocationObject(params));
+    history.push(convertParamsToLocationObject(params));
   }
 
-  filter = (key, value) => {
-    const stringified = this.convertObjectToQueryString(key, value);
-    this.setUrl(stringified);
-  }
+  // filter = (key, value) => {
+  //   const stringified = this.convertObjectToQueryString(key, value);
+  //   this.setUrl(stringified);
+  // }
 
   handleFilterFor = (value) => {
-    this.filter('for', value);
+    // this.filter('for', value);
+    const searchParameters = _.clone(this.props.searchParameters);
+    searchParameters.for = value;
+
+    // clear price min, max if exists
+    searchParameters.price = { min: undefined, max: undefined };
+    this.setUrl(searchParameters);
   }
 
   handleFilterElectricTrain = (value) => {
@@ -194,25 +315,56 @@ class Home extends Component {
   }
 
   handleFilterInput = (value) => {
-    this.delay(() => {
-      this.filter('query', value);
-    }, 1000);
+    console.log('handleFilterInput', value);
+    // this.delay(() => {
+    //   this.filter('query', value);
+    // }, 1000);
+  }
+
+  handleSelectArea = (option) => {
+    const searchParameters = _.clone(this.props.searchParameters);
+    searchParameters.area = option.value;
+    this.setUrl(searchParameters);
   }
 
   handleFilterPrice = (key, value) => {
-    this.filter(key, value);
+    // this.filter(key, value);
+    const searchParameters = _.clone(this.props.searchParameters);
+    if (key === 'priceMin') {
+      searchParameters.price = {
+        ...searchParameters.price,
+        min: _.toNumber(value),
+      };
+    }
+    if (key === 'priceMax') {
+      searchParameters.price = {
+        ...searchParameters.price,
+        max: _.toNumber(value),
+      };
+    }
+    this.setUrl(searchParameters);
   }
 
   handleFilterResidentialType = (value) => {
-    this.filter('residentialType', value);
+    const searchParameters = _.clone(this.props.searchParameters);
+    searchParameters.propertyType = value;
+    this.setUrl(searchParameters);
   }
 
   handleFilterBedRoom = (value) => {
-    this.filter('bedroom', value);
+    // this.filter('bedroom', value);
+
+    const searchParameters = _.clone(this.props.searchParameters);
+    searchParameters.bedroom = value;
+    this.setUrl(searchParameters);
   }
 
   handleFilterBathRoom = (value) => {
-    this.filter('bathroom', value);
+    // this.filter('bathroom', value);
+
+    const searchParameters = _.clone(this.props.searchParameters);
+    searchParameters.bathroom = value;
+    this.setUrl(searchParameters);
   }
 
   handleFilterSpecialFeature = (data) => {
@@ -277,11 +429,31 @@ class Home extends Component {
     const mapBound = map.getBounds();
     const ne = mapBound.getNorthEast().toJSON();
     const sw = mapBound.getSouthWest().toJSON();
-    this.filter('bound', `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`);
+
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    console.log('MapBoundChanged', ne, sw, center);
+
+    const searchParameters = this.props.searchParameters;
+    searchParameters.location = `${center.lat()},${center.lng()},${zoom}z`;
+    searchParameters.bound = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
+
+
+    // Check where is the nearest area of new center is
+    const nearestArea = _.minBy(_.map(this.props.areas, (area, key) => ({ ...area, key })), (area) => {
+      return getDistance(center.toJSON(), convertLocationToLatLngZoom(area.location));
+    });
+
+    if (nearestArea.key !== searchParameters.area) {
+      searchParameters.area = nearestArea.key;
+    }
+
+    console.log('new searchParameters', searchParameters);
+    this.setUrl(searchParameters);
   }
 
   render() {
-    const { banner, realestate, configRealestate, location } = this.props;
+    const { searchParameters, userDidSearch, banner, realestate, configRealestate, location } = this.props;
     const { advanceExpand } = this.state;
 
     let search = [];
@@ -293,7 +465,7 @@ class Home extends Component {
     const defaultSelected = {
       for: search.for ? search.for : [],
       electricTrain: search.electricTrain ? search.electricTrain : [],
-      location: search.location ? search.location : [],
+      location: search.location ? search.location : '',
       radius: search.radius ? search.radius : [],
       query: search.query ? search.query : [],
       price: {
@@ -317,12 +489,11 @@ class Home extends Component {
       <div id="Home">
         <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
-            {_.size(search) > 0 ? (
+            { userDidSearch ? (
               <MapLocation
-                value={defaultSelected.location}
+                location={searchParameters.location}
                 nearby={realestate.data}
-                onDragEnd={this.handleMapBoundChanged}
-                onZoomChanged={this.handleMapBoundChanged}
+                onBoundChanged={this.handleMapBoundChanged}
               />
             ) : (
               <BannerRealEstate />
@@ -340,17 +511,19 @@ class Home extends Component {
                         <div style={{ width: '100%' }} >
                           <SelectResidentialType
                             placeholder="ประเภทอสังหาฯ"
-                            value={defaultSelected.residentialType}
+                            value={searchParameters.propertyType}
                             onChange={this.handleFilterResidentialType}
                           />
                         </div>
                       </div>
                       <div className="col-sm-9">
-                        <SearchInput
+                        <SearchAreaInput
                           placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ"
-                          defaultValue={defaultSelected.query}
+                          dataSource={this.props.areaDataSource}
                           style={{ width: '100%' }}
+                          value={searchParameters.area}
                           onChange={this.handleFilterInput}
+                          onSelect={this.handleSelectArea}
                         />
                       </div>
                     </div>
@@ -365,7 +538,7 @@ class Home extends Component {
                           />*/ }
                           <Select
                             placeholder="ลักษณะการขาย"
-                            value={defaultSelected.for}
+                            value={searchParameters.for}
                             style={{ width: '100%' }}
                             onChange={this.handleFilterFor}
                           >
@@ -386,7 +559,11 @@ class Home extends Component {
                       </div>
                       <div className="col-sm-3 col-price">
                         <div style={{ width: '100%' }} >
-                          <SelectPrice value={defaultSelected.price} onChange={this.handleFilterPrice} />
+                          <SelectPrice
+                            priceList={searchParameters.for === 'sale' ? priceListSale : priceListRent}
+                            value={searchParameters.price}
+                            onChange={this.handleFilterPrice}
+                          />
                         </div>
                       </div>
                       <div className="col-sm-2 col-advance">
@@ -512,7 +689,7 @@ class Home extends Component {
               </div>
             )}
             <hr />
-            {realestate.filter === true ? (
+            {userDidSearch ? (
               <div className="result">
                 {realestate.loading === true ? (
                   <LoadingComponent />
@@ -531,64 +708,8 @@ class Home extends Component {
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="result">
-                {Object.keys(banner.condo).length > 0 &&
-                  <div className="list clearfix">
-                    <h3>คอนโด</h3>
-                    <ul>
-                      {
-                        _.map(banner.condo, (row, index) => {
-                          const rowMD = 12 / Object.keys(row).length;
-                          return (
-                            <li key={index}>
-                              <ul>
-                                {
-                                  _.map(row, (item, index2) => {
-                                    return (
-                                      <li key={index2} className={`item col-sm-${rowMD} col-md-6 col-lg-${rowMD}`}>
-                                        <RealEstateItem item={item} type="sell" />
-                                      </li>
-                                    );
-                                  })
-                                }
-                              </ul>
-                            </li>
-                          );
-                        })
-                      }
-                    </ul>
-                  </div>
-                }
-                {Object.keys(banner.house).length > 0 &&
-                  <div className="list clearfix">
-                    <h3>บ้าน</h3>
-                    <ul>
-                      {
-                        _.map(banner.house, (row, index) => {
-                          const rowMD = 12 / Object.keys(row).length;
-                          return (
-                            <li key={index}>
-                              <ul>
-                                {
-                                  _.map(row, (item, index2) => {
-                                    return (
-                                      <li key={index2} className={`item col-sm-${rowMD} col-md-6 col-lg-${rowMD}`}>
-                                        <RealEstateItem item={item} type="sell" />
-                                      </li>
-                                    );
-                                  })
-                                }
-                              </ul>
-                            </li>
-                          );
-                        })
-                      }
-                    </ul>
-                  </div>
-                }
-              </div>
-            )}
+            ) : <LandingPage banner={banner} />
+            }
           </div>
         </div>
       </div>

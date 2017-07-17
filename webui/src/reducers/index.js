@@ -7,6 +7,7 @@ import realestates from './realestates';
 import sell from './sell';
 
 // Entities
+import areas from './entities/areas';
 import properties from './entities/properties';
 import agents from './entities/agents';
 import references from './entities/references';
@@ -28,6 +29,7 @@ export default combineReducers({
   realestates,
   sell,
   entities: combineReducers({
+    areas,
     properties,
     agents,
     references,

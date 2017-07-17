@@ -9,18 +9,25 @@ let marker;
 let markers = [];
 const MarkerWithLabel = require('markerwithlabel')(google.maps);
 
+const convertLocationToLatLngZoom = (location) => {
+  const [lat, lng, zoomStr] = _.split(location, ',');
+  const zoom = _.toNumber(_.replace(zoomStr, 'z', ''));
+  return {
+    lat,
+    lng,
+    zoom,
+  }
+}
 class MapLocation extends Component {
 
   static propTypes = {
-    onDragEnd: T.func,
-    onZoomChanged: T.func,
+    location: T.string,
+    onBoundChanged: T.func,
   }
 
   static defaultProps = {
-    center: { lat: 13.7245599, lng: 100.492681 },
-    zoom: 13,
-    onDragEnd: theMap => console.log('map dragend', theMap.getBounds.toJSON()),
-    onZoomChanged: theMap => console.log('map zoom_changed', theMap.getBounds.toJSON()),
+    location: '13.7245599,100.492681,13z',
+    onBoundChanged: theMap => console.log('map zoom_changed', theMap.getBounds.toJSON()),
   }
 
   componentDidMount() {
@@ -28,6 +35,16 @@ class MapLocation extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // console.log('MapLocation::componentWillReceiveProps', nextProps);
+    if (!_.isEqual(nextProps.location, this.props.location)) {
+      const location = nextProps.location;
+      // const [lat, lng, zoomStr] = _.split(location, ',');
+      // const zoomNumber = _.toNumber(_.replace(zoomStr, 'z', ''));
+      const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
+      map.panTo(new google.maps.LatLng(lat, lng));
+      map.setZoom(zoom);
+    }
+
     if (!_.isEqual(nextProps.nearby, this.props.nearby)) {
       this.setMarker(nextProps.nearby);
     }
@@ -102,21 +119,22 @@ class MapLocation extends Component {
     }
   }
 
+
+
   initializeMap = () => {
-    const { center, zoom } = this.props;
+    const { location } = this.props;
+    const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
 
     map = new google.maps.Map(this.map, {
       zoom,
-      center,
+      center: new google.maps.LatLng(lat, lng),
     });
 
-    map.addListener('zoom_changed', () => {
-      this.props.onZoomChanged(map);
+
+    map.addListener('idle', () => {
+      this.props.onBoundChanged(map);
     });
 
-    map.addListener('dragend', () => {
-      this.props.onDragEnd(map);
-    });
   }
 
   render() {
