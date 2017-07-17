@@ -27,7 +27,7 @@ class MapLocation extends Component {
 
   static defaultProps = {
     location: '13.7245599,100.492681,13z',
-    onBoundChanged: theMap => console.log('map zoom_changed', theMap.getBounds.toJSON()),
+    onBoundChanged: theMap => console.log('map zoom_changed', theMap.getBounds().toJSON()),
   }
 
   componentDidMount() {

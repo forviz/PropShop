@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
@@ -39,6 +40,12 @@ const store = createStore(
     thunk,
   ),
 );
+
+const SiteContent = styled.div`
+  position: relative;
+  padding-top: 50px;
+`;
+
 
 class PropShop extends Component {
   render() {
@@ -119,7 +126,7 @@ class PropShop extends Component {
                   component={route.header}
                 />
               ))}
-              <div id="Content">
+              <SiteContent>
                 {routes.map(route => (
                   <Route
                     key={route.path}
@@ -128,7 +135,7 @@ class PropShop extends Component {
                     component={route.content}
                   />
                 ))}
-              </div>
+              </SiteContent>
               {routes.map(route => (
                 <Route
                   key={route.path}
@@ -136,7 +143,7 @@ class PropShop extends Component {
                   exact={route.exact}
                   component={route.footer}
                 />
-              ))}
+            ))}
             </div>
           </Router>
         </IntlProvider>
