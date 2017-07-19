@@ -25,6 +25,8 @@ dotenv.load({ path: '.env' });
 const postController = require('./controllers/post');
 const propertyController = require('./controllers/property');
 const wishlistController = require('./controllers/wishlist');
+const userController = require('./controllers/user');
+
 /**
  * Create Express server.
  */
@@ -72,10 +74,15 @@ const contentDeliveryAuthentication = (req, res, next) => {
 const apiPrefix = '/api/v1';
 
 app.post (`${apiPrefix}/media`, postController.uploadFile);
+app.delete (`${apiPrefix}/media/:assetId`, postController.deleteFile);
 app.get(`${apiPrefix}/posts`, postController.queryPosts);
 app.post(`${apiPrefix}/posts`, postController.createPost);
 
 app.get(`${apiPrefix}/properties`, propertyController.queryProperties);
+app.get(`${apiPrefix}/property/:id`, propertyController.getEntry);
+
+app.get(`${apiPrefix}/user/:uid`, userController.getUser);
+app.post(`${apiPrefix}/user/:uid`, userController.updateUser);
 
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
 

@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import * as contentful from './contentful';
+import * as UserActions from '../actions/user-actions';
 
 const config = {
   apiKey: process.env.REACT_APP_APIKEY,
@@ -50,15 +51,15 @@ export const signIn = (email, password) => {
   }).catch(function(error) {
     return mapFirebaseErrorMessage(error.message);
   });
-}
+};
 
 export const forgotpassword = (email) => {
-  return firebase.auth().sendPasswordResetEmail(email).then(function() {
+  return firebase.auth().sendPasswordResetEmail(email).then(() => {
     return false;
-  }, function(error) {
+  }, (error) => {
     return mapFirebaseErrorMessage(error.message);
   });
-}
+};
 
 const getProviderForProviderId = (providerId) => {
   let provider = null;
@@ -82,14 +83,14 @@ const getProviderForProviderId = (providerId) => {
       provider.addScope('email');
   }
   return provider;
-}
+};
 
 const signInWithProvider = async (provider) => {
   const data = await firebase.auth().signInWithPopup(provider).then((result) => {
-    console.log('signInWithProvider', result);
     // const token = result.credential.accessToken;
     const user = result.user;
-    user['username'] = result.displayName ? result.displayName : result.email;
+    user.username = result.displayName ? result.displayName : result.email;
+    UserActions.fetchUserData(user.uid);
     contentful.createUser(user).then(() => {
       return false;
     });
@@ -99,6 +100,25 @@ const signInWithProvider = async (provider) => {
     });
   });
   return data;
+};
+
+const differentCredential = async (provider, error) => {
+  if (error.code === 'auth/account-exists-with-different-credential') {
+    const email = error.email;
+    const result = await firebase.auth().fetchProvidersForEmail(email).then((providers) => {
+      if (providers[0] === 'password') {
+        return {
+          type: 'auth/account-exists-with-different-credential',
+          message: 'คุณเคยสมัครอีเมลนี้แล้ว',
+          email,
+        };
+      }
+      signInWithProvider(getProviderForProviderId(providers[0]));
+      return true;
+    });
+    return result;
+  }
+  return true;
 };
 
 export const signInWithFacebook = async () => {
@@ -118,25 +138,6 @@ export const signInWithTwitter = async () => {
   const result = await signInWithProvider(provider);
   return result;
 };
-
-const differentCredential = async (provider, error) => {
-  if (error.code === 'auth/account-exists-with-different-credential') {
-    // const pendingCred = error.credential;
-    const email = error.email;
-     return await firebase.auth().fetchProvidersForEmail(email).then(function(providers) {
-       if (providers[0] === 'password') {
-         return {
-           type: 'auth/account-exists-with-different-credential',
-           message: 'คุณเคยสมัครอีเมลนี้แล้ว',
-           email: email,
-         };
-       }
-       const provider = getProviderForProviderId(providers[0]);
-       signInWithProvider(provider);
-    });
-  }
-}
-
 
 export const verifiedUser = (user) => {
   let verified = false;

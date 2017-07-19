@@ -21,11 +21,10 @@ import SelectRadius from '../../components/SelectRadius';
 import MapLocation from '../../components/Map/MapLocation';
 import SearchInput from '../../containers/SearchInput';
 
-import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
 import * as ConfigActions from '../../actions/config-actions';
 
-import * as firebase from '../../api/firebase';
+// import * as firebase from '../../api/firebase';
 
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
@@ -48,7 +47,6 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const actions = {
-  fetchUserProfile: UserActions.fetchUserProfile,
   searchProperties: RealestateActions.searchProperties,
   fetchConfigs: ConfigActions.fetchConfigs,
 };
@@ -65,7 +63,6 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.getProfile(props);
     this.getConfig(props);
     // this.goFilter(props.location);
   }
@@ -92,15 +89,6 @@ class Home extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('scroll', this.handleScroll);
-  }
-
-  getProfile = (props) => {
-    firebase.core().auth().onAuthStateChanged((user) => {
-      if (user) {
-        const { fetchUserProfile } = props.actions;
-        fetchUserProfile(user);
-      }
-    });
   }
 
   getConfig = (props) => {
