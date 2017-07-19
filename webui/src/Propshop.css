@@ -706,6 +706,12 @@ img {
     text-align: center;
     margin: 40px 0; }
 
+#WishList .head {
+  height: 115px;
+  line-height: 115px;
+  font-size: 24px;
+  font-family: "SukhumvitSet-Bold"; }
+
 #Header .container {
   width: 100%; }
 
@@ -1232,6 +1238,15 @@ body .rating span {
   margin-left: 5px;
   vertical-align: middle; }
 
+.RealEstateItem .wishList {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  z-index: 2; }
+
 .RealEstateItem .background {
   height: 150px;
   position: relative; }
@@ -1358,3 +1373,35 @@ body .ant-notification {
     padding: 3px 8px;
     text-align: center;
     text-decoration: none; }
+
+.WishItem {
+  font-size: 14px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eeeeee;
+  margin-bottom: 20px; }
+  .WishItem .image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    padding: 0;
+    cursor: pointer; }
+  .WishItem .detail .title {
+    font-size: 18px;
+    color: #8ebc42;
+    cursor: pointer; }
+  .WishItem .option .view {
+    color: white;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: #8ebc42;
+    border-radius: 4px;
+    margin-bottom: 20px; }
+  .WishItem .option .delete {
+    color: white;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: #db0018;
+    border-radius: 4px;
+    margin-left: 20px; }

@@ -15,6 +15,7 @@ import activities from './entities/activities';
 // Domain
 import propertySearch from './domain/property-search';
 import agentSearch from './domain/agent-search';
+import wishlist from './domain/wishlist';
 
 // Form
 import profile from './form/profile';
@@ -36,6 +37,7 @@ export default combineReducers({
   domain: combineReducers({
     agentSearch,
     propertySearch,
+    wishlist,
   }),
   form: combineReducers({
     profile,

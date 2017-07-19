@@ -5,6 +5,8 @@ import thunk from 'redux-thunk';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 
+import * as firebase from 'firebase';
+
 import { IntlProvider } from 'react-redux-multilingual';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -27,6 +29,7 @@ import Register from './pages/Register';
 import Forgotpassword from './pages/Forgotpassword';
 import Profile from './pages/Profile';
 import Changepassword from './pages/Changepassword';
+import WishList from './pages/WishList';
 
 import './Propshop.css';
 
@@ -40,7 +43,9 @@ const store = createStore(
   ),
 );
 
+
 class PropShop extends Component {
+
   render() {
     const routes = [
       { path: '/',
@@ -103,6 +108,11 @@ class PropShop extends Component {
         exact: false,
         header: Header,
         content: Changepassword,
+      },
+      { path: '/wishlist',
+        exact: false,
+        header: Header,
+        content: WishList,
       },
     ];
 

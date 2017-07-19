@@ -47,6 +47,9 @@ class Header extends Component {
     if (user.username) {
       const menu = (
         <Menu onClick={this.handleMenuClick}>
+          <Menu.Item key="wishlist">
+            <NavLink exact to="/wishlist">รายการประกาศที่บันทึกไว้</NavLink>
+          </Menu.Item>
           <Menu.Item key="profile">
             <NavLink exact to="/profile">การตั้งค่าบัญชีผู้ใช้</NavLink>
           </Menu.Item>

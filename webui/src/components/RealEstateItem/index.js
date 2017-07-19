@@ -1,12 +1,69 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
+import _ from 'lodash';
+
+import * as WishListActions from '../../actions/wishlist-actions';
 
 class RealEstateItem extends Component {
 
+  // state = {
+  //   wishList: {},
+  // }
+  handleWishList = (itemId) => {
+
+    // LOCAL STORAGE
+    // if(_.isEmpty(localStorage.wishList)){
+    //   localStorage.wishList = `["${itemId}"]`
+    // }else{
+    //   let wishList = JSON.parse(localStorage.wishList);
+    //   const indexItem = _.indexOf(wishList,itemId);
+    //   (indexItem !== -1) ? wishList.splice(indexItem,1) : wishList.push(itemId);
+    //   localStorage.wishList = JSON.stringify(wishList)
+    //   this.setState({
+    //     wishList: JSON.parse(localStorage.wishList),
+    //   })
+    // }
+
+    const { userId } = this.props
+    const { createWishlist, getWishlist } = this.props.actions
+    createWishlist(userId, itemId);
+    //const { userId } = this.props
+    //const wishList = JSON.parse(localStorage.wishList);
+    // _.map(wishList, (value,key) => {
+    //   createWishlist(userId, key);
+    // });
+  }
+
+  // componentDidMount() {
+  //   this.getWishList()
+  // }
+
+  // getWishList = () => {
+  //   const wishList = JSON.parse(localStorage.wishList);
+  //   this.setState({
+  //     wishList,
+  //   })
+  // }
+
   render() {
-    const { type, item } = this.props;
+    const { type, item, wishlist } = this.props;
+    //const { wishList } = this.state;
+
+    console.log('www',item.id)
+    console.log('xxx',wishlist)
+
+    let wished = false;
+    _.map(wishlist, (value) => {
+      if(value.id === item.id){
+        wished = true;
+      }
+    })
 
     if (!item) return (<div />);
 
@@ -60,6 +117,11 @@ class RealEstateItem extends Component {
 
     return (
       <div className="RealEstateItem sell">
+        <FontAwesome
+          onClick={() => this.handleWishList(item.id)}
+          className="wishList"
+          name={ wished ? 'heart' : 'heart-o'}
+        />
         <NavLink exact to={`/realestate/${item.id}`}>
           <div className="background" style={background}>
             <div className="gradient"></div>
@@ -86,4 +148,22 @@ class RealEstateItem extends Component {
   }
 }
 
-export default RealEstateItem;
+const mapStateToProps = (state) => {
+  return {
+    wishlist: state.domain.wishlist.data,
+    userId: state.user.data.id,
+  };
+};
+
+const actions = {
+  createWishlist: WishListActions.createWishlist,
+  getWishlist: WishListActions.getWishlist,
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RealEstateItem);
