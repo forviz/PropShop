@@ -3,6 +3,7 @@ import * as contentfulManagement from 'contentful-management';
 import moment from 'moment';
 import _ from 'lodash';
 
+import { mapContentFulPropertyToMyField } from './property';
 import mapAgentEntryToEntity from './utils/mapAgentEntryToEntity';
 
 const client = contentful.createClient({
@@ -45,7 +46,7 @@ const convertBanner = (entry, string) => {
     const row = string+(i+1).toString();
     if (entry.items[0].fields[row]) {
       const items = entry.items[0].fields[row];
-      const data = mapContentFulRealestateToMyField(items);
+      const data = mapContentFulPropertyToMyField(items);
       datas[i] = data;
     }
   }
@@ -54,7 +55,7 @@ const convertBanner = (entry, string) => {
 
 const mapContentFulBannerToMyField = (entry) => {
   return {
-    main: _.map(mapContentFulRealestateToMyField(entry.items[0].fields.main), main => main),
+    main: _.map(mapContentFulPropertyToMyField(entry.items[0].fields.main), main => main),
     condo: convertBanner(entry, 'condoRow'),
     house: convertBanner(entry, 'houseRow'),
   };
@@ -122,7 +123,10 @@ export const getBannerRealEstate = () => {
     'sys.id': process.env.REACT_APP_CONTENTFUL_BANNER,
     include: 1,
   }).then((entry) => {
-    return mapContentFulBannerToMyField(entry);
+    console.log('getBannerRealEstate 1', entry);
+    const xx = mapContentFulBannerToMyField(entry);
+    console.log('getBannerRealEstate 2', xx);
+    return xx;
   });
 };
 

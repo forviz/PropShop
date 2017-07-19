@@ -47,27 +47,23 @@ const pageAccountProperty = (page) => {
   };
 };
 
-export const fetchPropertiesByAgent = (user, skip, limit) => {
-  return (dispatch, getState) => {
+export const fetchPropertiesByAgent = (userId, skip, limit) => {
+  return (dispatch) => {
     dispatch(fetchingAccountProperty(true));
-    contentful.getUserData(user.uid).then((userData) => {
-      dispatch(UserActions.setUserData(UserActions.mapUserData(user, userData)));
-      const id = getState().user.data.id;
-      getProperties(`?agentId=${id}&skip=${skip}&limit=${limit}`)
-      .then((result) => {
-        if (_.size(result.data) > 0) {
-          dispatch(receiveAccountProperty(result.data));
-          dispatch(totalAccountProperty(result.total));
-          dispatch(pageAccountProperty(skip + 1));
-          dispatch(resultAccountProperty('ok'));
-        } else {
-          dispatch(resultAccountProperty('no'));
-        }
-        dispatch(fetchingAccountProperty(false));
-      })
-      .catch((error) => {
-        dispatch(handleError(error));
-      });
+    getProperties(`?agentId=${userId}&skip=${skip}&limit=${limit}`)
+    .then((result) => {
+      if (_.size(result.data) > 0) {
+        dispatch(receiveAccountProperty(result.data));
+        dispatch(totalAccountProperty(result.total));
+        dispatch(pageAccountProperty(skip + 1));
+        dispatch(resultAccountProperty('ok'));
+      } else {
+        dispatch(resultAccountProperty('no'));
+      }
+      dispatch(fetchingAccountProperty(false));
+    })
+    .catch((error) => {
+      dispatch(handleError(error));
     });
   };
 };

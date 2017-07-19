@@ -5,7 +5,7 @@ const BASEURL = 'http://localhost:4000/api/v1';
 
 // const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
 
-const mapContentFulPropertyToMyField = (data) => {
+export const mapContentFulPropertyToMyField = (data) => {
   const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
   return _.reduce(data, (acc, elem, index) => {
     const forSale = _.get(elem, 'fields.forSale') === true;
