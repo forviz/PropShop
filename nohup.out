@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 npm ERR! Windows_NT 6.1.7601
 npm ERR! argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "run" "watch-css"
 npm ERR! node v6.10.2
@@ -10,3 +11,65 @@ npm ERR!     <https://github.com/npm/npm/issues>
 
 npm ERR! Please include the following file with any support request:
 npm ERR!     C:\Users\spyrocash\Desktop\project\propshop\npm-debug.log
+=======
+
+> propshop@0.1.0 watch-css C:\Users\spyrocash\Desktop\project\propshop
+> npm run build-css && node-sass src/ -o src/ --watch --recursive
+
+
+> propshop@0.1.0 build-css C:\Users\spyrocash\Desktop\project\propshop
+> node-sass src/ -o src/
+
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\libraries\font-awesome\4.7.0\scss\font-awesome.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Wrote 2 CSS files to C:\Users\spyrocash\Desktop\project\propshop\src\
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.scss
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+=> changed: C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+/c/Program Files/nodejs/npm: line 34:  7008 Hangup                  "$NODE_EXE" "$NPM_CLI_JS" "$@"
+
+> propshop@0.1.0 watch-css C:\Users\spyrocash\Desktop\project\propshop
+> npm run build-css && node-sass src/ -o src/ --watch --recursive
+
+
+> propshop@0.1.0 build-css C:\Users\spyrocash\Desktop\project\propshop
+> node-sass src/ -o src/
+
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\libraries\font-awesome\4.7.0\scss\font-awesome.css
+Rendering Complete, saving .css file...
+Wrote CSS to C:\Users\spyrocash\Desktop\project\propshop\src\Propshop.css
+Wrote 2 CSS files to C:\Users\spyrocash\Desktop\project\propshop\src\
+npm ERR! missing script: watch-css
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\punchkub147\AppData\Roaming\npm-cache\_logs\2017-06-29T08_56_40_477Z-debug.log
+npm ERR! missing script: watch-css
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\punchkub147\AppData\Roaming\npm-cache\_logs\2017-06-29T09_00_12_316Z-debug.log
+npm ERR! missing script: watch-css
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\punchkub147\AppData\Roaming\npm-cache\_logs\2017-06-29T09_24_16_286Z-debug.log
+>>>>>>> f43dad576958da2256a73b8634522631a8f277d2

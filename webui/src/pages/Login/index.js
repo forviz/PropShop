@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Input, Alert, Spin } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
+import { firebaseConnect, pathToJS } from 'react-redux-firebase';
+import queryString from 'query-string';
+import _ from 'lodash';
 
-import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
 
 import SocialLogin from '../../containers/SocialLogin';
 import MemberInfo from '../../containers/MemberInfo';
 
 class Login extends Component {
+
+  static propTypes = {
+    firebase: PropTypes.shape().isRequired,
+    history: PropTypes.shape().isRequired,
+    location: PropTypes.shape().isRequired,
+    authError: PropTypes.shape(),
+  }
+
+  constructor(props) {
+    super(props);
+    this.checkLogin();
+  }
 
   state = {
     submitting: false,
@@ -25,17 +40,11 @@ class Login extends Component {
     },
   }
 
-  componentDidMount() {
-    this.getProfile();
-  }
-
-  getProfile = () => {
-    firebase.core().auth().onAuthStateChanged((user) => {
-      if (user && firebase.verifiedUser(user)) {
-        const { history } = this.props;
-        history.push({
-          pathname: '/',
-        });
+  checkLogin = () => {
+    const { firebase, history } = this.props;
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        history.push({ pathname: '/' });
       }
     });
   }
@@ -55,8 +64,8 @@ class Login extends Component {
     this.setState(prevState => ({
       password: {
         ...prevState.password,
-        value: value,
-      }
+        value,
+      },
     }));
   }
 
@@ -65,34 +74,33 @@ class Login extends Component {
     this.setState(prevState => ({
       email: {
         ...prevState.email,
-        errorMessage: errorMessage,
-      }
+        errorMessage,
+      },
     }));
     return errorMessage;
   }
 
   checkPassword = (password) => {
     const errorMessage = helpers.errorMessageInputPassword(password);
-    this.setState(prevState => ({
+    this.setState(() => ({
       password: {
-        errorMessage: errorMessage,
-      }
+        errorMessage,
+      },
     }));
     return errorMessage;
   }
 
   submit = () => {
+    const { firebase } = this.props;
     const { submitting } = this.state;
 
-    if ( submitting === true ) {
-      return;
-    } else {
-      this.setState({
-        submitting: true,
-      });
+    if (submitting === true) {
+      return false;
     }
 
-    const _self = this;
+    this.setState({
+      submitting: true,
+    });
 
     const email = this.state.email.value;
     const password = this.state.password.value;
@@ -100,36 +108,43 @@ class Login extends Component {
     const errorEmail = this.checkEmail(email);
     const errorPassword = this.checkPassword(password);
 
-    if ( errorEmail === '' && errorPassword === '' ) {
-      firebase.signIn(email, password).then(function(errorMessage) {
-        if ( errorMessage ) {
-          _self.setState({
-            submitting: false,
-            errorMessage: errorMessage,
-          });
-        }
-      });
-    } else {
-      this.setState({
-        submitting: false,
+    if (errorEmail === '' && errorPassword === '') {
+      firebase.login({
+        email,
+        password,
       });
     }
+    this.setState({
+      submitting: false,
+    });
+    return true;
   }
 
   handleSocialError = (error) => {
-    if (  error.type === 'auth/account-exists-with-different-credential' ) {
+    if (_.get(error, 'type') && error.type === 'auth/account-exists-with-different-credential') {
       this.setState({
         errorMessage: error.message,
         email: {
           ...this.state.email,
           value: error.email,
-        }
+        },
       });
+    } else {
+      const { history } = this.props;
+      const { param } = this.props.location.search;
+      if (param) {
+        const search = queryString.parse(param);
+        if (_.get(search, 'redirectFrom')) {
+          history.push({ pathname: `/${search.redirectFrom}` });
+        } else {
+          history.push({ pathname: '/' });
+        }
+      }
     }
   }
 
   render() {
-
+    const { authError } = this.props;
     const { submitting } = this.state;
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
@@ -137,7 +152,7 @@ class Login extends Component {
 
     return (
       <div id="Login">
-      	<div className="row">
+        <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
             <MemberInfo />
           </div>
@@ -147,9 +162,9 @@ class Login extends Component {
                 <div className="row">
                   <div className="col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
                     <h1>เข้าสู่ระบบ</h1>
-                    {this.state.errorMessage !== '' &&
+                    {_.get(authError, 'message') &&
                       <div className="form-group">
-                        <Alert message={this.state.errorMessage} type="error" />
+                        <Alert message={authError.message} type="error" />
                       </div>
                     }
                     <div className="form-group">
@@ -172,13 +187,13 @@ class Login extends Component {
                   </div>
                 </div>
               </div>
-              <hr/>
+              <hr />
               <div className="social_login">
                 <SocialLogin error={this.handleSocialError} />
               </div>
             </Spin>
           </div>
-      	</div>
+        </div>
       </div>
     );
   }
@@ -186,7 +201,7 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user.data,
+    authError: pathToJS(state.firebase, 'authError'),
   };
 };
 
@@ -200,4 +215,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(Login);
