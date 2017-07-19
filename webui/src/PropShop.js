@@ -3,37 +3,36 @@ import styled from 'styled-components';
 import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
-import { HashRouter as Router, Route } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
-
+import { createStore, applyMiddleware, compose } from 'redux';
+import { reactReduxFirebase } from 'react-redux-firebase';
 import { IntlProvider } from 'react-redux-multilingual';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 import rootReducer from './reducers';
-
 import translations from './translations';
-
-import Header from './containers/Header';
-import Footer from './containers/Footer';
-
-import Home from './pages/Home';
-import Realestate from './pages/Realestate';
-import Sell from './pages/Sell';
-import Agent from './pages/Agent';
-
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Forgotpassword from './pages/Forgotpassword';
-import Profile from './pages/Profile';
-import Changepassword from './pages/Changepassword';
+import MyRouter from './router';
 
 import './Propshop.css';
 
 const loggerMiddleware = createLogger();
 
-const store = createStore(
+// Firebase config
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_APIKEY,
+  authDomain: process.env.REACT_APP_AUTHDOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASEURL,
+  storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+};
+
+// Add redux Firebase to compose
+const createStoreWithFirebase = compose(
+  reactReduxFirebase(firebaseConfig),
+)(createStore);
+
+// Create store with reducers and initial state
+const store = createStoreWithFirebase(
   rootReducer,
   applyMiddleware(
     loggerMiddleware,
@@ -49,103 +48,10 @@ const SiteContent = styled.div`
 
 class PropShop extends Component {
   render() {
-    const routes = [
-      { path: '/:propertyType/:for/:area/',
-        exact: true,
-        header: Header,
-        content: Home,
-        footer: Footer,
-      },
-      { path: '/realestate/:id',
-        exact: false,
-        header: Header,
-        content: Realestate,
-        footer: Footer,
-      },
-      { path: '/sell',
-        exact: false,
-        header: Header,
-        content: Sell,
-        footer: Footer,
-      },
-      { path: '/agent',
-        exact: false,
-        header: Header,
-        content: Agent,
-        footer: Footer,
-      },
-      // { path: '/agent-search',
-      //   exact: false,
-      //   header: Header,
-      //   content: AgentSearchResult,
-      //   footer: Footer,
-      // },
-      // { path: '/agent/:id',
-      //   exact: true,
-      //   header: Header,
-      //   content: AgentDetail,
-      //   footer: Footer,
-      // },
-      { path: '/login',
-        exact: false,
-        header: Header,
-        content: Login,
-      },
-      { path: '/register',
-        exact: false,
-        header: Header,
-        content: Register,
-      },
-      { path: '/forgotpassword',
-        exact: false,
-        header: Header,
-        content: Forgotpassword,
-      },
-      { path: '/profile',
-        exact: false,
-        header: Header,
-        content: Profile,
-      },
-      { path: '/changepassword',
-        exact: false,
-        header: Header,
-        content: Changepassword,
-      },
-    ];
-
     return (
       <Provider store={store} locale="th">
         <IntlProvider translations={translations}>
-          <Router>
-            <div className="PropShop">
-              {routes.map(route => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  exact={route.exact}
-                  component={route.header}
-                />
-              ))}
-              <SiteContent>
-                {routes.map(route => (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    exact={route.exact}
-                    component={route.content}
-                  />
-                ))}
-              </SiteContent>
-              {routes.map(route => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  exact={route.exact}
-                  component={route.footer}
-                />
-            ))}
-            </div>
-          </Router>
+          <MyRouter />
         </IntlProvider>
       </Provider>
     );

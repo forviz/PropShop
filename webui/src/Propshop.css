@@ -103,198 +103,257 @@ img {
 .PropShop.end #Home .layout-left {
   position: absolute;
   bottom: 0; }
-  .PropShop.end #Home .layout-left .BannerRealEstate {
-    padding: 0; }
+
+.PropShop.end #Home .layout-left .BannerRealEstate {
+  padding: 0; }
 
 .PropShop.end #Footer {
   visibility: visible !important; }
 
 #Home {
   height: 100%; }
-  #Home > .row {
-    height: 100%;
-    margin: 0;
-    position: relative; }
-  #Home .layout-left {
-    height: 100%;
-    position: fixed;
-    padding: 0; }
-  #Home .layout-right {
-    padding: 0; }
-  #Home .filter_real_estate {
-    padding: 20px; }
-    #Home .filter_real_estate .ant-tabs {
-      overflow: visible; }
-    #Home .filter_real_estate .ant-tabs-bar {
-      border: 0; }
-    #Home .filter_real_estate .ant-tabs-nav .ant-tabs-tab {
-      font-family: "SukhumvitSet-Bold";
-      color: #999999; }
-    #Home .filter_real_estate .ant-tabs-nav .ant-tabs-tab-active {
-      font-family: "SukhumvitSet-Bold";
-      color: #484849; }
-    #Home .filter_real_estate .ant-tabs-ink-bar {
-      height: 3px;
-      background-color: #87b840; }
-    #Home .filter_real_estate .ant-tabs-tabpane .row {
-      margin-bottom: 10px; }
-    #Home .filter_real_estate .ant-tabs-tabpane .row > div {
-      padding-left: 5px;
-      padding-right: 5px; }
-    #Home .filter_real_estate .ant-tabs-tabpane .row > div:first-child {
-      padding-left: 15px; }
-    #Home .filter_real_estate .ant-tabs-tabpane .row > div:last-child {
-      padding-right: 15px; }
-    #Home .filter_real_estate .price_length .ant-slider {
-      width: 80%;
-      text-align: center;
-      margin: 10px auto; }
-    #Home .filter_real_estate .price_length .ant-slider-track {
-      background: #4d790a; }
-    #Home .filter_real_estate .price_length .ant-slider-handle {
-      background: #82b23e;
-      border-color: #4d790a; }
-    #Home .filter_real_estate .price_length .ant-slider:hover .ant-slider-handle {
-      background: #82b23e; }
-    #Home .filter_real_estate .price_length .ant-slider:hover .ant-slider-track {
-      background: #4d790a; }
-    #Home .filter_real_estate .price_length .ant-slider-handle:active {
-      box-shadow: none; }
-    #Home .filter_real_estate .col-room {
-      width: 100px; }
-    #Home .filter_real_estate .col-advance .btn-filter_advance.active {
-      background: #484849; }
-    #Home .filter_real_estate .Select.active .ant-select-selection--single,
-    #Home .filter_real_estate .SelectRoom.active .ant-select-selection--single,
-    #Home .filter_real_estate .SelectElectricTrain.active .ant-select-selection--single,
-    #Home .filter_real_estate .SelectElectricTrainStation.active .ant-select-selection--single,
-    #Home .filter_real_estate .SelectRadius.active .ant-select-selection--single {
-      background: none; }
-    #Home .filter_real_estate .SelectPrice .ant-select-selection--single.active {
-      background: none; }
-    #Home .filter_real_estate .price-lenght-block .active .ant-select-selection--single {
-      background: none; }
-  #Home .filter_advance {
-    margin-top: 20px; }
-  #Home .list h3 {
-    font-family: "SukhumvitSet-Bold"; }
-  #Home .result {
-    padding: 15px;
-    position: relative; }
-    #Home .result .list li.item {
-      padding: 0;
-      padding: 0 8px 8px 0; }
-  @media (max-width: 767px) {
-    #Home .filter_real_estate .ant-tabs-tabpane .row_1 {
-      margin-bottom: 0; }
-    #Home .filter_real_estate .ant-tabs-tabpane .row > div {
-      padding-right: 15px;
-      padding-left: 15px;
-      margin-bottom: 10px; } }
-  @media (min-width: 400px) and (max-width: 767px) {
-    #Home .result .list .item {
-      width: 50%;
-      float: left; } }
+
+#Home > .row {
+  height: 100%;
+  margin: 0;
+  position: relative; }
+
+#Home .layout-left {
+  height: 100%;
+  position: fixed;
+  padding: 0; }
+
+#Home .layout-right {
+  padding: 0; }
+
+#Home .filter_real_estate {
+  padding: 20px; }
+
+#Home .filter_real_estate .ant-tabs {
+  overflow: visible; }
+
+#Home .filter_real_estate .ant-tabs-bar {
+  border: 0; }
+
+#Home .filter_real_estate .ant-tabs-nav .ant-tabs-tab {
+  font-family: "SukhumvitSet-Bold";
+  color: #999999; }
+
+#Home .filter_real_estate .ant-tabs-nav .ant-tabs-tab-active {
+  font-family: "SukhumvitSet-Bold";
+  color: #484849; }
+
+#Home .filter_real_estate .ant-tabs-ink-bar {
+  height: 3px;
+  background-color: #87b840; }
+
+#Home .filter_real_estate .ant-tabs-tabpane .row {
+  margin-bottom: 10px; }
+
+#Home .filter_real_estate .ant-tabs-tabpane .row > div {
+  padding-left: 5px;
+  padding-right: 5px; }
+
+#Home .filter_real_estate .ant-tabs-tabpane .row > div:first-child {
+  padding-left: 15px; }
+
+#Home .filter_real_estate .ant-tabs-tabpane .row > div:last-child {
+  padding-right: 15px; }
+
+#Home .filter_real_estate .price_length .ant-slider {
+  width: 80%;
+  text-align: center;
+  margin: 10px auto; }
+
+#Home .filter_real_estate .price_length .ant-slider-track {
+  background: #4d790a; }
+
+#Home .filter_real_estate .price_length .ant-slider-handle {
+  background: #82b23e;
+  border-color: #4d790a; }
+
+#Home .filter_real_estate .price_length .ant-slider:hover .ant-slider-handle {
+  background: #82b23e; }
+
+#Home .filter_real_estate .price_length .ant-slider:hover .ant-slider-track {
+  background: #4d790a; }
+
+#Home .filter_real_estate .price_length .ant-slider-handle:active {
+  box-shadow: none; }
+
+#Home .filter_real_estate .col-room {
+  width: 100px; }
+
+#Home .filter_real_estate .col-advance .btn-filter_advance.active {
+  background: #484849; }
+
+#Home .filter_real_estate .Select.active .ant-select-selection--single,
+#Home .filter_real_estate .SelectRoom.active .ant-select-selection--single,
+#Home .filter_real_estate .SelectElectricTrain.active .ant-select-selection--single,
+#Home .filter_real_estate .SelectElectricTrainStation.active .ant-select-selection--single,
+#Home .filter_real_estate .SelectRadius.active .ant-select-selection--single {
+  background: none; }
+
+#Home .filter_real_estate .SelectPrice .ant-select-selection--single.active {
+  background: none; }
+
+#Home .filter_real_estate .price-lenght-block .active .ant-select-selection--single {
+  background: none; }
+
+#Home .filter_advance {
+  margin-top: 20px; }
+
+#Home .list h3 {
+  font-family: "SukhumvitSet-Bold"; }
+
+#Home .result {
+  padding: 15px;
+  position: relative; }
+
+#Home .result .list li.item {
+  padding: 0;
+  padding: 0 8px 8px 0; }
+
+@media (max-width: 767px) {
+  #Home .filter_real_estate .ant-tabs-tabpane .row_1 {
+    margin-bottom: 0; }
+  #Home .filter_real_estate .ant-tabs-tabpane .row > div {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-bottom: 10px; } }
+
+@media (min-width: 400px) and (max-width: 767px) {
+  #Home .result .list .item {
+    width: 50%;
+    float: left; } }
 
 #Sell {
   min-height: 100vh; }
-  #Sell .steps {
-    margin: 25px 0; }
-    #Sell .steps .ant-steps-title {
-      font-family: "SukhumvitSet-SemiBold"; }
-    #Sell .steps .ant-steps .ant-steps-item.ant-steps-status-process .ant-steps-head-inner {
-      border-color: #84b43e;
-      background-color: #84b43e; }
-    #Sell .steps .ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner > .ant-steps-icon {
-      color: #ffffff; }
-    #Sell .steps .ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner {
-      border-color: #84b43e;
-      background-color: #84b43e; }
-  #Sell h1 {
-    font-family: "SukhumvitSet-Bold";
-    font-size: 36px;
-    color: #8ebc42;
-    text-align: center;
-    margin-top: 60px;
-    margin-bottom: 20px; }
-  #Sell .action {
-    margin: 40px 0; }
-  #Sell #Step0 section {
-    margin: 30px 0; }
-    #Sell #Step0 section h4 {
-      margin: 0 0 20px 30px;
-      font-family: "SukhumvitSet-SemiBold";
-      font-size: 18px; }
-  #Sell #Step0 .custom-col > .row > div {
-    padding-right: 5px;
-    padding-left: 5px; }
-  #Sell #Step0 .custom-col > .row > div:first-child {
-    padding-left: 15px; }
-  #Sell #Step0 .custom-col > .row > div:last-child {
-    padding-right: 15px; }
-  #Sell #Step1 .SpecialFeature h4 {
-    display: none; }
-  #Sell #Step1 .SpecialFeature .foot .btn-main {
-    display: none; }
-  #Sell #Step2 .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container {
-    height: 42px; }
-  #Sell #Step2 .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
-    font-family: "SukhumvitSet-SemiBold";
-    font-size: 18px;
-    color: #000000;
-    padding: 7px 20px; }
-  #Sell #Step2 .main-image .image-name {
-    font-size: 12px;
-    font-weight: bold; }
-  #Sell #Step2 .main-image .image-size {
-    font-size: 12px;
-    color: #999999; }
-  #Sell #Step3 .form {
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    padding: 30px;
-    margin-bottom: 10px; }
+
+#Sell .steps {
+  margin: 25px 0; }
+
+#Sell .steps .ant-steps-title {
+  font-family: "SukhumvitSet-SemiBold"; }
+
+#Sell .steps .ant-steps .ant-steps-item.ant-steps-status-process .ant-steps-head-inner {
+  border-color: #84b43e;
+  background-color: #84b43e; }
+
+#Sell .steps .ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner > .ant-steps-icon {
+  color: #ffffff; }
+
+#Sell .steps .ant-steps .ant-steps-item.ant-steps-status-finish .ant-steps-head-inner {
+  border-color: #84b43e;
+  background-color: #84b43e; }
+
+#Sell h1 {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 36px;
+  color: #8ebc42;
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 20px; }
+
+#Sell .action {
+  margin: 40px 0; }
+
+#Sell #Step0 section {
+  margin: 30px 0; }
+
+#Sell #Step0 section h4 {
+  margin: 0 0 20px 30px;
+  font-family: "SukhumvitSet-SemiBold";
+  font-size: 18px; }
+
+#Sell #Step0 .custom-col > .row > div {
+  padding-right: 5px;
+  padding-left: 5px; }
+
+#Sell #Step0 .custom-col > .row > div:first-child {
+  padding-left: 15px; }
+
+#Sell #Step0 .custom-col > .row > div:last-child {
+  padding-right: 15px; }
+
+#Sell #Step1 .SpecialFeature h4 {
+  display: none; }
+
+#Sell #Step1 .SpecialFeature .foot .btn-main {
+  display: none; }
+
+#Sell #Step2 .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container {
+  height: 42px; }
+
+#Sell #Step2 .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+  font-family: "SukhumvitSet-SemiBold";
+  font-size: 18px;
+  color: #000000;
+  padding: 7px 20px; }
+
+#Sell #Step2 .main-image .image-name {
+  font-size: 12px;
+  font-weight: bold; }
+
+#Sell #Step2 .main-image .image-size {
+  font-size: 12px;
+  color: #999999; }
+
+#Sell #Step3 .form {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 30px;
+  margin-bottom: 10px; }
 
 #Agent .search {
   margin: 25px 0; }
 
 #Agent .persons {
   margin-top: 10px; }
-  #Agent .persons .title {
-    margin: 10px 0; }
-    #Agent .persons .title .text {
-      font-family: "SukhumvitSet-Bold";
-      color: #999999;
-      line-height: 30px; }
-    #Agent .persons .title .icon i {
-      font-size: 30px;
-      color: #8ebc42; }
-  #Agent .persons .view_more a {
-    color: #8ebc42;
-    font-weight: bold; }
-  #Agent .persons .AgentItem {
-    margin: 20px 0;
-    border-bottom: 1px solid #eeeeee;
-    padding-bottom: 20px; }
+
+#Agent .persons .title {
+  margin: 10px 0; }
+
+#Agent .persons .title .text {
+  font-family: "SukhumvitSet-Bold";
+  color: #999999;
+  line-height: 30px; }
+
+#Agent .persons .title .icon i {
+  font-size: 30px;
+  color: #8ebc42; }
+
+#Agent .persons .view_more a {
+  color: #8ebc42;
+  font-weight: bold; }
+
+#Agent .persons .AgentItem {
+  margin: 20px 0;
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 20px; }
 
 #Agent .about {
   background: #eeeeee;
   padding: 40px 0;
   margin-top: 40px; }
-  #Agent .about .topic {
-    font-family: "SukhumvitSet-SemiBold";
-    font-size: 24px;
-    margin-bottom: 40px;
-    text-align: center; }
-  #Agent .about .items {
-    text-align: center; }
-    #Agent .about .items .image img {
-      width: 120px; }
-    #Agent .about .items .title {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 18px;
-      color: #999999;
-      margin-top: 20px; }
+
+#Agent .about .topic {
+  font-family: "SukhumvitSet-SemiBold";
+  font-size: 24px;
+  margin-bottom: 40px;
+  text-align: center; }
+
+#Agent .about .items {
+  text-align: center; }
+
+#Agent .about .items .image img {
+  width: 120px; }
+
+#Agent .about .items .title {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 18px;
+  color: #999999;
+  margin-top: 20px; }
 
 #AgentDetail .info .name {
   font-size: 24px;
@@ -326,386 +385,601 @@ img {
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 15px;
   margin-bottom: 15px; }
-  #AgentDetail section h3 {
-    margin-bottom: 10px; }
+
+#AgentDetail section h3 {
+  margin-bottom: 10px; }
 
 #AgentDetail .property_list.odd .address {
   color: #409ee1; }
 
 #Realestate {
   padding-bottom: 40px; }
-  #Realestate .action .backhome {
-    display: inline-block;
-    background-image: linear-gradient(to top, #ececec, white);
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    padding: 8px 16px;
-    cursor: pointer; }
-    #Realestate .action .backhome .fa {
-      font-size: 16px;
-      font-weight: bold;
-      vertical-align: text-bottom;
-      margin-right: 4px; }
-  #Realestate .action .address {
-    display: inline-block;
-    margin-left: 15px; }
-  #Realestate .content .cover {
-    border: 1px solid #eeeeee; }
-    #Realestate .content .cover .google-map {
-      width: 29%;
-      float: right;
-      padding-top: 8px; }
-      #Realestate .content .cover .google-map img {
-        cursor: pointer; }
-    #Realestate .content .cover .image-gallery-slide img {
-      height: 500px; }
-    #Realestate .content .cover .image-gallery-thumbnail {
-      width: 140px; }
-      #Realestate .content .cover .image-gallery-thumbnail img {
-        height: 100px; }
-    #Realestate .content .cover .image-gallery-thumbnails-wrapper {
-      width: 70%;
-      float: left; }
-    #Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-slide {
-      text-align: center; }
-      #Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-slide img {
-        width: 65%;
-        height: inherit; }
-    #Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnail {
-      width: 100px; }
-      #Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnail img {
-        height: 70px; }
-    #Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnails-wrapper {
-      width: inherit;
-      float: none; }
-  #Realestate .content .main-info {
-    border: 1px solid #eeeeee;
-    border-top: 0; }
-  #Realestate .content .detail-block {
-    border-top: 1px solid #eeeeee;
-    border-bottom: 1px solid #eeeeee;
-    margin-top: 20px; }
-  #Realestate .content .price-block {
-    padding: 15px;
-    border-right: 1px solid #eeeeee; }
-    #Realestate .content .price-block .for {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 18px;
-      color: #4d790a; }
-    #Realestate .content .price-block .price {
-      font-family: 'Myriad Pro';
-      font-size: 48px; }
-    #Realestate .content .price-block .create_date {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 18px; }
-  #Realestate .content .address-block {
-    padding: 15px; }
-    #Realestate .content .address-block .address_1 {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 30px; }
-    #Realestate .content .address-block .address_2 {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 18px;
-      color: #999999; }
-    #Realestate .content .address-block .options ul li {
-      display: inline-block;
-      margin: 0 10px;
-      font-family: "SukhumvitSet-Bold";
-      font-size: 18px; }
-    #Realestate .content .address-block .options ul li:first-child {
-      margin-left: 0; }
-    #Realestate .content .address-block .options ul li:last-child {
-      margin-right: 0; }
-  #Realestate .content section.info {
-    padding: 15px;
-    border: 1px solid #eeeeee;
-    border-top: 0; }
-    #Realestate .content section.info h2 {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 30px;
-      margin-bottom: 10px; }
-    #Realestate .content section.info h4 {
-      font-family: "SukhumvitSet-Bold";
-      font-style: 18px;
-      margin-top: 20px; }
-  #Realestate .content section.info.detail {
-    border-right: 0;
-    border-bottom: 0;
-    min-height: 293px; }
-  #Realestate .content .contact-block {
-    background: #f6f6f6;
-    padding: 25px; }
-  #Realestate .content .agent-block {
-    margin-bottom: 20px; }
-  #Realestate .content .agent-info .name {
-    color: #8ebc42; }
-  #Realestate .content .agent-info .phone {
-    color: #999999;
-    font-weight: bold; }
-  #Realestate .nearby_place {
-    border: 1px solid #eeeeee;
-    border-top: 0; }
-    #Realestate .nearby_place .place-list {
-      padding: 15px; }
+
+#Realestate .action .backhome {
+  display: inline-block;
+  background-image: linear-gradient(to top, #ececec, white);
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer; }
+
+#Realestate .action .backhome .fa {
+  font-size: 16px;
+  font-weight: bold;
+  vertical-align: text-bottom;
+  margin-right: 4px; }
+
+#Realestate .action .address {
+  display: inline-block;
+  margin-left: 15px; }
+
+#Realestate .content .cover {
+  border: 1px solid #eeeeee; }
+
+#Realestate .content .cover .google-map {
+  width: 29%;
+  float: right;
+  padding-top: 8px; }
+
+#Realestate .content .cover .google-map img {
+  cursor: pointer; }
+
+#Realestate .content .cover .image-gallery-slide img {
+  height: 500px; }
+
+#Realestate .content .cover .image-gallery-thumbnail {
+  width: 140px; }
+
+#Realestate .content .cover .image-gallery-thumbnail img {
+  height: 100px; }
+
+#Realestate .content .cover .image-gallery-thumbnails-wrapper {
+  width: 70%;
+  float: left; }
+
+#Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-slide {
+  text-align: center; }
+
+#Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-slide img {
+  width: 65%;
+  height: inherit; }
+
+#Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnail {
+  width: 100px; }
+
+#Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnail img {
+  height: 70px; }
+
+#Realestate .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnails-wrapper {
+  width: inherit;
+  float: none; }
+
+#Realestate .content .main-info {
+  border: 1px solid #eeeeee;
+  border-top: 0; }
+
+#Realestate .content .detail-block {
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  margin-top: 20px; }
+
+#Realestate .content .price-block {
+  padding: 15px;
+  border-right: 1px solid #eeeeee; }
+
+#Realestate .content .price-block .for {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 18px;
+  color: #4d790a; }
+
+#Realestate .content .price-block .price {
+  font-family: 'Myriad Pro';
+  font-size: 48px; }
+
+#Realestate .content .price-block .create_date {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 18px; }
+
+#Realestate .content .address-block {
+  padding: 15px; }
+
+#Realestate .content .address-block .address_1 {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 30px; }
+
+#Realestate .content .address-block .address_2 {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 18px;
+  color: #999999; }
+
+#Realestate .content .address-block .options ul li {
+  display: inline-block;
+  margin: 0 10px;
+  font-family: "SukhumvitSet-Bold";
+  font-size: 18px; }
+
+#Realestate .content .address-block .options ul li:first-child {
+  margin-left: 0; }
+
+#Realestate .content .address-block .options ul li:last-child {
+  margin-right: 0; }
+
+#Realestate .content section.info {
+  padding: 15px;
+  border: 1px solid #eeeeee;
+  border-top: 0; }
+
+#Realestate .content section.info h2 {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 30px;
+  margin-bottom: 10px; }
+
+#Realestate .content section.info h4 {
+  font-family: "SukhumvitSet-Bold";
+  font-style: 18px;
+  margin-top: 20px; }
+
+#Realestate .content section.info.detail {
+  border-right: 0;
+  border-bottom: 0;
+  min-height: 293px; }
+
+#Realestate .content .contact-block {
+  background: #f6f6f6;
+  padding: 25px; }
+
+#Realestate .content .agent-block {
+  margin-bottom: 20px; }
+
+#Realestate .content .agent-info .name {
+  color: #8ebc42; }
+
+#Realestate .content .agent-info .phone {
+  color: #999999;
+  font-weight: bold; }
+
+#Realestate .nearby_place {
+  border: 1px solid #eeeeee;
+  border-top: 0; }
+
+#Realestate .nearby_place .place-list {
+  padding: 15px; }
 
 #Login {
   height: 100%; }
-  #Login > .row {
-    height: 100%;
-    margin: 0; }
-  #Login .layout-left {
-    height: 100%;
-    position: fixed;
-    padding: 0; }
-  #Login .layout-right {
-    padding: 0; }
-  #Login .form {
-    margin: 40px 0; }
-    #Login .form > .row {
-      margin: 0; }
-    #Login .form h1 {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
-      color: #8ebc42;
-      margin-bottom: 40px;
-      text-align: center; }
-    #Login .form .form-group.link {
-      text-align: center; }
-    #Login .form .form-group.link li {
-      margin: 0 14px;
-      display: inline-block;
-      vertical-align: middle;
-      position: relative; }
-    #Login .form .form-group.link li:after {
-      content: '|';
-      color: #4d790a;
-      position: absolute;
-      margin-left: 13px; }
-    #Login .form .form-group.link li:last-child:after {
-      content: ''; }
-    #Login .form .form-group.link li a {
-      color: #8ebc42; }
-    #Login .form .form-group.action {
-      text-align: center;
-      margin-top: 20px; }
-    #Login .form .form-group.action button {
-      margin: 0 10px; }
-  #Login .social_login {
-    text-align: center;
-    margin: 20px 0; }
-    #Login .social_login > div {
-      display: inline-block;
-      vertical-align: middle;
-      margin: 0 10px; }
+
+#Login > .row {
+  height: 100%;
+  margin: 0; }
+
+#Login .layout-left {
+  height: 100%;
+  position: fixed;
+  padding: 0; }
+
+#Login .layout-right {
+  padding: 0; }
+
+#Login .form {
+  margin: 40px 0; }
+
+#Login .form > .row {
+  margin: 0; }
+
+#Login .form h1 {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 36px;
+  color: #8ebc42;
+  margin-bottom: 40px;
+  text-align: center; }
+
+#Login .form .form-group.link {
+  text-align: center; }
+
+#Login .form .form-group.link li {
+  margin: 0 14px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative; }
+
+#Login .form .form-group.link li:after {
+  content: '|';
+  color: #4d790a;
+  position: absolute;
+  margin-left: 13px; }
+
+#Login .form .form-group.link li:last-child:after {
+  content: ''; }
+
+#Login .form .form-group.link li a {
+  color: #8ebc42; }
+
+#Login .form .form-group.action {
+  text-align: center;
+  margin-top: 20px; }
+
+#Login .form .form-group.action button {
+  margin: 0 10px; }
+
+#Login .social_login {
+  text-align: center;
+  margin: 20px 0; }
+
+#Login .social_login > div {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 10px; }
 
 #Register {
   height: 100%; }
-  #Register > .row {
-    height: 100%;
-    margin: 0; }
-  #Register .layout-left {
-    height: 100%;
-    position: fixed;
-    padding: 0; }
-  #Register .layout-right {
-    padding: 0; }
-  #Register .form {
-    margin: 40px 0; }
-    #Register .form > .row {
-      margin: 0; }
-    #Register .form h1 {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
-      color: #8ebc42;
-      margin-bottom: 40px;
-      text-align: center; }
-    #Register .form .form-group.link {
-      text-align: center; }
-    #Register .form .form-group.link li {
-      margin: 0 14px;
-      display: inline-block;
-      vertical-align: middle;
-      position: relative; }
-    #Register .form .form-group.link li:after {
-      content: '|';
-      color: #4d790a;
-      position: absolute;
-      margin-left: 13px; }
-    #Register .form .form-group.link li:last-child:after {
-      content: ''; }
-    #Register .form .form-group.link li a {
-      color: #8ebc42; }
-    #Register .form .form-group.action {
-      text-align: center;
-      margin-top: 20px; }
-    #Register .form .form-group.action button {
-      margin: 0 10px; }
-  #Register .social_login {
-    text-align: center;
-    margin: 20px 0; }
-    #Register .social_login > div {
-      display: inline-block;
-      vertical-align: middle;
-      margin: 0 10px; }
+
+#Register > .row {
+  height: 100%;
+  margin: 0; }
+
+#Register .layout-left {
+  height: 100%;
+  position: fixed;
+  padding: 0; }
+
+#Register .layout-right {
+  padding: 0; }
+
+#Register .form {
+  margin: 40px 0; }
+
+#Register .form > .row {
+  margin: 0; }
+
+#Register .form h1 {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 36px;
+  color: #8ebc42;
+  margin-bottom: 40px;
+  text-align: center; }
+
+#Register .form .form-group.link {
+  text-align: center; }
+
+#Register .form .form-group.link li {
+  margin: 0 14px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative; }
+
+#Register .form .form-group.link li:after {
+  content: '|';
+  color: #4d790a;
+  position: absolute;
+  margin-left: 13px; }
+
+#Register .form .form-group.link li:last-child:after {
+  content: ''; }
+
+#Register .form .form-group.link li a {
+  color: #8ebc42; }
+
+#Register .form .form-group.action {
+  text-align: center;
+  margin-top: 20px; }
+
+#Register .form .form-group.action button {
+  margin: 0 10px; }
+
+#Register .social_login {
+  text-align: center;
+  margin: 20px 0; }
+
+#Register .social_login > div {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 10px; }
 
 #Forgotpassword {
   height: 100%; }
-  #Forgotpassword > .row {
-    height: 100%;
-    margin: 0; }
-  #Forgotpassword .layout-left {
-    height: 100%;
-    position: fixed;
-    padding: 0; }
-  #Forgotpassword .layout-right {
-    padding: 0; }
-  #Forgotpassword .form {
-    margin: 40px 0; }
-    #Forgotpassword .form > .row {
-      margin: 0; }
-    #Forgotpassword .form h1 {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
-      color: #8ebc42;
-      margin-bottom: 40px;
-      text-align: center; }
-    #Forgotpassword .form .form-group.link {
-      text-align: center; }
-    #Forgotpassword .form .form-group.link li {
-      margin: 0 14px;
-      display: inline-block;
-      vertical-align: middle;
-      position: relative; }
-    #Forgotpassword .form .form-group.link li:after {
-      content: '|';
-      color: #4d790a;
-      position: absolute;
-      margin-left: 13px; }
-    #Forgotpassword .form .form-group.link li:last-child:after {
-      content: ''; }
-    #Forgotpassword .form .form-group.link li a {
-      color: #8ebc42; }
-    #Forgotpassword .form .form-group.action {
-      text-align: center;
-      margin-top: 20px; }
-    #Forgotpassword .form .form-group.action button {
-      margin: 0 10px; }
-  #Forgotpassword .social_login {
-    text-align: center;
-    margin: 20px 0; }
-    #Forgotpassword .social_login > div {
-      display: inline-block;
-      vertical-align: middle;
-      margin: 0 10px; }
+
+#Forgotpassword > .row {
+  height: 100%;
+  margin: 0; }
+
+#Forgotpassword .layout-left {
+  height: 100%;
+  position: fixed;
+  padding: 0; }
+
+#Forgotpassword .layout-right {
+  padding: 0; }
+
+#Forgotpassword .form {
+  margin: 40px 0; }
+
+#Forgotpassword .form > .row {
+  margin: 0; }
+
+#Forgotpassword .form h1 {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 36px;
+  color: #8ebc42;
+  margin-bottom: 40px;
+  text-align: center; }
+
+#Forgotpassword .form .form-group.link {
+  text-align: center; }
+
+#Forgotpassword .form .form-group.link li {
+  margin: 0 14px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative; }
+
+#Forgotpassword .form .form-group.link li:after {
+  content: '|';
+  color: #4d790a;
+  position: absolute;
+  margin-left: 13px; }
+
+#Forgotpassword .form .form-group.link li:last-child:after {
+  content: ''; }
+
+#Forgotpassword .form .form-group.link li a {
+  color: #8ebc42; }
+
+#Forgotpassword .form .form-group.action {
+  text-align: center;
+  margin-top: 20px; }
+
+#Forgotpassword .form .form-group.action button {
+  margin: 0 10px; }
+
+#Forgotpassword .social_login {
+  text-align: center;
+  margin: 20px 0; }
+
+#Forgotpassword .social_login > div {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 10px; }
 
 #Profile {
   height: 100%; }
-  #Profile > .row {
-    height: 100%;
-    margin: 0; }
-  #Profile .layout-left {
-    height: 100%;
-    position: fixed;
-    padding: 0;
-    background: #f6f6f6; }
-  #Profile .layout-right .layout-container h1 {
-    text-align: center;
-    margin-top: 40px;
-    font-family: "SukhumvitSet-Bold";
-    font-size: 36px;
-    color: #8ebc42; }
-  #Profile .layout-right .layout-container .form {
-    margin-top: 20px;
-    border: 1px solid #eeeeee;
-    border-radius: 4px; }
-    #Profile .layout-right .layout-container .form section {
-      border-bottom: 1px solid #eeeeee;
-      padding-bottom: 20px; }
-    #Profile .layout-right .layout-container .form section:last-child {
-      border-bottom: 0; }
-    #Profile .layout-right .layout-container .form .title {
-      font-family: "SukhumvitSet-SemiBold";
-      font-size: 18px;
-      padding: 20px; }
-    #Profile .layout-right .layout-container .form .form-group-phone .col-md-6:first-child {
-      padding-right: 0; }
-    #Profile .layout-right .layout-container .form .uploadImage-block {
-      cursor: pointer;
-      border: 1px solid #eeeeee;
-      padding: 4px;
-      border-radius: 4px;
-      width: 120px;
-      height: 120px;
-      line-height: 130px;
-      text-align: center; }
-      #Profile .layout-right .layout-container .form .uploadImage-block .uploadImage-bg {
-        background: #f6f6f6;
-        width: 100%;
-        height: 100%; }
-        #Profile .layout-right .layout-container .form .uploadImage-block .uploadImage-bg .fa {
-          font-size: 60px; }
-    #Profile .layout-right .layout-container .form .uploadImage-block.has-image {
-      width: 200px;
-      height: inherit;
-      line-height: inherit; }
-    #Profile .layout-right .layout-container .form .btn-action {
-      text-align: center;
-      margin: 40px 0; }
+
+#Profile > .row {
+  height: 100%;
+  margin: 0; }
+
+#Profile .layout-left {
+  height: 100%;
+  position: fixed;
+  padding: 0;
+  background: #f6f6f6; }
+
+#Profile .layout-right .layout-container h1 {
+  text-align: center;
+  font-family: "SukhumvitSet-Bold";
+  font-size: 36px;
+  color: #8ebc42; }
+
+#Profile .layout-right .layout-container .form {
+  margin-top: 20px;
+  border: 1px solid #eeeeee;
+  border-radius: 4px; }
+
+#Profile .layout-right .layout-container .form section {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 20px; }
+
+#Profile .layout-right .layout-container .form section:last-child {
+  border-bottom: 0; }
+
+#Profile .layout-right .layout-container .form .title {
+  font-family: "SukhumvitSet-SemiBold";
+  font-size: 18px;
+  padding: 20px; }
+
+#Profile .layout-right .layout-container .form .form-group-phone .col-md-6:first-child {
+  padding-right: 0; }
+
+#Profile .layout-right .layout-container .form .uploadImage-block {
+  cursor: pointer;
+  border: 1px solid #eeeeee;
+  padding: 4px;
+  border-radius: 4px;
+  width: 120px;
+  height: 120px;
+  line-height: 130px;
+  text-align: center; }
+
+#Profile .layout-right .layout-container .form .uploadImage-block .uploadImage-bg {
+  background: #f6f6f6;
+  width: 100%;
+  height: 100%; }
+
+#Profile .layout-right .layout-container .form .uploadImage-block .uploadImage-bg .fa {
+  font-size: 60px; }
+
+#Profile .layout-right .layout-container .form .uploadImage-block.has-image {
+  width: 200px;
+  height: inherit;
+  line-height: inherit; }
+
+#Profile .layout-right .layout-container .form .btn-action {
+  text-align: center;
+  margin: 40px 0; }
 
 #Changepassword {
   height: 100%; }
-  #Changepassword > .row {
-    height: 100%;
-    margin: 0; }
-  #Changepassword .layout-left {
-    height: 100%;
-    position: fixed;
-    padding: 0;
-    background: #f6f6f6; }
-  #Changepassword .layout-right .layout-container h1 {
-    text-align: center;
-    margin-top: 40px;
-    font-family: "SukhumvitSet-Bold";
-    font-size: 36px;
-    color: #8ebc42; }
-  #Changepassword .layout-right .layout-container .form {
-    margin-top: 20px;
-    border: 1px solid #eeeeee;
-    border-radius: 4px;
-    padding-top: 20px; }
-    #Changepassword .layout-right .layout-container .form section {
-      border-bottom: 1px solid #eeeeee;
-      padding-bottom: 20px; }
-    #Changepassword .layout-right .layout-container .form section:last-child {
-      border-bottom: 0; }
-    #Changepassword .layout-right .layout-container .form .title {
-      font-family: "SukhumvitSet-SemiBold";
-      font-size: 18px;
-      padding: 20px; }
-    #Changepassword .layout-right .layout-container .form .form-group-phone .col-md-6:first-child {
-      padding-right: 0; }
-    #Changepassword .layout-right .layout-container .form .uploadImage-block {
-      cursor: pointer;
-      border: 1px solid #eeeeee;
-      padding: 4px;
-      border-radius: 4px;
-      width: 120px;
-      height: 120px;
-      line-height: 130px;
-      text-align: center; }
-      #Changepassword .layout-right .layout-container .form .uploadImage-block .uploadImage-bg {
-        background: #f6f6f6;
-        width: 100%;
-        height: 100%; }
-        #Changepassword .layout-right .layout-container .form .uploadImage-block .uploadImage-bg .fa {
-          font-size: 60px; }
-    #Changepassword .layout-right .layout-container .form .uploadImage-block.has-image {
-      width: 200px;
-      height: inherit;
-      line-height: inherit; }
-  #Changepassword .layout-right .layout-container .btn-action {
-    text-align: center;
-    margin: 40px 0; }
+
+#Changepassword > .row {
+  height: 100%;
+  margin: 0; }
+
+#Changepassword .layout-left {
+  height: 100%;
+  position: fixed;
+  padding: 0;
+  background: #f6f6f6; }
+
+#Changepassword .layout-right .layout-container h1 {
+  text-align: center;
+  font-family: "SukhumvitSet-Bold";
+  font-size: 36px;
+  color: #8ebc42; }
+
+#Changepassword .layout-right .layout-container .form {
+  margin-top: 20px;
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  padding-top: 20px; }
+
+#Changepassword .layout-right .layout-container .form section {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 20px; }
+
+#Changepassword .layout-right .layout-container .form section:last-child {
+  border-bottom: 0; }
+
+#Changepassword .layout-right .layout-container .form .title {
+  font-family: "SukhumvitSet-SemiBold";
+  font-size: 18px;
+  padding: 20px; }
+
+#Changepassword .layout-right .layout-container .form .form-group-phone .col-md-6:first-child {
+  padding-right: 0; }
+
+#Changepassword .layout-right .layout-container .form .uploadImage-block {
+  cursor: pointer;
+  border: 1px solid #eeeeee;
+  padding: 4px;
+  border-radius: 4px;
+  width: 120px;
+  height: 120px;
+  line-height: 130px;
+  text-align: center; }
+
+#Changepassword .layout-right .layout-container .form .uploadImage-block .uploadImage-bg {
+  background: #f6f6f6;
+  width: 100%;
+  height: 100%; }
+
+#Changepassword .layout-right .layout-container .form .uploadImage-block .uploadImage-bg .fa {
+  font-size: 60px; }
+
+#Changepassword .layout-right .layout-container .form .uploadImage-block.has-image {
+  width: 200px;
+  height: inherit;
+  line-height: inherit; }
+
+#Changepassword .layout-right .layout-container .btn-action {
+  text-align: center;
+  margin: 40px 0; }
+
+#WishList .head {
+  height: 115px;
+  line-height: 115px;
+  font-size: 24px;
+  font-family: "SukhumvitSet-Bold"; }
+
+#News .breadcrumb {
+  height: 100px;
+  padding: 0;
+  background: white;
+  line-height: 100px;
+  margin-bottom: 0; }
+
+#News .breadcrumb .breadcrumb-item {
+  font-size: 14px;
+  color: #999999;
+  float: left;
+  margin-right: 5px; }
+
+#News .breadcrumb .breadcrumb-item a {
+  color: #484849;
+  text-decoration: none; }
+
+#News .ant-tabs-ink-bar {
+  background: #88b840;
+  height: 4px;
+  width: 120px; }
+
+#News .ant-tabs-bar {
+  margin-left: 38px;
+  box-sizing: border-box;
+  border: none; }
+
+#News .ant-tabs-nav .ant-tabs-tab {
+  margin-right: 0px;
+  padding-top: 60px;
+  color: #999999; }
+
+#News .ant-tabs-nav .ant-tabs-tab-active {
+  color: #484849; }
+
+#News .tap-title {
+  font-size: 30px;
+  font-family: "SukhumvitSet-Bold";
+  padding-left: 38px;
+  box-sizing: border-box; }
+
+#News .ant-pagination {
+  margin-bottom: 20px;
+  text-align: center; }
+
+#News .ant-pagination-item-active {
+  background: #8ebc42;
+  border-color: #8ebc42; }
+
+#News .ant-pagination-item:focus, #News .ant-pagination-item:hover {
+  border-color: #8ebc42;
+  color: #8ebc42; }
+
+#News .ant-pagination-prev:active, #News .ant-pagination-next:active, #News .ant-pagination-prev:hover, #News .ant-pagination-next:hover, #News .ant-pagination-prev:focus, #News .ant-pagination-next:focus {
+  border-color: #8ebc42; }
+
+#News .ant-pagination-prev:active a, #News .ant-pagination-next:active a, #News .ant-pagination-prev:hover a, #News .ant-pagination-next:hover a, #News .ant-pagination-prev:focus a, #News .ant-pagination-next:focus a {
+  color: #8ebc42; }
+
+#News .box-spin {
+  width: 100%;
+  padding: 100px;
+  text-align: center; }
+
+#Account {
+  margin: 40px 0; }
+
+#Account .ant-menu-root {
+  border: 1px solid #eeeeee; }
+
+#MyProperty h1 {
+  font-family: "SukhumvitSet-Bold";
+  color: #8ebc42;
+  font-size: 36px; }
+
+#MyProperty .property-list .property-block .thumbnail {
+  cursor: pointer; }
+
+#MyProperty .property-list .property-block .thumbnail:hover {
+  border: 1px solid #8ebc42; }
+
+#MyProperty .property-list .property-block .thumbnail .image {
+  width: 100%;
+  height: 140px; }
+
+#MyProperty .property-list .property-block .thumbnail .project {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; }
+
+#MyProperty .property-pagination {
+  text-align: center; }
+
+#PropertyEdit #Sell .container {
+  width: 100%;
+  margin: 0;
+  padding: 0; }
+
+#PropertyEdit #Sell #Step0 > .container > .row > .col-md-10 {
+  width: 100%;
+  margin-left: 0; }
 
 #Header .container {
   width: 100%; }
@@ -773,9 +1047,9 @@ img {
   .navbar-default .navbar-toggle:hover {
     border-color: #484849;
     background: #484849; }
-    .navbar-default .navbar-toggle[aria-expanded=true] .icon-bar,
-    .navbar-default .navbar-toggle:hover .icon-bar {
-      background: #ffffff; }
+  .navbar-default .navbar-toggle[aria-expanded=true] .icon-bar,
+  .navbar-default .navbar-toggle:hover .icon-bar {
+    background: #ffffff; }
   .navbar-collapse.collapse {
     display: none !important; }
   .navbar-toggle {
@@ -817,124 +1091,156 @@ img {
   height: 20px;
   float: left;
   margin-right: 10px; }
-  #Header .avatar img {
-    position: absolute;
-    top: -3px;
-    right: -1px;
-    width: 30px; }
+
+#Header .avatar img {
+  position: absolute;
+  top: -3px;
+  right: -1px;
+  width: 30px; }
 
 #Footer {
   background: #494749;
   padding: 15px 25px 25px 25px;
   z-index: 10;
   position: relative; }
-  #Footer a,
-  #Footer span,
-  #Footer div {
-    color: #ffffff; }
-  #Footer a:hover {
-    text-decoration: none; }
-  #Footer .menu-left ul li,
-  #Footer .menu-right ul li {
-    display: inline-block;
-    margin: 0 16px; }
-  #Footer .menu-left ul li:first-child,
-  #Footer .menu-right ul li:first-child {
-    margin-left: 0; }
-  #Footer .menu-left ul li:last-child,
-  #Footer .menu-right ul li:last-child {
-    margin-right: 0; }
-  #Footer .menu-left ul li a {
-    font-family: "SukhumvitSet-Text"; }
-  #Footer .menu-right ul li a {
-    border-bottom: 1px solid #ffffff; }
-  #Footer .menu-right ul li a:after {
-    content: '|';
-    color: #8ebc42;
-    position: absolute;
-    margin-left: 13px; }
-  #Footer .menu-right ul li:last-child a:after {
-    content: ''; }
-  #Footer .row_2 {
-    margin-top: 15px; }
-  #Footer .copyright .logo {
-    display: inline-block;
-    vertical-align: middle; }
-  #Footer .copyright .text {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 15px; }
+
+#Footer a,
+#Footer span,
+#Footer div {
+  color: #ffffff; }
+
+#Footer a:hover {
+  text-decoration: none; }
+
+#Footer .menu-left ul li,
+#Footer .menu-right ul li {
+  display: inline-block;
+  margin: 0 16px; }
+
+#Footer .menu-left ul li:first-child,
+#Footer .menu-right ul li:first-child {
+  margin-left: 0; }
+
+#Footer .menu-left ul li:last-child,
+#Footer .menu-right ul li:last-child {
+  margin-right: 0; }
+
+#Footer .menu-left ul li a {
+  font-family: "SukhumvitSet-Text"; }
+
+#Footer .menu-right ul li a {
+  border-bottom: 1px solid #ffffff; }
+
+#Footer .menu-right ul li a:after {
+  content: '|';
+  color: #8ebc42;
+  position: absolute;
+  margin-left: 13px; }
+
+#Footer .menu-right ul li:last-child a:after {
+  content: ''; }
+
+#Footer .row_2 {
+  margin-top: 15px; }
+
+#Footer .copyright .logo {
+  display: inline-block;
+  vertical-align: middle; }
+
+#Footer .copyright .text {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 15px; }
 
 .BannerRealEstate {
   height: 100%;
   padding-bottom: 50px; }
-  .BannerRealEstate .image-gallery,
-  .BannerRealEstate .image-gallery-content,
-  .BannerRealEstate .image-gallery-slide-wrapper,
-  .BannerRealEstate .image-gallery-swipe,
-  .BannerRealEstate .image-gallery-slides,
-  .BannerRealEstate .image-gallery-slide,
-  .BannerRealEstate .image-gallery-image {
-    height: 100%; }
-  .BannerRealEstate .image-gallery-image {
-    position: relative; }
-  .BannerRealEstate .image-gallery-gradient {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 70%;
-    background: linear-gradient(to bottom, transparent, #000000);
-    z-index: 1; }
-  .BannerRealEstate .image-gallery-bullets .image-gallery-bullet {
-    border-radius: 0;
-    padding: 8px;
-    box-shadow: none;
-    border: 2px solid #ffffff; }
-  .BannerRealEstate .image-gallery-bullets .image-gallery-bullet.active {
-    background: #ac1a00; }
-  .BannerRealEstate .image-gallery-bullets .image-gallery-bullets-container {
-    text-align: right; }
-  .BannerRealEstate .image-gallery-bullets {
-    bottom: 25px;
-    width: 93%; }
-  .BannerRealEstate .image-gallery-slide .image-gallery-description {
-    left: 0;
-    bottom: 0;
-    background: none;
-    padding: 30px;
-    z-index: 2;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 30px; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description div {
-      color: #ffffff; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .topic {
-      font-size: 36px;
-      color: #ffffff;
-      margin-bottom: 15px; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .price {
-      font-size: 24px;
-      color: #88b840; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option {
-      margin-top: 5px; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li {
-      list-style: none;
-      display: inline-block;
-      margin: 0 6px; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:first-child {
-      margin-left: 0; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:last-child {
-      margin-right: 0; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li span {
-      color: #ffffff;
-      margin: 0 10px; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li span.fa {
-      font-size: 24px; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:first-child span {
-      margin-left: 0; }
-    .BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:last-child span {
-      margin-right: 0; }
+
+.BannerRealEstate .image-gallery,
+.BannerRealEstate .image-gallery-content,
+.BannerRealEstate .image-gallery-slide-wrapper,
+.BannerRealEstate .image-gallery-swipe,
+.BannerRealEstate .image-gallery-slides,
+.BannerRealEstate .image-gallery-slide,
+.BannerRealEstate .image-gallery-image {
+  height: 100%; }
+
+.BannerRealEstate .image-gallery-image {
+  position: relative; }
+
+.BannerRealEstate .image-gallery-gradient {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 70%;
+  background: linear-gradient(to bottom, transparent, #000000);
+  z-index: 1; }
+
+.BannerRealEstate .image-gallery-bullets .image-gallery-bullet {
+  border-radius: 0;
+  padding: 8px;
+  box-shadow: none;
+  border: 2px solid #ffffff; }
+
+.BannerRealEstate .image-gallery-bullets .image-gallery-bullet.active {
+  background: #ac1a00; }
+
+.BannerRealEstate .image-gallery-bullets .image-gallery-bullets-container {
+  text-align: right; }
+
+.BannerRealEstate .image-gallery-bullets {
+  bottom: 25px;
+  width: 93%; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description {
+  left: 0;
+  bottom: 0;
+  background: none;
+  padding: 30px;
+  z-index: 2;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 30px; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description div {
+  color: #ffffff; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .topic {
+  font-size: 36px;
+  color: #ffffff;
+  margin-bottom: 15px; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .price {
+  font-size: 24px;
+  color: #88b840; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option {
+  margin-top: 5px; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li {
+  list-style: none;
+  display: inline-block;
+  margin: 0 6px; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:first-child {
+  margin-left: 0; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:last-child {
+  margin-right: 0; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li span {
+  color: #ffffff;
+  margin: 0 10px; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li span.fa {
+  font-size: 24px; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:first-child span {
+  margin-left: 0; }
+
+.BannerRealEstate .image-gallery-slide .image-gallery-description .option ul li:last-child span {
+  margin-right: 0; }
 
 .SpecialFeature .head h4 {
   font-family: "SukhumvitSet-SemiBold";
@@ -945,10 +1251,11 @@ img {
   border-radius: 4px;
   margin: 5px 0;
   padding: 15px; }
-  .SpecialFeature .list .title {
-    color: #999999;
-    font-weight: bold;
-    margin-bottom: 8px; }
+
+.SpecialFeature .list .title {
+  color: #999999;
+  font-weight: bold;
+  margin-bottom: 8px; }
 
 .SpecialFeature .foot .remark {
   font-size: 12px;
@@ -959,40 +1266,50 @@ img {
 
 .NearbyPlace {
   height: 500px; }
-  .NearbyPlace .tabs-block .type {
-    position: relative;
-    display: inline-block;
-    width: 80px;
-    height: 80px;
-    background: #f6f6f6;
-    margin: 0 4px;
-    cursor: pointer; }
-    .NearbyPlace .tabs-block .type .item {
-      position: absolute;
-      left: 50%;
-      top: 52%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      line-height: 20px; }
-      .NearbyPlace .tabs-block .type .item .icon {
-        font-size: 40px;
-        color: #484849; }
-      .NearbyPlace .tabs-block .type .item .text {
-        font-size: 12px;
-        color: #484849; }
-  .NearbyPlace .tabs-block .type.active {
-    background: #87b740; }
-    .NearbyPlace .tabs-block .type.active .icon {
-      color: #ffffff; }
-    .NearbyPlace .tabs-block .type.active .text {
-      color: #ffffff; }
-  .NearbyPlace .tabs-block .type:first-child {
-    margin-left: 0; }
-  .NearbyPlace .tabs-block .type:last-child {
-    margin-right: 0; }
-  .NearbyPlace .place-map {
-    width: 100%;
-    height: 500px; }
+
+.NearbyPlace .tabs-block .type {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  background: #f6f6f6;
+  margin: 0 4px;
+  cursor: pointer; }
+
+.NearbyPlace .tabs-block .type .item {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  line-height: 20px; }
+
+.NearbyPlace .tabs-block .type .item .icon {
+  font-size: 40px;
+  color: #484849; }
+
+.NearbyPlace .tabs-block .type .item .text {
+  font-size: 12px;
+  color: #484849; }
+
+.NearbyPlace .tabs-block .type.active {
+  background: #87b740; }
+
+.NearbyPlace .tabs-block .type.active .icon {
+  color: #ffffff; }
+
+.NearbyPlace .tabs-block .type.active .text {
+  color: #ffffff; }
+
+.NearbyPlace .tabs-block .type:first-child {
+  margin-left: 0; }
+
+.NearbyPlace .tabs-block .type:last-child {
+  margin-right: 0; }
+
+.NearbyPlace .place-map {
+  width: 100%;
+  height: 500px; }
 
 .SocialLogin .text {
   margin-right: 4px; }
@@ -1005,29 +1322,38 @@ img {
 .MemberInfo {
   height: 100%;
   background: #f6f6f6; }
+
+.MemberInfo .layout {
+  padding: 100px;
+  margin: auto; }
+
+.MemberInfo .layout > .title {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 36px;
+  color: #8ebc42; }
+
+.MemberInfo .layout > .description {
+  margin-top: 10px; }
+
+.MemberInfo .layout .info .block {
+  margin: 20px 0; }
+
+.MemberInfo .layout .info .block .image {
+  text-align: center; }
+
+.MemberInfo .layout .info .block .image img {
+  width: 60px; }
+
+.MemberInfo .layout .info .block .title {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 18px; }
+
+.MemberInfo .layout .info .block .description {
+  margin-top: 5px; }
+
+@media screen and (max-width: 1200px) {
   .MemberInfo .layout {
-    padding: 100px;
-    margin: auto; }
-    .MemberInfo .layout > .title {
-      font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
-      color: #8ebc42; }
-    .MemberInfo .layout > .description {
-      margin-top: 10px; }
-    .MemberInfo .layout .info .block {
-      margin: 20px 0; }
-      .MemberInfo .layout .info .block .image {
-        text-align: center; }
-        .MemberInfo .layout .info .block .image img {
-          width: 60px; }
-      .MemberInfo .layout .info .block .title {
-        font-family: "SukhumvitSet-Bold";
-        font-size: 18px; }
-      .MemberInfo .layout .info .block .description {
-        margin-top: 5px; }
-  @media screen and (max-width: 1200px) {
-    .MemberInfo .layout {
-      padding: 60px; } }
+    padding: 60px; } }
 
 body .btn {
   padding: 6px 20px; }
@@ -1131,15 +1457,16 @@ body .btn-main:visited {
   background-image: linear-gradient(to top, #7eab3b, #87b740);
   border-color: #79a13d;
   box-shadow: inset 0px -1px 0px #000000; }
-  body .btn-main span,
-  body .btn-main.active span,
-  body .btn-main:active span,
-  body .btn-main:hover span,
-  body .btn-main:focus span,
-  body .btn-main:visited span {
-    font-family: "SukhumvitSet-Bold";
-    font-size: 14px;
-    color: #ffffff; }
+
+body .btn-main span,
+body .btn-main.active span,
+body .btn-main:active span,
+body .btn-main:hover span,
+body .btn-main:focus span,
+body .btn-main:visited span {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 14px;
+  color: #ffffff; }
 
 body .ant-input {
   font-size: 14px;
@@ -1233,117 +1560,148 @@ body .rating span {
   margin-left: 5px;
   vertical-align: middle; }
 
-.RealEstateItem .background {
-  height: 150px;
-  position: relative; }
-  .RealEstateItem .background .gradient {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 90%;
-    background: linear-gradient(to bottom, transparent, #000000);
-    z-index: 1; }
-  .RealEstateItem .background .content {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
-    padding: 10px; }
-    .RealEstateItem .background .content .price {
-      font-size: 14px;
-      color: #88b840;
-      font-weight: bold; }
-    .RealEstateItem .background .content .place {
-      font-size: 12px;
-      color: #ffffff; }
-    .RealEstateItem .background .content .option {
-      margin-top: 3px; }
-    .RealEstateItem .background .content .option ul li {
-      display: inline-block;
-      margin: 0 5px; }
-    .RealEstateItem .background .content .option ul li:first-child {
-      margin-left: 0; }
-    .RealEstateItem .background .content .option ul li:last-child {
-      margin-right: 0; }
-    .RealEstateItem .background .content .option ul li span {
-      font-size: 12px;
-      color: #ffffff;
-      font-weight: bold;
-      margin: 0 4px; }
-    .RealEstateItem .background .content .option ul li span:first-child {
-      font-size: 14px; }
+.RealEstateItem {
+  border: 1px solid #eeeeee;
+  padding-bottom: 10px; }
+
+.RealEstateItem .image {
+  width: 100%;
+  height: 180px; }
+
+.RealEstateItem .content {
+  z-index: 2;
+  padding: 10px; }
+
+.RealEstateItem .content .name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; }
+
+.RealEstateItem .content .price {
+  font-size: 14px;
+  color: #88b840;
+  font-weight: bold; }
+
+.RealEstateItem .content .place {
+  font-size: 12px;
+  color: #484849; }
+
+.RealEstateItem .content .option {
+  margin-top: 3px; }
+
+.RealEstateItem .content .option ul li:first-child {
+  margin-left: 0; }
+
+.RealEstateItem .content .option ul li:last-child {
+  margin-right: 0; }
+
+.RealEstateItem .content .option ul li span {
+  float: left;
+  font-size: 12px;
+  color: #484849;
+  font-weight: bold;
+  margin-right: 10px; }
+
+.RealEstateItem .content .option ul li span:first-child {
+  font-size: 14px; }
+
+.RealEstateItem .wishList {
+  color: #8ebc42;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  text-shadow: 0 1px 0 black;
+  font-weight: bold;
+  z-index: 2; }
 
 .RealEstateItem.detail {
   margin: 20px 0;
   padding-bottom: 20px;
   border-bottom: 1px solid #eeeeee; }
-  .RealEstateItem.detail .address {
-    font-weight: bold;
-    font-size: 18px; }
-  .RealEstateItem.detail .option {
-    margin-top: 4px; }
-    .RealEstateItem.detail .option ul li {
-      display: inline-block;
-      margin: 0 6px; }
-    .RealEstateItem.detail .option ul li:first-child {
-      margin-left: 0; }
-    .RealEstateItem.detail .option ul li:last-child {
-      margin-right: 0; }
-    .RealEstateItem.detail .option ul li span {
-      margin-right: 5px; }
-  .RealEstateItem.detail .for {
-    color: #ffffff;
-    padding: 7px 14px;
-    border-radius: 3px; }
-  .RealEstateItem.detail .for.sell,
-  .RealEstateItem.detail .for.rent {
-    background: #8ebc42; }
-  .RealEstateItem.detail .for.sold_out {
-    background: #db0018; }
-  .RealEstateItem.detail .price {
-    font-weight: bold;
-    font-size: 18px; }
+
+.RealEstateItem.detail .address {
+  font-weight: bold;
+  font-size: 18px; }
+
+.RealEstateItem.detail .option {
+  margin-top: 4px; }
+
+.RealEstateItem.detail .option ul li {
+  display: inline-block;
+  margin: 0 6px; }
+
+.RealEstateItem.detail .option ul li:first-child {
+  margin-left: 0; }
+
+.RealEstateItem.detail .option ul li:last-child {
+  margin-right: 0; }
+
+.RealEstateItem.detail .option ul li span {
+  margin-right: 5px; }
+
+.RealEstateItem.detail .for {
+  color: #ffffff;
+  padding: 7px 14px;
+  border-radius: 3px; }
+
+.RealEstateItem.detail .for.sell,
+.RealEstateItem.detail .for.rent {
+  background: #8ebc42; }
+
+.RealEstateItem.detail .for.sold_out {
+  background: #db0018; }
+
+.RealEstateItem.detail .price {
+  font-weight: bold;
+  font-size: 18px; }
 
 body .ant-notification {
   z-index: 2000; }
 
 .SelectPrice {
   position: relative; }
-  .SelectPrice .ant-select-selection--single {
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    height: 38px;
-    line-height: 38px;
-    cursor: pointer;
-    background-image: linear-gradient(to top, #ececec, #ffffff); }
-    .SelectPrice .ant-select-selection--single > .clearfix {
-      padding: 0 10px; }
-      .SelectPrice .ant-select-selection--single > .clearfix .pull-left {
-        overflow: hidden;
-        width: 90%;
-        white-space: nowrap;
-        text-overflow: ellipsis; }
-    .SelectPrice .ant-select-selection--single .icon i {
-      font-size: 11px; }
-  .SelectPrice .price-lenght-block {
-    position: absolute;
-    right: 0;
-    z-index: 100;
-    background: #ffffff;
-    border: 1px solid #cccccc;
-    border-top: 0;
-    padding: 10px;
-    width: 230px; }
-    .SelectPrice .price-lenght-block .price-min {
-      width: 47%; }
-    .SelectPrice .price-lenght-block .to {
-      margin: 0 3px; }
-    .SelectPrice .price-lenght-block .price-max {
-      width: 47%; }
-    .SelectPrice .price-lenght-block .ant-select {
-      width: 100%; }
+
+.SelectPrice .ant-select-selection--single {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  height: 38px;
+  line-height: 38px;
+  cursor: pointer;
+  background-image: linear-gradient(to top, #ececec, #ffffff); }
+
+.SelectPrice .ant-select-selection--single > .clearfix {
+  padding: 0 10px; }
+
+.SelectPrice .ant-select-selection--single > .clearfix .pull-left {
+  overflow: hidden;
+  width: 90%;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
+
+.SelectPrice .ant-select-selection--single .icon i {
+  font-size: 11px; }
+
+.SelectPrice .price-lenght-block {
+  position: absolute;
+  right: 0;
+  z-index: 100;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-top: 0;
+  padding: 10px;
+  width: 230px; }
+
+.SelectPrice .price-lenght-block .price-min {
+  width: 47%; }
+
+.SelectPrice .price-lenght-block .to {
+  margin: 0 3px; }
+
+.SelectPrice .price-lenght-block .price-max {
+  width: 47%; }
+
+.SelectPrice .price-lenght-block .ant-select {
+  width: 100%; }
 
 .SelectPrice.active .price-lenght-block {
   border-color: #8ebc42; }
@@ -1351,11 +1709,202 @@ body .ant-notification {
 .MapLocation {
   width: 100%;
   height: 100%; }
-  .MapLocation .custom-marker .price {
-    background: #000000;
-    border-radius: 4px;
-    color: #FFFFFF;
-    max-width: 200px;
-    padding: 3px 8px;
-    text-align: center;
-    text-decoration: none; }
+
+.MapLocation .custom-marker .price {
+  background: #000000;
+  border-radius: 4px;
+  color: #FFFFFF;
+  max-width: 200px;
+  padding: 3px 8px;
+  text-align: center;
+  text-decoration: none; }
+
+.WishItem {
+  font-size: 14px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eeeeee;
+  margin-bottom: 20px; }
+
+.WishItem .image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  padding: 0;
+  cursor: pointer; }
+
+.WishItem .detail .title {
+  font-size: 18px;
+  color: #8ebc42;
+  cursor: pointer; }
+
+.WishItem .option .view {
+  color: white;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: #8ebc42;
+  border-radius: 4px;
+  margin-bottom: 20px; }
+
+.WishItem .option .delete {
+  color: white;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: #db0018;
+  border-radius: 4px; }
+
+.NewsItem .list {
+  min-height: 520px;
+  margin-bottom: 30px; }
+
+.NewsItem .list .image {
+  width: 100%;
+  height: 300px; }
+
+.NewsItem .list .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; }
+
+.NewsItem .list .title {
+  font-size: 18px;
+  font-family: "SukhumvitSet-Bold";
+  color: #484849;
+  margin: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; }
+
+.NewsItem .list .date {
+  font-size: 14px;
+  color: #8ebc42;
+  margin: 10px 0; }
+
+.NewsItem .list .description {
+  font-size: 14px;
+  color: #484849;
+  margin: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical; }
+
+.NewsItem .list .seemore {
+  font-size: 14px;
+  color: #8ebc42;
+  margin: 10px 0; }
+
+.HotNews {
+  padding: 30px;
+  border: 1px solid #eeeeee;
+  box-sizing: border-box;
+  margin-top: 117px; }
+
+.HotNews .title {
+  font-family: "SukhumvitSet-SemiBold";
+  font-size: 24px;
+  color: #484849;
+  margin-bottom: 40px; }
+
+.HotNews .list {
+  font-size: 14px;
+  margin-bottom: 40px; }
+
+.HotNews .list .text {
+  color: #484849; }
+
+.HotNews .list .date {
+  color: #8ebc42; }
+
+.NewsBanner {
+  width: 100%;
+  height: 460px;
+  background: #999999;
+  color: #f6f6f6; }
+
+.NewsBanner .banner {
+  width: 100%;
+  height: 460px;
+  position: relative; }
+
+.NewsBanner .banner .image-dark {
+  width: 100%;
+  height: 460px;
+  position: absolute;
+  z-index: 1; }
+
+.NewsBanner .banner .content {
+  height: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: "SukhumvitSet-Text";
+  position: absolute;
+  z-index: 2;
+  bottom: 40px;
+  right: 0;
+  background: linear-gradient(to right, transparent, #88b840);
+  width: 100%; }
+
+.NewsBanner .banner .content .title {
+  width: 50%;
+  float: right;
+  font-size: 32px;
+  line-height: 40px;
+  color: #f6f6f6;
+  text-align: left;
+  z-index: 2;
+  height: auto;
+  white-space: normal;
+  font-family: "SukhumvitSet-Text";
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical; }
+
+.NewsBanner .banner .content .description {
+  font-size: 18px;
+  line-height: 30px;
+  color: #f6f6f6;
+  width: 70%;
+  z-index: 2;
+  height: auto;
+  white-space: normal;
+  font-family: "SukhumvitSet-Text";
+  margin-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical; }
+
+.NewsBanner .banner .content button {
+  width: 140px;
+  height: 35px;
+  z-index: 2; }
+
+.NewsBanner .image-gallery-bullets {
+  width: 100%;
+  padding-right: 25px;
+  box-sizing: border-box;
+  bottom: -30px; }
+
+.NewsBanner .image-gallery-bullets .image-gallery-bullets-container {
+  text-align: center; }
+
+.NewsBanner .image-gallery-bullets .image-gallery-bullet {
+  border-radius: 0%;
+  padding: 8px;
+  border: 2px solid #999999;
+  box-sizing: border-box;
+  box-shadow: none; }
+
+.NewsBanner .image-gallery-bullets .image-gallery-bullet.active {
+  background: #8ebc42; }
+
+.NewsBanner .image-gallery-left-nav:hover, .NewsBanner .image-gallery-right-nav:hover, .NewsBanner .image-gallery-left-nav:target, .NewsBanner .image-gallery-right-nav:target {
+  color: white; }

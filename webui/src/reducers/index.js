@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { firebaseStateReducer } from 'react-redux-firebase';
 import { IntlReducer as Intl } from 'react-redux-multilingual';
 import user from './user';
 import config from './config';
@@ -12,14 +13,15 @@ import properties from './entities/properties';
 import agents from './entities/agents';
 import references from './entities/references';
 import activities from './entities/activities';
+import news from './entities/news';
 
 // Domain
 import propertySearch from './domain/property-search';
 import agentSearch from './domain/agent-search';
-
-// Form
-import profile from './form/profile';
-import changepassword from './form/changepassword';
+import accountProperty from './domain/account-property';
+import accountChangepassword from './domain/account-changepassword';
+import accountProfile from './domain/account-profile';
+import accountWishlist from './domain/account-wishlist';
 
 export default combineReducers({
   Intl,
@@ -34,13 +36,15 @@ export default combineReducers({
     agents,
     references,
     activities,
+    news,
   }),
   domain: combineReducers({
     agentSearch,
     propertySearch,
+    accountWishlist,
+    accountProperty,
+    accountChangepassword,
+    accountProfile,
   }),
-  form: combineReducers({
-    profile,
-    changepassword,
-  }),
+  firebase: firebaseStateReducer,
 });

@@ -5,8 +5,8 @@ const BASEURL = 'http://localhost:4000/api/v1';
 
 // const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
 
-const mapContentFulPropertyToMyField = (data) => {
-  // console.log('mapContentFulPropertyToMyField', data);
+export const mapContentFulPropertyToMyField = (data) => {
+  const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
   return _.reduce(data, (acc, elem, index) => {
     const forSale = _.get(elem, 'fields.forSale') === true;
     return {
@@ -39,9 +39,9 @@ const mapContentFulPropertyToMyField = (data) => {
         zipcode: _.get(elem, 'fields.location.zipcode'),
         createdAt: elem.sys.createdAt,
         updatedAt: elem.sys.updatedAt,
-        mainImage: _.get(elem, 'fields.coverImage.fields.file.url'),
+        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields.file.url') : noImage,
         images: _.map(_.get(elem, 'fields.images'), (image) => {
-          return _.get(image, 'fields.file.url');
+          return _.get(image, 'fields.file.url') ? _.get(image, 'fields.file.url') : noImage;
         }),
         // Extra
         publicTransports: _.get(elem, 'fields.location.publicTransports'),
@@ -74,8 +74,10 @@ export const getProperties = (search) => {
   })
   .then(response => response.json())
   .then((response) => {
-    let mapResult = mapContentFulPropertyToMyField(response.items);
-    return mapResult;
+    return {
+      data: mapContentFulPropertyToMyField(response.items),
+      total: response.total,
+    };
   });
 };
 
@@ -184,3 +186,16 @@ export const createPost = async (data) => {
 //     .catch(console.error)
 //   });
 // }
+
+export const getPropertyById = (id) => {
+  return fetch(`${BASEURL}/property/${id}`, {
+    'Content-Type': 'application/json',
+  })
+  .then(response => response.json())
+  .then((response) => {
+    const data = [];
+    data[0] = response;
+    const result = mapContentFulPropertyToMyField(data);
+    return result[0];
+  });
+};

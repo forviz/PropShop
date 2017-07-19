@@ -1,0 +1,74 @@
+#News{
+  .breadcrumb{
+    height: 100px;
+    padding: 0;
+    background: white;
+    line-height: 100px;
+    margin-bottom: 0;
+    .breadcrumb-item{
+      font-size: 14px;
+      color: $text-gray;
+      float: left;
+      margin-right: 5px;
+      a{
+        color: $text-default;
+        text-decoration: none;
+      }
+    }
+  }
+
+
+  .ant-tabs-ink-bar{
+    background: $main-bg;
+    height: 4px;
+    width: 120px;
+  }
+  .ant-tabs-bar{
+    margin-left: 38px;
+    box-sizing: border-box;
+    border: none;
+  }
+  .ant-tabs-nav {
+    .ant-tabs-tab{
+      margin-right: 0px;
+      padding-top: 60px;
+      color: $text-gray;
+    }
+    .ant-tabs-tab-active {
+      color: $text-default;
+    }
+  }
+  .tap-title{
+    font-size: 30px;
+    font-family: $sukumvit-bold;
+    padding-left: 38px;
+    box-sizing: border-box; 
+  }
+
+  .ant-pagination{
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .ant-pagination-item-active{
+    background: $text-green;
+    border-color: $text-green;
+  }
+  .ant-pagination-item:focus, .ant-pagination-item:hover{
+    border-color: $text-green;
+    color: $text-green;
+  }
+  .ant-pagination-prev:active, .ant-pagination-next:active, .ant-pagination-prev:hover, .ant-pagination-next:hover ,.ant-pagination-prev:focus, .ant-pagination-next:focus{
+    border-color: $text-green;
+    
+    a{
+      color: $text-green;
+    }
+  }
+
+  .box-spin{
+    width: 100%;
+    padding: 100px;
+    text-align: center;
+  }
+}

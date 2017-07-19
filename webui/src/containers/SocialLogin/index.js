@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
-import * as firebase from '../../api/firebase';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import FontAwesome from 'react-fontawesome';
 
 class SocialLogin extends Component {
 
-  handleFacebookLogin = async () => {
-    const error = await firebase.signInWithFacebook();
-    this.props.error(error);
+  static propTypes = {
+    firebase: PropTypes.shape().isRequired,
   }
 
-  handleGoogleLogin = async () => {
-    const error = await firebase.signInWithGoogle();
-    this.props.error(error);
+  handleFacebookLogin = () => {
+    const { firebase } = this.props;
+    firebase.login({
+      provider: 'facebook',
+      type: 'popup',
+    });
+  }
+
+  handleGoogleLogin = () => {
+    const { firebase } = this.props;
+    firebase.login({
+      provider: 'google',
+      type: 'popup',
+    });
   }
 
   render() {
@@ -33,4 +46,16 @@ class SocialLogin extends Component {
   }
 }
 
-export default SocialLogin;
+const mapStateToProps = () => {
+  return {};
+};
+
+const actions = {};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+
+export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(SocialLogin);
