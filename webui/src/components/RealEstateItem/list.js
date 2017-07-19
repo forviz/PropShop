@@ -36,7 +36,7 @@ class List extends Component {
   }
 
   render() {
-    const { item, wishlist } = this.props;
+    const { item } = this.props;
 
     if (!item) return (<div />);
 

@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Spin, Alert, Pagination } from 'antd';
-import FontAwesome from 'react-fontawesome';
+// import FontAwesome from 'react-fontawesome';
 import _ from 'lodash';
 
 import * as PropertyActions from '../../../actions/property-actions';

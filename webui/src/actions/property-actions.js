@@ -1,6 +1,4 @@
 import _ from 'lodash';
-import * as UserActions from './user-actions';
-import * as contentful from '../api/contentful';
 import { getProperties, getPropertyById } from '../api/property';
 import { handleError } from './errors';
 

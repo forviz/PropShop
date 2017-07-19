@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Input, Spin, Alert, notification } from 'antd';
+import { Select, Input, Spin, Alert } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
-import FontAwesome from 'react-fontawesome';
-import Dropzone from 'react-dropzone';
+// import FontAwesome from 'react-fontawesome';
+// import Dropzone from 'react-dropzone';
 import _ from 'lodash';
 
 import * as ProfileActions from '../../../actions/profile-actions';
