@@ -53,15 +53,15 @@ class Header extends Component {
     if (_.size(user.username) > 0) {
       const menu = (
         <Menu onClick={this.handleMenuClick}>
-          <Menu.Item key="wishlist">
-            <NavLink exact to="/wishlist">รายการประกาศที่บันทึกไว้</NavLink>
-          </Menu.Item>
-          <Menu.Item key="profile">
-            <NavLink exact to="/account/profile">การตั้งค่าบัญชีผู้ใช้</NavLink>
-          </Menu.Item>
-          <Menu.Divider />
           <Menu.Item key="property">
             <NavLink exact to="/account/property">รายการที่ประกาศ</NavLink>
+          </Menu.Item>
+          <Menu.Item key="wishlist">
+            <NavLink exact to="/account/wishlist">รายการที่บันทึกไว้</NavLink>
+          </Menu.Item>
+          <Menu.Divider />
+          <Menu.Item key="profile">
+            <NavLink exact to="/account/profile">การตั้งค่าบัญชีผู้ใช้</NavLink>
           </Menu.Item>
           <Menu.Item key="changepassword">
             <NavLink exact to="/account/changepassword">เปลี่ยนรหัสผ่าน</NavLink>

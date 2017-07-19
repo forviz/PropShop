@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 
-import WishItem from '../../components/WishItem';
+import WishItem from '../../../components/WishItem';
 
-import * as WishListActions from '../../actions/wishlist-actions';
+import * as WishListActions from '../../../actions/wishlist-actions';
 
 class WishList extends Component {
 
@@ -18,7 +18,7 @@ class WishList extends Component {
     // _.map(wishList, (value,key) => {
     //   createWishlist('R1qSQRWv9LRpCjBGD1tsGfgFupm1', key);
     // });
-    console.log('USERID',user)
+    console.log('USERID', user);
     getWishlist(user.id);
   }
 
@@ -34,10 +34,7 @@ class WishList extends Component {
           </div>
           <div className="row">
             <div className="col-md-9">
-              <WishItem items={items} history={history} />
-            </div>
-            <div className="col-md-3">
-              right menu
+              <WishItem items={items} />
             </div>
           </div>
         </div>
@@ -48,7 +45,7 @@ class WishList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    items: state.domain.wishlist.data,
+    items: state.domain.accountWishlist.data,
     user: state.user.data,
   };
 };

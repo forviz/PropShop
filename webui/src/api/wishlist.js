@@ -38,7 +38,6 @@ export const fetchCreateWishlist = (userId, propertyId) => {
   }))
   .then((entry) => {
     entry.publish();
-    console.log('result entry',entry)
     return entry;
   })
   .catch(console.error);

@@ -5,6 +5,7 @@ import Property from './property';
 import PropertyEdit from './property-edit';
 import Profile from './profile';
 import Changepassword from './changepassword';
+import Wishlist from './wishlist';
 
 
 class Pages extends Component {
@@ -25,6 +26,7 @@ class Pages extends Component {
       }
       case 'profile': return <Profile param={param} />;
       case 'changepassword': return <Changepassword param={param} />;
+      case 'wishlist': return <Wishlist param={param} />;
       default: return <Property param={param} />;
     }
   }

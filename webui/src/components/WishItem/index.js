@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FontAwesome from 'react-fontawesome';
 import _ from 'lodash';
+import { NavLink } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,58 +10,57 @@ import * as WishListActions from '../../actions/wishlist-actions';
 
 class WishItem extends Component {
 
-  handleView = (propertyId) => {
-    this.props.history.push(`/realestate/${propertyId}`)
-  }
-
   handleDelete = (entryId) => {
-    console.log('DELETE ', entryId)
     const { deleteWishlist } = this.props.actions;
-    const { user } = this.props
-    console.log('handledeleteuserid',user)
-    deleteWishlist(user.id, entryId)
+    const { user } = this.props;
+    deleteWishlist(user.id, entryId);
   }
 
   render() {
-
     const { items } = this.props;
-    
+
     return (
       <div className="row">
         {
-          _.map(items, (item, key) => {
+          _.map(items, (item) => {
             return (
               <div className="WishItem col-md-12">
-                <img src={item.imageUrl} alt="" className="image col-md-2" onClick={() => this.handleView(item.entryId)}/>
+                <NavLink exact to={`/realestate/${item.id}`}>
+                  <img src={item.imageUrl} alt="" className="image col-md-2" />
+                </NavLink>
                 <div className="detail col-md-3">
-                  <div className="title" onClick={() => this.handleView(item.entryId)}>{item.name.th}</div>
+                  <NavLink exact to={`/realestate/${item.id}`}>
+                    <div className="title">{item.name.th}</div>
+                  </NavLink>
                   <div className="description">{item.description.th}</div>
                 </div>
                 <div className="status col-md-3">
-                  สถานะ: <br/> {item.type}
-                  <br/><br/>
-                  <FontAwesome name='bed'/> {item.attributes.numBedrooms} ห้องนอน<br/>
-                  <FontAwesome name='bath'/> {item.attributes.numBathrooms} ห้องน้ำ
+                  สถานะ: <br /> {item.type}
+                  <br /><br />
+                  <FontAwesome name="bed" /> {item.attributes.numBedrooms} ห้องนอน<br />
+                  <FontAwesome name="bath" /> {item.attributes.numBathrooms} ห้องน้ำ
                 </div>
                 <div className="space col-md-3">
-                  พื้นที่: <br/> {item.area.value} {item.area.unit}
-                  <br/><br/>
-                  ราคา: <br/> {item.price.value} {item.price.currency}
+                  พื้นที่: <br /> {item.area.value} {item.area.unit}
+                  <br /><br />
+                  ราคา: <br /> {item.price.value} {item.price.currency}
                 </div>
                 <div className="option col-md-1">
-                  <button className="view" onClick={() => this.handleView(item.entryId)}>
-                    <FontAwesome
-                      name='eye'
-                    />
-                  </button>
+                  <NavLink exact to={`/realestate/${item.id}`}>
+                    <button className="view" onClick={() => this.handleView(item.entryId)}>
+                      <FontAwesome
+                        name="eye"
+                      />
+                    </button>
+                  </NavLink>
                   <button className="delete" onClick={() => this.handleDelete(item.entryId)}>
                     <FontAwesome
-                      name='remove'
+                      name="remove"
                     />
                   </button>
                 </div>
               </div>
-            )
+            );
           })
         }
       </div>

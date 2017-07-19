@@ -20,7 +20,7 @@ import agentSearch from './domain/agent-search';
 import accountProperty from './domain/account-property';
 import accountChangepassword from './domain/account-changepassword';
 import accountProfile from './domain/account-profile';
-import wishlist from './domain/wishlist';
+import accountWishlist from './domain/account-wishlist';
 
 export default combineReducers({
   Intl,
@@ -39,13 +39,10 @@ export default combineReducers({
   domain: combineReducers({
     agentSearch,
     propertySearch,
-<<<<<<< HEAD
-    wishlist,
-=======
+    accountWishlist,
     accountProperty,
     accountChangepassword,
     accountProfile,
->>>>>>> 1377ed59c0f4d993e18f71133b584d601e1fa7f9
   }),
   firebase: firebaseStateReducer,
 });
