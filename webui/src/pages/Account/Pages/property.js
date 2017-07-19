@@ -3,12 +3,13 @@ import T from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { notification, Spin, Alert, Pagination } from 'antd';
-import numeral from 'numeral';
+import { Spin, Alert, Pagination } from 'antd';
+import FontAwesome from 'react-fontawesome';
 import _ from 'lodash';
 
-import * as firebase from '../../../api/firebase';
 import * as PropertyActions from '../../../actions/property-actions';
+import RealEstateItem from '../../../components/RealEstateItem';
+import DisplayType from '../../../components/DisplayType';
 
 class Property extends Component {
 
@@ -30,6 +31,10 @@ class Property extends Component {
     this.getPropertiesByAgent();
   }
 
+  state = {
+    displayType: 'thumbnail',
+  }
+
   getPropertiesByAgent = () => {
     const { user, page, limit } = this.props;
     const { fetchPropertiesByAgent } = this.props.actions;
@@ -42,34 +47,40 @@ class Property extends Component {
     fetchPropertiesByAgent(user.id, page - 1, limit);
   }
 
+  handleDisplayType = (displayType) => {
+    this.setState({
+      displayType,
+    });
+  }
+
   render() {
+    const { displayType } = this.state;
     const { properties, fetching, result, page, total, limit } = this.props;
 
     return (
       <div id="MyProperty">
-        <h1>รายการอสังหาฯของฉัน</h1>
+        <div className="clearfix">
+          <div className="pull-left">
+            <div className="topic">
+              <h1>รายการอสังหาฯของฉัน</h1>
+            </div>
+          </div>
+          <div className="pull-right">
+            <div className="display-type">
+              <DisplayType active={displayType} onChange={this.handleDisplayType} />
+            </div>
+          </div>
+        </div>
         <div className="property-list">
           <div className="row">
             <Spin spinning={fetching}>
               {result === 'ok' &&
-                _.map(properties, (value, key) => {
-                  const imageStyle = {
-                    backgroundImage: `url(${value.mainImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  };
+                _.map(properties, (item, key) => {
                   return (
-                    <div className="property-block" key={key}>
-                      <div className="col-md-3">
-                        <NavLink exact to={`/account/property?id=${value.id}`}>
-                          <div className="thumbnail">
-                            <div className="image" style={imageStyle} />
-                            <div className="caption">
-                              <p className="price">{numeral(value.price).format('0,0')} บาท</p>
-                              <p className="project">{value.project || value.topic}</p>
-                              <p className="address">{value.street || value.district || value.amphur} - {value.province}</p>
-                            </div>
-                          </div>
+                    <div className={displayType === 'thumbnail' ? 'col-md-3' : 'col-md-12'} key={key}>
+                      <div className="property-block">
+                        <NavLink exact to={`/account/property?id=${item.id}`}>
+                          <RealEstateItem item={item} type={displayType} />
                         </NavLink>
                       </div>
                     </div>

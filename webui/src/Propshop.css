@@ -753,7 +753,6 @@ img {
   background: #f6f6f6; }
 
 #Profile .layout-right .layout-container h1 {
-  text-align: center;
   font-family: "SukhumvitSet-Bold";
   font-size: 36px;
   color: #8ebc42; }
@@ -819,7 +818,6 @@ img {
   background: #f6f6f6; }
 
 #Changepassword .layout-right .layout-container h1 {
-  text-align: center;
   font-family: "SukhumvitSet-Bold";
   font-size: 36px;
   color: #8ebc42; }
@@ -953,20 +951,8 @@ img {
   color: #8ebc42;
   font-size: 36px; }
 
-#MyProperty .property-list .property-block .thumbnail {
-  cursor: pointer; }
-
-#MyProperty .property-list .property-block .thumbnail:hover {
-  border: 1px solid #8ebc42; }
-
-#MyProperty .property-list .property-block .thumbnail .image {
-  width: 100%;
-  height: 140px; }
-
-#MyProperty .property-list .property-block .thumbnail .project {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden; }
+#MyProperty .property-list .property-block {
+  margin-bottom: 20px; }
 
 #MyProperty .property-pagination {
   text-align: center; }
@@ -1559,99 +1545,72 @@ body .rating span {
   margin-left: 5px;
   vertical-align: middle; }
 
-.RealEstateItem {
-  border: 1px solid #eeeeee;
-  padding-bottom: 10px; }
+.RealEstateItem .Thumbnail {
+  border: 1px solid #eeeeee; }
 
-.RealEstateItem .image {
+.RealEstateItem .Thumbnail:hover {
+  border: 1px solid #8ebc42; }
+
+.RealEstateItem .Thumbnail .image {
   width: 100%;
   height: 180px; }
 
-.RealEstateItem .content {
+.RealEstateItem .Thumbnail .content {
   z-index: 2;
-  padding: 10px; }
+  padding: 10px;
+  padding-bottom: 2px; }
 
-.RealEstateItem .content .name {
+.RealEstateItem .Thumbnail .content .name {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap; }
 
-.RealEstateItem .content .price {
+.RealEstateItem .Thumbnail .content .price {
   font-size: 14px;
   color: #88b840;
   font-weight: bold; }
 
-.RealEstateItem .content .place {
+.RealEstateItem .Thumbnail .content .place {
   font-size: 12px;
   color: #484849; }
 
-.RealEstateItem .content .option {
+.RealEstateItem .Thumbnail .content .option {
   margin-top: 3px; }
 
-.RealEstateItem .content .option ul li:first-child {
+.RealEstateItem .Thumbnail .content .option ul li {
+  display: inline-block; }
+
+.RealEstateItem .Thumbnail .content .option ul li:first-child {
   margin-left: 0; }
 
-.RealEstateItem .content .option ul li:last-child {
+.RealEstateItem .Thumbnail .content .option ul li:last-child {
   margin-right: 0; }
 
-.RealEstateItem .content .option ul li span {
+.RealEstateItem .Thumbnail .content .option ul li span {
   float: left;
   font-size: 12px;
   color: #484849;
   font-weight: bold;
   margin-right: 10px; }
 
-.RealEstateItem .content .option ul li span:first-child {
+.RealEstateItem .Thumbnail .content .option ul li span:first-child {
   font-size: 14px; }
 
-.RealEstateItem .wishList {
-  color: #8ebc42;
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  text-shadow: 0 1px 0 black;
-  font-weight: bold;
+.RealEstateItem .Thumbnail .wishList {
+  font-size: 18px;
   z-index: 2; }
 
-.RealEstateItem.detail {
-  margin: 20px 0;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eeeeee; }
+.RealEstateItem .Thumbnail .wishList.active,
+.RealEstateItem .Thumbnail .wishList:hover {
+  color: #8ebc42; }
 
-.RealEstateItem.detail .address {
-  font-weight: bold;
-  font-size: 18px; }
+.RealEstateItem .List {
+  border: 1px solid #eeeeee; }
 
-.RealEstateItem.detail .option {
-  margin-top: 4px; }
+.RealEstateItem .List:hover {
+  border: 1px solid #8ebc42; }
 
-.RealEstateItem.detail .option ul li {
-  display: inline-block;
-  margin: 0 6px; }
-
-.RealEstateItem.detail .option ul li:first-child {
-  margin-left: 0; }
-
-.RealEstateItem.detail .option ul li:last-child {
-  margin-right: 0; }
-
-.RealEstateItem.detail .option ul li span {
-  margin-right: 5px; }
-
-.RealEstateItem.detail .for {
-  color: #ffffff;
-  padding: 7px 14px;
-  border-radius: 3px; }
-
-.RealEstateItem.detail .for.sell,
-.RealEstateItem.detail .for.rent {
-  background: #8ebc42; }
-
-.RealEstateItem.detail .for.sold_out {
-  background: #db0018; }
-
-.RealEstateItem.detail .price {
-  font-weight: bold;
+.RealEstateItem .List .actions .fa {
   font-size: 18px; }
 
 body .ant-notification {
@@ -1907,3 +1866,19 @@ body .ant-notification {
 
 .NewsBanner .image-gallery-left-nav:hover, .NewsBanner .image-gallery-right-nav:hover, .NewsBanner .image-gallery-left-nav:target, .NewsBanner .image-gallery-right-nav:target {
   color: white; }
+
+.DisplayType ul li {
+  display: inline-block;
+  margin: 0 2px;
+  font-size: 24px;
+  cursor: pointer; }
+
+.DisplayType ul li span {
+  color: #E5E5E5;
+  border: 1px solid #E5E5E5;
+  border-radius: 4px;
+  padding: 2px 4px; }
+
+.DisplayType ul li.active span, .DisplayType ul li:hover span {
+  color: #484849;
+  border: 1px solid transparent; }

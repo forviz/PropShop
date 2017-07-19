@@ -1,0 +1,23 @@
+.DisplayType {
+  ul {
+    li {
+      display: inline-block;
+      margin: 0 2px;
+      font-size: 24px;
+      cursor: pointer;
+      span {
+        color: #E5E5E5;
+        border: 1px solid #E5E5E5;
+        border-radius: 4px;
+        padding: 2px 4px;
+      }
+      &.active,
+      &:hover {
+        span {
+          color: $text-default;
+          border: 1px solid transparent;
+        }
+      }
+    }
+  }
+}
