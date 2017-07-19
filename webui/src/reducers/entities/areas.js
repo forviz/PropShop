@@ -251,8 +251,8 @@ const initialState = {
       location: '13.7252116,100.5844235,16z',
       category: 'BTS Station',
       bound: {
-        sw: { lat: 13.729, lng: 100.591 },
-        ne: { lat: 13.713, lng: 100.576 },
+        sw: { lat: 13.713, lng: 100.576 },
+        ne: { lat: 13.729, lng: 100.591 },
       },
     },
     phrakanong: {
