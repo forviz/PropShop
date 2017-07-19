@@ -24,7 +24,9 @@ dotenv.load({ path: '.env' });
 
 const postController = require('./controllers/post');
 const propertyController = require('./controllers/property');
+const wishlistController = require('./controllers/wishlist');
 const userController = require('./controllers/user');
+
 /**
  * Create Express server.
  */
@@ -81,6 +83,8 @@ app.get(`${apiPrefix}/property/:id`, propertyController.getEntry);
 
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
 app.post(`${apiPrefix}/user/:id`, userController.updateUser);
+
+app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
 
 /**
  * CIC App codebase: WEBUI

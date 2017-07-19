@@ -872,6 +872,12 @@ img {
   text-align: center;
   margin: 40px 0; }
 
+#WishList .head {
+  height: 115px;
+  line-height: 115px;
+  font-size: 24px;
+  font-family: "SukhumvitSet-Bold"; }
+
 #News .breadcrumb {
   height: 100px;
   padding: 0;
@@ -1553,57 +1559,59 @@ body .rating span {
   margin-left: 5px;
   vertical-align: middle; }
 
-.RealEstateItem .background {
-  height: 150px;
-  position: relative; }
+.RealEstateItem {
+  border: 1px solid #eeeeee;
+  padding-bottom: 10px; }
 
-.RealEstateItem .background .gradient {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 90%;
-  background: linear-gradient(to bottom, transparent, #000000);
-  z-index: 1; }
+.RealEstateItem .image {
+  width: 100%;
+  height: 180px; }
 
-.RealEstateItem .background .content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+.RealEstateItem .content {
   z-index: 2;
   padding: 10px; }
 
-.RealEstateItem .background .content .price {
+.RealEstateItem .content .name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; }
+
+.RealEstateItem .content .price {
   font-size: 14px;
   color: #88b840;
   font-weight: bold; }
 
-.RealEstateItem .background .content .place {
+.RealEstateItem .content .place {
   font-size: 12px;
-  color: #ffffff; }
+  color: #484849; }
 
-.RealEstateItem .background .content .option {
+.RealEstateItem .content .option {
   margin-top: 3px; }
 
-.RealEstateItem .background .content .option ul li {
-  display: inline-block;
-  margin: 0 5px; }
-
-.RealEstateItem .background .content .option ul li:first-child {
+.RealEstateItem .content .option ul li:first-child {
   margin-left: 0; }
 
-.RealEstateItem .background .content .option ul li:last-child {
+.RealEstateItem .content .option ul li:last-child {
   margin-right: 0; }
 
-.RealEstateItem .background .content .option ul li span {
+.RealEstateItem .content .option ul li span {
+  float: left;
   font-size: 12px;
-  color: #ffffff;
+  color: #484849;
   font-weight: bold;
-  margin: 0 4px; }
+  margin-right: 10px; }
 
-.RealEstateItem .background .content .option ul li span:first-child {
+.RealEstateItem .content .option ul li span:first-child {
   font-size: 14px; }
+
+.RealEstateItem .wishList {
+  color: #8ebc42;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  text-shadow: 0 1px 0 black;
+  font-weight: bold;
+  z-index: 2; }
 
 .RealEstateItem.detail {
   margin: 20px 0;
@@ -1709,6 +1717,41 @@ body .ant-notification {
   padding: 3px 8px;
   text-align: center;
   text-decoration: none; }
+
+.WishItem {
+  font-size: 14px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #eeeeee;
+  margin-bottom: 20px; }
+
+.WishItem .image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  padding: 0;
+  cursor: pointer; }
+
+.WishItem .detail .title {
+  font-size: 18px;
+  color: #8ebc42;
+  cursor: pointer; }
+
+.WishItem .option .view {
+  color: white;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: #8ebc42;
+  border-radius: 4px;
+  margin-bottom: 20px; }
+
+.WishItem .option .delete {
+  color: white;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: #db0018;
+  border-radius: 4px; }
 
 .NewsItem .list {
   min-height: 520px;

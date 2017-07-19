@@ -20,6 +20,7 @@ import agentSearch from './domain/agent-search';
 import accountProperty from './domain/account-property';
 import accountChangepassword from './domain/account-changepassword';
 import accountProfile from './domain/account-profile';
+import accountWishlist from './domain/account-wishlist';
 
 export default combineReducers({
   Intl,
@@ -38,6 +39,7 @@ export default combineReducers({
   domain: combineReducers({
     agentSearch,
     propertySearch,
+    accountWishlist,
     accountProperty,
     accountChangepassword,
     accountProfile,
