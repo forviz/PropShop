@@ -265,25 +265,26 @@ class Profile extends Component {
   }
 
   handleUpdateAvatar = () => {
-    const { data } = this.props;
+    const { data, user } = this.props;
     const { updateAvatar } = this.props.actions;
     if (_.get(data, 'image.value.fields.file.url') && _.get(data, 'image.errorMessage') === false) {
       const file = _.get(data, 'image.value.fields.file');
       const fileName = _.get(data, 'image.value.fields.file.fileName');
-      updateAvatar(file, fileName);
+      updateAvatar(user.id, file, fileName);
     }
   }
 
   render() {
     const { data, editing, editSuccess } = this.props;
 
-    if (_.size(data) === 0) return <div />;
+    if (_.size(data) === 0) return <center><Spin /></center>;
 
     return (
       <div id="Profile">
         <div className="row">
           <div className="col-md-12">
             <div className="layout-right">
+
               <Spin tip="Loading..." spinning={editing}>
                 <div className="layout-container">
                   <h1>แก้ไขข้อมูลส่วนตัว</h1>
@@ -297,7 +298,7 @@ class Profile extends Component {
                     </div>
                   }
                   <div className="form">
-                    <section>
+                    {/* <section>
                       <div className="title">รูปสมาชิก</div>
                       <div className="row">
                         <div className="col-md-6 col-md-offset-3">
@@ -324,7 +325,7 @@ class Profile extends Component {
                           <button className="btn btn-primary" onClick={this.handleUpdateAvatar} >อัพเดทรูปภาพ</button>
                         </div>
                       </div>
-                    </section>
+                    </section>*/}
                     <section>
                       <div className="title">ข้อมูลทั่วไป</div>
                       <div className="row">

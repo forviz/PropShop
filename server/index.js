@@ -80,7 +80,7 @@ app.get(`${apiPrefix}/properties`, propertyController.queryProperties);
 app.get(`${apiPrefix}/property/:id`, propertyController.getEntry);
 
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
-app.post(`${apiPrefix}/user/:uid`, userController.updateUser);
+app.post(`${apiPrefix}/user/:id`, userController.updateUser);
 
 /**
  * CIC App codebase: WEBUI

@@ -13,8 +13,8 @@ export const fetchUserAPI = (uid) => {
   });
 };
 
-export const updateUserAPI = (uid, data) => {
-  return fetch(`${BASEURL}/user/${uid}`, {
+export const updateUserAPI = (id, data) => {
+  return fetch(`${BASEURL}/user/${id}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

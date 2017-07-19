@@ -31,10 +31,10 @@ export const getUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
    try {
     const data = req.body;
-    const { uid } = req.params;
+    const { id } = req.params;
 
     const space = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE);
-    const entry = await space.getEntry(uid);
+    const entry = await space.getEntry(id);
 
     if (_.get(data, 'email')) entry.fields.email['en-US'] = data.email;
     if (_.get(data, 'prefixName')) entry.fields.prefixName['en-US'] = data.prefixName;
@@ -46,7 +46,7 @@ export const updateUser = async (req, res, next) => {
     if (_.get(data, 'specialization')) entry.fields.specialization['en-US'] = data.specialization;
     if (_.get(data, 'licenseNumber')) entry.fields.licenseNumber['en-US'] = data.licenseNumber;
     if (_.get(data, 'about')) entry.fields.about['en-US'] = data.about;
-    if (_.get(data, 'image')) entry.fields.image.sys.id['en-US'] = data.image;
+    if (_.get(data, 'image.sys.id')) entry.fields.image['en-US'].sys.id = data.image.sys.id;
 
     const entryUpdate = await entry.update();
     const entryPublish = await entryUpdate.publish();
