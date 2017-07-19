@@ -129,7 +129,10 @@ class PropertySearch extends Component {
 
   handleSelectArea = (option) => {
     const searchParameters = _.clone(this.props.searchParameters);
-    searchParameters.area = option.value;
+    searchParameters.area = {
+      name: option.value,
+      bound: { sw: undefined, ne: undefined },
+    }
     this.setUrl(searchParameters);
   }
 
@@ -217,7 +220,7 @@ class PropertySearch extends Component {
                   placeholder="กรอกทำเลหรือชื่อโครงการที่ต้องการ"
                   dataSource={this.props.areaDataSource}
                   style={{ width: '100%' }}
-                  value={searchParameters.area}
+                  value={searchParameters.area.name}
                   onChange={this.handleFilterInput}
                   onSelect={this.handleSelectArea}
                 />

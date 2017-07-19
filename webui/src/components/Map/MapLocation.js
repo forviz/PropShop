@@ -21,12 +21,25 @@ const convertLocationToLatLngZoom = (location) => {
 class MapLocation extends Component {
 
   static propTypes = {
-    location: T.string,
+    area: T.shape({
+      name: T.string,
+      bound: T.shape({
+        ne: T.shape({ lat: T.number, lng: T.number }),
+        sw: T.shape({ lat: T.number, lng: T.number }),
+      }),
+    }),
     onBoundChanged: T.func,
   }
 
   static defaultProps = {
     location: '13.7245599,100.492681,13z',
+    area: {
+      name: '',
+      bound: {
+        ne: { lat: undefined, lng: undefined },
+        sw: { lat: undefined, lng: undefined },
+      },
+    },
     onBoundChanged: theMap => console.log('map zoom_changed', theMap.getBounds().toJSON()),
   }
 
@@ -36,13 +49,18 @@ class MapLocation extends Component {
 
   componentWillReceiveProps(nextProps) {
     // console.log('MapLocation::componentWillReceiveProps', nextProps);
-    if (!_.isEqual(nextProps.location, this.props.location)) {
-      const location = nextProps.location;
-      // const [lat, lng, zoomStr] = _.split(location, ',');
-      // const zoomNumber = _.toNumber(_.replace(zoomStr, 'z', ''));
-      const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
-      map.panTo(new google.maps.LatLng(lat, lng));
-      map.setZoom(zoom);
+    if (!_.isEqual(nextProps.area, this.props.area)) {
+      const area = nextProps.area;
+
+      // Use center + zoom, v1, moving on
+      // const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
+      // map.panTo(new google.maps.LatLng(lat, lng));
+      // map.setZoom(zoom);
+      if (area.bound) {
+        const { ne, sw } = area.bound;
+        const mapBound = new google.maps.LatLngBounds(sw, ne);
+        map.fitBounds(mapBound);
+      }
     }
 
     if (!_.isEqual(nextProps.nearby, this.props.nearby)) {
@@ -119,22 +137,24 @@ class MapLocation extends Component {
     }
   }
 
-
-
   initializeMap = () => {
-    const { location } = this.props;
-    const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
-
+    console.log('initializeMap', this.props);
+    // const { location } = this.props;
+    // const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
+    const { ne, sw } = this.props.area.bound;
+    const mapBound = new google.maps.LatLngBounds(sw, ne);
+    console.log('mapBound', mapBound.getCenter().toJSON());
     map = new google.maps.Map(this.map, {
-      zoom,
-      center: new google.maps.LatLng(lat, lng),
+      center: mapBound.getCenter(),
+      zoomControl: true,
+      zoomControlOptions: { position: 'LEFT_CENTER' },
     });
+    map.fitBounds(mapBound);
 
 
     map.addListener('idle', () => {
       this.props.onBoundChanged(map);
     });
-
   }
 
   render() {

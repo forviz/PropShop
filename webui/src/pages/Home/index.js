@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { Button } from 'antd';
+
+import { Button, Pagination } from 'antd';
 
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -11,11 +12,13 @@ import queryString from 'query-string';
 import BannerRealEstate from '../../containers/BannerRealEstate';
 
 import LoadingComponent from '../../components/Loading';
+import PropertyItem from '../../components/PropertyItem';
 import RealEstateItem from '../../components/RealEstateItem';
 
 import MapLocation from '../../components/Map/MapLocation';
 
 import PropertySearch from '../../components/PropertySearch';
+import Slider from '../../components/Slider';
 
 import * as UserActions from '../../actions/user-actions';
 import * as RealestateActions from '../../actions/realestate-actions';
@@ -26,10 +29,10 @@ import LandingPage from './LandingPage';
 import { convertLocationToLatLngZoom, getDistance } from '../../helpers/map-helpers';
 
 const BREAKPOINT = 768;
+const PAGE_SIZE = 30;
 
 class SearchParameters {
-  area: string;
-  location: string;
+  area: object;
 
   bound: string;
   bedroom: number;
@@ -38,21 +41,64 @@ class SearchParameters {
     min: number;
     max: number;
   };
+
+  skip: number;
 }
 
-const convertRouterPropsToParams = (props, areaEntities) => {
+const getAreaParamFromSlug = (areaSlug, areaEntities) => {
+  const [areaName, boundStr] = _.split(areaSlug, '@');
+  let areaBound;
 
+  if (boundStr && _.size(_.split(boundStr, ',')) === 4) {
+    const [swLat, swLng, neLat, neLng] = _.map(_.split(boundStr, ','), pos => _.toNumber(pos));
+    areaBound = {
+      ne: { lat: neLat, lng: neLng },
+      sw: { lat: swLat, lng: swLng },
+    };
+  }
+
+  if (areaName && _.isEmpty(boundStr)) {
+    // Find bound from areaEntities
+    areaBound = _.get(areaEntities, `${areaSlug}.bound`);
+  }
+
+  return {
+    name: areaName,
+    bound: areaBound,
+  };
+};
+
+const isValidBound = (bound) => {
+  if (!bound) return false;
+  if (!bound.sw || !bound.ne) return false;
+  if (
+    !_.isNumber(_.get(bound, 'sw.lat')) ||
+    !_.isNumber(_.get(bound, 'sw.lng')) ||
+    !_.isNumber(_.get(bound, 'ne.lat')) ||
+    !_.isNumber(_.get(bound, 'ne.lng'))) return false;
+  return true;
+};
+
+const getBoundSlug = (bound) => {
+  if (!isValidBound(bound)) return '';
+  return `${_.get(bound, 'sw.lat')},${_.get(bound, 'sw.lng')},${_.get(bound, 'ne.lat')},${_.get(bound, 'ne.lng')}`;
+};
+
+const getAreaSlugFromParam = (areaParams) => {
+  return `${_.get(areaParams, 'name', '')}${isValidBound(areaParams.bound) ? `@${getBoundSlug(areaParams.bound)}` : ''}`;
+};
+
+const convertRouterPropsToParams = (props, areaEntities) => {
   const search = queryString.parse(_.get(props, 'location.search', {}));
   // console.log('convertRouterPropsToParams', search);
-  const areaSlug = _.get(props, 'match.params.area');
+  const area = _.get(props, 'match.params.area');
   return {
-    area: areaSlug,
-    location: _.get(areaEntities, `${areaSlug}.location`),
+    area: getAreaParamFromSlug(area, areaEntities),
+    // location: _.get(areaEntities, `${area}.location`),
     for: _.replace(_.get(props, 'match.params.for'), 'for-', ''),
     propertyType: _.split(_.get(props, 'match.params.propertyType'), ','),
 
     // Query Parameters
-    bound: _.get(search, 'bound'),
     bedroom: _.get(search, 'bedroom') ? _.toNumber(_.get(search, 'bedroom')) : undefined,
     bathroom: _.get(search, 'bathroom') ? _.toNumber(_.get(search, 'bathroom')) : undefined,
     price: _.get(search, 'price') ? {
@@ -62,24 +108,28 @@ const convertRouterPropsToParams = (props, areaEntities) => {
   };
 };
 
+
 const convertParamsToLocationObject = (params) => {
+  const areaSlug = getAreaSlugFromParam(params.area);
   return {
-    pathname: `/${params.propertyType}/for-${params.for}/${params.area}/`,
+    pathname: `/${params.propertyType}/for-${params.for}/${areaSlug}/`,
     search: `?${queryString.stringify({
-      bound: _.get(params, 'bound'),
       bedroom: _.get(params, 'bedroom'),
       bathroom: _.get(params, 'bathroom'),
       price: (_.get(params, 'price.min') || _.get(params, 'price.max')) ?
         `${_.get(params, 'price.min', '0')}-${_.get(params, 'price.max', '')}`
         :
         undefined,
+      skip: _.get(params, 'skip', 0),
     })}`,
   };
 };
 
+const convertToURLParam = data => `?${_.join(_.map(_.omitBy(data, val => val === undefined), (value, key) => `${key}=${value}`), '&')}`;
+
 const convertParamsToSearchAPI = (params) => {
-  console.log('convertParamsToSearchAPI', params, queryString.stringify(params));
-  const str = queryString.stringify({
+  console.log('convertParamsToSearchAPI', params);
+  return convertToURLParam({
     // id: undefined,
     // ids: undefined,
     // query,
@@ -89,12 +139,11 @@ const convertParamsToSearchAPI = (params) => {
     bathroom: _.get(params, 'bathroom') ? _.toNumber(_.get(params, 'bathroom')) : undefined,
     priceMin: _.get(params, 'price.min') ? _.toNumber(_.get(params, 'price.min')) : undefined,
     priceMax: _.get(params, 'price.max') ? _.toNumber(_.get(params, 'price.max')) : undefined,
-    bound: _.get(params, 'bound'),
-    location: undefined,
+    bound: _.get(params, 'area.bound') ? getBoundSlug(_.get(params, 'area.bound')) : undefined,
+    skip: _.get(params, 'skip', 0),
+    limit: PAGE_SIZE,
     // select
   });
-
-  return `?${str}`;
 };
 
 
@@ -105,6 +154,7 @@ const mapStateToProps = (state, ownProps) => {
   const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
 
   const areaEntities = _.get(state, 'entities.areas.entities');
+  // console.log('mapStateToProps', convertRouterPropsToParams(ownProps, areaEntities));
   return {
     searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
     areas: areaEntities,
@@ -115,6 +165,7 @@ const mapStateToProps = (state, ownProps) => {
     banner: state.banners,
     userDidSearch: true, // _.get(ownProps, 'location.search') !== '',
     realestate: {
+      loading: propertySearch.loading,
       filter: _.get(ownProps, 'location.search') !== '',
       data: _.compact(properties),
       total: propertySearch.total,
@@ -141,6 +192,7 @@ const MapWrapper = styled.div`
   bottom: 0px;
   right: ${props => props.hide ? '100%' : '0'};
   left: ${props => props.hide ? '-100%' : '0'};
+  visibility: ${props => props.hide ? 'none' : 'visible'};
 
   @media (min-width: ${BREAKPOINT}px) {
     right: auto;
@@ -149,12 +201,22 @@ const MapWrapper = styled.div`
   }
 `;
 
+const SliderWrapper = styled.div`
+  position: fixed;
+  bottom: 20px;
+  height: 100px;
+  width: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.4);
+`;
+
 const ListWrapper = styled.div`
   // Mobile
   position: relative;
   background: white;
   display: ${props => props.mode === 'list' ? 'block' : 'none'};
-  
+
 
   // Desktop
   @media (min-width: ${BREAKPOINT}px) {
@@ -167,7 +229,7 @@ const ListWrapper = styled.div`
 
 const ToggleButtonWrapper = styled.div`
   position: fixed;
-  bottom: 50px;
+  bottom: 120px;
   right: 50px;
   z-index:1;
 
@@ -202,8 +264,9 @@ class Home extends Component {
     this.getConfig(props);
 
     this.state = {
-      mobileViewMode: 'list',
-    }
+      mobileViewMode: 'map',
+      currentPage: 1,
+    };
     // this.goFilter(props.location);
   }
 
@@ -249,15 +312,15 @@ class Home extends Component {
   }
 
   handleScroll = () => {
-    const scroolHeight = document.body.scrollTop + window.innerHeight;
-    const bodyHeight = document.getElementsByClassName('layout-right')[0].clientHeight + this.headerHeight;
-    if (scroolHeight >= bodyHeight) {
-      document.getElementsByClassName('PropShop')[0].classList.add('end');
-    } else {
-      if (document.getElementsByClassName('PropShop')[0].classList.contains('end')) {
-        document.getElementsByClassName('PropShop')[0].classList.remove('end');
-      }
-    }
+    // const scroolHeight = document.body.scrollTop + window.innerHeight;
+    // const bodyHeight = document.getElementsByClassName('layout-right')[0].clientHeight + this.headerHeight;
+    // if (scroolHeight >= bodyHeight) {
+    //   document.getElementsByClassName('PropShop')[0].classList.add('end');
+    // } else {
+    //   if (document.getElementsByClassName('PropShop')[0].classList.contains('end')) {
+    //     document.getElementsByClassName('PropShop')[0].classList.remove('end');
+    //   }
+    // }
   }
 
   delay = (() => {
@@ -282,9 +345,9 @@ class Home extends Component {
     const center = map.getCenter();
     const zoom = map.getZoom();
     console.log('MapBoundChanged', ne, sw, center);
-
+    /*
     const searchParameters = this.props.searchParameters;
-    searchParameters.location = `${center.lat()},${center.lng()},${zoom}z`;
+    // searchParameters.location = `${center.lat()},${center.lng()},${zoom}z`;
     searchParameters.bound = `${sw.lat},${sw.lng},${ne.lat},${ne.lng}`;
 
 
@@ -299,6 +362,7 @@ class Home extends Component {
 
     console.log('new searchParameters', searchParameters);
     this.setUrl(searchParameters);
+    */
   }
 
   toggleMobileViewMode = () => {
@@ -307,7 +371,16 @@ class Home extends Component {
     else this.setState({ mobileViewMode: 'map' });
   }
 
+  onChangeListPage = (page, pageSize) => {
+    this.setState({ currentPage: page });
+    const { searchProperties } = this.props.actions;
+    const searchParameters = _.clone(this.props.searchParameters);
+    searchParameters.skip = (page - 1) * pageSize;
+    searchProperties(convertParamsToSearchAPI(searchParameters));
+  }
+
   renderSearchFilter = (loading, searchParameters) => {
+    console.log('renderSearchFilter', searchParameters);
     return (
       <div>
         {loading === true ? (
@@ -323,23 +396,26 @@ class Home extends Component {
     );
   }
 
-  renderList = (loading, items) => {
+  renderList = (loading, items, total) => {
     return (
       <div className="result">
         {loading === true ? (
           <LoadingComponent />
         ) : (
           <div className="list clearfix">
-            <h3>{items.length} ผลการค้นหา</h3>
+            <h3>แสดง {items.length} รายการจาก {total} ผลการค้นหา</h3>
             <ul>
               {
                 _.map(items, (item, index) => {
                   return (
-                    <li key={index} className="item col-sm-4 col-lg-6 col-lg-4"><RealEstateItem item={item} type="sell" /></li>
+                    <li key={index} className="item col-sm-4 col-lg-6 col-lg-4">
+                      <RealEstateItem item={item} type="sell" />
+                    </li>
                   );
                 })
               }
             </ul>
+            <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
           </div>
         )}
       </div>
@@ -356,7 +432,7 @@ class Home extends Component {
         <div id="Home">
           <MapWrapper>
             <MapLocation
-              location={searchParameters.location}
+              area={searchParameters.area}
               nearby={realestate.data}
               onBoundChanged={this.handleMapBoundChanged}
             />
@@ -364,30 +440,46 @@ class Home extends Component {
           <ListWrapper>
             {this.renderSearchFilter(false, searchParameters)}
             <hr />
-            {this.renderList(realestate.loading, realestate.data)}
+            {this.renderList(realestate.loading, realestate.data, realestate.total)}
           </ListWrapper>
         </div>
       );
     }
 
     // Mobile, Not split screen
+
     return (
       <div id="Home">
         {
           <MapWrapper hide={mobileViewMode === 'list'}>
             <MapLocation
-              location={searchParameters.location}
+              area={searchParameters.area}
               nearby={realestate.data}
               onBoundChanged={this.handleMapBoundChanged}
             />
+            {
+              _.size(realestate.data) > 0 &&
+                <SliderWrapper>
+                  <Slider>
+                    {
+                      _.map(realestate.data, (item) => {
+                        return (
+                          <PropertyItem key={item.id} {...item} />
+                        );
+                      })
+                    }
+                  </Slider>
+                </SliderWrapper>
+            }
           </MapWrapper>
+
         }
         {
           (mobileViewMode === 'list') &&
             <ListWrapper mode={mobileViewMode}>
               {this.renderSearchFilter(false, searchParameters)}
               <hr />
-              {this.renderList(realestate.loading, realestate.data)}
+              {this.renderList(realestate.loading, realestate.data, realestate.total)}
             </ListWrapper>
         }
         <ToggleButtonWrapper>
