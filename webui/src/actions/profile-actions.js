@@ -68,7 +68,7 @@ export const updateUserProfile = (id, data) => {
   };
 };
 
-export const updateAvatar = (file, fileName, assetId = '') => {
+export const updateAvatar = (id, file, fileName, oldAssetId = '') => {
   return (dispatch) => {
     dispatch(setErrorMessage(''));
     dispatch(profileEditing(true));
@@ -76,8 +76,23 @@ export const updateAvatar = (file, fileName, assetId = '') => {
     uploadMediaAPI(file, fileName).then((result) => {
       dispatch(profileEditing(false));
       if (result.status === 'success') {
-        deleteMediaAPI(assetId);
-        dispatch(profileEditSuccess(true));
+        if (oldAssetId) deleteMediaAPI(oldAssetId);
+        const newAssetId = result.data.sys.id;
+        const data = {
+          image: {
+            sys: {
+              id: newAssetId,
+            },
+          },
+        };
+        updateUserAPI(id, data).then((updateResult) => {
+          if (updateResult.status === 'SUCCESS') {
+            dispatch(profileEditSuccess(true));
+          } else {
+            dispatch(setErrorMessage('แก้ไขข้อมูลส่วนตัวล้มเหลว'));
+            dispatch(profileEditSuccess(false));
+          }
+        });
       } else {
         dispatch(setErrorMessage('อัพโหลดรูปภาพล้มเหลว'));
         dispatch(profileEditSuccess(false));

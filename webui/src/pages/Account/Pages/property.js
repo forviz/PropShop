@@ -16,9 +16,8 @@ class Property extends Component {
     actions: T.shape({
       fetchPropertiesByAgent: T.func,
     }).isRequired,
-    history: T.shape().isRequired,
     user: T.shape().isRequired,
-    // properties: T.array.isRequired,
+    properties: T.array.isRequired,
     fetching: T.bool.isRequired,
     result: T.string.isRequired,
     page: T.number.isRequired,
@@ -32,22 +31,15 @@ class Property extends Component {
   }
 
   getPropertiesByAgent = () => {
-    const { history, page, limit } = this.props;
-    firebase.core().auth().onAuthStateChanged((user) => {
-      if (!user) {
-        notification.error({ message: 'กรุณาเข้าสู่ระบบก่อน' });
-        history.push({ pathname: '/' });
-      } else {
-        const { fetchPropertiesByAgent } = this.props.actions;
-        fetchPropertiesByAgent(user, page - 1, limit);
-      }
-    });
+    const { user, page, limit } = this.props;
+    const { fetchPropertiesByAgent } = this.props.actions;
+    fetchPropertiesByAgent(user.id, page - 1, limit);
   }
 
   handlePagination = (page) => {
     const { user, limit } = this.props;
     const { fetchPropertiesByAgent } = this.props.actions;
-    fetchPropertiesByAgent(user, page - 1, limit);
+    fetchPropertiesByAgent(user.id, page - 1, limit);
   }
 
   render() {
