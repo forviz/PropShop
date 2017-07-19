@@ -12,10 +12,10 @@ const properties = (state = initialState, action) => {
     case 'ENTITY/PROPERTIES/RECEIVED': {
       return {
         ...state,
-        entities: _.reduce(action.properties, (acc, property) => {
+        entities: _.reduce(action.properties.data, (acc, property) => {
           return { ...acc, [property.id]: property };
         }, state.entities),
-        fetchStatus: _.reduce(action.properties, (acc, property) => {
+        fetchStatus: _.reduce(action.properties.data, (acc, property) => {
           return { ...acc, [property.id]: 'loaded' };
         }, state.fetchStatus),
       };
