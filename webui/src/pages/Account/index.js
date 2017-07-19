@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import { Menu, Icon, notification } from 'antd';
+import { Menu, Icon, notification, Spin } from 'antd';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
+import _ from 'lodash';
 
 import AccountPages from './Pages';
 
@@ -18,6 +19,7 @@ class Account extends Component {
     location: T.shape().isRequired,
     history: T.shape().isRequired,
     firebase: T.shape().isRequired,
+    user: T.shape().isRequired,
   }
 
   constructor(props) {
@@ -36,6 +38,7 @@ class Account extends Component {
   }
 
   render() {
+    const { user } = this.props;
     const page = this.props.match.params.page;
     const param = queryString.parse(this.props.location.search);
 
@@ -61,7 +64,11 @@ class Account extends Component {
               </Menu>
             </div>
             <div className="col-md-9">
-              <AccountPages page={page} param={param} history={this.props.history} />
+              {_.size(user) > 0 ? (
+                <AccountPages page={page} param={param} history={this.props.history} />
+              ) : (
+                <center><Spin /></center>
+              )}
             </div>
           </div>
         </div>
@@ -70,8 +77,10 @@ class Account extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.data,
+  };
 };
 
 const actions = {};
