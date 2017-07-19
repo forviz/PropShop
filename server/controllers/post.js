@@ -241,3 +241,24 @@ export const createPost = async (req, res, next) => {
 export const importPost = async (req, res) => {
 
 };
+
+export const deleteFile = async (req, res) => {
+
+  try {
+    const { assetId } = req.params;
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then((space) => space.getAsset(assetId))
+    .then((asset) => asset.delete())
+    .then(() => console.log('Asset deleted.'))
+    .catch(console.error)
+
+    res.json(response);
+
+  } catch (e) {
+    console.error(e);
+    res.json({
+      error: e.message,
+    });
+  }
+}

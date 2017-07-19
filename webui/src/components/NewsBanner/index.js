@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import ImageGallery from 'react-image-gallery';
-import FontAwesome from 'react-fontawesome';
-import numeral from 'numeral';
 
 import _ from 'lodash';
 
@@ -21,7 +19,7 @@ class NewsItem extends Component {
     };
 
     const title = strip(data.title.rendered);
-    const description = strip(data.acf.content);
+    // const description = strip(data.acf.content);
 
     return (
       <div className="banner" style={backgroundStyle}>

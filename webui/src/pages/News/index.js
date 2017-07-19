@@ -5,13 +5,11 @@ import _ from 'lodash';
 import queryString from 'query-string';
 import FontAwesome from 'react-fontawesome';
 import T from 'prop-types';
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import NewsBanner from '../../components/NewsBanner';
 import NewsItem from '../../components/NewsItem';
-import HotNews from '../../components/HotNews';
 
 import { getNewsProp, getNewsBanner } from '../../actions/news-actions';
 
@@ -20,9 +18,9 @@ const TabPane = Tabs.TabPane;
 class News extends Component {
 
   static propTypes = {
-    history: T.arrayOf().isRequired,
-    location: T.arrayOf().isRequired,
-    actions: T.arrayOf(T.shape({
+    history: T.shape().isRequired,
+    location: T.shape().isRequired,
+    actions: T.shape(T.shape({
       getNewsProp: T.func,
     })).isRequired,
     newsItem: T.arrayOf(T.shape({
@@ -94,34 +92,6 @@ class News extends Component {
 
     if (Object.keys(this.props.newsItem.entities).length === 0) return <div />;
 
-    // const hotNews = [
-    //   {
-    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-    //     date: '16 มิ.ย. 2560',
-    //     redirectURL: '###',
-    //   },
-    //   {
-    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-    //     date: '16 มิ.ย. 2560',
-    //     redirectURL: '###',
-    //   },
-    //   {
-    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-    //     date: '16 มิ.ย. 2560',
-    //     redirectURL: '###',
-    //   },
-    //   {
-    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-    //     date: '16 มิ.ย. 2560',
-    //     redirectURL: '###',
-    //   },
-    //   {
-    //     text: '[ดวงรายสัปดาห์]กูรู12ราศี: ประจำวันที่ 19 - 25 มิถุนายน 2560',
-    //     date: '16 มิ.ย. 2560',
-    //     redirectURL: '###',
-    //   },
-    // ];
-
     return (
       <div id="News">
         <div className="container">
@@ -187,13 +157,7 @@ class News extends Component {
                 </Tabs>
               </div>
             </Spin>
-            {/*
-            <div className="col-md-4">
-              <HotNews datas={hotNews} />
-            </div>
-            */}
           </div>
-
         </div>
       </div>
     );
@@ -201,7 +165,6 @@ class News extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('STATEEEEEEEEEEEEE', state.entities.news);
   return {
     newsItem: state.entities.news,
     fetching: state.entities.news.fetching,

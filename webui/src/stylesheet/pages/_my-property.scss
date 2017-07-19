@@ -1,0 +1,29 @@
+#MyProperty {
+  h1 {
+    font-family: $sukumvit-bold;
+    color: $text-green;
+    font-size: 36px;
+  }
+  .property-list {
+    .property-block {
+      .thumbnail {
+        cursor: pointer;
+        &:hover {
+          border: 1px solid $text-green;
+        }
+        .image {
+          width: 100%;
+          height: 140px;
+        }
+        .project {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+  .property-pagination {
+    text-align: center;
+  }
+}

@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import { Steps, Spin, notification } from 'antd';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 import _ from 'lodash';
 
-import * as firebase from '../../api/firebase';
 import * as SellActions from '../../actions/sell-actions';
-import * as UserActions from '../../actions/user-actions';
 
 import DevTool from './DevTool';
 import Step0 from './step0';
@@ -27,16 +26,19 @@ const steps = [
 class Sell extends Component {
 
   static propTypes = {
-    sell: T.shape({
-      redirect: T.bool,
-    }),
-  }
-  constructor(props) {
-    super(props);
-    this.getProfile(props);
+    firebase: T.shape().isRequired,
+    history: T.shape().isRequired,
+    actions: T.shape().isRequired,
+    sell: T.shape().isRequired,
+    user: T.shape().isRequired,
   }
 
-  componentWillReceiveProps(nextProps) {
+  constructor(props) {
+    super(props);
+    this.checkLogin();
+  }
+
+  componentWillReceiveProps() {
     const { sell, history } = this.props;
     if (sell.redirect === true) {
       history.push({
@@ -45,19 +47,12 @@ class Sell extends Component {
     }
   }
 
-  getProfile = (props) => {
-    firebase.core().auth().onAuthStateChanged((user) => {
-      if (user) {
-        const { fetchUserProfile } = props.actions;
-        fetchUserProfile(user);
-      } else {
-        notification.error({
-          message: 'กรุณาเข้าสู่ระบบก่อน',
-        });
-        const { history } = props;
-        history.push({
-          pathname: '/login',
-        });
+  checkLogin = () => {
+    const { firebase, history } = this.props;
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        notification.error({ message: 'กรุณาเข้าสู่ระบบก่อน' });
+        history.push({ pathname: '/login', search: '?redirectFrom=sell' });
       }
     });
   }
@@ -75,7 +70,6 @@ class Sell extends Component {
   }
 
   nextStep = () => {
-
     const errorMessage = this.validateForm();
     if (errorMessage) {
       alert(errorMessage);
@@ -83,12 +77,13 @@ class Sell extends Component {
     }
 
     const { sell } = this.props;
-    if (sell.step < steps.length-1) {
+    if (sell.step < steps.length - 1) {
       const { nextStep } = this.props.actions;
       nextStep();
     } else {
       this.submit();
     }
+    return true;
   }
 
   validateForm = () => {
@@ -111,7 +106,7 @@ class Sell extends Component {
     let errorMessage = '';
 
     const { sell } = this.props;
-    _.forEach(sell[step].requiredField, (value, key) => {
+    _.forEach(sell[step].requiredField, (value) => {
       if (sell.step0[value] === '') {
         errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
       }
@@ -126,8 +121,7 @@ class Sell extends Component {
   }
 
   nextStep = () => {
-
-    let errorMessage = this.validateForm();
+    const errorMessage = this.validateForm();
     if (errorMessage) {
       alert(errorMessage);
       return false;
@@ -140,6 +134,7 @@ class Sell extends Component {
     } else {
       this.submit();
     }
+    return true;
   }
 
   validateForm = () => {
@@ -162,7 +157,7 @@ class Sell extends Component {
     let errorMessage = '';
 
     const { sell } = this.props;
-    _.forEach(sell[step].requiredField, (value, key) => {
+    _.forEach(sell[step].requiredField, (value) => {
       if (sell.step0[value] === '') {
         errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
       }
@@ -178,7 +173,6 @@ class Sell extends Component {
   validateFormStep0 = () => {
     let errorMessage = this.checkRequiredField('step0');
     if (errorMessage) {
-
       const { sell } = this.props;
 
       if (sell.step0.areaSize !== '') {
@@ -211,7 +205,6 @@ class Sell extends Component {
           errorMessage = '"รหัสไปรษณีย์" ไม่ถูกต้อง';
         }
       }
-
     }
     return errorMessage;
   }
@@ -344,7 +337,6 @@ const mapStateToProps = (state) => {
 };
 
 const actions = {
-  fetchUserProfile: UserActions.fetchUserProfile,
   nextStep: SellActions.nextStep,
   prevStep: SellActions.prevStep,
   doCreateRealEstate: SellActions.doCreateRealEstate,
@@ -357,4 +349,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sell);
+export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(Sell);

@@ -588,70 +588,69 @@ export const mapFieldAgent = (data) => {
 }
 
 export const updateAgent = async (id, data) => {
-
-  let image;
-  if (data.image.newImage) {
-    image = await uploadFile(data.image.newImage.name, data.image.newImage.type, data.image.newImage);
-    if (image) {
-      await deleteOldAsset(data.image.sys.id);
-    }
-  }
+  // let image;
+  // if (data.image.newImage) {
+  //   image = await uploadFile(data.image.newImage.name, data.image.newImage.type, data.image.newImage);
+  //   if (image) {
+  //     await deleteOldAsset(data.image.sys.id);
+  //   }
+  // }
 
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
-  .then((space) => space.getEntry(id))
+  .then(space => space.getEntry(id))
   .then((entry) => {
     const fields = {
       email: {
-        'en-US': data.email
+        'en-US': data.email,
       },
-      image: {
-        'en-US': {
-          'sys': {
-            'id': image ? image.sys.id : data.image.sys.id,
-            'linkType': 'Asset',
-            'type': 'Link',
-          }
-        }
-      },
+      // image: {
+      //   'en-US': {
+      //     'sys': {
+      //       'id': image ? image.sys.id : data.image.sys.id,
+      //       'linkType': 'Asset',
+      //       'type': 'Link',
+      //     }
+      //   }
+      // },
       username: {
-        'en-US': data.username
+        'en-US': data.username,
       },
       prefixName: {
-        'en-US': data.prefixName
+        'en-US': data.prefixName,
       },
       name: {
-        'en-US': data.name
+        'en-US': data.name,
       },
       lastname: {
-        'en-US': data.lastname
+        'en-US': data.lastname,
       },
       phone: {
-        'en-US': data.prefixPhone+data.phone
+        'en-US': data.prefixPhone + data.phone,
       },
       rating: {
-        'en-US': data.rating
+        'en-US': data.rating,
       },
       company: {
-        'en-US': data.company
+        'en-US': data.company,
       },
       specialization: {
-        'en-US': data.specialization
+        'en-US': data.specialization,
       },
       licenseNumber: {
-        'en-US': data.licenseNumber
+        'en-US': data.licenseNumber,
       },
       about: {
-        'en-US': data.about
+        'en-US': data.about,
       },
       uid: {
-        'en-US': entry.fields.uid['en-US']
+        'en-US': entry.fields.uid['en-US'],
       },
-    }
+    };
     entry.fields = fields;
     return entry.update();
   })
   .then((entry) => {
     return publishEntry(entry.sys.id);
   })
-  .catch(console.error)
-}
+  .catch(console.error);
+};
