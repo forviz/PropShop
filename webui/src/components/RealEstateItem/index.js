@@ -46,7 +46,7 @@ class RealEstateItem extends Component {
     // _.map(wishList, (value,key) => {
     //   createWishlist(userId, key);
     // });
-    
+
   }
 
   // componentDidMount() {
@@ -64,8 +64,6 @@ class RealEstateItem extends Component {
   render() {
     const { type, item, wishlist } = this.props;
     //const { wishList } = this.state;
-
-    console.log('www',item)
 
     let wished = false;
     _.map(wishlist, (value) => {
@@ -124,9 +122,9 @@ class RealEstateItem extends Component {
 
     return (
       <div className="RealEstateItem sell">
-        
+
         <NavLink exact to={`/realestate/${item.id}`}>
-          <img src={item.mainImage} alt="" className="image" />
+          <img src={`${item.mainImage}?w=180&h=180&fit=fill`} alt="" className="image" />
         </NavLink>
         <div className="content">
           <NavLink exact to={`/realestate/${item.id}`}>
@@ -147,7 +145,7 @@ class RealEstateItem extends Component {
             </div>
           }
 
-        </div>          
+        </div>
         <FontAwesome
           onClick={() => this.handleWishList(item.id)}
           className="wishList"

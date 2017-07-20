@@ -3,6 +3,7 @@
 @import url(libraries/font-propshop/css/Glyphter.css);
 @import url(../node_modules/react-image-gallery/styles/css/image-gallery.css);
 @import url(~antd/dist/antd.css);
+
 html,
 body,
 #root,
