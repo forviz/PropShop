@@ -30,6 +30,7 @@
     "react-google-maps": "^7.2.0",
     "react-image-gallery": "^0.8.0",
     "react-masonry-component": "^5.0.7",
+    "react-number-format": "^2.0.1",
     "react-redux": "^5.0.4",
     "react-redux-firebase": "^1.5.0-rc.1",
     "react-redux-multilingual": "^1.0.4",

@@ -2,6 +2,9 @@ import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 import moment from 'moment';
+const fs = require('fs');
+const path = require('path');    
+    // filePath = path.join(__dirname, 'start.html');
 
 const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE,
@@ -16,32 +19,26 @@ const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.80
 
 
 export const uploadFile = async (req, res) => {
-
   try {
-    const fileName = req.body.fileName;
-    const fileType = req.body.fileType;
-    const file = req.body.file;
-
+    const file = req.file;
     const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
     .then(space => space.createAssetFromFiles({
       fields: {
         title: {
-          'en-US': fileName
+          'en-US': file.originalname,
         },
         file: {
           'en-US': {
             contentType: 'application/octet-stream',
-            fileName: fileName,
-            file: file,
+            fileName: file.originalname,
+            file: file.buffer,
           }
         }
       }
     }))
     .then(asset => asset.processForAllLocales())
     .then(asset => asset.publish());
-
     res.json(response);
-
   } catch (e) {
     console.error(e);
     res.json({
@@ -50,9 +47,7 @@ export const uploadFile = async (req, res) => {
   }
 }
 
-
 export const queryPosts = async (req, res, next) => {
-
   try {
     const { id, query, residentialType, bedroom, bathroom, priceMin, priceMax } = req.query;
     const _for = req.query.for;
@@ -249,6 +244,7 @@ export const deleteFile = async (req, res) => {
 
     const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
     .then((space) => space.getAsset(assetId))
+    .then((asset) => asset.unpublish())
     .then((asset) => asset.delete())
     .then(() => console.log('Asset deleted.'))
     .catch(console.error)

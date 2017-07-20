@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import _ from 'lodash';
 import { Select } from 'antd';
 
 const Option = Select.Option;
 
 class SelectComponent extends Component {
+
+  static propTypes = {
+    items: T.shape().isRequired,
+    placeholder: T.string,
+    value: T.string,
+    onChange: T.func.isRequired,
+  }
 
   static defaultProps = {
     items: [],
@@ -19,6 +27,8 @@ class SelectComponent extends Component {
   render() {
     const { items, placeholder, value } = this.props;
 
+    console.log('asdowq', this.props);
+
     let itemsOption = null;
     if (items) {
       itemsOption = _.map(items, (item, index) => {
@@ -32,7 +42,7 @@ class SelectComponent extends Component {
 
     return (
       <div className={`Select ${className}`}>
-        <Select placeholder={placeholder} value={value} style={{ width: '100%' }} onChange={this.handleOnChange} >
+        <Select placeholder={placeholder} value={value ? value : []} style={{ width: '100%' }} onChange={this.handleOnChange} >
           {itemsOption}
         </Select>
       </div>

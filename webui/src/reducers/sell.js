@@ -3,7 +3,8 @@ import _ from 'lodash';
 const initalState = {
   step: 0,
   step0: {
-    requiredField: ['for', 'residentialType', 'topic', 'announcementDetails', 'areaSize', 'bedroom', 'bathroom', 'price', 'province', 'amphur', 'district', 'location', 'address', 'street', 'zipcode'],
+    requiredField: ['for', 'residentialType', 'topic', 'announcementDetails', 'areaSize',
+      'bedroom', 'bathroom', 'price', 'province', 'amphur', 'district', 'location', 'address', 'street', 'zipcode'],
     for: '',
     residentialType: '',
     topic: '',
@@ -17,6 +18,7 @@ const initalState = {
     bedroom: '',
     bathroom: '',
     price: '',
+    priceDisplay: '',
     pricePerUnit: '',
     fee: '',
     project: '',

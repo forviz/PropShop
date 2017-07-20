@@ -3,15 +3,11 @@ import _ from 'lodash';
 const BASEURL = 'http://localhost:4000/api/v1';
 
 export const uploadMediaAPI = (file, fileName) => {
+  const data = new FormData();
+  data.append('file', file);
   return fetch(`${BASEURL}/media`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      file,
-      fileName,
-    }),
+    body: data,
   })
   .then((response) => {
     return response.json();

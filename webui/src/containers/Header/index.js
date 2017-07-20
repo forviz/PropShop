@@ -72,7 +72,7 @@ class Header extends Component {
       );
 
       let divAvatar = null;
-      if (user.image) {
+      if (_.get(user, 'image.fields.file.url')) {
         divAvatar = (
           <div className="avatar">
             <img src={user.image.fields.file.url} alt={user.image.fields.file.fileName} className="img-circle" />
