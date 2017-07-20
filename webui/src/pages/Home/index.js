@@ -8,12 +8,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 
-import BannerRealEstate from '../../containers/BannerRealEstate';
+// import BannerRealEstate from '../../containers/BannerRealEstate';
 
 import LoadingComponent from '../../components/Loading';
 import MapLocation from '../../components/Map/MapLocation';
 
 import {
+  actions as PropertyActions,
   convertRouterPropsToParams,
   convertParamsToLocationObject,
   convertParamsToSearchAPI,
@@ -23,12 +24,10 @@ import {
 } from '../../modules/property';
 
 import Slider from '../../components/Slider';
+import { handleError } from '../../actions/errors';
 
-import * as RealestateActions from '../../actions/realestate-actions';
+// import * as RealestateActions from '../../actions/realestate-actions';
 import * as ConfigActions from '../../actions/config-actions';
-
-import LandingPage from './LandingPage';
-import { convertLocationToLatLngZoom, getDistance } from '../../helpers/map-helpers';
 
 const BREAKPOINT = 768;
 const PAGE_SIZE = 30;
@@ -48,11 +47,10 @@ class SearchParameters {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const propertySearch = _.get(state, 'domain.propertySearch');
-  const visibleIDs = propertySearch.visibleIDs;
+  const propertySearch = _.get(state, 'entities.properties.search.home');
+  const visibleIDs = propertySearch.result;
 
   const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
-
   const areaEntities = _.get(state, 'entities.areas.entities');
   // console.log('mapStateToProps', convertRouterPropsToParams(ownProps, areaEntities));
   return {
@@ -75,7 +73,18 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const actions = {
-  searchProperties: RealestateActions.searchProperties,
+  searchProperties: (param) => {
+    return (dispatch) => {
+      // Get all properties, with ID Only
+      dispatch(PropertyActions.search(param, 'home'))
+      .then(() => {
+        console.log('SEARCH COMPLETE');
+      })
+      .catch((error) => {
+        dispatch(handleError(error));
+      });
+    };
+  },
   fetchConfigs: ConfigActions.fetchConfigs,
 };
 

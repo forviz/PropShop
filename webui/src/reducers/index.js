@@ -9,11 +9,13 @@ import sell from './sell';
 
 // Entities
 import areas from './entities/areas';
-import properties from './entities/properties';
 import agents from './entities/agents';
 import references from './entities/references';
 import activities from './entities/activities';
 import news from './entities/news';
+
+// modules
+import properties from '../modules/property';
 
 // Domain
 import propertySearch from './domain/property-search';
