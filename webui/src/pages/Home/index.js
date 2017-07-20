@@ -292,7 +292,7 @@ class Home extends Component {
   }
 
   renderSearchFilter = (loading, searchParameters) => {
-    const { areaDataSource } = this.props;
+    const { areas } = this.props;
     return (
       <div>
         {loading === true ? (
@@ -301,7 +301,7 @@ class Home extends Component {
           <PropertySearch
             activeTab="area"
             searchParameters={searchParameters}
-            areaDataSource={areaDataSource}
+            areaDataSource={areas}
             onUpdate={this.setUrl}
           />
         )}

@@ -4,7 +4,7 @@ const initialState = {
   entities: {
     bangkok: {
       slug: 'bangkok',
-      title: 'Bangkok',
+      title: { en: 'Bangkok', th: 'กรุงเทพ' },
       location: '13.7248946,100.4930242,11z',
       category: 'Province',
       bound: {
@@ -14,7 +14,7 @@ const initialState = {
     },
     wattana: {
       slug: 'watthana',
-      title: 'Watthana',
+      title: { en: 'Watthana', th: 'วัฒนา' },
       category: 'District/เขต',
       bound: {
         sw: { lat: 13.712135, lng: 100.549385 },
@@ -23,7 +23,7 @@ const initialState = {
     },
     'yan-nawa': {
       slug: 'yan-nawa',
-      title: 'Yan Nawa',
+      title: { en: 'Yan Nawa', th: 'ยานนาวา' },
       category: 'Sub District/แขวง',
       bound: {
         sw: { lat: 13.710224, lng: 100.508002 },
@@ -32,7 +32,7 @@ const initialState = {
     },
     'thung-mahamek': {
       slug: 'thung-mahamek',
-      title: 'Thung Mahamek/ทุ่งมหาเมฆ',
+      title: { en: 'Thung Mahamek', th: 'ทุ่งมหาเมฆ' },
       category: 'Sub District/แขวง',
       bound: {
         sw: { lat: 13.704280, lng: 100.531781 },
@@ -103,7 +103,8 @@ const initialState = {
       },
     },
     senanikhom1: {
-      title: 'ซอยเสนานิคม 1',
+      slug: 'senanikhom1',
+      title: { en: 'senanikhom1', th: 'ซอยเสนานิคม 1' },
       location: '13.8325384,100.5767017,16z',
       category: 'Neighborhood',
       bound: {
@@ -112,7 +113,8 @@ const initialState = {
       },
     },
     ratchayothin: {
-      title: 'รัชโยธิน',
+      slug: 'ratchayothin',
+      title: { en: 'Ratchayothin', th: 'รัชโยธิน' },
       location: '13.8264438,100.5640438,16z',
       category: 'Neighborhood',
       bound: {
@@ -121,7 +123,8 @@ const initialState = {
       },
     },
     mochit: {
-      title: 'หมอชิต',
+      slug: 'mochit',
+      title: { en: 'Mochit', th: 'หมอชิต' },
       location: '13.8014124,100.5498388,16z',
       category: 'BTS Station',
       bound: {
@@ -130,7 +133,8 @@ const initialState = {
       },
     },
     sapankwai: {
-      title: 'สะพานควาย',
+      mochit: 'sapankwai',
+      title: { en: 'Sapan Kwai', th: 'สะพานควาย' },
       location: '13.7935809,100.5474953,16z',
       category: 'BTS Station',
       bound: {
@@ -139,7 +143,7 @@ const initialState = {
       },
     },
     ari: {
-      title: 'อารีย์',
+      title: { en: 'Ari', th: 'อารีย์' },
       location: '13.7796185,100.5422168,16z',
       category: 'BTS Station',
       bound: {
@@ -148,7 +152,7 @@ const initialState = {
       },
     },
     sanampao: {
-      title: 'สนามเป้า',
+      title: { en: 'Sanam Pao', th: 'สนามเป้า' },
       location: '13.7726578,100.5398886,16z',
       category: 'BTS Station',
       bound: {
@@ -157,7 +161,7 @@ const initialState = {
       },
     },
     'victory-monument': {
-      title: 'อนุสาวรีย์ชัยสมรภูมิ',
+      title: { en: 'Victory of Monument', th: 'อนุสาวรีย์ชัยสมรภูมิ' },
       location: '13.7650299,100.5336123,16z',
       category: 'BTS Station',
       bound: {
@@ -166,7 +170,7 @@ const initialState = {
       },
     },
     phayathai: {
-      title: 'พญาไท',
+      title: { en: 'Phayathai', th: 'พญาไท' },
       location: '13.756464,100.5294924,16z',
       category: 'BTS Station',
       bound: {
@@ -175,7 +179,7 @@ const initialState = {
       },
     },
     ratchathewi: {
-      title: 'ราชเทวี',
+      title: { en: 'Ratchathewi', th: 'ราชเทวี' },
       location: '13.751936,100.5273681,16z',
       category: 'BTS Station',
       bound: {
@@ -184,7 +188,7 @@ const initialState = {
       },
     },
     siamsquare: {
-      title: 'Siam Square',
+      title: { en: 'Siam Square', th: 'สยามสแควร์' },
       location: '13.7454609,100.5324483,16z',
       category: 'BTS Station',
       bound: {
@@ -193,7 +197,7 @@ const initialState = {
       },
     },
     chidlom: {
-      title: 'Chidlom',
+      title: { en: 'Chidlom', th: 'ชิดลม' },
       location: '13.7442377,100.542221,16z',
       category: 'BTS Station',
       bound: {
@@ -202,7 +206,7 @@ const initialState = {
       },
     },
     ploenchit: {
-      title: 'Ploenchit',
+      title: { en: 'Ploenchit', th: 'เพลินจิต' },
       location: '13.7426217,100.5462458,16z',
       category: 'BTS Station',
       bound: {
@@ -211,7 +215,7 @@ const initialState = {
       },
     },
     nana: {
-      title: 'Nana',
+      title: { en: 'Nana', th: 'นานา' },
       location: '13.7408443,100.5521043,16z',
       category: 'BTS Station',
       bound: {
@@ -220,7 +224,7 @@ const initialState = {
       },
     },
     asoke: {
-      title: 'Asoke',
+      title: { en: 'Asoke', th: 'อโศก' },
       location: '13.7357541,100.5566995,16z',
       category: 'BTS Station',
       bound: {
@@ -229,7 +233,7 @@ const initialState = {
       },
     },
     phrompong: {
-      title: 'พร้อมพงษ์',
+      title: { en: 'Phrompong', th: 'พร้อมพงษ์' },
       location: '13.7304631,100.5647048,16z',
       category: 'BTS Station',
       bound: {
@@ -238,7 +242,7 @@ const initialState = {
       },
     },
     thonglor: {
-      title: 'ทองหล่อ',
+      title: { en: 'Thonglor', th: 'ทองหล่อ' },
       location: '13.7243972,100.5746183,16z',
       category: 'BTS Station',
       bound: {
@@ -247,7 +251,7 @@ const initialState = {
       },
     },
     ekkamai: {
-      title: 'เอกมัย',
+      title: { en: 'Ekkamai', th: 'เอกมัย' },
       location: '13.7252116,100.5844235,16z',
       category: 'BTS Station',
       bound: {
@@ -256,7 +260,7 @@ const initialState = {
       },
     },
     phrakanong: {
-      title: 'พระโขนง',
+      title: { en: 'Phrakanong', th: 'พระโขนง' },
       location: '13.7153778,100.5890691,16z',
       category: 'BTS Station',
       bound: {
@@ -265,7 +269,7 @@ const initialState = {
       },
     },
     onnut: {
-      title: 'อ่อนนุช',
+      title: { en: 'Onnut', th: 'อ่อนนุช' },
       location: '13.7071486,100.5956689,16z',
       category: 'BTS Station',
       bound: {
@@ -274,7 +278,7 @@ const initialState = {
       },
     },
     bangchak: {
-      title: 'บางจาก',
+      title: { en: 'Bangchak', th: 'บางจาก' },
       location: '13.6978405,100.6016278,16z',
       category: 'BTS Station',
       bound: {
@@ -283,7 +287,7 @@ const initialState = {
       },
     },
     punnawithi: {
-      title: 'ปุณณวิถี',
+      title: { en: 'Punnawithi', th: 'ปุณณวิถี' },
       location: '13.688986,100.6078008,16z',
       category: 'BTS Station',
       bound: {
@@ -292,7 +296,7 @@ const initialState = {
       },
     },
     udomsuk: {
-      title: 'อุดมสุข',
+      title: { en: 'Udonsuk', th: 'อุดมสุข' },
       location: '13.6801312,100.6076645,16z',
       category: 'BTS Station',
       bound: {
@@ -301,7 +305,7 @@ const initialState = {
       },
     },
     bangna: {
-      title: 'บางนา',
+      title: { en: 'Bangna', th: 'บางนา' },
       location: '13.6689142,100.5974721,16z',
       category: 'BTS Station',
       bound: {
@@ -310,7 +314,7 @@ const initialState = {
       },
     },
     bearing: {
-      title: 'แบริ่ง',
+      title: { en: 'Bearing', th: 'แบริ่ง' },
       location: '13.6607722,100.5992746,16z',
       category: 'BTS Station',
       bound: {
@@ -319,7 +323,7 @@ const initialState = {
       },
     },
     ratchadamri: {
-      title: 'ราชดำริ',
+      title: { en: 'Ratchadamri', th: 'ราชดำริ' },
       location: '13.739411,100.5356314,16z',
       category: 'BTS Station',
       bound: {
@@ -328,7 +332,7 @@ const initialState = {
       },
     },
     silom: {
-      title: 'สีลม',
+      title: { en: 'Silom', th: 'สีลม' },
       location: '13.7266423,100.5289839,16z',
       category: 'BTS Station',
       bound: {
@@ -337,7 +341,7 @@ const initialState = {
       },
     },
     chongnonsri: {
-      title: 'ช่องนนทรี',
+      title: { en: 'Chongnonsri', th: 'ช่องนนทรี' },
       location: '13.7229698,100.5278257,16z',
       category: 'BTS Station',
       bound: {
@@ -346,7 +350,7 @@ const initialState = {
       },
     },
     surasak: {
-      title: 'สุรศักดิ์',
+      title: { en: 'Surasak', th: 'สุรศักดิ์' },
       location: '13.7188902,100.5180897,16z',
       category: 'BTS Station',
       bound: {
@@ -355,7 +359,7 @@ const initialState = {
       },
     },
     'sapan-taksin': {
-      title: 'สะพานตากสิน',
+      title: { en: 'Sapan Taksin', th: 'สะพานตากสิน' },
       location: '13.7184877,100.5103311,16z',
       category: 'BTS Station',
       bound: {
@@ -364,7 +368,7 @@ const initialState = {
       },
     },
     'krung-thon-buri': {
-      title: 'กรุงธนบุรี',
+      title: { en: 'Krung Thon Buri', th: 'กรุงธนบุรี' },
       location: '13.7209335,100.5026136,16z',
       category: 'BTS Station',
       bound: {
@@ -373,7 +377,7 @@ const initialState = {
       },
     },
     'wongwian-yai': {
-      title: 'วงเวียนใหญ่',
+      title: { en: 'Wongwian Yai', th: 'วงเวียนใหญ่' },
       location: '13.7211257,100.4914626,16z',
       category: 'BTS Station',
       bound: {
@@ -382,7 +386,7 @@ const initialState = {
       },
     },
     'pho-nimit': {
-      title: 'โพธิ์นิมิตร',
+      title: { en: 'Pho Nimit', th: 'โพธิ์นิมิตร' },
       location: '13.718656,100.4831202,16z',
       category: 'BTS Station',
       bound: {
@@ -391,7 +395,7 @@ const initialState = {
       },
     },
     'talat-phlu': {
-      title: 'ตลาดพลู',
+      title: { en: 'Talat Phlu', th: 'ตลาดพลู' },
       location: '13.7137164,100.4736102,16z',
       category: 'BTS Station',
       bound: {
@@ -400,7 +404,7 @@ const initialState = {
       },
     },
     wutthakat: {
-      title: 'วุฒากาศ',
+      title: { en: 'Wutthakat', th: 'วุฒากาศ' },
       location: '13.7127102,100.4656067,16z',
       category: 'BTS Station',
       bound: {
@@ -409,7 +413,7 @@ const initialState = {
       },
     },
     'bang-wa': {
-      title: 'บางหว้า',
+      title: { en: 'Bang wa', th: 'บางหว้า' },
       location: '13.7206527,100.4547245,16z',
       category: 'BTS Station',
       bound: {

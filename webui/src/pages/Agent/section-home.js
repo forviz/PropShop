@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'antd';
 import AgentItem from '../../components/AgentItem';
-import agentData from '../../../public/data/agentData.json';
+import agentData from './agentData.json';
 
 export default () => {
   return (

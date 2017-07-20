@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import Autosuggest from 'react-autosuggest';
 import _ from 'lodash';
 import { Input, Select, Icon, Popover, Col, Row } from 'antd';
-import ReactSelect from 'react-select';
 import InputPriceRange from '../InputPriceRange';
+import ReactSelect from 'react-select';
+import 'react-select/dist/react-select.css';
 
 const InputGroup = Input.Group;
 const Option = Select.Option;
@@ -51,10 +53,10 @@ const content = (
         </ul>
       </Col>
       <Col span={6}>
-      <ListHeader>รถใต้ดิน</ListHeader>
-      <ul>
-        <li><a href="#">ลาดพร้าว</a></li>
-      </ul>
+        <ListHeader>รถใต้ดิน</ListHeader>
+        <ul>
+          <li><a href="#">ลาดพร้าว</a></li>
+        </ul>
       </Col>
     </Row>
   </LocationPopover>
@@ -72,9 +74,10 @@ class PropertySearch extends Component {
   }
 
   handleSelectArea = (option) => {
+    console.log('handleSelectArea', option);
     const searchParameters = _.clone(this.props.searchParameters);
     searchParameters.area = {
-      name: option.value,
+      name: option !== null ? option.value : '',
       bound: { sw: undefined, ne: undefined },
     }
     this.onUpdateSearchParameters(searchParameters);
@@ -99,7 +102,6 @@ class PropertySearch extends Component {
   }
 
   render() {
-
     const { searchParameters, areaDataSource } = this.props;
     console.log('areaDataSource', areaDataSource);
     const locationInputSuffix = (
@@ -112,7 +114,7 @@ class PropertySearch extends Component {
             <Select
               style={{ width: '20%' }}
               defaultValue="sale"
-              onChange={value => this.onUpdateSearchParameters({...searchParameters, for: value })}
+              onChange={value => this.onUpdateSearchParameters({ ...searchParameters, for: value })}
             >
               <Option value="sale">ขาย</Option>
               <Option value="rent">เช่า</Option>
@@ -121,16 +123,22 @@ class PropertySearch extends Component {
               prefix={<Icon type="notification" />}
               style={{ width: '30%' }}
               defaultValue="Condominium"
-              onChange={value => this.onUpdateSearchParameters({...searchParameters, propertyType: value })}
+              onChange={value => this.onUpdateSearchParameters({ ...searchParameters, propertyType: value })}
             >
               {_.map(propertyTypes, type => <Option key={type} value={type}>{type}</Option>)}
             </Select>
-            <Input
-              style={{ width: '50%' }}
-              prefix={<Icon type="search" />}
-              defaultValue="Thonglor"
-              suffix={locationInputSuffix}
-            />
+            <div style={{ width: '50%' }}>
+              <ReactSelect
+                options={_.map(areaDataSource, (a, slug) => ({ value: slug, label: a.title.th }))}
+                placeholder="ค้นหาทำเล"
+                clearable={false}
+                value={_.get(searchParameters, 'area.name')}
+                onChange={this.handleSelectArea}
+                arrowRenderer={({ onMouseDown, isOpen }) =>
+                  <Icon type="bars" />
+                }
+              />
+            </div>
           </InputGroup>
         </div>
         <div>
@@ -141,7 +149,7 @@ class PropertySearch extends Component {
                 placeholder="ห้องนอน"
                 onChange={value => this.onUpdateSearchParameters({ ...searchParameters, bedroom: value })}
               >
-                {_.map(_.range(1,6), num => <Option value={num}>{num} ห้องนอน</Option>)}
+                {_.map(_.range(1, 6), num => <Option value={`${num}`}>{num} ห้องนอน</Option>)}
               </Select>
             </Col>
             <Col span={8}>
@@ -150,7 +158,7 @@ class PropertySearch extends Component {
                 placeholder="ห้องน้ำ"
                 onChange={value => this.onUpdateSearchParameters({ ...searchParameters, bathroom: value })}
               >
-                {_.map(_.range(1,6), n => <Option value={n}>{n} ห้องน้ำ</Option>)}
+                {_.map(_.range(1, 6), num => <Option value={`${num}`}>{num} ห้องน้ำ</Option>)}
               </Select>
             </Col>
             <Col span={8}>

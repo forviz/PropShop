@@ -13,9 +13,9 @@ import SelectSellType from '../../components/SelectSellType';
 import SelectResidentialType from '../../components/SelectResidentialType';
 import SelectRoom from '../../components/SelectRoom';
 
-import provinceJSON from '../../../public/data/province.json';
-import amphurJSON from '../../../public/data/amphur.json';
-import districtJSON from '../../../public/data/district.json';
+import provinceJSON from './province.json';
+import amphurJSON from './amphur.json';
+import districtJSON from './district.json';
 
 import * as SellActions from '../../actions/sell-actions';
 
