@@ -65,8 +65,6 @@ class RealEstateItem extends Component {
     const { type, item, wishlist } = this.props;
     //const { wishList } = this.state;
 
-    console.log('www',item)
-
     let wished = false;
     _.map(wishlist, (value) => {
       if (value.id === item.id) wished = true;

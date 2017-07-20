@@ -7,23 +7,26 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
-import queryString from 'query-string';
 
 import BannerRealEstate from '../../containers/BannerRealEstate';
 
 import LoadingComponent from '../../components/Loading';
-import PropertyItem from '../../components/PropertyItem';
-import RealEstateItem from '../../components/RealEstateItem';
-
 import MapLocation from '../../components/Map/MapLocation';
 
-import PropertySearch from '../../components/PropertySearch';
+import {
+  convertRouterPropsToParams,
+  convertParamsToLocationObject,
+  convertParamsToSearchAPI,
+  PropertyItemMini,
+  PropertyItemThumbnail,
+  PropertySearch,
+} from '../../modules/property';
+
 import Slider from '../../components/Slider';
 
 import * as RealestateActions from '../../actions/realestate-actions';
 import * as ConfigActions from '../../actions/config-actions';
 
-import * as firebase from '../../api/firebase';
 import LandingPage from './LandingPage';
 import { convertLocationToLatLngZoom, getDistance } from '../../helpers/map-helpers';
 
@@ -43,108 +46,6 @@ class SearchParameters {
 
   skip: number;
 }
-
-const getAreaParamFromSlug = (areaSlug, areaEntities) => {
-  const [areaName, boundStr] = _.split(areaSlug, '@');
-  let areaBound;
-
-  if (boundStr && _.size(_.split(boundStr, ',')) === 4) {
-    const [swLat, swLng, neLat, neLng] = _.map(_.split(boundStr, ','), pos => _.toNumber(pos));
-    areaBound = {
-      ne: { lat: neLat, lng: neLng },
-      sw: { lat: swLat, lng: swLng },
-    };
-  }
-
-  if (areaName && _.isEmpty(boundStr)) {
-    // Find bound from areaEntities
-    areaBound = _.get(areaEntities, `${areaSlug}.bound`);
-  }
-
-  return {
-    name: areaName,
-    bound: areaBound,
-  };
-};
-
-const isValidBound = (bound) => {
-  if (!bound) return false;
-  if (!bound.sw || !bound.ne) return false;
-  if (
-    !_.isNumber(_.get(bound, 'sw.lat')) ||
-    !_.isNumber(_.get(bound, 'sw.lng')) ||
-    !_.isNumber(_.get(bound, 'ne.lat')) ||
-    !_.isNumber(_.get(bound, 'ne.lng'))) return false;
-  return true;
-};
-
-const getBoundSlug = (bound) => {
-  if (!isValidBound(bound)) return '';
-  return `${_.get(bound, 'sw.lat')},${_.get(bound, 'sw.lng')},${_.get(bound, 'ne.lat')},${_.get(bound, 'ne.lng')}`;
-};
-
-const getAreaSlugFromParam = (areaParams) => {
-  return `${_.get(areaParams, 'name', '')}${isValidBound(areaParams.bound) ? `@${getBoundSlug(areaParams.bound)}` : ''}`;
-};
-
-const convertRouterPropsToParams = (props, areaEntities) => {
-  const search = queryString.parse(_.get(props, 'location.search', {}));
-  // console.log('convertRouterPropsToParams', search);
-  const area = _.get(props, 'match.params.area');
-  return {
-    area: getAreaParamFromSlug(area, areaEntities),
-    // location: _.get(areaEntities, `${area}.location`),
-    for: _.replace(_.get(props, 'match.params.for'), 'for-', ''),
-    propertyType: _.split(_.get(props, 'match.params.propertyType'), ','),
-
-    // Query Parameters
-    bedroom: _.get(search, 'bedroom') ? _.toNumber(_.get(search, 'bedroom')) : undefined,
-    bathroom: _.get(search, 'bathroom') ? _.toNumber(_.get(search, 'bathroom')) : undefined,
-    price: _.get(search, 'price') ? {
-      min: _.toNumber(_.head(_.split(_.get(search, 'price'), '-'))),
-      max: _.toNumber(_.last(_.split(_.get(search, 'price'), '-'))),
-    } : { min: undefined, max: undefined },
-  };
-};
-
-
-const convertParamsToLocationObject = (params) => {
-  const areaSlug = getAreaSlugFromParam(params.area);
-  return {
-    pathname: `/${params.propertyType}/for-${params.for}/${areaSlug}/`,
-    search: `?${queryString.stringify({
-      bedroom: _.get(params, 'bedroom'),
-      bathroom: _.get(params, 'bathroom'),
-      price: (_.get(params, 'price.min') || _.get(params, 'price.max')) ?
-        `${_.get(params, 'price.min', '0')}-${_.get(params, 'price.max', '')}`
-        :
-        undefined,
-      skip: _.get(params, 'skip', 0),
-    })}`,
-  };
-};
-
-const convertToURLParam = data => `?${_.join(_.map(_.omitBy(data, val => val === undefined), (value, key) => `${key}=${value}`), '&')}`;
-
-const convertParamsToSearchAPI = (params) => {
-  console.log('convertParamsToSearchAPI', params);
-  return convertToURLParam({
-    // id: undefined,
-    // ids: undefined,
-    // query,
-    for: params.for,
-    propertyType: _.join(_.get(params, 'propertyType'), ','),
-    bedroom: _.get(params, 'bedroom') ? _.toNumber(_.get(params, 'bedroom')) : undefined,
-    bathroom: _.get(params, 'bathroom') ? _.toNumber(_.get(params, 'bathroom')) : undefined,
-    priceMin: _.get(params, 'price.min') ? _.toNumber(_.get(params, 'price.min')) : undefined,
-    priceMax: _.get(params, 'price.max') ? _.toNumber(_.get(params, 'price.max')) : undefined,
-    bound: _.get(params, 'area.bound') ? getBoundSlug(_.get(params, 'area.bound')) : undefined,
-    skip: _.get(params, 'skip', 0),
-    limit: PAGE_SIZE,
-    // select
-  });
-};
-
 
 const mapStateToProps = (state, ownProps) => {
   const propertySearch = _.get(state, 'domain.propertySearch');
@@ -267,8 +168,22 @@ class Home extends Component {
     // this.goFilter(props.location);
   }
 
+  handleResize = () => {
+    const showSplitContent = window.matchMedia(`(min-width: ${BREAKPOINT}px)`).matches;
+    if (showSplitContent !== this.state.showSplitContent) {
+      this.setState({
+        showSplitContent,
+      });
+    }
+  }
+
+  componentWillMount() {
+    this.handleResize();
+  }
+
   componentDidMount() {
     document.getElementById('Footer').style.visibility = 'hidden';
+    window.addEventListener('resize', this.handleResize);
     document.addEventListener('scroll', this.handleScroll);
     this.headerHeight = document.getElementById('Header').clientHeight;
 
@@ -291,6 +206,7 @@ class Home extends Component {
   }
 
   componentWillUnmount() {
+    window.addEventListener('resize', this.handleResize);
     document.removeEventListener('scroll', this.handleScroll);
   }
 
@@ -321,7 +237,6 @@ class Home extends Component {
 
   setUrl = (params) => {
     const { history } = this.props;
-    console.log('setUrl', params, convertParamsToLocationObject(params));
     history.push(convertParamsToLocationObject(params));
   }
 
@@ -368,7 +283,7 @@ class Home extends Component {
   }
 
   renderSearchFilter = (loading, searchParameters) => {
-    console.log('renderSearchFilter', searchParameters);
+    const { areaDataSource } = this.props;
     return (
       <div>
         {loading === true ? (
@@ -377,6 +292,7 @@ class Home extends Component {
           <PropertySearch
             activeTab="area"
             searchParameters={searchParameters}
+            areaDataSource={areaDataSource}
             onUpdate={this.setUrl}
           />
         )}
@@ -397,7 +313,7 @@ class Home extends Component {
                 _.map(items, (item, index) => {
                   return (
                     <li key={index} className="item col-sm-4 col-lg-6 col-lg-4">
-                      <RealEstateItem item={item} type="sell" />
+                      <PropertyItemThumbnail item={item} />
                     </li>
                   );
                 })
@@ -410,31 +326,9 @@ class Home extends Component {
     );
   }
 
-  render() {
-    const { searchParameters, userDidSearch, banner, realestate, configRealestate, location } = this.props;
+  renderMobileScreen = () => {
+    const { searchParameters, realestate } = this.props;
     const { mobileViewMode } = this.state;
-    const showSplitContent = window.matchMedia(`(min-width: ${BREAKPOINT}px)`).matches;
-
-    if (showSplitContent) {
-      return (
-        <div id="Home">
-          <MapWrapper>
-            <MapLocation
-              area={searchParameters.area}
-              nearby={realestate.data}
-              onBoundChanged={this.handleMapBoundChanged}
-            />
-          </MapWrapper>
-          <ListWrapper>
-            {this.renderSearchFilter(false, searchParameters)}
-            <hr />
-            {this.renderList(realestate.loading, realestate.data, realestate.total)}
-          </ListWrapper>
-        </div>
-      );
-    }
-
-    // Mobile, Not split screen
 
     return (
       <div id="Home">
@@ -452,7 +346,7 @@ class Home extends Component {
                     {
                       _.map(realestate.data, (item) => {
                         return (
-                          <PropertyItem key={item.id} {...item} />
+                          <PropertyItemMini key={item.id} {...item} />
                         );
                       })
                     }
@@ -475,6 +369,35 @@ class Home extends Component {
         </ToggleButtonWrapper>
       </div>
     );
+  }
+
+  renderSplitScreen = () => {
+    const { searchParameters, realestate } = this.props;
+    return (
+      <div id="Home">
+        <MapWrapper>
+          <MapLocation
+            area={searchParameters.area}
+            nearby={realestate.data}
+            onBoundChanged={this.handleMapBoundChanged}
+          />
+        </MapWrapper>
+        <ListWrapper>
+          {this.renderSearchFilter(false, searchParameters)}
+          <hr />
+          {this.renderList(realestate.loading, realestate.data, realestate.total)}
+        </ListWrapper>
+      </div>
+    );
+  }
+
+  render() {
+    const { showSplitContent } = this.state;
+
+    if (showSplitContent) return this.renderSplitScreen();
+
+    // Mobile, Not split screen
+    return this.renderMobileScreen();
   }
 }
 

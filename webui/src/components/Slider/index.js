@@ -56,7 +56,7 @@ class Slider extends Component {
     window.removeEventListener('resize', this.updateDimensions);
   }
 
-  updateDimensions() {
+  updateDimensions = () => {
     const w = window;
     const d = document;
     const documentElement = d.documentElement;
