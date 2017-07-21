@@ -14,7 +14,10 @@ class SelectPrice extends Component {
       8000000, 8500000, 9000000, 9500000, 10000000,
       11000000, 12000000, 13000000, 14000000,
       15000000, 20000000, 50000000],
-    value: {},
+    value: {
+      min: '',
+      max: '',
+    },
   }
 
   state = {
@@ -22,13 +25,10 @@ class SelectPrice extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.expand === true) {
-      const { value } = nextProps;
-      if ((value.min === parseInt(value.min, 10) && value.min) && (value.max === parseInt(value.max, 10) && value.max)) {
-        this.setState({
-          expand: false,
-        });
-      }
+    if (!_.isEqual(this.props.priceList && nextProps.priceList)) {
+      // if pricelist change, clear value
+      // this.props.onChange('priceMin', undefined);
+      // this.props.onChange('priceMax', undefined);
     }
   }
 
@@ -60,10 +60,12 @@ class SelectPrice extends Component {
   }
 
   handlePriceMin = (value) => {
+    if (_.get(this.props, 'value.max') && _.isNumber(_.get(this.props, 'value.max'))) this.setState({ expand: false });
     this.props.onChange('priceMin', value);
   }
 
   handlePriceMax = (value) => {
+    if (_.get(this.props, 'value.min') && _.isNumber(_.get(this.props, 'value.min'))) this.setState({ expand: false });
     this.props.onChange('priceMax', value);
   }
 

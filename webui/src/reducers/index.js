@@ -8,11 +8,14 @@ import realestates from './realestates';
 import sell from './sell';
 
 // Entities
-import properties from './entities/properties';
+import areas from './entities/areas';
 import agents from './entities/agents';
 import references from './entities/references';
 import activities from './entities/activities';
 import news from './entities/news';
+
+// modules
+import properties from '../modules/property';
 
 // Domain
 import propertySearch from './domain/property-search';
@@ -30,6 +33,7 @@ export default combineReducers({
   realestates,
   sell,
   entities: combineReducers({
+    areas,
     properties,
     agents,
     references,

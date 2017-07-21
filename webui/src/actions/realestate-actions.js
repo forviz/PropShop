@@ -63,6 +63,7 @@ export const searchProperties = (search) => {
       const propertyIDsToFetch = _.difference(visibleIDs, fetchedPropertyIDs);
       getProperties(`?ids=${_.join(propertyIDsToFetch, ',')}`)
       .then((properties) => {
+        console.log('receivePropertiesEntity', properties);
         dispatch(receivePropertiesEntity(properties));
         dispatch(realestateLoading(false));
       });

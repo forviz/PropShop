@@ -10,14 +10,21 @@ const PropertyRow = styled.div`
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
-  height: 200px;
+  height: 100px;
   margin-bottom: 15px;
+  background: white;
+  padding: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+
+  border: 1px solid #ccc;
+  border-radius: 4px;
 `;
 
 const CoverImgWrapper = styled.div`
   display: flex;
   flex-grow: 0;
-  width: 200px;
+  width: 100px;
 `;
 
 const CoverImg = styled.img`
@@ -53,7 +60,7 @@ class PropertyItem extends Component {
     return (
       <PropertyRow>
         <CoverImgWrapper>
-          <CoverImg src={mainImage} alt="" />
+          <CoverImg src={`${mainImage}?h=100&fit=fill`} alt="" />
         </CoverImgWrapper>
         <ContentWrapper>
           <PropertyTitle>{'title'}</PropertyTitle>
