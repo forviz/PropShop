@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { Input, Select, Icon, Popover, Col, Row } from 'antd';
-import ReactSelect from 'react-select';
 
 import InputPriceRange from '../InputPriceRange';
 import InputAreaSearch from '../InputAreaSearch';
@@ -128,22 +127,6 @@ class PropertySearch extends Component {
               {_.map(propertyTypes, type => <Option key={type} value={type}>{type}</Option>)}
             </Select>
             <div style={{ width: '50%' }}>
-              { /* <ReactSelect
-                options={_.map(areaDataSource, (a, slug) => ({ value: slug, label: a.title.th }))}
-                placeholder="ค้นหาทำเล"
-                clearable={false}
-                autofocus={false}
-                onFocus={() => {
-                  console.log('focus');
-                }}
-                value={_.get(searchParameters, 'area.name')}
-                onChange={this.handleSelectArea}
-                arrowRenderer={({ onMouseDown, isOpen }) =>
-                  <Icon type="bars" />
-                }
-              />
-            */ }
-
               <InputAreaSearch
                 value={_.find(areas, a => searchParameters.area.name === a.value)}
                 options={areas}

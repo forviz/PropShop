@@ -55,7 +55,7 @@ const mapStateToProps = (state, ownProps) => {
   const areas = _.map(_.get(state, 'entities.areas.entities'), (area, slug) => {
     return {
       ...area,
-      label: _.get(area, 'title.en'),
+      label: _.get(area, 'title.th'),
       value: slug,
     };
   });

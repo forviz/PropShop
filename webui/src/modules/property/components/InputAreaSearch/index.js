@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 import _ from 'lodash';
+import { Row, Col, Icon } from 'antd';
 import styled from 'styled-components';
 
 import filterOptions from './utils/filterOptions';
@@ -32,7 +33,7 @@ const SuggestionWrapper = styled.div`
   left: 0;
   right: 0;
   max-height: 400px;
-  z-index: 1;
+  z-index: 3;
   overflow: scroll;
 `;
 
@@ -55,6 +56,51 @@ const SuggestionItem = styled.li`
   }
 `;
 
+const ListButton = styled.button`
+  border: none;
+  background: transparent;
+  position: absolute;
+  width: 37px;
+  height: 37px;
+  top: 0;
+  right: 0;
+  outline: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+`;
+
+const AreaListWrapper = styled.div`
+  position: absolute;
+  top:40px;
+  right: 0;
+  width: 560px;
+  max-height: 400px;
+  z-index: 3;
+  overflow: scroll;
+  background: white;
+  border: 1px solid #ccc;
+`;
+
+const AreaListContent = styled.div`
+  padding: 15px;
+`;
+
+const AreaListHeader = styled.div`
+  color: #88b840;
+`;
+
+const AreaListItem = styled.a`
+  padding: 5px 0;
+  font-size: 14px;
+  color: #787878;
+  display: block;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const OptionCategory = styled.span`
   color: #88b840;
   margin-right: 15px;
@@ -62,7 +108,6 @@ const OptionCategory = styled.span`
   font-size: 0.8em;
   font-weight: bold;
 `;
-
 
 export const renderCategory = (category) => {
   switch (category) {
@@ -105,6 +150,7 @@ class InputAreaSearch extends Component {
     super(props);
     this.state = {
       showSuggestion: false,
+      showAreaList: false,
       searchValue: getOptionLabel(props.value),
       focusAtIndex: 0,
     };
@@ -133,6 +179,7 @@ class InputAreaSearch extends Component {
   _handleDetectClickOutside = (e) => {
     if (this.component.contains(e.target)) return;
     this.hideSuggestion();
+    this.hideAreaList();
   }
   /* End of Detect click Outside */
 
@@ -146,6 +193,18 @@ class InputAreaSearch extends Component {
   hideSuggestion = () => {
     this.setState({
       showSuggestion: false,
+    });
+  }
+
+  showAreaList = () => {
+    this.setState({
+      showAreaList: true,
+    });
+  }
+
+  hideAreaList = () => {
+    this.setState({
+      showAreaList: false,
     });
   }
 
@@ -165,7 +224,10 @@ class InputAreaSearch extends Component {
     event.preventDefault();
 
     if (!this.state.showSuggestion) this.showSuggestion();
-    else this.hideSuggestion();
+    else {
+      this.hideSuggestion();
+      this.hideAreaList();
+    }
   }
 
 
@@ -179,6 +241,7 @@ class InputAreaSearch extends Component {
 
     /* Close options */
     this.hideSuggestion();
+    this.hideAreaList();
   }
 
   handleSelectOptionAtIndex = (index) => {
@@ -218,8 +281,16 @@ class InputAreaSearch extends Component {
 
   render() {
     const { value, options } = this.props;
-    const { searchValue, showSuggestion, focusAtIndex } = this.state;
+    const { searchValue, showSuggestion, showAreaList, focusAtIndex } = this.state;
     const suggestions = filterOptions(options, searchValue);
+
+    // AreaList
+    const btsAreas = _.filter(options, opt => opt.category === 'BTS');
+    const btsCol1 = _.slice(btsAreas, 0, 10);
+    const btsCol2 = _.slice(btsAreas, 10, 20);
+    const btsCol3 = _.slice(btsAreas, 20, 30);
+
+    const col2 = _.filter(options, opt => opt.category === 'SUBDISTRICT');
 
     const showCategory = !_.isEmpty(value.category) && !_.isEmpty(searchValue);
     return (
@@ -253,6 +324,36 @@ class InputAreaSearch extends Component {
                 ))}
               </SuggestionList>
             </SuggestionWrapper>
+        }
+        <ListButton type="button" onClick={showAreaList ? this.hideAreaList : this.showAreaList}>
+          <Icon type="bars" />
+        </ListButton>
+        {
+          showAreaList &&
+            <AreaListWrapper>
+              <AreaListContent>
+                <Row>
+                  <Col span={16}>
+                    <AreaListHeader>BTS</AreaListHeader>
+                    <Row>
+                      <Col span={8}>
+                        {_.map(btsCol1, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                      </Col>
+                      <Col span={8}>
+                        {_.map(btsCol2, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                      </Col>
+                      <Col span={8}>
+                        {_.map(btsCol3, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col span={8}>
+                    <AreaListHeader>แขวง</AreaListHeader>
+                    {_.map(col2, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                  </Col>
+                </Row>
+              </AreaListContent>
+            </AreaListWrapper>
         }
       </InputAreaSearchWrapper>
     );
