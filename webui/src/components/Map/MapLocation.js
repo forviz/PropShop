@@ -141,16 +141,18 @@ class MapLocation extends Component {
     console.log('initializeMap', this.props);
     // const { location } = this.props;
     // const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
-    const { ne, sw } = this.props.area.bound;
-    const mapBound = new google.maps.LatLngBounds(sw, ne);
-    console.log('mapBound', mapBound.getCenter().toJSON());
+
     map = new google.maps.Map(this.map, {
-      center: mapBound.getCenter(),
       zoomControl: true,
       zoomControlOptions: { position: 'LEFT_CENTER' },
     });
-    map.fitBounds(mapBound);
 
+    const area = this.props.area;
+    if (area && area.bound) {
+      const { ne, sw } = this.props.area.bound;
+      const mapBound = new google.maps.LatLngBounds(sw, ne);
+      map.fitBounds(mapBound);
+    }
 
     map.addListener('idle', () => {
       this.props.onBoundChanged(map);

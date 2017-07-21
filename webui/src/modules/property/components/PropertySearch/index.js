@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Autosuggest from 'react-autosuggest';
 import _ from 'lodash';
 import { Input, Select, Icon, Popover, Col, Row } from 'antd';
-import InputPriceRange from '../InputPriceRange';
 import ReactSelect from 'react-select';
+
+import InputPriceRange from '../InputPriceRange';
+import InputAreaSearch from '../InputAreaSearch';
 import 'react-select/dist/react-select.css';
 
 const InputGroup = Input.Group;
@@ -102,11 +103,10 @@ class PropertySearch extends Component {
   }
 
   render() {
-    const { searchParameters, areaDataSource } = this.props;
-    console.log('areaDataSource', areaDataSource);
-    const locationInputSuffix = (
-      <Popover content={content} placement="bottomRight" trigger="click"><Icon type="bars" /></Popover>
-    );
+    const { searchParameters, areas } = this.props;
+    // const locationInputSuffix = (
+    //   <Popover content={content} placement="bottomRight" trigger="click"><Icon type="bars" /></Popover>
+    // );
     return (
       <PropertySearchWrapper>
         <div>
@@ -128,15 +128,26 @@ class PropertySearch extends Component {
               {_.map(propertyTypes, type => <Option key={type} value={type}>{type}</Option>)}
             </Select>
             <div style={{ width: '50%' }}>
-              <ReactSelect
+              { /* <ReactSelect
                 options={_.map(areaDataSource, (a, slug) => ({ value: slug, label: a.title.th }))}
                 placeholder="ค้นหาทำเล"
                 clearable={false}
+                autofocus={false}
+                onFocus={() => {
+                  console.log('focus');
+                }}
                 value={_.get(searchParameters, 'area.name')}
                 onChange={this.handleSelectArea}
                 arrowRenderer={({ onMouseDown, isOpen }) =>
                   <Icon type="bars" />
                 }
+              />
+            */ }
+
+              <InputAreaSearch
+                value={_.find(areas, a => searchParameters.area.name === a.value)}
+                options={areas}
+                onChange={this.handleSelectArea}
               />
             </div>
           </InputGroup>

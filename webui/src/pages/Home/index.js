@@ -52,13 +52,20 @@ const mapStateToProps = (state, ownProps) => {
 
   const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
   const areaEntities = _.get(state, 'entities.areas.entities');
+  const areas = _.map(_.get(state, 'entities.areas.entities'), (area, slug) => {
+    return {
+      ...area,
+      label: _.get(area, 'title.en'),
+      value: slug,
+    };
+  });
   // console.log('mapStateToProps', convertRouterPropsToParams(ownProps, areaEntities));
   return {
     searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
-    areas: areaEntities,
-    areaDataSource: _.map(_.groupBy(_.map(areaEntities, (a, key) => ({ ...a, key })), (area) => {
-      return area.category;
-    }), (areas, category) => ({ title: category, children: areas })),
+    areas: areas,
+    // areaDataSource: _.map(_.groupBy(_.map(areaEntities, (a, key) => ({ ...a, key })), (area) => {
+    //   return area.category;
+    // }), (areas, category) => ({ title: category, children: areas })),
     user: state.user.data,
     banner: state.banners,
     userDidSearch: true, // _.get(ownProps, 'location.search') !== '',
@@ -301,7 +308,7 @@ class Home extends Component {
           <PropertySearch
             activeTab="area"
             searchParameters={searchParameters}
-            areaDataSource={areas}
+            areas={areas}
             onUpdate={this.setUrl}
           />
         )}
@@ -315,9 +322,9 @@ class Home extends Component {
         {loading === true ? (
           <LoadingComponent />
         ) : (
-          <div className="list clearfix">
+          <div className="list">
             <h3>แสดง {items.length} รายการจาก {total} ผลการค้นหา</h3>
-            <ul>
+            <ul className="clearfix">
               {
                 _.map(items, (item, index) => {
                   return (
