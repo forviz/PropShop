@@ -3,9 +3,6 @@
     line-height: initial;
     label {
       color: $text-default;
-      &:after {
-        display: none;
-      }
     }
   }
   .has-feedback:after {

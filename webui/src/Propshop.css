@@ -1889,9 +1889,6 @@ body .ant-notification {
 .ant-form .ant-form-item-label label {
   color: #484849; }
 
-.ant-form .ant-form-item-label label:after {
-  display: none; }
-
 .ant-form .has-feedback:after {
   width: 38px;
   height: 38px;

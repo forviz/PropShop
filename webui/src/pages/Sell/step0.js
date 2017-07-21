@@ -51,25 +51,13 @@ class Step0 extends Component {
     form: T.func.isRequired,
   }
 
-  getProvince = (id) => {
-    return _.find(provinceJSON, (province) => { return province.PROVINCE_ID === id; });
-  }
-
-  getAmphur = (id) => {
-    return _.find(amphurJSON, (amphur) => { return amphur.AMPHUR_ID === id; });
-  }
-
-  getDistrict = (id) => {
-    return _.find(districtJSON, (district) => { return district.DISTRICT_ID === id; });
-  }
-
   setLocation = () => {
     let address = '';
-    address = this.props.data.province ? this.getProvince(this.props.data.provinceId).PROVINCE_NAME : '';
+    address = this.props.data.province ? this.findProvince(this.props.data.provinceId).PROVINCE_NAME : '';
     if (this.props.data.district) {
-      address += `+${this.getDistrict(this.props.data.districtId).DISTRICT_NAME}`;
+      address += `+${this.findDistrict(this.props.data.districtId).DISTRICT_NAME}`;
     } else if (this.props.data.amphur) {
-      address += `+${this.getAmphur(this.props.data.amphurId).AMPHUR_NAME}`;
+      address += `+${this.findAmphur(this.props.data.amphurId).AMPHUR_NAME}`;
     }
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}`;
     fetch(url)
@@ -194,7 +182,7 @@ class Step0 extends Component {
   }
 
   sumAreaSize = () => {
-    if ( this.props.data.areaSize0 && this.props.data.areaSize1 ) {
+    if (this.props.data.areaSize0 && this.props.data.areaSize1) {
       const sumAreaSize = this.props.data.areaSize0 * this.props.data.areaSize1;
       const newData = {
         ...this.props.data,
@@ -359,7 +347,7 @@ class Step0 extends Component {
     const newData = {
       ...this.props.data,
       provinceId: value,
-      province: this.getProvince(value).PROVINCE_NAME,
+      province: this.findProvince(value).PROVINCE_NAME,
       amphur: '',
       district: '',
     };
@@ -372,7 +360,7 @@ class Step0 extends Component {
     const newData = {
       ...this.props.data,
       amphurId: value,
-      amphur: this.getAmphur(value).AMPHUR_NAME,
+      amphur: this.findAmphur(value).AMPHUR_NAME,
       district: '',
     };
     this.setData(newData).then(() => {
@@ -384,7 +372,7 @@ class Step0 extends Component {
     const newData = {
       ...this.props.data,
       districtId: value,
-      district: this.getDistrict(value).DISTRICT_NAME,
+      district: this.findDistrict(value).DISTRICT_NAME,
     };
     this.setData(newData).then(() => {
       this.setLocation();
@@ -418,31 +406,51 @@ class Step0 extends Component {
     this.setData(newData);
   }
 
-  getErrorPattern = (message) => {
-    return (
-      <div className="text-red"><b>{message}</b></div>
-    );
+  getDistrict = () => {
+    const { data } = this.props;
+    if (data.amphur !== '') {
+      const districtJSONFilter = _.filter(districtJSON, (district) => { return district.AMPHUR_ID === data.amphurId; });
+      return _.map(districtJSONFilter, (value, index) => {
+        return <Option key={index} value={value.DISTRICT_ID} >{value.DISTRICT_NAME}</Option>;
+      });
+    }
+    return [];
+  }
+
+  getAmphur = () => {
+    const { data } = this.props;
+    if (data.province !== '') {
+      const amphurJSONFilter = _.filter(amphurJSON, (amphur) => { return amphur.PROVINCE_ID === data.provinceId; });
+      return _.map(amphurJSONFilter, (value, index) => {
+        return <Option key={index} value={value.AMPHUR_ID} >{value.AMPHUR_NAME}</Option>;
+      });
+    }
+    return [];
+  }
+
+  getProvince = () => {
+    return _.map(provinceJSON, (value, index) => {
+      return (
+        <Option key={index} value={value.PROVINCE_ID}>{value.PROVINCE_NAME}</Option>
+      );
+    });
+  }
+
+  findProvince = (id) => {
+    return _.find(provinceJSON, (province) => { return province.PROVINCE_ID === id; });
+  }
+
+  findAmphur = (id) => {
+    return _.find(amphurJSON, (amphur) => { return amphur.AMPHUR_ID === id; });
+  }
+
+  findDistrict = (id) => {
+    return _.find(districtJSON, (district) => { return district.DISTRICT_ID === id; });
   }
 
   render() {
     const { data } = this.props;
-    const { getFieldDecorator, getFieldError } = this.props.form;
-
-    let amphurData = [];
-    if (data.province !== '') {
-      const amphurJSONFilter = _.filter(amphurJSON, (amphur) => { return amphur.PROVINCE_ID === data.provinceId; });
-      amphurData = _.map(amphurJSONFilter, (value, index) => {
-        return <Option key={index} value={value.AMPHUR_ID} >{value.AMPHUR_NAME}</Option>;
-      });
-    }
-
-    let districtData = [];
-    if (data.amphur !== '') {
-      const districtJSONFilter = _.filter(districtJSON, (district) => { return district.AMPHUR_ID === data.amphurId; });
-      districtData = _.map(districtJSONFilter, (value, index) => {
-        return <Option key={index} value={value.DISTRICT_ID} >{value.DISTRICT_NAME}</Option>;
-      });
-    }
+    const { getFieldDecorator } = this.props.form;
 
     return (
       <div id="Step0">
@@ -460,8 +468,10 @@ class Step0 extends Component {
                           <FormItem
                             label="ประกาศประเภท"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('for', {
+                              initialValue: data.for,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
@@ -479,8 +489,10 @@ class Step0 extends Component {
                           <FormItem
                             label="ประกาศอสังหาฯ"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('residentialType', {
+                              initialValue: data.residentialType,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
@@ -497,8 +509,10 @@ class Step0 extends Component {
                       <FormItem
                         label="หัวข้อประกาศ"
                         hasFeedback
+                        colon={false}
                       >
                         {getFieldDecorator('topic', {
+                          initialValue: data.topic,
                           rules: [{
                             required: true, message: 'Required!',
                           }],
@@ -509,8 +523,10 @@ class Step0 extends Component {
                       <FormItem
                         label="รายละเอียดเกี่ยวกับประกาศ"
                         hasFeedback
+                        colon={false}
                       >
                         {getFieldDecorator('announcementDetails', {
+                          initialValue: data.announcementDetails,
                           rules: [{
                             required: true, message: 'Required!',
                           }],
@@ -612,8 +628,10 @@ class Step0 extends Component {
                           <FormItem
                             label="ห้องนอน"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('bedroom', {
+                              initialValue: data.bedroom,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
@@ -626,8 +644,10 @@ class Step0 extends Component {
                           <FormItem
                             label="ห้องนอน"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('bathroom', {
+                              initialValue: data.bathroom,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
@@ -640,8 +660,10 @@ class Step0 extends Component {
                           <FormItem
                             label="ราคา"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('price', {
+                              initialValue: data.price,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
@@ -649,7 +671,7 @@ class Step0 extends Component {
                               <NumberFormat
                                 className="ant-input"
                                 thousandSeparator={true}
-                                value={data.price}หหก
+                                value={data.price}
                                 onChange={this.handleInputPrice}
                                 suffix=" บาท"
                               />,
@@ -717,27 +739,25 @@ class Step0 extends Component {
                           <FormItem
                             label="จังหวัด"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('province', {
+                              initialValue: data.province,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
                             })(
-                              <Select
-                                size="default"
-                                placeholder="เลือก"
-                                value={data.province ? data.province : []}
-                                onChange={this.handleSelectProvince}
-                                style={{ width: '100%' }}
-                              >
-                                {
-                                  _.map(provinceJSON, (value, index) => {
-                                    return (
-                                      <Option key={index} value={value.PROVINCE_ID}>{value.PROVINCE_NAME}</Option>
-                                    );
-                                  })
-                                }
-                              </Select>,
+                              <div>
+                                <Select
+                                  size="default"
+                                  placeholder="เลือก"
+                                  value={data.province ? data.province : []}
+                                  onChange={this.handleSelectProvince}
+                                  style={{ width: '100%' }}
+                                >
+                                  {this.getProvince()}
+                                </Select>
+                              </div>,
                             )}
                           </FormItem>
                         </div>
@@ -745,22 +765,26 @@ class Step0 extends Component {
                           <FormItem
                             label="อำเภอ/เขต"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('amphur', {
+                              initialValue: data.amphur,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
                             })(
-                              <Select
-                                size="default"
-                                placeholder="เลือกจังหวัดก่อน"
-                                value={data.amphur ? data.amphur : []}
-                                disabled={data.province !== '' ? false : true}
-                                onChange={this.handleSelectAmphur}
-                                style={{ width: '100%' }}
-                              >
-                                {amphurData}
-                              </Select>,
+                              <div>
+                                <Select
+                                  size="default"
+                                  placeholder="เลือกจังหวัดก่อน"
+                                  value={data.amphur ? data.amphur : []}
+                                  disabled={data.province !== '' ? false : true}
+                                  onChange={this.handleSelectAmphur}
+                                  style={{ width: '100%' }}
+                                >
+                                  {this.getAmphur()}
+                                </Select>
+                              </div>,
                             )}
                           </FormItem>
                         </div>
@@ -768,22 +792,26 @@ class Step0 extends Component {
                           <FormItem
                             label="ตำบล/แขวง"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('district', {
+                              initialValue: data.district,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
                             })(
-                              <Select
-                                size="default"
-                                placeholder="เลือกอำเภอ/เขตก่อน"
-                                value={data.district ? data.district : []}
-                                disabled={data.amphur !== '' ? false : true}
-                                onChange={this.handleSelectDistrict}
-                                style={{ width: '100%' }}
-                              >
-                                {districtData}
-                              </Select>,
+                              <div>
+                                <Select
+                                  size="default"
+                                  placeholder="เลือกอำเภอ/เขตก่อน"
+                                  value={data.district ? data.district : []}
+                                  disabled={data.amphur !== '' ? false : true}
+                                  onChange={this.handleSelectDistrict}
+                                  style={{ width: '100%' }}
+                                >
+                                  {this.getDistrict()}
+                                </Select>
+                              </div>,
                             )}
                           </FormItem>
                         </div>
@@ -793,8 +821,10 @@ class Step0 extends Component {
                           <FormItem
                             label="เลขที่"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('address', {
+                              initialValue: data.address,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
@@ -807,8 +837,10 @@ class Step0 extends Component {
                           <FormItem
                             label="ถนน"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('street', {
+                              initialValue: data.street,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
@@ -821,8 +853,10 @@ class Step0 extends Component {
                           <FormItem
                             label="รหัสไปรษณีย์"
                             hasFeedback
+                            colon={false}
                           >
                             {getFieldDecorator('zipcode', {
+                              initialValue: data.zipcode,
                               rules: [{
                                 required: true, message: 'Required!',
                               }],
