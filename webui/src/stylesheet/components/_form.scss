@@ -1,0 +1,16 @@
+.ant-form {
+  .ant-form-item-label {
+    line-height: initial;
+    label {
+      color: $text-default;
+      &:after {
+        display: none;
+      }
+    }
+  }
+  .has-feedback:after {
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+  }
+}

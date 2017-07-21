@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { Steps, Spin, notification } from 'antd';
+import { Steps, Spin, notification, Form } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
@@ -31,6 +31,7 @@ class Sell extends Component {
     actions: T.shape().isRequired,
     sell: T.shape().isRequired,
     user: T.shape().isRequired,
+    form: T.func.isRequired,
   }
 
   constructor(props) {
@@ -69,72 +70,25 @@ class Sell extends Component {
     prevStep();
   }
 
-  nextStep = () => {
-    const errorMessage = this.validateForm();
-    if (errorMessage) {
-      alert(errorMessage);
-      return false;
-    }
-
-    const { sell } = this.props;
-    if (sell.step < steps.length - 1) {
-      const { nextStep } = this.props.actions;
-      nextStep();
-    } else {
-      this.submit();
-    }
-    return true;
-  }
-
-  validateForm = () => {
-    let errorMessage = '';
-
-    const { sell } = this.props;
-
-    if (sell.step === 0) {
-      errorMessage = this.validateFormStep0();
-    } else if (sell.step === 2) {
-      errorMessage = this.validateFormStep2();
-    } else if (sell.step === 3) {
-      errorMessage = this.validateFormStep3();
-    }
-
-    return errorMessage;
-  }
-
-  checkRequiredField = (step) => {
-    let errorMessage = '';
-
-    const { sell } = this.props;
-    _.forEach(sell[step].requiredField, (value) => {
-      if (sell.step0[value] === '') {
-        errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+  nextStep = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const { sell } = this.props;
+        if (sell.step < steps.length - 1) {
+          const { nextStep } = this.props.actions;
+          nextStep();
+        } else {
+          this.submit();
+        }
       }
     });
-
-    return errorMessage;
-  }
-
-  prevStep = () => {
-    const { prevStep } = this.props.actions;
-    prevStep();
-  }
-
-  nextStep = () => {
-    const errorMessage = this.validateForm();
-    if (errorMessage) {
-      alert(errorMessage);
-      return false;
-    }
-
-    const { sell } = this.props;
-    if (sell.step < steps.length - 1) {
-      const { nextStep } = this.props.actions;
-      nextStep();
-    } else {
-      this.submit();
-    }
-    return true;
+    // const errorMessage = this.validateForm();
+    // if (errorMessage) {
+    //   alert(errorMessage);
+    //   return false;
+    // }
+    // return true;
   }
 
   validateForm = () => {
@@ -157,9 +111,13 @@ class Sell extends Component {
     let errorMessage = '';
 
     const { sell } = this.props;
-    _.forEach(sell[step].requiredField, (value) => {
-      if (sell.step0[value] === '') {
+    _.forEach(sell[step].requiredField, (field) => {
+      if (sell.step0[field] === '') {
         errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+        return {
+          field,
+          errorMessage,
+        };
       }
     });
 
@@ -172,7 +130,7 @@ class Sell extends Component {
 
   validateFormStep0 = () => {
     let errorMessage = this.checkRequiredField('step0');
-    if (errorMessage) {
+    if (!errorMessage) {
       const { sell } = this.props;
 
       if (sell.step0.areaSize !== '') {
@@ -251,6 +209,46 @@ class Sell extends Component {
     });
   }
 
+  buttonAction = () => {
+    const { step } = this.props.sell;
+    if (step === 0) {
+      return (
+        <div className="row">
+          <center>
+            <button type="submit" className="btn btn-primary">ต่อไป</button>
+          </center>
+        </div>
+      );
+    }
+    return (
+      <div className="row">
+        <div className="col-md-6 text-right">
+          <button type="button" className="btn btn-default" onClick={this.prevStep}>ย้อนกลับ</button>
+        </div>
+        <div className="col-md-6">
+          <button type="submit" className="btn btn-primary">ต่อไป</button>
+        </div>
+      </div>
+    );
+  }
+
+  renderStep = () => {
+    const { form } = this.props;
+    const { step } = this.props.sell;
+    switch (step) {
+      case 0:
+        return <Step0 form={form} />;
+      case 1:
+        return <Step1 form={form} />;
+      case 2:
+        return <Step2 form={form} />;
+      case 3:
+        return <Step3 form={form} />;
+      default:
+        return <Step0 form={form} />;
+    }
+  }
+
   render() {
     const { sell } = this.props;
     const { step, sendingData, sendData } = sell;
@@ -259,70 +257,34 @@ class Sell extends Component {
       this.success();
     }
 
-    let renderStep = null;
-    switch (step) {
-      case 0:
-        renderStep = <Step0 />;
-        break;
-      case 1:
-        renderStep = <Step1 />;
-        break;
-      case 2:
-        renderStep = <Step2 />;
-        break;
-      case 3:
-        renderStep = <Step3 />;
-        break;
-      default:
-    }
-
-    let buttonAction = null;
-    if (step === 0) {
-      buttonAction = (
-        <div className="row">
-          <center>
-            <button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
-          </center>
-        </div>
-      );
-    } else {
-      buttonAction = (
-        <div className="row">
-          <div className="col-md-6 text-right">
-            <button type="button" className="btn btn-default" onClick={this.prevStep}>ย้อนกลับ</button>
-          </div>
-          <div className="col-md-6">
-            <button type="button" className="btn btn-primary" onClick={this.nextStep}>ต่อไป</button>
-          </div>
-        </div>);
-    }
-
     return (
       <div id="Sell">
-        <Spin tip="Loading..." spinning={sendingData}>
-          <div className="container">
-            <div className="row">
-              <div className="col-md-10 col-md-offset-1">
-                <div className="steps">
-                  <Steps current={step}>
-                    { steps.map(item => <Step key={item.title} title={item.title} />) }
-                  </Steps>
+        <Form onSubmit={this.nextStep}>
+          <Spin tip="Loading..." spinning={sendingData}>
+            <div className="container">
+              <div className="row">
+                <div className="col-md-10 col-md-offset-1">
+                  <div className="steps">
+                    <Steps current={step}>
+                      { steps.map(item => <Step key={item.title} title={item.title} />) }
+                    </Steps>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <hr />
-          {renderStep}
-          <div className="container">
-            <div className="row">
-              <div className="col-md-6 col-md-offset-3">
-                <div className="action">
-                  {buttonAction}
+            <hr />
+            {this.renderStep()}
+            <div className="container">
+              <div className="row">
+                <div className="col-md-6 col-md-offset-3">
+                  <div className="action">
+                    {this.buttonAction()}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Spin>
+          </Spin>
+        </Form>
         <DevTool />
       </div>
     );
@@ -349,4 +311,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(Sell);
+const WrappedRegistrationForm = Form.create()(Sell);
+
+export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(WrappedRegistrationForm);

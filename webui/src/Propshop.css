@@ -3,7 +3,6 @@
 @import url(libraries/font-propshop/css/Glyphter.css);
 @import url(../node_modules/react-image-gallery/styles/css/image-gallery.css);
 @import url(~antd/dist/antd.css);
-
 html,
 body,
 #root,
@@ -56,9 +55,6 @@ img {
 
 .form-inline .form-group:last-child {
   margin-right: 0; }
-
-#Content {
-  padding-top: 50px; }
 
 .vcenter {
   display: inline-block;
@@ -968,7 +964,10 @@ img {
   margin-left: 0; }
 
 #Header .container {
-  width: 100%; }
+  width: 100%;
+  padding: 0;
+  padding-left: 15px;
+  margin: 0; }
 
 .navbar-default {
   background: #88b840;
@@ -1883,3 +1882,17 @@ body .ant-notification {
 .DisplayType ul li.active span, .DisplayType ul li:hover span {
   color: #484849;
   border: 1px solid transparent; }
+
+.ant-form .ant-form-item-label {
+  line-height: initial; }
+
+.ant-form .ant-form-item-label label {
+  color: #484849; }
+
+.ant-form .ant-form-item-label label:after {
+  display: none; }
+
+.ant-form .has-feedback:after {
+  width: 38px;
+  height: 38px;
+  line-height: 38px; }

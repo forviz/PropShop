@@ -30,8 +30,8 @@
     "react-google-maps": "^7.2.0",
     "react-image-gallery": "^0.8.0",
     "react-masonry-component": "^5.0.7",
-    "react-number-format": "^2.0.1",
     "react-motion": "^0.5.0",
+    "react-number-format": "^2.0.1",
     "react-redux": "^5.0.4",
     "react-redux-firebase": "^1.5.0-rc.1",
     "react-redux-multilingual": "^1.0.4",
@@ -40,11 +40,13 @@
     "react-router-dom": "^4.1.1",
     "react-scripts": "0.9.5",
     "react-select": "^1.0.0-rc.5",
+    "react-validation": "^2.10.9",
     "redux": "^3.6.0",
     "redux-logger": "^3.0.6",
     "redux-react-firebase": "^2.6.1",
     "redux-thunk": "^2.2.0",
-    "styled-components": "^2.1.1"
+    "styled-components": "^2.1.1",
+    "validator": "^8.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

@@ -8,7 +8,7 @@ class SelectSellType extends Component {
     type: T.string.isRequired,
     items: T.shape().isRequired,
     placeholder: T.string,
-    value: T.string,
+    value: T.string.isRequired,
     onChange: T.func.isRequired,
   }
 
@@ -19,7 +19,6 @@ class SelectSellType extends Component {
       seller: ['ขาย', 'เช่า'],
     },
     placeholder: [],
-    value: 'ขาย',
   }
 
   handleOnChange = (value) => {
