@@ -13,6 +13,7 @@ import LoadingComponent from '../../components/Loading';
 import {
   actions as PropertyActions,
   convertRouterPropsToParams,
+  convertParamsToLocationObject,
   convertParamsToSearchAPI,
   PropertyItemThumbnail,
   PropertySearch,
@@ -119,16 +120,6 @@ const ListWrapper = styled.div`
   }
 `;
 
-const ToggleButtonWrapper = styled.div`
-  position: fixed;
-  bottom: 120px;
-  right: 50px;
-  z-index:1;
-
-  @media (min-width: ${BREAKPOINT}px) {
-    display: none;
-  }
-`;
 
 class Landing extends Component {
 
@@ -163,48 +154,17 @@ class Landing extends Component {
       mobileViewMode: 'map',
       currentPage: 1,
     };
-    // this.goFilter(props.location);
   }
 
-  handleResize = () => {
-    const showSplitContent = window.matchMedia(`(min-width: ${BREAKPOINT}px)`).matches;
-    if (showSplitContent !== this.state.showSplitContent) {
-      this.setState({
-        showSplitContent,
-      });
-    }
-  }
-
-  componentWillMount() {
-    this.handleResize();
-  }
 
   componentDidMount() {
     document.getElementById('Footer').style.visibility = 'hidden';
-    window.addEventListener('resize', this.handleResize);
-    document.addEventListener('scroll', this.handleScroll);
     this.headerHeight = document.getElementById('Header').clientHeight;
 
     const { onInitPage } = this.props.actions;
     onInitPage();
   }
 
-  componentWillUnmount() {
-    window.addEventListener('resize', this.handleResize);
-    document.removeEventListener('scroll', this.handleScroll);
-  }
-
-  handleScroll = () => {
-    // const scroolHeight = document.body.scrollTop + window.innerHeight;
-    // const bodyHeight = document.getElementsByClassName('layout-right')[0].clientHeight + this.headerHeight;
-    // if (scroolHeight >= bodyHeight) {
-    //   document.getElementsByClassName('PropShop')[0].classList.add('end');
-    // } else {
-    //   if (document.getElementsByClassName('PropShop')[0].classList.contains('end')) {
-    //     document.getElementsByClassName('PropShop')[0].classList.remove('end');
-    //   }
-    // }
-  }
 
   delay = (() => {
     let timer = 0;
@@ -220,16 +180,8 @@ class Landing extends Component {
     else this.setState({ mobileViewMode: 'map' });
   }
 
-  onChangeListPage = (page, pageSize) => {
-    this.setState({ currentPage: page });
-    const { searchProperties } = this.props.actions;
-    const searchParameters = _.clone(this.props.searchParameters);
-    searchParameters.skip = (page - 1) * pageSize;
-    searchProperties(convertParamsToSearchAPI(searchParameters));
-  }
-
   renderSearchFilter = (loading, searchParameters) => {
-    const { areas } = this.props;
+    const { history, areas } = this.props;
     return (
       <div>
         {loading === true ? (
@@ -239,7 +191,7 @@ class Landing extends Component {
             activeTab="area"
             searchParameters={searchParameters}
             areas={areas}
-            onUpdate={this.setUrl}
+            onUpdate={params => history.push(convertParamsToLocationObject(params))}
           />
         )}
       </div>
@@ -308,7 +260,7 @@ class Landing extends Component {
 
   render() {
     const { showSplitContent } = this.state;
-
+    
     if (showSplitContent) return this.renderSplitScreen();
 
     // Mobile, Not split screen
