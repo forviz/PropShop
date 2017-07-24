@@ -26,25 +26,8 @@ import {
 import Slider from '../../components/Slider';
 import { handleError } from '../../actions/errors';
 
-// import * as RealestateActions from '../../actions/realestate-actions';
-import * as ConfigActions from '../../actions/config-actions';
-
 const BREAKPOINT = 768;
 const PAGE_SIZE = 30;
-
-class SearchParameters {
-  area: object;
-
-  bound: string;
-  bedroom: number;
-  bathroom: number;
-  price: {
-    min: number;
-    max: number;
-  };
-
-  skip: number;
-}
 
 const mapStateToProps = (state, ownProps) => {
   const propertySearch = _.get(state, 'entities.properties.search.home');
@@ -59,23 +42,18 @@ const mapStateToProps = (state, ownProps) => {
       value: slug,
     };
   });
-  // console.log('mapStateToProps', convertRouterPropsToParams(ownProps, areaEntities));
+
   return {
     searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
-    areas: areas,
-    // areaDataSource: _.map(_.groupBy(_.map(areaEntities, (a, key) => ({ ...a, key })), (area) => {
-    //   return area.category;
-    // }), (areas, category) => ({ title: category, children: areas })),
+    areas,
     user: state.user.data,
     banner: state.banners,
-    userDidSearch: true, // _.get(ownProps, 'location.search') !== '',
     realestate: {
       loading: propertySearch.loading,
       filter: _.get(ownProps, 'location.search') !== '',
       data: _.compact(properties),
       total: propertySearch.total,
     },
-    configRealestate: state.config,
   };
 };
 
@@ -92,7 +70,6 @@ const actions = {
       });
     };
   },
-  fetchConfigs: ConfigActions.fetchConfigs,
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -105,9 +82,9 @@ const MapWrapper = styled.div`
   position: fixed;
   top:50px;
   bottom: 0px;
-  right: ${props => props.hide ? '100%' : '0'};
-  left: ${props => props.hide ? '-100%' : '0'};
-  visibility: ${props => props.hide ? 'none' : 'visible'};
+  right: ${props => (props.hide ? '100%' : '0')};
+  left: ${props => (props.hide ? '-100%' : '0')};
+  visibility: ${props => (props.hide ? 'none' : 'visible')};
 
   @media (min-width: ${BREAKPOINT}px) {
     right: auto;
@@ -130,7 +107,7 @@ const ListWrapper = styled.div`
   // Mobile
   position: relative;
   background: white;
-  display: ${props => props.mode === 'list' ? 'block' : 'none'};
+  display: ${props => (props.mode === 'list' ? 'block' : 'none')};
 
 
   // Desktop
@@ -158,8 +135,16 @@ class Home extends Component {
   headerHeight: 0;
 
   static propTypes = {
-    searchParameters: T.instanceOf(SearchParameters),
-    userDidSearch: T.bool.isRequired,
+    searchParameters: T.shape({
+      bound: T.string,
+      bedroom: T.number,
+      bathroom: T.number,
+      price: T.shape({
+        min: T.number,
+        max: T.number,
+      }),
+      skip: T.number,
+    }),
     actions: T.shape({
       searchProperties: T.func,
     }).isRequired,
@@ -175,8 +160,6 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.getConfig(props);
-
     this.state = {
       mobileViewMode: 'map',
       currentPage: 1,
@@ -224,11 +207,6 @@ class Home extends Component {
   componentWillUnmount() {
     window.addEventListener('resize', this.handleResize);
     document.removeEventListener('scroll', this.handleScroll);
-  }
-
-  getConfig = (props) => {
-    const { fetchConfigs } = props.actions;
-    fetchConfigs();
   }
 
   handleScroll = () => {

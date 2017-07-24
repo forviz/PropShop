@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { Provider } from 'react-redux';
 import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
@@ -39,12 +38,6 @@ const store = createStoreWithFirebase(
     thunk,
   ),
 );
-
-const SiteContent = styled.div`
-  position: relative;
-  padding-top: 50px;
-`;
-
 
 class PropShop extends Component {
   render() {

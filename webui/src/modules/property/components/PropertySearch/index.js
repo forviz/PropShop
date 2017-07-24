@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import styled from 'styled-components';
 import _ from 'lodash';
-import { Input, Select, Icon, Popover, Col, Row } from 'antd';
+import { Input, Select, Icon, Col, Row } from 'antd';
+
+import { connect } from 'react-redux';
 
 import InputPriceRange from '../InputPriceRange';
 import InputAreaSearch from '../InputAreaSearch';
-import 'react-select/dist/react-select.css';
 
 const InputGroup = Input.Group;
 const Option = Select.Option;
@@ -25,48 +27,34 @@ const PropertySearchWrapper = styled.div`
   padding: 15px;
 `;
 
-const ListHeader = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-`;
-
-const LocationPopover = styled.div`
-  width: 600px;
-`;
-
 const propertyTypes = ['Condominium', 'Town-home', 'House', 'Commercial Space', 'Land'];
 
-const content = (
-  <LocationPopover>
-    <Row>
-      <Col span={6}>
-        <ListHeader>ทำเล</ListHeader>
-        <ul>
-          <li><a href="#">บางลำภู</a></li>
-        </ul>
-      </Col>
-      <Col span={12}>
-        <ListHeader>รถไฟฟ้า</ListHeader>
-        <ul>
-          <li><a href="#">หมอชิต</a></li>
-          <li><a href="#">สนามเป้า</a></li>
-        </ul>
-      </Col>
-      <Col span={6}>
-        <ListHeader>รถใต้ดิน</ListHeader>
-        <ul>
-          <li><a href="#">ลาดพร้าว</a></li>
-        </ul>
-      </Col>
-    </Row>
-  </LocationPopover>
-);
+const mapStateToProps = (state) => {
+  const areas = _.map(_.get(state, 'entities.areas.entities'), (area, slug) => {
+    return {
+      ...area,
+      label: _.get(area, 'title.th'),
+      value: slug,
+    };
+  });
 
+  return {
+    areas,
+  };
+};
+
+export default connect(mapStateToProps)(
 class PropertySearch extends Component {
 
+  static propTypes = {
+    areas: T.shape({
+      label: T.string,
+      value: T.string,
+    }),
+  }
   static defaultProps = {
     searchParameters: {},
-    areaDataSource: [],
+    areas: [],
   }
 
   onUpdateSearchParameters = (searchParameters) => {
@@ -103,9 +91,6 @@ class PropertySearch extends Component {
 
   render() {
     const { searchParameters, areas } = this.props;
-    // const locationInputSuffix = (
-    //   <Popover content={content} placement="bottomRight" trigger="click"><Icon type="bars" /></Popover>
-    // );
     return (
       <PropertySearchWrapper>
         <div>
@@ -167,6 +152,4 @@ class PropertySearch extends Component {
       </PropertySearchWrapper>
     );
   }
-}
-
-export default PropertySearch;
+});

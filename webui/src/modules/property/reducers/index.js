@@ -1,5 +1,10 @@
 import _ from 'lodash';
 
+// selector
+export const selectPropertyFromDomain = (domain, state) => {
+  return _.get(state, `search.${domain}`);
+};
+
 const initialState = {
   entities: {},
   fetchStatus: {},

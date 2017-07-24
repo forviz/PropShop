@@ -8,7 +8,8 @@ import { firebaseConnect } from 'react-redux-firebase';
 import Header from './containers/Header';
 import Footer from './containers/Footer';
 
-import Home from './pages/Home';
+import Landing from './pages/Landing';
+import HomeSearch from './pages/HomeSearch';
 import Realestate from './pages/Realestate';
 import Sell from './pages/Sell';
 import Agent from './pages/Agent';
@@ -24,13 +25,13 @@ const routes = [
   { path: '/',
     exact: true,
     header: Header,
-    content: Home,
+    content: Landing,
     footer: Footer,
   },
   { path: '/:propertyType/:for/:area/',
     exact: true,
     header: Header,
-    content: Home,
+    content: HomeSearch,
     footer: Footer,
   },
   { path: '/realestate/:id',
