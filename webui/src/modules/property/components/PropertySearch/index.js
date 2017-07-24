@@ -47,11 +47,12 @@ export default connect(mapStateToProps)(
 class PropertySearch extends Component {
 
   static propTypes = {
-    areas: T.shape({
+    areas: T.arrayOf(T.shape({
       label: T.string,
       value: T.string,
-    }),
+    })),
   }
+
   static defaultProps = {
     searchParameters: {},
     areas: [],
@@ -128,7 +129,7 @@ class PropertySearch extends Component {
                 placeholder="ห้องนอน"
                 onChange={value => this.onUpdateSearchParameters({ ...searchParameters, bedroom: value })}
               >
-                {_.map(_.range(1, 6), num => <Option value={`${num}`}>{num} ห้องนอน</Option>)}
+                {_.map(_.range(1, 6), num => <Option key={`${num}-bedroom`} value={`${num}`}>{num} ห้องนอน</Option>)}
               </Select>
             </Col>
             <Col span={8}>
@@ -137,7 +138,7 @@ class PropertySearch extends Component {
                 placeholder="ห้องน้ำ"
                 onChange={value => this.onUpdateSearchParameters({ ...searchParameters, bathroom: value })}
               >
-                {_.map(_.range(1, 6), num => <Option value={`${num}`}>{num} ห้องน้ำ</Option>)}
+                {_.map(_.range(1, 6), num => <Option key={`${num}-bathroom`} value={`${num}`}>{num} ห้องน้ำ</Option>)}
               </Select>
             </Col>
             <Col span={8}>

@@ -9,7 +9,7 @@ import Header from './containers/Header';
 import Footer from './containers/Footer';
 
 import Landing from './pages/Landing';
-import HomeSearch from './pages/HomeSearch';
+import PropertySearchPage from './pages/PropertySearchPage';
 import Realestate from './pages/Realestate';
 import Sell from './pages/Sell';
 import Agent from './pages/Agent';
@@ -31,7 +31,7 @@ const routes = [
   { path: '/:propertyType/:for/:area/',
     exact: true,
     header: Header,
-    content: HomeSearch,
+    content: PropertySearchPage,
     footer: Footer,
   },
   { path: '/realestate/:id',

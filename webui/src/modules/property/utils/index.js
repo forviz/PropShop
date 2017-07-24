@@ -59,7 +59,6 @@ export const convertRouterPropsToParams = (props, areaEntities) => {
   return {
     area: getAreaParamFromSlug(area, areaEntities),
     for: _.replace(_.get(props, 'match.params.for'), 'for-', '') || defaultParam.for,
-    // propertyType: _.split(_.get(props, 'match.params.propertyType'), ',') || defaultParam.propertyType,
     propertyType: !_.isEmpty(_.get(props, 'match.params.propertyType')) ?
       _.split(_.get(props, 'match.params.propertyType'), ',')
       :
@@ -94,7 +93,6 @@ export const convertParamsToLocationObject = (params) => {
 const convertToURLParam = data => `?${_.join(_.map(_.omitBy(data, val => val === undefined), (value, key) => `${key}=${value}`), '&')}`;
 
 export const convertParamsToSearchAPI = (params) => {
-  console.log('convertParamsToSearchAPI', params);
   return convertToURLParam({
     // id: undefined,
     // ids: undefined,

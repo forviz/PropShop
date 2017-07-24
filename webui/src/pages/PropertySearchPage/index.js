@@ -35,17 +35,8 @@ const mapStateToProps = (state, ownProps) => {
 
   const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
   const areaEntities = _.get(state, 'entities.areas.entities');
-  const areas = _.map(_.get(state, 'entities.areas.entities'), (area, slug) => {
-    return {
-      ...area,
-      label: _.get(area, 'title.th'),
-      value: slug,
-    };
-  });
-
   return {
     searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
-    areas,
     user: state.user.data,
     banner: state.banners,
     realestate: {
@@ -130,7 +121,7 @@ const ToggleButtonWrapper = styled.div`
   }
 `;
 
-class Home extends Component {
+class PropertySearchPage extends Component {
 
   headerHeight: 0;
 
@@ -241,7 +232,6 @@ class Home extends Component {
 
     const center = map.getCenter();
     const zoom = map.getZoom();
-    console.log('MapBoundChanged', ne, sw, center);
     /*
     const searchParameters = this.props.searchParameters;
     // searchParameters.location = `${center.lat()},${center.lng()},${zoom}z`;
@@ -277,7 +267,6 @@ class Home extends Component {
   }
 
   renderSearchFilter = (loading, searchParameters) => {
-    const { areas } = this.props;
     return (
       <div>
         {loading === true ? (
@@ -286,7 +275,6 @@ class Home extends Component {
           <PropertySearch
             activeTab="area"
             searchParameters={searchParameters}
-            areas={areas}
             onUpdate={this.setUrl}
           />
         )}
@@ -395,4 +383,4 @@ class Home extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(PropertySearchPage);

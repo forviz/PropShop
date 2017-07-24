@@ -14,7 +14,6 @@ import {
   actions as PropertyActions,
   convertRouterPropsToParams,
   convertParamsToLocationObject,
-  convertParamsToSearchAPI,
   PropertyItemThumbnail,
   PropertySearch,
 } from '../../modules/property';
@@ -34,22 +33,9 @@ const selectPropertyFromDomain = (state, domain) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const propertySearch = _.get(state, 'entities.properties.search.home');
-  const visibleIDs = propertySearch.result;
-
-  const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
   const areaEntities = _.get(state, 'entities.areas.entities');
-  const areas = _.map(_.get(state, 'entities.areas.entities'), (area, slug) => {
-    return {
-      ...area,
-      label: _.get(area, 'title.th'),
-      value: slug,
-    };
-  });
-
   return {
     searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
-    areas,
     banner: state.banners,
     landingItems: [
       {
@@ -94,16 +80,6 @@ const MapWrapper = styled.div`
   }
 `;
 
-const SliderWrapper = styled.div`
-  position: fixed;
-  bottom: 20px;
-  height: 100px;
-  width: 100%;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.4);
-`;
-
 const ListWrapper = styled.div`
   // Mobile
   position: relative;
@@ -134,6 +110,10 @@ class Landing extends Component {
       }),
       skip: T.number,
     }),
+    landingItems: T.arrayOf(T.shape({
+      title: T.string,
+      result: T.array,
+    })),
     actions: T.shape({
       searchProperties: T.func,
     }).isRequired,
@@ -145,6 +125,7 @@ class Landing extends Component {
       location: undefined,
       bound: undefined,
     },
+    landingItems: [],
   }
 
   constructor(props) {
@@ -204,20 +185,20 @@ class Landing extends Component {
       <div className="result">
         {
           _.map(landingItems, group =>
-            (<div className="list clearfix">
+            (<div key={group.title} className="list clearfix">
               <h3>{group.title}</h3>
               <ul>
                 {
                   _.map(group.result, (item, index) => {
                     return (
-                      <li key={index} className="item col-sm-4 col-lg-6 col-lg-4">
+                      <li key={`${group.title}-${index}`} className="item col-sm-4 col-lg-6 col-lg-4">
                         <PropertyItemThumbnail item={item} />
                       </li>
                     );
                   })
                 }
               </ul>
-            </div>)
+            </div>),
           )
         }
       </div>
@@ -260,7 +241,7 @@ class Landing extends Component {
 
   render() {
     const { showSplitContent } = this.state;
-    
+
     if (showSplitContent) return this.renderSplitScreen();
 
     // Mobile, Not split screen
