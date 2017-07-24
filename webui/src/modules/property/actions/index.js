@@ -3,6 +3,15 @@ import moment from 'moment';
 import { getPropertyIDs, getProperties } from '../api';
 import toURLParam from '../utils/toURLParam';
 
+
+export const setHilightProperty = (propertyId, value = true) => {
+  return {
+    type: 'PROPERTY/SET_HILIGHT',
+    propertyId,
+    value,
+  };
+};
+
 const propertySearchStart = (domain = 'default') => {
   return {
     type: 'PROPERTY/SEARCH/START',

@@ -69,17 +69,31 @@ const reducer = (state = initialState, action) => {
         }, state.fetchStatus),
       };
     }
-    case 'ENTITY/PROPERTY/RECEIVED': {
+    // case 'ENTITY/PROPERTY/RECEIVED': {
+    //   const propertyId = action.propertyId;
+    //   return {
+    //     ...state,
+    //     entities: {
+    //       ...state.entities,
+    //       [propertyId]: { ...state.entities[propertyId], ...action.property },
+    //     },
+    //     fetchStatus: {
+    //       ...state.fetchStatus,
+    //       [propertyId]: 'loaded',
+    //     },
+    //   };
+    // }
+
+    case 'PROPERTY/SET_HILIGHT': {
       const propertyId = action.propertyId;
       return {
         ...state,
         entities: {
           ...state.entities,
-          [propertyId]: { ...state.entities[propertyId], ...action.property },
-        },
-        fetchStatus: {
-          ...state.fetchStatus,
-          [propertyId]: 'loaded',
+          [propertyId]: {
+            ..._.get(state, `entities.${propertyId}`),
+            hilight: action.value,
+          },
         },
       };
     }

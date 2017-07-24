@@ -337,19 +337,25 @@ class InputAreaSearch extends Component {
                     <AreaListHeader>BTS</AreaListHeader>
                     <Row>
                       <Col span={8}>
-                        {_.map(btsCol1, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                        {_.map(btsCol1, area =>
+                          <AreaListItem key={area.value} onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)
+                        }
                       </Col>
                       <Col span={8}>
-                        {_.map(btsCol2, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                        {_.map(btsCol2, area =>
+                          <AreaListItem key={area.value} onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)
+                        }
                       </Col>
                       <Col span={8}>
-                        {_.map(btsCol3, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                        {_.map(btsCol3, area =>
+                          <AreaListItem key={area.value} onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)
+                        }
                       </Col>
                     </Row>
                   </Col>
                   <Col span={8}>
                     <AreaListHeader>แขวง</AreaListHeader>
-                    {_.map(col2, area => <AreaListItem onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
+                    {_.map(col2, area => <AreaListItem key={area.value} onClick={() => this.handleSelectOption(area)}>{area.title.th}</AreaListItem>)}
                   </Col>
                 </Row>
               </AreaListContent>

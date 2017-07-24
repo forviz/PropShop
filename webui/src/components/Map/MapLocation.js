@@ -2,23 +2,15 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import _ from 'lodash';
 
+import numeral from 'numeral';
+
 /* global google */
 
-let map;
-let marker;
-let markers = [];
 const MarkerWithLabel = require('markerwithlabel')(google.maps);
 
-const convertLocationToLatLngZoom = (location) => {
-  const [lat, lng, zoomStr] = _.split(location, ',');
-  const zoom = _.toNumber(_.replace(zoomStr, 'z', ''));
-  return {
-    lat,
-    lng,
-    zoom,
-  }
-}
 class MapLocation extends Component {
+
+  map;
 
   static propTypes = {
     area: T.shape({
@@ -28,6 +20,7 @@ class MapLocation extends Component {
         sw: T.shape({ lat: T.number, lng: T.number }),
       }),
     }),
+    startWithHilightMarkersWithId: T.arrayOf(T.string),
     onBoundChanged: T.func,
   }
 
@@ -40,7 +33,13 @@ class MapLocation extends Component {
         sw: { lat: undefined, lng: undefined },
       },
     },
+    startWithHilightMarkersWithId: [],
     onBoundChanged: theMap => console.log('map zoom_changed', theMap.getBounds().toJSON()),
+  }
+
+  constructor(props) {
+    super(props);
+    this.markers = {};
   }
 
   componentDidMount() {
@@ -48,101 +47,81 @@ class MapLocation extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('MapLocation::componentWillReceiveProps', nextProps);
     if (!_.isEqual(nextProps.area, this.props.area)) {
       const area = nextProps.area;
 
-      // Use center + zoom, v1, moving on
-      // const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
-      // map.panTo(new google.maps.LatLng(lat, lng));
-      // map.setZoom(zoom);
       if (area.bound) {
         const { ne, sw } = area.bound;
         const mapBound = new google.maps.LatLngBounds(sw, ne);
-        map.fitBounds(mapBound);
+        this.map.fitBounds(mapBound);
       }
     }
 
-    if (!_.isEqual(nextProps.nearby, this.props.nearby)) {
-      this.setMarker(nextProps.nearby);
-    }
-  }
+    // Check if marker need to be rerendered?
 
-  // setCenter = (lat, lng) => {
-  //   this.props.onChange({
-  //     lat,
-  //     lng,
-  //   });
-  // }
+    const allIds = _.uniq([
+      ..._.map(nextProps.nearby, item => item.id),
+      ..._.map(this.props.nearby, item => item.id)
+    ]);
+    _.forEach(allIds, (markerId) => {
+      const existingMarker = this.markers[markerId] !== undefined;
+      const nextPropsMarkerData = _.find(nextProps.nearby, item => item.id === markerId);
+      const inNextProps = nextPropsMarkerData !== undefined;
 
-  setMarker = (data) => {
-    if (marker) {
-      this.deleteMarkers();
-    }
-    if (_.size(data) > 0) {
-      _.forEach(data, (value) => {
-        if (value.location) {
-          marker = new MarkerWithLabel({
-            position: new google.maps.LatLng(value.location.lat, value.location.lon),
-            map,
-            labelContent: `<div class="price">${value.price}</div>`,
-            labelAnchor: new google.maps.Point(0, 25),
-            labelClass: 'custom-marker',
-            icon: 'no',
-          });
-          markers.push(marker);
-
-          const contentString = '<div id="content">' +
-            '<div id="siteNotice">' +
-            '</div>' +
-            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
-            '<div id="bodyContent">' +
-            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-            'sandstone rock formation in the southern part of the ' +
-            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
-            'south west of the nearest large town, Alice Springs; 450&#160;km ' +
-            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
-            'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
-            'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
-            'Aboriginal people of the area. It has many springs, waterholes, ' +
-            'rock caves and ancient paintings. Uluru is listed as a World ' +
-            'Heritage Site.</p>' +
-            '</div>' +
-            '</div>';
-
-          const infowindow = new google.maps.InfoWindow({
-            content: contentString,
-          });
-
-          google.maps.event.addListener(marker, 'click', () => {
-            infowindow.open(map, this);
-          });
-
-          // marker.addListener('click', () => {
-          //   infowindow.open(map, marker);
-          // });
+      if (existingMarker) {
+        if (!inNextProps) {
+          // Not found in nextProps
+          this.clearMarkerWithId(markerId);
+        } else if (existingMarker && inNextProps) {
+          const thisPropsMarkerData = _.find(this.props.nearby, item => item.id === markerId);
+          if (!_.isEqual(thisPropsMarkerData, nextPropsMarkerData)) {
+            this.updateMarker(nextPropsMarkerData);
+          }
+          // Do nothing
         }
-      });
-    }
+      } else {
+        // New
+        this.createMarker(nextPropsMarkerData);
+      }
+    })
+
   }
 
-  deleteMarkers = () => {
-    this.clearMarkers();
-    markers = [];
+  createMarker = (markerData) => {
+    // console.log('createMarker', markerData);
+    const marker = new MarkerWithLabel({
+      position: new google.maps.LatLng(markerData.location.lat, markerData.location.lon),
+      map: this.map,
+      labelContent: `<div class="price">${numeral(markerData.price).format('฿0.0a')}</div>`,
+      labelAnchor: new google.maps.Point(0, 25),
+      labelClass: `custom-marker ${markerData.hilight ? 'hilight' : ''}`,
+      icon: 'no',
+    });
+    _.set(this.markers, markerData.id, marker);
+  }
+
+  updateMarker = (markerData) => {
+    // console.log('updateMarker', markerData);
+    this.clearMarkerWithId(markerData.id);
+    this.createMarker(markerData);
+  }
+
+  clearMarkerWithId = (id) => {
+    // console.log('clearMarkerWithId', id);
+    const markerRef = _.get(this.markers, id);
+    markerRef.setMap(null);
+    delete this.markers[id];
   }
 
   clearMarkers = () => {
-    for (let i = 0; i < markers.length; i += 1) {
-      markers[i].setMap(null);
-    }
+    _.forEach(this.markers, (markerRef) => {
+      markerRef.setMap(null);
+    });
+    this.markers = {};
   }
 
   initializeMap = () => {
-    console.log('initializeMap', this.props);
-    // const { location } = this.props;
-    // const { lat, lng, zoom } = convertLocationToLatLngZoom(location);
-
-    map = new google.maps.Map(this.map, {
+    this.map = new google.maps.Map(this.mapRef, {
       zoomControl: true,
       zoomControlOptions: { position: 'LEFT_CENTER' },
     });
@@ -151,18 +130,18 @@ class MapLocation extends Component {
     if (area && area.bound) {
       const { ne, sw } = this.props.area.bound;
       const mapBound = new google.maps.LatLngBounds(sw, ne);
-      map.fitBounds(mapBound);
+      this.map.fitBounds(mapBound);
     }
 
-    map.addListener('idle', () => {
-      this.props.onBoundChanged(map);
+    this.map.addListener('idle', () => {
+      this.props.onBoundChanged(this.map);
     });
   }
 
   render() {
     return (
       <div className="MapLocation">
-        <div ref={c => this.map = c} style={{ width: '100%', height: '100%' }} />
+        <div ref={c => this.mapRef = c} style={{ width: '100%', height: '100%' }} />
       </div>
     );
   }

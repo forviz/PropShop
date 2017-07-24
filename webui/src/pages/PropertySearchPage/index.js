@@ -61,6 +61,9 @@ const actions = {
       });
     };
   },
+  userFocusOnProperty: (propertyId, value) => {
+    return PropertyActions.setHilightProperty(propertyId, value);
+  },
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -154,8 +157,8 @@ class PropertySearchPage extends Component {
     this.state = {
       mobileViewMode: 'map',
       currentPage: 1,
+      userFocusOnPropertiesWithId: [],
     };
-    // this.goFilter(props.location);
   }
 
   handleResize = () => {
@@ -266,6 +269,22 @@ class PropertySearchPage extends Component {
     searchProperties(convertParamsToSearchAPI(searchParameters));
   }
 
+  handleMouseEnterPropertyItem = (property) => {
+    const { userFocusOnProperty } = this.props.actions;
+    userFocusOnProperty(property.id);
+    // this.setState({
+    //   userFocusOnPropertiesWithId: _.uniq([...this.state.userFocusOnPropertiesWithId, property.id]),
+    // });
+  }
+
+  handleMouseLeavePropertyItem = (property) => {
+    const { userFocusOnProperty } = this.props.actions;
+    userFocusOnProperty(property.id, false);
+    // this.setState({
+    //   userFocusOnPropertiesWithId: _.reject(this.state.userFocusOnPropertiesWithId, id => id === property.id),
+    // });
+  }
+
   renderSearchFilter = (loading, searchParameters) => {
     return (
       <div>
@@ -295,7 +314,11 @@ class PropertySearchPage extends Component {
                 _.map(items, (item, index) => {
                   return (
                     <li key={index} className="item col-sm-4 col-lg-6 col-lg-4">
-                      <PropertyItemThumbnail item={item} />
+                      <PropertyItemThumbnail
+                        item={item}
+                        onMouseEnter={this.handleMouseEnterPropertyItem}
+                        onMouseLeave={this.handleMouseLeavePropertyItem}
+                      />
                     </li>
                   );
                 })
@@ -355,12 +378,15 @@ class PropertySearchPage extends Component {
 
   renderSplitScreen = () => {
     const { searchParameters, realestate } = this.props;
+    const { userFocusOnPropertiesWithId } = this.state;
+    console.log('renderSplitScreen', userFocusOnPropertiesWithId);
     return (
       <div id="Home">
         <MapWrapper>
           <MapLocation
             area={searchParameters.area}
             nearby={realestate.data}
+            hilightMarkersWithId={userFocusOnPropertiesWithId}
             onBoundChanged={this.handleMapBoundChanged}
           />
         </MapWrapper>
