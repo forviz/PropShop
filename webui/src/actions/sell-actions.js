@@ -1,6 +1,6 @@
 // import { createRealEstate } from '../api/contentful';
 import _ from 'lodash';
-import { createPost, createProperty } from '../api/property';
+import { createPost, createProperty, updateProperty } from '../api/property';
 import { uploadMediaAPI } from '../api/media';
 
 const goSaveStep = (step, data) => {
@@ -81,6 +81,37 @@ export const doCreateRealEstate = (sell, userId) => {
     }
 
     createProperty(sell, userId).then((result) => {
+      dispatch(sendingData(false));
+      if (result.data.sys.id) {
+        dispatch(sendDataSuccess('yes'));
+      } else {
+        dispatch(sendDataSuccess('no'));
+      }
+    });
+  };
+};
+
+export const doUpdateProperty = (id, sell) => {
+  return async (dispatch) => {
+    dispatch(sendingData(true));
+    dispatch(sendDataSuccess(''));
+
+    // if (_.size(_.get(sell, 'step2.mainImage')) > 0) {
+    //   const mainImage = await uploadMediaAPI(_.get(sell, 'step2.mainImage'));
+    //   if (_.get(mainImage, 'data.sys.id')) {
+    //     _.set(sell, 'coverImageId', _.get(mainImage, 'data.sys.id'));
+    //   }
+    // }
+
+    // if (_.size(_.get(sell, 'step2.images')) > 0) {
+    //   const imagesId = await Promise.all(_.map(_.get(sell, 'step2.images'), async (file) => {
+    //     const images = await uploadMediaAPI(file);
+    //     return _.get(images, 'data.sys.id');
+    //   }));
+    //   _.set(sell, 'imagesId', imagesId);
+    // }
+
+    updateProperty(id, sell).then((result) => {
       dispatch(sendingData(false));
       if (result.data.sys.id) {
         dispatch(sendDataSuccess('yes'));

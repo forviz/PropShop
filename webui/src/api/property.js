@@ -39,9 +39,9 @@ export const mapContentFulPropertyToMyField = (data) => {
         zipcode: _.get(elem, 'fields.location.zipcode'),
         createdAt: elem.sys.createdAt,
         updatedAt: elem.sys.updatedAt,
-        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields.file.url') : noImage,
+        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields') : noImage,
         images: _.map(_.get(elem, 'fields.images'), (image) => {
-          return _.get(image, 'fields.file.url') ? _.get(image, 'fields.file.url') : noImage;
+          return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : noImage;
         }),
         // Extra
         publicTransports: _.get(elem, 'fields.location.publicTransports'),
@@ -187,19 +187,6 @@ export const createPost = async (data) => {
 //   });
 // }
 
-export const getPropertyById = (id) => {
-  return fetch(`${BASEURL}/property/${id}`, {
-    'Content-Type': 'application/json',
-  })
-  .then(response => response.json())
-  .then((response) => {
-    const data = [];
-    data[0] = response;
-    const result = mapContentFulPropertyToMyField(data);
-    return result[0];
-  });
-};
-
 export const createProperty = (data, userId) => {
   return fetch(`${BASEURL}/property`, {
     method: 'POST',
@@ -207,6 +194,19 @@ export const createProperty = (data, userId) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ data, userId }),
+  })
+  .then((response) => {
+    return response.json();
+  });
+};
+
+export const updateProperty = (id, data) => {
+  return fetch(`${BASEURL}/property/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ...data }),
   })
   .then((response) => {
     return response.json();

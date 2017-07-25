@@ -4,6 +4,7 @@ import { Steps, Spin, notification, Form } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
+import _ from 'lodash';
 
 import * as SellActions from '../../actions/sell-actions';
 
@@ -36,6 +37,22 @@ class Sell extends Component {
   constructor(props) {
     super(props);
     this.checkLogin();
+  }
+
+  componentWillUnmount() {
+    if (this.getParameterByName('id')) {
+      const { clearForm } = this.props.actions;
+      clearForm();
+    }
+  }
+
+  getParameterByName = (name, url = window.location.href) => {
+    const nameReg = name.replace(/[\[\]]/g, "\\$&");
+    const regex = new RegExp(`[?&]${nameReg}(=([^&#]*)|&|#|$)`);
+    const results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
   checkLogin = () => {
@@ -183,19 +200,25 @@ class Sell extends Component {
 
   submit = () => {
     const { sell, user } = this.props;
-    const { doCreateRealEstate } = this.props.actions;
+    const { doCreateRealEstate, doUpdateProperty } = this.props.actions;
     if (sell.sendingData === false) {
-      doCreateRealEstate(sell, user.id);
+      const id = this.getParameterByName('id');
+      if (id) {
+        doUpdateProperty(id, sell);
+      } else {
+        doCreateRealEstate(sell, user.id);
+      }
     }
   }
 
   success = () => {
-    this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
-    // const { history } = this.props;
-    // history.push({
-    //   pathname: '/',
-    // });
     const { clearForm } = this.props.actions;
+    if (this.getParameterByName('id')) {
+      this.openNotificationWithIcon('success', 'อัพเดทประกาศขาย - เช่า สำเร็จ');
+      this.props.history.push('/account/property');
+    } else {
+      this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
+    }
     clearForm();
   }
 
@@ -298,6 +321,7 @@ const actions = {
   nextStep: SellActions.nextStep,
   prevStep: SellActions.prevStep,
   doCreateRealEstate: SellActions.doCreateRealEstate,
+  doUpdateProperty: SellActions.doUpdateProperty,
   clearForm: SellActions.clearForm,
 };
 

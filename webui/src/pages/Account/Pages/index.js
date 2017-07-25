@@ -20,7 +20,7 @@ class Pages extends Component {
     switch (page) {
       case 'property': {
         if (param.id) {
-          return <PropertyEdit id={param.id} />;
+          return <PropertyEdit id={param.id} history={history} />;
         }
         return <Property history={history} />;
       }

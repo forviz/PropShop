@@ -12,7 +12,8 @@ const TabPane = Tabs.TabPane;
 class Step2 extends Component {
 
   static propTypes = {
-    defaultValue: T.shape().isRequired,
+    mainImage: T.shape().isRequired,
+    images: T.arrayOf().isRequired,
     actions: T.shape().isRequired,
   }
 
@@ -22,10 +23,18 @@ class Step2 extends Component {
 
   setMainImage = (accepted) => {
     if (accepted.length > 0) {
-      const { defaultValue } = this.props;
       const data = {
-        ...defaultValue,
-        mainImage: accepted[0],
+        mainImage: {
+          file: {
+            contentType: accepted[0].type,
+            url: accepted[0].preview,
+            details: {
+              size: accepted[0].size,
+            },
+          },
+          title: accepted[0].name,
+          newImage: accepted[0],
+        },
       };
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
@@ -36,21 +45,39 @@ class Step2 extends Component {
 
   setImages = (accepted) => {
     if (accepted.length > 0) {
-      const { defaultValue } = this.props;
-      const images = defaultValue.images;
+      const { images } = this.props;
 
       if (this.state.currentEdit !== '') {
-        images[this.state.currentEdit] = accepted[0];
+        images[this.state.currentEdit] = {
+          mainImage: {
+            file: {
+              contentType: accepted[0].type,
+              url: accepted[0].preview,
+              details: {
+                size: accepted[0].size,
+              },
+            },
+            title: accepted[0].name,
+            newImage: accepted[0],
+          },
+        };
       } else {
         _.map(accepted, (accept) => {
-          images.push(accept);
+          images.push({
+            file: {
+              contentType: accept.type,
+              url: accept.preview,
+              details: {
+                size: accept.size,
+              },
+            },
+            title: accept.name,
+            newImage: accept,
+          });
         });
       }
 
-      const data = {
-        ...defaultValue,
-        images,
-      };
+      const data = images;
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
 
@@ -96,9 +123,9 @@ class Step2 extends Component {
   }
 
   render() {
-    const { defaultValue } = this.props;
-    const hasMainImage = Object.keys(defaultValue.mainImage).length > 0 ? true : false;
-    const hasImages = Object.keys(defaultValue.images).length > 0 ? true : false;
+    const { mainImage, images } = this.props;
+    const hasMainImage = _.size(mainImage) > 0 ? true : false;
+    const hasImages = _.size(images) > 0 ? true : false;
 
     const dropzoneStyle = {
       width: '100%',
@@ -143,11 +170,11 @@ class Step2 extends Component {
                       <div className="col-md-6">
                         <div className="main-image">
                           <div className="image">
-                            <img src={defaultValue.mainImage.preview} alt={defaultValue.mainImage.name} />
+                            <img src={mainImage.file.url} alt={mainImage.title} />
                           </div>
                           <div className="image-detail">
-                            <div className="image-name">{defaultValue.mainImage.name}</div>
-                            <div className="image-size">{defaultValue.mainImage.type} / {defaultValue.mainImage.size} kb</div>
+                            <div className="image-name">{mainImage.title}</div>
+                            <div className="image-size">{mainImage.file.contentType} / {mainImage.file.details.size} kb</div>
                           </div>
                           <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                             <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
@@ -193,16 +220,16 @@ class Step2 extends Component {
                       <div className="col-md-6">
                         <div className="row">
                           {
-                            _.map(defaultValue.images, (image, index) => {
+                            _.map(images, (image, index) => {
                               return (
                                 <div key={index} className="col-md-6" draggable="true">
                                   <div className="main-image">
                                     <div className="image">
-                                      <img src={image.preview} alt={image.name} />
+                                      <img src={image.file.url} alt={image.title} />
                                     </div>
                                     <div className="image-detail">
-                                      <div className="image-name">{image.name}</div>
-                                      <div className="image-size">{image.type} / {image.size} kb</div>
+                                      <div className="image-name">{image.title}</div>
+                                      <div className="image-size">{image.file.contentType} / {image.file.details.size} kb</div>
                                     </div>
                                     <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                                       <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
@@ -237,7 +264,8 @@ class Step2 extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    defaultValue: state.sell.step2,
+    mainImage: state.sell.step2.mainImage,
+    images: state.sell.step2.images,
   };
 };
 

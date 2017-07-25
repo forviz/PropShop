@@ -53,19 +53,6 @@ export const queryProperties = async (req, res, next) => {
   }
 }
 
-export const getEntry = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const response = await client.getEntry(id);
-    res.json(response);
-  } catch (e) {
-    res.status(500).json({
-      status: 'ERROR',
-      message: e.message,
-    });
-  }
-}
-
 export const create = async (req, res, next) => {
   try {
     const { data, userId } = req.body;
@@ -246,6 +233,163 @@ export const create = async (req, res, next) => {
     }))
     .then((entry) => {
       return entry;
+    });
+
+    res.json({
+      data: response,
+    });
+  } catch (e) {
+    res.status(500).json({
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
+    });
+  }
+}
+
+export const update = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const { id } = req.params;
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then((space) => space.getEntry(id))
+    .then((entry) => {
+      if (_.get(data, 'step0.residentialType')) _.set(entry.fields, "propertyType['en-US']", data.step0.residentialType);
+      if (_.get(data, 'step0.topic')) _.set(entry.fields, "nameTh['en-US']", data.step0.topic);
+      if (_.get(data, 'step0.announcementDetails')) {
+        _.set(entry.fields, "description['en-US']", {
+          "en": "",
+          "th": data.step0.announcementDetails
+        });
+      }
+      _.set(entry.fields, "location['en-US']", {
+        "soi": "",
+        "full": {
+          "en": "",
+          "th": ""
+        },
+        "areas": [],
+        "mooNo": "",
+        "street": _.get(data, 'step0.street'),
+        "unitNo": _.get(data, 'step0.address'),
+        "floorNo": "",
+        "summary": {
+          "en": "",
+          "th": ""
+        },
+        "zipcode": _.get(data, 'step0.zipcode'),
+        "district": _.get(data, 'step0.district'),
+        "latitude": _.get(data, 'step0.googleMap.markers[0].position.lat'),
+        "province": _.get(data, 'step0.province'),
+        "longitude": _.get(data, 'step0.googleMap.markers[0].position.lng'),
+        "buildingNo": "",
+        "subDistrict": _.get(data, 'step0.amphur'),
+        "publicTransports": [
+          {
+            "name": "0",
+            "type": "BTS",
+            "distance": 0
+          },
+          {
+            "name": "0",
+            "type": "MRT",
+            "distance": 0
+          },
+          {
+            "name": "0",
+            "type": "BRT",
+            "distance": 0
+          }
+        ]
+      });
+      _.set(entry.fields, "attributes['en-US']", {
+        "numFloors": "",
+        "yearBuilt": "",
+        "numBedrooms": _.get(data, 'step0.bedroom'),
+        "numBathrooms": _.get(data, 'step0.bathroom'),
+      });
+      _.set(entry.fields, "areaLand['en-US']", {
+        "unit": "sqm",
+        "value": _.get(data, 'step0.areaSize'),
+        "width": "",
+        "detail": "",
+        "height": ""
+      });
+      if (_.get(data, 'step0.for')) _.set(entry.fields, "forSale['en-US']", _.get(data, 'step0.for') === 'ขาย' ? true : false);
+      if (_.get(data, 'step0.for')) _.set(entry.fields, "forRent['en-US']", _.get(data, 'step0.for') === 'เช่า' ? true : false);
+      if (_.get(data, 'step0.for') === 'ขาย') {
+        _.set(entry.fields, "priceSale['en-US']", {
+          "type": "",
+          "until": "",
+          "value": _.get(data, 'step0.price'),
+          "detail": "",
+          "currency": "thb",
+          "discount": 0
+        });
+      }
+      if (_.get(data, 'step0.for') === 'เช่า') {
+        _.set(entry.fields, "priceRent['en-US']", {
+          "type": "",
+          "until": "",
+          "value": _.get(data, 'step0.price'),
+          "detail": "",
+          "currency": "thb",
+          "discount": 0
+        });
+      }
+      // if (_.get(data, 'step0.xxxx')) {
+      //   entry.fields = {
+      //     coverImage: {
+      //       'en-US': {
+      //         sys: {
+      //           id: _.get(data, 'step0.coverImageId'),
+      //           linkType: 'Asset',
+      //           type: 'Link',
+      //         }
+      //       },
+      //     },
+      //   };
+      // }
+      // if (_.get(data, 'step0.xxxx')) {
+      //   const images = _.map(_.get(data, 'step0.imagesId'), (id) => {
+      //     return {
+      //       sys: {
+      //         id,
+      //         linkType: 'Asset',
+      //         type: 'Link',
+      //       }
+      //     };
+      //   });
+      //   entry.fields = {
+      //     images: {
+      //       'en-US': images,
+      //     },
+      //   };
+      // }
+      if (_.get(data, 'step1.specialFeatureFacilities') || 
+        _.get(data, 'step1.specialFeatureNearbyPlaces') || 
+        _.get(data, 'step1.specialFeaturePrivate') || 
+        _.get(data, 'step1.specialFeatureView')) {
+          const tags = _.concat(_.get(data, 'step1.specialFeatureFacilities'), _.get(data, 'step1.specialFeatureNearbyPlaces'), _.get(data, 'step1.specialFeaturePrivate'), _.get(data, 'step1.specialFeatureView'));
+          _.set(entry.fields, "tags['en-US']", tags);
+      }
+      if (_.get(data, 'step0.bedroom')) _.set(entry.fields, "numBedrooms['en-US']", data.step0.bedroom);
+      if (_.get(data, 'step0.bathroom')) _.set(entry.fields, "numBathrooms['en-US']", data.step0.bathroom);
+      _.set(entry.fields, "locationMarker['en-US']", {
+        lon: _.get(data, 'step0.googleMap.markers[0].position.lng'),
+        lat: _.get(data, 'step0.googleMap.markers[0].position.lat'),
+      });
+      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceSaleValue['en-US']", _.get(data, 'step0.for') === 'ขาย' ? _.get(data, 'step0.price') : 0);
+      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceRentValue['en-US']", _.get(data, 'step0.for') === 'เช่า' ? _.get(data, 'step0.price') : 0);
+      if (_.get(data, 'step0.province')) _.set(entry.fields, "province['en-US']", data.step0.province);
+      if (_.get(data, 'step0.project')) _.set(entry.fields, "projectName['en-US']", data.step0.project);
+      if (_.get(data, 'step0.areaSize')) _.set(entry.fields, "areaSize['en-US']", data.step0.areaSize);
+
+      return entry.update();
+    })
+    .then((entry) => {
+      return entry.publish();
     });
 
     res.json({

@@ -77,6 +77,45 @@ const reducers = (state = initalState, action) => {
     case 'SELL/DATA/SENDING': return { ...state, sendingData: action.status };
     case 'SELL/DATA/SEND/SUCCESS': return { ...state, sendDataSuccess: action.status };
     case 'SELL/CLEAR/FORM': return initalState;
+    case 'SELL/SET/FORM': return {
+      ...state,
+      step0: {
+        ...state.step0,
+        for: action.data.for,
+        residentialType: action.data.residentialType,
+        topic: action.data.topic,
+        announcementDetails: action.data.announceDetails,
+        areaSize: action.data.areaSize,
+        landSize: '',
+        bedroom: action.data.bedroom,
+        bathroom: action.data.bathroom,
+        price: action.data.price,
+        fee: action.data.fee,
+        project: action.data.project,
+        province: action.data.province,
+        amphur: action.data.amphur,
+        district: action.data.district,
+        address: action.data.address,
+        street: action.data.street,
+        zipcode: action.data.zipcode,
+        googleMap: {
+          zoom: 10,
+          markers: [{
+            position: {
+              lat: action.data.location.lat,
+              lng: action.data.location.lon,
+            },
+            key: action.data.province,
+            defaultAnimation: 2,
+          }],
+        },
+      },
+      step2: {
+        ...state.step2,
+        mainImage: action.data.mainImage,
+        images: action.data.images,
+      },
+    };
     default:
       return state;
   }

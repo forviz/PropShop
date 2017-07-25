@@ -67,18 +67,16 @@ export const fetchPropertiesByAgent = (userId, skip, limit) => {
 };
 
 export const fetchPropertiesById = (id) => {
-  return (dispatch, getState) => {
-    // dispatch(fetchingAccountProperty(true));
-    getPropertyById(id)
+  return (dispatch) => {
+    getProperties(`?id=${id}`)
     .then((result) => {
       console.log('fetchPropertiesById', result);
-      // if (_.size(result) > 0) {
-      //   dispatch(receiveAccountProperty(result));
-      //   dispatch(resultAccountProperty('ok'));
-      // } else {
-      //   dispatch(resultAccountProperty('no'));
-      // }
-      // dispatch(fetchingAccountProperty(false));
+      if (result.total === 1) {
+        dispatch({
+          type: 'SELL/SET/FORM',
+          data: result.data[0],
+        });
+      }
     })
     .catch((error) => {
       dispatch(handleError(error));
