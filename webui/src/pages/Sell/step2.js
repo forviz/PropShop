@@ -15,6 +15,7 @@ class Step2 extends Component {
     mainImage: T.shape().isRequired,
     images: T.arrayOf().isRequired,
     actions: T.shape().isRequired,
+    step2: T.shape().isRequired,
   }
 
   state = {
@@ -24,6 +25,7 @@ class Step2 extends Component {
   setMainImage = (accepted) => {
     if (accepted.length > 0) {
       const data = {
+        ...this.props.step2,
         mainImage: {
           file: {
             contentType: accepted[0].type,
@@ -45,21 +47,23 @@ class Step2 extends Component {
 
   setImages = (accepted) => {
     if (accepted.length > 0) {
-      const { images } = this.props;
+      let { images } = this.props;
+
+      if (!_.get(images, '0.file.details.size')) {
+        images = [];
+      }
 
       if (this.state.currentEdit !== '') {
         images[this.state.currentEdit] = {
-          mainImage: {
-            file: {
-              contentType: accepted[0].type,
-              url: accepted[0].preview,
-              details: {
-                size: accepted[0].size,
-              },
+          file: {
+            contentType: accepted[0].type,
+            url: accepted[0].preview,
+            details: {
+              size: accepted[0].size,
             },
-            title: accepted[0].name,
-            newImage: accepted[0],
           },
+          title: accepted[0].name,
+          newImage: accepted[0],
         };
       } else {
         _.map(accepted, (accept) => {
@@ -77,7 +81,10 @@ class Step2 extends Component {
         });
       }
 
-      const data = images;
+      const data = {
+        ...this.props.step2,
+        images,
+      };
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
 
@@ -90,9 +97,8 @@ class Step2 extends Component {
   }
 
   handleDeleteMainImage = () => {
-    const { defaultValue } = this.props;
     const data = {
-      ...defaultValue,
+      ...this.props.step2,
       mainImage: {},
     };
     const { saveStep } = this.props.actions;
@@ -111,12 +117,11 @@ class Step2 extends Component {
   }
 
   deleteImages = (index) => {
-    const { defaultValue } = this.props;
-    const images = defaultValue.images;
+    const { images } = this.props;
     images.splice(index, 1);
     const data = {
-      ...defaultValue,
-      mainImage: images,
+      ...this.props.step2,
+      images,
     };
     const { saveStep } = this.props.actions;
     saveStep('step2', data);
@@ -124,8 +129,6 @@ class Step2 extends Component {
 
   render() {
     const { mainImage, images } = this.props;
-    const hasMainImage = _.size(mainImage) > 0 ? true : false;
-    const hasImages = _.size(images) > 0 ? true : false;
 
     const dropzoneStyle = {
       width: '100%',
@@ -146,7 +149,7 @@ class Step2 extends Component {
               <Tabs type="card">
                 <TabPane tab="รูปภาพหลัก" key="1">
                   <div className="row">
-                    <div className={`col-md-${hasMainImage ? 6 : 12}`}>
+                    <div className={`col-md-${_.get(mainImage, 'file.details.size') ? 6 : 12}`}>
                       <div style={{ textAlign: 'center' }} >
                         <Dropzone
                           accept="image/jpeg, image/png, video/*"
@@ -166,15 +169,15 @@ class Step2 extends Component {
                         </Dropzone>
                       </div>
                     </div>
-                    {hasMainImage === true &&
+                    {_.get(mainImage, 'file.details.size') &&
                       <div className="col-md-6">
                         <div className="main-image">
                           <div className="image">
-                            <img src={mainImage.file.url} alt={mainImage.title} />
+                            <img src={_.get(mainImage, 'file.url')} alt={_.get(mainImage, 'title')} />
                           </div>
                           <div className="image-detail">
-                            <div className="image-name">{mainImage.title}</div>
-                            <div className="image-size">{mainImage.file.contentType} / {mainImage.file.details.size} kb</div>
+                            <div className="image-name">{_.get(mainImage, 'title')}</div>
+                            <div className="image-size">{_.get(mainImage, 'file.contentType')} / {_.get(mainImage, 'file.details.size')} kb</div>
                           </div>
                           <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                             <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
@@ -195,7 +198,7 @@ class Step2 extends Component {
                 </TabPane>
                 <TabPane tab="รูปภาพประกอบ" key="2">
                   <div className="row">
-                    <div className={`col-md-${hasImages ? 6 : 12}`}>
+                    <div className={`col-md-${_.get(images, '0.file.details.size') ? 6 : 12}`}>
                       <div style={{ textAlign: 'center' }} >
                         <Dropzone
                           accept="image/jpeg, image/png, video/*"
@@ -216,7 +219,7 @@ class Step2 extends Component {
                         </Dropzone>
                       </div>
                     </div>
-                    {hasImages === true &&
+                    {_.get(images, '0.file.details.size') &&
                       <div className="col-md-6">
                         <div className="row">
                           {
@@ -225,11 +228,11 @@ class Step2 extends Component {
                                 <div key={index} className="col-md-6" draggable="true">
                                   <div className="main-image">
                                     <div className="image">
-                                      <img src={image.file.url} alt={image.title} />
+                                      <img src={_.get(image, 'file.url')} alt={_.get(image, 'title')} />
                                     </div>
                                     <div className="image-detail">
-                                      <div className="image-name">{image.title}</div>
-                                      <div className="image-size">{image.file.contentType} / {image.file.details.size} kb</div>
+                                      <div className="image-name">{_.get(image, 'title')}</div>
+                                      <div className="image-size">{_.get(image, 'file.contentType')} / {_.get(image, 'file.details.size')} kb</div>
                                     </div>
                                     <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                                       <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
@@ -264,6 +267,7 @@ class Step2 extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    step2: state.sell.step2,
     mainImage: state.sell.step2.mainImage,
     images: state.sell.step2.images,
   };

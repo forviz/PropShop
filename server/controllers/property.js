@@ -338,35 +338,23 @@ export const update = async (req, res, next) => {
           "discount": 0
         });
       }
-      // if (_.get(data, 'step0.xxxx')) {
-      //   entry.fields = {
-      //     coverImage: {
-      //       'en-US': {
-      //         sys: {
-      //           id: _.get(data, 'step0.coverImageId'),
-      //           linkType: 'Asset',
-      //           type: 'Link',
-      //         }
-      //       },
-      //     },
-      //   };
-      // }
-      // if (_.get(data, 'step0.xxxx')) {
-      //   const images = _.map(_.get(data, 'step0.imagesId'), (id) => {
-      //     return {
-      //       sys: {
-      //         id,
-      //         linkType: 'Asset',
-      //         type: 'Link',
-      //       }
-      //     };
-      //   });
-      //   entry.fields = {
-      //     images: {
-      //       'en-US': images,
-      //     },
-      //   };
-      // }
+      if (_.get(data, 'coverImageId')) {
+        _.set(entry.fields, "coverImage['en-US'].sys.id", _.get(data, 'coverImageId'));
+        _.set(entry.fields, "coverImage['en-US'].sys.linkType", 'Asset');
+        _.set(entry.fields, "coverImage['en-US'].sys.type", 'Link');
+      }
+      if (_.get(data, 'imagesId')) {
+        const images = _.map(_.get(data, 'imagesId'), (id) => {
+          return {
+            sys: {
+              id,
+              linkType: 'Asset',
+              type: 'Link',
+            }
+          };
+        });
+        _.set(entry.fields, "images['en-US']", images);
+      }
       if (_.get(data, 'step1.specialFeatureFacilities') || 
         _.get(data, 'step1.specialFeatureNearbyPlaces') || 
         _.get(data, 'step1.specialFeaturePrivate') || 

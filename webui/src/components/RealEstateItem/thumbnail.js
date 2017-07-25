@@ -47,7 +47,7 @@ class Thumbnail extends Component {
 
     return (
       <div className="Thumbnail">
-        <img src={item.mainImage} alt="" className="image" />
+        <img src={item.mainImage.file.url} alt="" className="image" />
         <div className="content">
           <div className="name">{item.project}</div>
           <div className="price">{numeral(item.price).format('0,0')} บาท</div>

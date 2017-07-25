@@ -13,7 +13,7 @@ export const mapContentFulPropertyToMyField = (data) => {
       ...acc,
       [index]: {
         id: elem.sys.id,
-        address: _.get(elem, 'fields.location.full.th'),
+        address: _.get(elem, 'fields.location.unitNo'),
         agentId: '',
         amphur: _.get(elem, 'fields.location.district'),
         announceDetails: _.get(elem, 'fields.description.th', ''),
@@ -39,9 +39,17 @@ export const mapContentFulPropertyToMyField = (data) => {
         zipcode: _.get(elem, 'fields.location.zipcode'),
         createdAt: elem.sys.createdAt,
         updatedAt: elem.sys.updatedAt,
-        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields') : noImage,
+        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields') : {
+          file: {
+            url: noImage,
+          },
+        },
         images: _.map(_.get(elem, 'fields.images'), (image) => {
-          return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : noImage;
+          return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : {
+            file: {
+              url: noImage,
+            },
+          };
         }),
         // Extra
         publicTransports: _.get(elem, 'fields.location.publicTransports'),

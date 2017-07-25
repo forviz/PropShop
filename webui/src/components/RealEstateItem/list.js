@@ -45,7 +45,7 @@ class List extends Component {
         <div className="row">
           <div className="col-md-3 vcenter">
             <div className="image">
-              <img src={item.mainImage} alt={item.project} />
+              <img src={item.mainImage.file.url} alt={item.project} />
             </div>
           </div>
           <div className="col-md-3 vcenter">

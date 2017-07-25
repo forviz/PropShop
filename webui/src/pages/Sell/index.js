@@ -204,6 +204,7 @@ class Sell extends Component {
     if (sell.sendingData === false) {
       const id = this.getParameterByName('id');
       if (id) {
+        console.log('submit', sell);
         doUpdateProperty(id, sell);
       } else {
         doCreateRealEstate(sell, user.id);
