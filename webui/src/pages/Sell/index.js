@@ -4,7 +4,6 @@ import { Steps, Spin, notification, Form } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
-import _ from 'lodash';
 
 import * as SellActions from '../../actions/sell-actions';
 
@@ -37,15 +36,6 @@ class Sell extends Component {
   constructor(props) {
     super(props);
     this.checkLogin();
-  }
-
-  componentWillReceiveProps() {
-    const { sell, history } = this.props;
-    if (sell.redirect === true) {
-      history.push({
-        pathname: '/',
-      });
-    }
   }
 
   checkLogin = () => {
@@ -201,10 +191,16 @@ class Sell extends Component {
 
   success = () => {
     this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
-    const { history } = this.props;
-    history.push({
-      pathname: '/',
-    });
+    // const { history } = this.props;
+    // history.push({
+    //   pathname: '/',
+    // });
+    const { clearForm } = this.props.actions;
+    clearForm();
+  }
+
+  fail = () => {
+    this.openNotificationWithIcon('error', 'ประกาศขาย - เช่า ล้มเหลว', 'เกิดข้อผิดพลาด กรุณาตรวจสอบข้อมูลของท่านอีกครั้ง');
   }
 
   buttonAction = () => {
@@ -253,6 +249,8 @@ class Sell extends Component {
 
     if (sendDataSuccess === 'yes') {
       this.success();
+    } else if (sendDataSuccess === 'no') {
+      this.fail();
     }
 
     return (
@@ -300,6 +298,7 @@ const actions = {
   nextStep: SellActions.nextStep,
   prevStep: SellActions.prevStep,
   doCreateRealEstate: SellActions.doCreateRealEstate,
+  clearForm: SellActions.clearForm,
 };
 
 const mapDispatchToProps = (dispatch) => {

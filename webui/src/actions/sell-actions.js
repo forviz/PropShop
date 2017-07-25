@@ -90,3 +90,11 @@ export const doCreateRealEstate = (sell, userId) => {
     });
   };
 };
+
+export const clearForm = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SELL/CLEAR/FORM',
+    });
+  };
+};

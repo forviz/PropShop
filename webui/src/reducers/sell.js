@@ -76,6 +76,7 @@ const reducers = (state = initalState, action) => {
     };
     case 'SELL/DATA/SENDING': return { ...state, sendingData: action.status };
     case 'SELL/DATA/SEND/SUCCESS': return { ...state, sendDataSuccess: action.status };
+    case 'SELL/CLEAR/FORM': return initalState;
     default:
       return state;
   }
