@@ -61,7 +61,6 @@ class Sell extends Component {
   openNotificationWithIcon = (type, message, description) => {
     const data = {};
     data.message = message;
-    data.duration = 6;
     if (description) data.description = description;
     notification[type](data);
   }

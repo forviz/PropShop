@@ -70,7 +70,7 @@ export const create = async (req, res, next) => {
   try {
     const { data, userId } = req.body;
 
-    let images = {};
+    let images = [];
     if (_.get(data, 'imagesId')) {
       images = _.map(_.get(data, 'imagesId'), (id) => {
         return {
@@ -81,6 +81,14 @@ export const create = async (req, res, next) => {
           }
         };
       });
+    }
+
+    let tags = [];
+    if (_.get(data, 'step1.specialFeatureFacilities') || 
+      _.get(data, 'step1.specialFeatureNearbyPlaces') || 
+      _.get(data, 'step1.specialFeaturePrivate') || 
+      _.get(data, 'step1.specialFeatureView')) {
+        tags = _.concat(_.get(data, 'step1.specialFeatureFacilities'), _.get(data, 'step1.specialFeatureNearbyPlaces'), _.get(data, 'step1.specialFeaturePrivate'), _.get(data, 'step1.specialFeatureView'));
     }
 
     const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
@@ -196,7 +204,7 @@ export const create = async (req, res, next) => {
           'en-US': images,
         },
         tags: {
-          'en-US': _.concat(_.get(data, 'step1.specialFeatureFacilities'), _.get(data, 'step1.specialFeatureNearbyPlaces'), _.get(data, 'step1.specialFeaturePrivate'), _.get(data, 'step1.specialFeatureView')),
+          'en-US': tags,
         },
         numBedrooms: {
           'en-US': _.toNumber(_.get(data, 'step0.bedroom')),
