@@ -199,3 +199,16 @@ export const getPropertyById = (id) => {
     return result[0];
   });
 };
+
+export const createProperty = (data, userId) => {
+  return fetch(`${BASEURL}/property`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data, userId }),
+  })
+  .then((response) => {
+    return response.json();
+  });
+};

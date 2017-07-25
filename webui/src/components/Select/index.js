@@ -27,8 +27,6 @@ class SelectComponent extends Component {
   render() {
     const { items, placeholder, value } = this.props;
 
-    console.log('asdowq', this.props);
-
     let itemsOption = null;
     if (items) {
       itemsOption = _.map(items, (item, index) => {

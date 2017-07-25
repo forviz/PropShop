@@ -20,6 +20,15 @@ const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.80
 
 export const uploadFile = async (req, res) => {
   try {
+
+    if (!req.file) {
+      res.status(400).json({
+        status: 400,
+        code: 'InvalidQueryError',
+        title: 'The request contained invalid or unknown query parameters.',
+      });
+    }
+
     const file = req.file;
     const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
     .then(space => space.createAssetFromFiles({
@@ -38,11 +47,24 @@ export const uploadFile = async (req, res) => {
     }))
     .then(asset => asset.processForAllLocales())
     .then(asset => asset.publish());
-    res.json(response);
-  } catch (e) {
-    console.error(e);
+
+    if (!_.get(response, 'sys.id')) {
+      res.status(500).json({
+        status: 500,
+        code: 'ServerError',
+        title: 'Something went wrong on servers.',
+      });
+    }
+
     res.json({
-      error: e.message,
+      data: response,
+    });
+
+  } catch (e) {
+    res.status(500).json({
+      status: 500,
+      code: 'ServerError',
+      title: 'Something went wrong on servers.',
     });
   }
 }

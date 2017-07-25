@@ -69,12 +69,12 @@ export const updateUserProfile = (id, data) => {
   };
 };
 
-export const updateAvatar = (id, file, fileName, oldAssetId = '') => {
+export const updateAvatar = (id, file, oldAssetId = '') => {
   return (dispatch) => {
     dispatch(setErrorMessage(''));
     dispatch(profileEditing(true));
     dispatch(profileEditSuccess(false));
-    uploadMediaAPI(file, fileName).then((result) => {
+    uploadMediaAPI(file).then((result) => {
       dispatch(profileEditing(false));
       if (result.status === 'success') {
         if (oldAssetId) deleteMediaAPI(oldAssetId);

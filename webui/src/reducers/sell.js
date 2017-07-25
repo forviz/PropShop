@@ -18,7 +18,6 @@ const initalState = {
     bedroom: '',
     bathroom: '',
     price: '',
-    priceDisplay: '',
     pricePerUnit: '',
     fee: '',
     project: '',
@@ -53,7 +52,7 @@ const initalState = {
     acceptTerms: false,
   },
   sendingData: false,
-  sendData: false,
+  sendDataSuccess: '', // yes, no
 };
 
 const reducers = (state = initalState, action) => {
@@ -76,7 +75,7 @@ const reducers = (state = initalState, action) => {
       },
     };
     case 'SELL/DATA/SENDING': return { ...state, sendingData: action.status };
-    case 'SELL/DATA/SEND/SUCCESS': return { ...state, sendData: action.status };
+    case 'SELL/DATA/SEND/SUCCESS': return { ...state, sendDataSuccess: action.status };
     default:
       return state;
   }

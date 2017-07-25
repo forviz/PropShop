@@ -255,9 +255,8 @@ class Profile extends Component {
     const { updateAvatar } = this.props.actions;
     if (_.get(data, 'image.value.newImage') && _.get(data, 'image.errorMessage') === false) {
       const file = _.get(data, 'image.value.newImage');
-      const fileName = _.get(data, 'image.value.newImage.name');
       const oldAssetId = _.get(data, 'image.value.sys.id');
-      updateAvatar(user.id, file, fileName, oldAssetId);
+      updateAvatar(user.id, file, oldAssetId);
     }
   }
 

@@ -61,6 +61,7 @@ class Sell extends Component {
   openNotificationWithIcon = (type, message, description) => {
     const data = {};
     data.message = message;
+    data.duration = 6;
     if (description) data.description = description;
     notification[type](data);
   }
@@ -91,119 +92,117 @@ class Sell extends Component {
     // return true;
   }
 
-  validateForm = () => {
-    let errorMessage = '';
+  // validateForm = () => {
+  //   let errorMessage = '';
 
-    const { sell } = this.props;
+  //   const { sell } = this.props;
 
-    if (sell.step === 0) {
-      errorMessage = this.validateFormStep0();
-    } else if (sell.step === 2) {
-      errorMessage = this.validateFormStep2();
-    } else if (sell.step === 3) {
-      errorMessage = this.validateFormStep3();
-    }
+  //   if (sell.step === 0) {
+  //     errorMessage = this.validateFormStep0();
+  //   } else if (sell.step === 2) {
+  //     errorMessage = this.validateFormStep2();
+  //   } else if (sell.step === 3) {
+  //     errorMessage = this.validateFormStep3();
+  //   }
 
-    return errorMessage;
-  }
+  //   return errorMessage;
+  // }
 
-  checkRequiredField = (step) => {
-    let errorMessage = '';
+  // checkRequiredField = (step) => {
+  //   let errorMessage = '';
 
-    const { sell } = this.props;
-    _.forEach(sell[step].requiredField, (field) => {
-      if (sell.step0[field] === '') {
-        errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
-        return {
-          field,
-          errorMessage,
-        };
-      }
-    });
+  //   const { sell } = this.props;
+  //   _.forEach(sell[step].requiredField, (field) => {
+  //     if (sell.step0[field] === '') {
+  //       errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+  //       return {
+  //         field,
+  //         errorMessage,
+  //       };
+  //     }
+  //   });
 
-    return errorMessage;
-  }
+  //   return errorMessage;
+  // }
 
-  isInt = (n) => {
-    return n % 1 === 0;
-  }
+  // isInt = (n) => {
+  //   return n % 1 === 0;
+  // }
 
-  validateFormStep0 = () => {
-    let errorMessage = this.checkRequiredField('step0');
-    if (!errorMessage) {
-      const { sell } = this.props;
+  // validateFormStep0 = () => {
+  //   let errorMessage = this.checkRequiredField('step0');
+  //   if (!errorMessage) {
+  //     const { sell } = this.props;
 
-      if (sell.step0.areaSize !== '') {
-        if (!this.isInt(sell.step0.areaSize)) {
-          errorMessage = '"พื้นที่ใช้สอย" ต้องกรอกเป็นตัวเลขเท่านั้น';
-        }
-      }
+  //     if (sell.step0.areaSize !== '') {
+  //       if (!this.isInt(sell.step0.areaSize)) {
+  //         errorMessage = '"พื้นที่ใช้สอย" ต้องกรอกเป็นตัวเลขเท่านั้น';
+  //       }
+  //     }
 
-      if (sell.step0.landSize !== '') {
-        if (!this.isInt(sell.step0.landSize)) {
-          errorMessage = '"จำนวนที่ดิน" ต้องกรอกเป็นตัวเลขเท่านั้น';
-        }
-      }
+  //     if (sell.step0.landSize !== '') {
+  //       if (!this.isInt(sell.step0.landSize)) {
+  //         errorMessage = '"จำนวนที่ดิน" ต้องกรอกเป็นตัวเลขเท่านั้น';
+  //       }
+  //     }
 
-      if (sell.step0.price !== '') {
-        if (!this.isInt(sell.step0.price)) {
-          errorMessage = '"ราคา" ต้องกรอกเป็นตัวเลขเท่านั้น';
-        }
-      }
+  //     if (sell.step0.price !== '') {
+  //       if (!this.isInt(sell.step0.price)) {
+  //         errorMessage = '"ราคา" ต้องกรอกเป็นตัวเลขเท่านั้น';
+  //       }
+  //     }
 
-      if (sell.step0.fee !== '') {
-        if (!this.isInt(sell.step0.fee)) {
-          errorMessage = '"ค่าธรรมเนียม" ต้องกรอกเป็นตัวเลขเท่านั้น';
-        }
-      }
+  //     if (sell.step0.fee !== '') {
+  //       if (!this.isInt(sell.step0.fee)) {
+  //         errorMessage = '"ค่าธรรมเนียม" ต้องกรอกเป็นตัวเลขเท่านั้น';
+  //       }
+  //     }
 
-      if (sell.step0.zipcode !== '') {
-        const zipcodeRegExp = /^\d{5}$/;
-        if (!zipcodeRegExp.test(sell.step0.zipcode)) {
-          errorMessage = '"รหัสไปรษณีย์" ไม่ถูกต้อง';
-        }
-      }
-    }
-    return errorMessage;
-  }
+  //     if (sell.step0.zipcode !== '') {
+  //       const zipcodeRegExp = /^\d{5}$/;
+  //       if (!zipcodeRegExp.test(sell.step0.zipcode)) {
+  //         errorMessage = '"รหัสไปรษณีย์" ไม่ถูกต้อง';
+  //       }
+  //     }
+  //   }
+  //   return errorMessage;
+  // }
 
-  validateFormStep2 = () => {
-    let errorMessage = '';
+  // validateFormStep2 = () => {
+  //   let errorMessage = '';
 
-    const { sell } = this.props;
+  //   const { sell } = this.props;
 
-    if (Object.keys(sell.step2.mainImage).length === 0) {
-      errorMessage = 'กรุณาอัพโหลดรูปภาพหลัก';
-    }
+  //   if (Object.keys(sell.step2.mainImage).length === 0) {
+  //     errorMessage = 'กรุณาอัพโหลดรูปภาพหลัก';
+  //   }
 
-    return errorMessage;
-  }
+  //   return errorMessage;
+  // }
 
-  validateFormStep3 = () => {
-    let errorMessage = '';
+  // validateFormStep3 = () => {
+  //   let errorMessage = '';
 
-    const { sell } = this.props;
+  //   const { sell } = this.props;
 
-    if (sell.step3.acceptTerms === false) {
-      errorMessage = 'กรุณายอมรับข้อตกลงและเงื่อนไข';
-    }
+  //   if (sell.step3.acceptTerms === false) {
+  //     errorMessage = 'กรุณายอมรับข้อตกลงและเงื่อนไข';
+  //   }
 
-    return errorMessage;
-  }
+  //   return errorMessage;
+  // }
 
   submit = () => {
     const { sell, user } = this.props;
     const { doCreateRealEstate } = this.props.actions;
     if (sell.sendingData === false) {
-      doCreateRealEstate(sell, user);
+      doCreateRealEstate(sell, user.id);
     }
   }
 
   success = () => {
-    const { history } = this.props;
-    const { sendDataSuccess } = this.props.actions;
-    sendDataSuccess(false);
     this.openNotificationWithIcon('success', 'ประกาศขาย - เช่า สำเร็จ', 'ทางเราจะทำการตรวจสอบข้อมูลของท่านก่อนนำขึ้นเว็บไซต์จริง');
+    const { history } = this.props;
     history.push({
       pathname: '/',
     });
@@ -251,9 +250,9 @@ class Sell extends Component {
 
   render() {
     const { sell } = this.props;
-    const { step, sendingData, sendData } = sell;
+    const { step, sendingData, sendDataSuccess } = sell;
 
-    if (sendData === true) {
+    if (sendDataSuccess === 'yes') {
       this.success();
     }
 
@@ -302,7 +301,6 @@ const actions = {
   nextStep: SellActions.nextStep,
   prevStep: SellActions.prevStep,
   doCreateRealEstate: SellActions.doCreateRealEstate,
-  sendDataSuccess: SellActions.sendDataSuccess,
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -311,6 +309,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const WrappedRegistrationForm = Form.create()(Sell);
+const SellForm = Form.create()(Sell);
 
-export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(WrappedRegistrationForm);
+export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(SellForm);
