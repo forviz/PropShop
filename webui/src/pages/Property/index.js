@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-
+import { Icon } from 'antd';
 import FontAwesome from 'react-fontawesome';
 import ImageGallery from 'react-image-gallery';
 import { connect } from 'react-redux';
@@ -213,9 +213,9 @@ class Property extends Component {
                           <section className="info detail">
                             <h2>รายละเอียด</h2>
                             <div className="announcementDetails">
-                              {data.announcementDetails &&
+                              {data.announceDetails &&
                                 <div>
-                                  {data.announcementDetails.split('\n').map((item, key) => {
+                                  {data.announceDetails.split('\n').map((item, key) => {
                                     return <span key={key.toString()}>{item}<br /></span>;
                                   })}
                                 </div>
@@ -225,34 +225,38 @@ class Property extends Component {
                         </div>
                       </div>
                     </div>
-                    {data.agent &&
-                      <div className="col-md-4" style={{ paddingLeft: 0 }} >
-                        <div className="contact-block">
-                          <div className="agent-block">
-                            <div className="row">
-                              <div className="col-md-4 vcenter">
-                                <div className="agent-image">
-                                  <img src={data.agent.image.fields.file.url} alt={`${data.agent.name} ${data.agent.lastname}`} />
-                                </div>
+                    <div className="col-md-4" style={{ paddingLeft: 0 }} >
+                      <div className="contact-block">
+                        <div className="agent-block">
+                          <div className="row">
+                            <div className="col-md-4 vcenter">
+                              <div className="agent-image">
+                                {_.get(data, 'agent.image') &&
+                                  <img src={_.get(data, 'agent.image')} alt={`${_.get(data, 'agent.name')} ${_.get(data, 'agent.lastname')}`} />
+                                }
                               </div>
-                              <div className="col-md-8 vcenter">
-                                <div className="agent-info">
-                                  <div className="name">{data.agent.name} {data.agent.lastname}</div>
-                                  {/*
-                                  <div className="rating">
-                                    <Rate disabled defaultValue={data.agent.rate.rating} />
-                                    <span>({agent.rate.count})</span>
-                                  </div>
-                                  */}
-                                  <div className="phone">{data.agent.phone}</div>
+                            </div>
+                            <div className="col-md-8 vcenter">
+                              <div className="agent-info">
+                                {(_.get(data, 'agent.name') || _.get(data, 'agent.lastname')) &&
+                                  <div className="name">{_.get(data, 'agent.name')} {_.get(data, 'agent.lastname')}</div>
+                                }
+                                {/*
+                                <div className="rating">
+                                  <Rate disabled defaultValue={data.agent.rate.rating} />
+                                  <span>({agent.rate.count})</span>
                                 </div>
+                                */}
+                                {_.get(data, 'agent.phone') &&
+                                  <div className="phone">{_.get(data, 'agent.phone')}</div>
+                                }
                               </div>
                             </div>
                           </div>
-                          <ContactAgent />
                         </div>
+                        <ContactAgent />
                       </div>
-                    }
+                    </div>
                   </div>
                 </div>
               </div>
@@ -272,60 +276,65 @@ class Property extends Component {
                   <div className="facilities-block">
                     <h4>สิ่งอำนวยความสะดวก:</h4>
                     <div className="row">
-                      {data.specialFeatureView &&
+                      {_.size(_.get(data, 'specialFeatureView')) > 0 &&
                         <span>
                           {
                             _.map(data.specialFeatureView, (value) => {
-                              return <div className="col-md-3" key={value}>{value}</div>;
+                              return <div className="col-md-3" key={value}><Icon type="check-circle" /> {value}</div>;
                             })
                           }
                         </span>
                       }
-                      {data.specialFeatureFacilities &&
+                      {_.size(_.get(data, 'specialFeatureFacilities')) > 0 &&
                         <span>
                           {
                             _.map(data.specialFeatureFacilities, (value) => {
-                              return <div className="col-md-3" key={value}>{value}</div>;
+                              return <div className="col-md-3" key={value}><Icon type="check-circle" /> {value}</div>;
                             })
                           }
                         </span>
                       }
-                      {data.specialFeatureNearbyPlaces &&
+                      {_.size(_.get(data, 'specialFeatureNearbyPlaces')) > 0 &&
                         <span>
                           {
                             _.map(data.specialFeatureNearbyPlaces, (value) => {
-                              return <div className="col-md-3" key={value}>{value}</div>;
+                              return <div className="col-md-3" key={value}><Icon type="check-circle" /> {value}</div>;
                             })
                           }
                         </span>
                       }
-                      {data.specialFeaturePrivate &&
+                      {_.size(_.get(data, 'specialFeaturePrivate')) > 0 &&
                         <span>
                           {
                             _.map(data.specialFeaturePrivate, (value) => {
-                              return <div className="col-md-3" key={value}>{value}</div>;
+                              return <div className="col-md-3" key={value}><Icon type="check-circle" /> {value}</div>;
                             })
                           }
                         </span>
                       }
                     </div>
                   </div>
-                  {data.fee &&
-                    <div className="row">
-                      <div className="col-md-12">
-                        <div className="fee-block">
-                          <h4>ค่าธรรมเนียมและภาษี:</h4>
-                          <div className="text-gray">ประมาณ {numeral(data.fee).format('0,0')} บาท</div>
-                        </div>
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="fee-block">
+                        <h4>ค่าธรรมเนียมและภาษี:</h4>
+                        <div className="text-gray">ประมาณ {numeral(data.fee).format('0,0')} บาท</div>
                       </div>
                     </div>
-                  }
+                  </div>
                 </section>
               </div>
             </div>
-            <div className="nearby_place">
-              <NearbyPlace />
-            </div>
+            {_.get(data, 'location.lat') && _.get(data, 'location.lon') &&
+              <div className="row">
+                <div className="col-md-12">
+                  <section className="info nearby_place">
+                    <h2>สถานที่ใกล้เคียง</h2>
+                    <NearbyPlace lat={data.location.lat} lng={data.location.lon} />
+                  </section>
+                </div>
+              </div>
+            }
             {/*
             <div className="row">
               <div className="col-md-12">

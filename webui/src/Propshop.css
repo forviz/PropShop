@@ -552,12 +552,21 @@ img {
   color: #999999;
   font-weight: bold; }
 
-#Property .nearby_place {
-  border: 1px solid #eeeeee;
-  border-top: 0; }
+#Property .nearby_place .result-lists .clearfix {
+  cursor: pointer;
+  transition: .3s; }
 
-#Property .nearby_place .place-list {
-  padding: 15px; }
+#Property .nearby_place .result-lists .clearfix div {
+  transition: .3s; }
+
+#Property .nearby_place .result-lists .clearfix:hover {
+  background: #8ebc42; }
+
+#Property .nearby_place .result-lists .clearfix:hover div {
+  color: #ffffff; }
+
+#Property .facilities-block i.anticon-check-circle {
+  color: #8ebc42; }
 
 #Login {
   height: 100%; }

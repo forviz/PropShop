@@ -21,7 +21,6 @@ export const queryProperties = async (req, res, next) => {
     console.log('req.query', req.query);
     const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, location, select, agentId, limit, skip } = req.query;
     const _for = req.query.for;
-
     const propertyQuery = _.omitBy({
       content_type: 'property',
       'sys.id': id,
@@ -36,8 +35,8 @@ export const queryProperties = async (req, res, next) => {
       'fields.priceSaleValue[lte]': _for === 'sale' && priceMax ? _.toNumber(priceMax) : undefined,
       'fields.priceRentValue[gte]': _for === 'rent' && priceMin ? _.toNumber(priceMin) : undefined,
       'fields.priceRentValue[lte]': _for === 'rent' && priceMax ? _.toNumber(priceMax) : undefined,
-      'fields.locationMarker[within]': bound || location,
-      'fields.agent.sys.id': agentId,
+      'fields.locationMarker[within]': bound ? bound : undefined,
+      'fields.agent.sys.id': agentId ? agentId : undefined,
       select: select ? select : undefined,
       limit: limit ? limit : undefined,
       skip: skip ? skip : undefined,

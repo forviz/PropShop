@@ -192,11 +192,26 @@
 	}
 
 	.nearby_place {
-		border: 1px solid $border-color;
-  	border-top: 0;
-  	.place-list {
-  		padding: 15px;
-  	}
+		.result-lists {
+			.clearfix {
+				cursor: pointer;
+				transition: .3s;
+				div {
+					transition: .3s;
+				}
+				&:hover {
+					background: $text-green;
+					div {
+						color: #ffffff;
+					}
+				}
+			}
+		}
+	}
+
+	.facilities-block i.anticon-check-circle {
+		color: $text-green;
+		
 	}
 
 }
