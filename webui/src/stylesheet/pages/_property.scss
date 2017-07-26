@@ -1,4 +1,4 @@
-#Realestate {
+#Property {
 
 	padding-bottom: 40px;
 
@@ -27,6 +27,30 @@
 
 		.cover {
 			border: 1px solid $border-color;
+			.street-view {
+				.block {
+					height: 500px;
+				}
+			}
+			.street-view,
+			.image-gallery-slide-wrapper {
+				transition: opacity 1s ease-out;
+				opacity: 0; 
+				height: 0;
+				overflow: hidden;
+			}
+			&.show-street-view {
+				.street-view {
+					opacity: 1;
+    			height: auto;
+				}
+			}
+			&.show-banner {
+				.image-gallery-slide-wrapper {
+					opacity: 1;
+    			height: auto;
+				}
+			}
 			.google-map {
 				width: 29%;
 		    float: right;

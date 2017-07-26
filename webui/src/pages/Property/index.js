@@ -6,23 +6,21 @@ import ImageGallery from 'react-image-gallery';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import numeral from 'numeral';
-// import { Rate } from 'antd';
 import _ from 'lodash';
 
 import ContactAgent from '../../components/ContactAgent';
 import MapComponent from '../../components/Map/MapWithStreetView';
 import NearbyPlace from '../../components/Map/MapNearbyPlace';
 
-import { getProperties } from '../../api/property';
-import { receivePropertiesEntity } from '../../actions/realestate-actions';
+import { getProperties } from '../../modules/property/api';
+import { receivePropertyEntity } from '../../modules/property/actions';
 
 const mapStateToProps = (state, ownProps) => {
   const propertyId = _.get(ownProps, 'match.params.id');
-  const property = _.get(state, `entities.properties.entities.${propertyId}`);
+  const property = _.get(state, `entities.properties.entities.${propertyId}[0]`);
   return {
     propertyId,
     data: property,
-    loading: state.realestates.loading,
   };
 };
 
@@ -31,7 +29,7 @@ const actions = {
     return (dispatch) => {
       getProperties(`?id=${propertyId}`)
       .then((result) => {
-        dispatch(receivePropertiesEntity(result));
+        dispatch(receivePropertyEntity(propertyId, result));
       });
     };
   },
@@ -54,29 +52,17 @@ class Property extends Component {
     actions: T.shape({
       getPropertyEntity: T.func,
     }).isRequired,
+    history: T.shape().isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    const { getPropertyEntity } = props.actions;
+    getPropertyEntity(props.propertyId);
   }
 
   state = {
     showStreetView: false,
-  }
-
-  componentDidMount() {
-    const { getPropertyEntity } = this.props.actions;
-    if (this.props.data === undefined) {
-      getPropertyEntity(this.props.propertyId);
-    }
-  }
-
-  getAgent = (id) => {
-
-  }
-
-  handleWishList = () => {
-
-  }
-
-  handleShare = () => {
-
   }
 
   backToHome = () => {
@@ -92,9 +78,19 @@ class Property extends Component {
     });
   }
 
+  handleThumbnailClick = () => {
+    if (this.state.showStreetView === false) return;
+    this.setState({
+      showStreetView: false,
+    });
+  }
+
   render() {
     const { data } = this.props;
-    if (_.size(data) === 0) return <div />;
+
+    console.log('asdpojasopdj', data);
+
+    if (data === undefined) return <div />;
 
     let images = [];
     images.push({
@@ -112,7 +108,7 @@ class Property extends Component {
     }
 
     return (
-      <div id="Realestate">
+      <div id="Property">
         <div className="action">
           <div className="container">
             <div className="row">
@@ -149,22 +145,28 @@ class Property extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-12">
-                <div className="cover">
+                <div className={`cover ${this.state.showStreetView === true ? 'show-street-view' : 'show-banner'}`}>
+                  <div className="street-view">
+                    <div className="block">
+                      <MapComponent center={{ lat: data.location.lat, lng: data.location.lon }} />
+                    </div>
+                  </div>
                   <ImageGallery
                     items={images}
                     slideInterval={2000}
                     showPlayButton={false}
+                    onThumbnailClick={this.handleThumbnailClick}
                   />
                   <div className="google-map">
                     <div className="clearfix">
                       <div className="pull-left text-center">
-                        <div role="button" tabIndex={0} onClick={this.handleStreerView}>
+                        <div role="button" tabIndex="0" onClick={this.handleStreerView}>
                           <img src={`${process.env.PUBLIC_URL} /images/googlemap/map-mark.jpg`} alt="Map View" />
                         </div>
                         <div>Map View</div>
                       </div>
                       <div className="pull-right text-center">
-                        <div role="button" tabIndex={0} onClick={this.handleStreerView}>
+                        <div role="button" tabIndex="0" onClick={this.handleStreerView}>
                           <img src={`${process.env.PUBLIC_URL} /images/googlemap/map-street.jpg`} alt="Street View" />
                         </div>
                         <div>Street View</div>
@@ -174,15 +176,6 @@ class Property extends Component {
                 </div>
               </div>
             </div>
-            {this.state.showStreetView === true &&
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="street-view">
-                    <MapComponent center={{ lat: data.location.lat, lng: data.location.lon }} />
-                  </div>
-                </div>
-              </div>
-            }
             <div className="row">
               <div className="col-md-12">
                 <div className="detail-block">
