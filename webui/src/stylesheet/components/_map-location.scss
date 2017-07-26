@@ -2,14 +2,19 @@
     width: 100%;
     height: 100%;
     .custom-marker {
-        .price {
-            background: #000000;
-            border-radius: 4px;
-            color: #FFFFFF;
-            max-width: 200px;
-            padding: 3px 8px;
-            text-align: center;
-            text-decoration: none;  
-        }
+      .price {
+          background: #000000;
+          border-radius: 4px;
+          color: #FFFFFF;
+          max-width: 200px;
+          padding: 3px 8px;
+          text-align: center;
+          text-decoration: none;
+      }
+
+      &.hilight, &:hover {
+        .price { background: #88b840; }
+        z-index: 9999;
+      }
     }
 }

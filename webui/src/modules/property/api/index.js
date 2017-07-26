@@ -7,8 +7,6 @@ const clientManagement = contentfulManagement.createClient({
 
 const BASEURL = 'http://localhost:4000/api/v1';
 
-// const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
-
 export const uploadFile = (fileName = '', fileType = '', file = '') => {
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
   .then(space => space.createAssetFromFiles({

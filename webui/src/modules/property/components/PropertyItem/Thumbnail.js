@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 import { notification, Icon } from 'antd';
@@ -15,6 +16,20 @@ const openNotification = () => {
 
 class PropertyItem extends Component {
 
+  static propTypes = {
+    item: T.object,
+    onMouseEnter: T.func,
+    onMouseLeave: T.func,
+  }
+
+  handleMouseEnter = (e) => {
+    this.props.onMouseEnter(this.props.item);
+  }
+
+  handleMouseLeave = (e) => {
+    this.props.onMouseLeave(this.props.item);
+  }
+
   render() {
     const { type, item } = this.props;
 
@@ -22,8 +37,7 @@ class PropertyItem extends Component {
     if (!item) return (<div />);
 
     return (
-      <div className="RealEstateItem sell">
-
+      <div className="RealEstateItem sell" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
         <NavLink exact to={`/realestate/${item.id}`}>
           <img src={`${item.mainImage}?w=180&h=180&fit=fill`} alt="" className="image" />
         </NavLink>

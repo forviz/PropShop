@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import styled from 'styled-components';
 import _ from 'lodash';
-import { Input, Select, Icon, Popover, Col, Row } from 'antd';
-import ReactSelect from 'react-select';
+import { Input, Select, Icon, Col, Row } from 'antd';
+
+import { connect } from 'react-redux';
+
 import InputPriceRange from '../InputPriceRange';
+import InputAreaSearch from '../InputAreaSearch';
 
 const InputGroup = Input.Group;
 const Option = Select.Option;
@@ -23,48 +27,35 @@ const PropertySearchWrapper = styled.div`
   padding: 15px;
 `;
 
-const ListHeader = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-`;
-
-const LocationPopover = styled.div`
-  width: 600px;
-`;
-
 const propertyTypes = ['Condominium', 'Town-home', 'House', 'Commercial Space', 'Land'];
 
-const content = (
-  <LocationPopover>
-    <Row>
-      <Col span={6}>
-        <ListHeader>ทำเล</ListHeader>
-        <ul>
-          <li><a href="#">บางลำภู</a></li>
-        </ul>
-      </Col>
-      <Col span={12}>
-        <ListHeader>รถไฟฟ้า</ListHeader>
-        <ul>
-          <li><a href="#">หมอชิต</a></li>
-          <li><a href="#">สนามเป้า</a></li>
-        </ul>
-      </Col>
-      <Col span={6}>
-      <ListHeader>รถใต้ดิน</ListHeader>
-      <ul>
-        <li><a href="#">ลาดพร้าว</a></li>
-      </ul>
-      </Col>
-    </Row>
-  </LocationPopover>
-);
+const mapStateToProps = (state) => {
+  const areas = _.map(_.get(state, 'entities.areas.entities'), (area, slug) => {
+    return {
+      ...area,
+      label: _.get(area, 'title.th'),
+      value: slug,
+    };
+  });
 
+  return {
+    areas,
+  };
+};
+
+export default connect(mapStateToProps)(
 class PropertySearch extends Component {
+
+  static propTypes = {
+    areas: T.arrayOf(T.shape({
+      label: T.string,
+      value: T.string,
+    })),
+  }
 
   static defaultProps = {
     searchParameters: {},
-    areaDataSource: [],
+    areas: [],
   }
 
   onUpdateSearchParameters = (searchParameters) => {
@@ -72,9 +63,10 @@ class PropertySearch extends Component {
   }
 
   handleSelectArea = (option) => {
+    console.log('handleSelectArea', option);
     const searchParameters = _.clone(this.props.searchParameters);
     searchParameters.area = {
-      name: option.value,
+      name: option !== null ? option.value : '',
       bound: { sw: undefined, ne: undefined },
     }
     this.onUpdateSearchParameters(searchParameters);
@@ -99,12 +91,7 @@ class PropertySearch extends Component {
   }
 
   render() {
-
-    const { searchParameters, areaDataSource } = this.props;
-    console.log('areaDataSource', areaDataSource);
-    const locationInputSuffix = (
-      <Popover content={content} placement="bottomRight" trigger="click"><Icon type="bars" /></Popover>
-    );
+    const { searchParameters, areas } = this.props;
     return (
       <PropertySearchWrapper>
         <div>
@@ -112,7 +99,7 @@ class PropertySearch extends Component {
             <Select
               style={{ width: '20%' }}
               defaultValue="sale"
-              onChange={value => this.onUpdateSearchParameters({...searchParameters, for: value })}
+              onChange={value => this.onUpdateSearchParameters({ ...searchParameters, for: value })}
             >
               <Option value="sale">ขาย</Option>
               <Option value="rent">เช่า</Option>
@@ -121,16 +108,17 @@ class PropertySearch extends Component {
               prefix={<Icon type="notification" />}
               style={{ width: '30%' }}
               defaultValue="Condominium"
-              onChange={value => this.onUpdateSearchParameters({...searchParameters, propertyType: value })}
+              onChange={value => this.onUpdateSearchParameters({ ...searchParameters, propertyType: value })}
             >
               {_.map(propertyTypes, type => <Option key={type} value={type}>{type}</Option>)}
             </Select>
-            <Input
-              style={{ width: '50%' }}
-              prefix={<Icon type="search" />}
-              defaultValue="Thonglor"
-              suffix={locationInputSuffix}
-            />
+            <div style={{ width: '50%' }}>
+              <InputAreaSearch
+                value={_.find(areas, a => searchParameters.area.name === a.value)}
+                options={areas}
+                onChange={this.handleSelectArea}
+              />
+            </div>
           </InputGroup>
         </div>
         <div>
@@ -141,7 +129,7 @@ class PropertySearch extends Component {
                 placeholder="ห้องนอน"
                 onChange={value => this.onUpdateSearchParameters({ ...searchParameters, bedroom: value })}
               >
-                {_.map(_.range(1,6), num => <Option value={num}>{num} ห้องนอน</Option>)}
+                {_.map(_.range(1, 6), num => <Option key={`${num}-bedroom`} value={`${num}`}>{num} ห้องนอน</Option>)}
               </Select>
             </Col>
             <Col span={8}>
@@ -150,7 +138,7 @@ class PropertySearch extends Component {
                 placeholder="ห้องน้ำ"
                 onChange={value => this.onUpdateSearchParameters({ ...searchParameters, bathroom: value })}
               >
-                {_.map(_.range(1,6), n => <Option value={n}>{n} ห้องน้ำ</Option>)}
+                {_.map(_.range(1, 6), num => <Option key={`${num}-bathroom`} value={`${num}`}>{num} ห้องน้ำ</Option>)}
               </Select>
             </Col>
             <Col span={8}>
@@ -165,6 +153,4 @@ class PropertySearch extends Component {
       </PropertySearchWrapper>
     );
   }
-}
-
-export default PropertySearch;
+});

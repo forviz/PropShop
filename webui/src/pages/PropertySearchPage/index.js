@@ -26,25 +26,8 @@ import {
 import Slider from '../../components/Slider';
 import { handleError } from '../../actions/errors';
 
-// import * as RealestateActions from '../../actions/realestate-actions';
-import * as ConfigActions from '../../actions/config-actions';
-
 const BREAKPOINT = 768;
 const PAGE_SIZE = 30;
-
-class SearchParameters {
-  area: object;
-
-  bound: string;
-  bedroom: number;
-  bathroom: number;
-  price: {
-    min: number;
-    max: number;
-  };
-
-  skip: number;
-}
 
 const mapStateToProps = (state, ownProps) => {
   const propertySearch = _.get(state, 'entities.properties.search.home');
@@ -52,23 +35,16 @@ const mapStateToProps = (state, ownProps) => {
 
   const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
   const areaEntities = _.get(state, 'entities.areas.entities');
-  // console.log('mapStateToProps', convertRouterPropsToParams(ownProps, areaEntities));
   return {
     searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
-    areas: areaEntities,
-    areaDataSource: _.map(_.groupBy(_.map(areaEntities, (a, key) => ({ ...a, key })), (area) => {
-      return area.category;
-    }), (areas, category) => ({ title: category, children: areas })),
     user: state.user.data,
     banner: state.banners,
-    userDidSearch: true, // _.get(ownProps, 'location.search') !== '',
     realestate: {
       loading: propertySearch.loading,
       filter: _.get(ownProps, 'location.search') !== '',
       data: _.compact(properties),
       total: propertySearch.total,
     },
-    configRealestate: state.config,
   };
 };
 
@@ -85,7 +61,9 @@ const actions = {
       });
     };
   },
-  fetchConfigs: ConfigActions.fetchConfigs,
+  userFocusOnProperty: (propertyId, value) => {
+    return PropertyActions.setHilightProperty(propertyId, value);
+  },
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -98,9 +76,9 @@ const MapWrapper = styled.div`
   position: fixed;
   top:50px;
   bottom: 0px;
-  right: ${props => props.hide ? '100%' : '0'};
-  left: ${props => props.hide ? '-100%' : '0'};
-  visibility: ${props => props.hide ? 'none' : 'visible'};
+  right: ${props => (props.hide ? '100%' : '0')};
+  left: ${props => (props.hide ? '-100%' : '0')};
+  visibility: ${props => (props.hide ? 'none' : 'visible')};
 
   @media (min-width: ${BREAKPOINT}px) {
     right: auto;
@@ -123,7 +101,7 @@ const ListWrapper = styled.div`
   // Mobile
   position: relative;
   background: white;
-  display: ${props => props.mode === 'list' ? 'block' : 'none'};
+  display: ${props => (props.mode === 'list' ? 'block' : 'none')};
 
 
   // Desktop
@@ -146,13 +124,21 @@ const ToggleButtonWrapper = styled.div`
   }
 `;
 
-class Home extends Component {
+class PropertySearchPage extends Component {
 
   headerHeight: 0;
 
   static propTypes = {
-    searchParameters: T.instanceOf(SearchParameters),
-    userDidSearch: T.bool.isRequired,
+    searchParameters: T.shape({
+      bound: T.string,
+      bedroom: T.number,
+      bathroom: T.number,
+      price: T.shape({
+        min: T.number,
+        max: T.number,
+      }),
+      skip: T.number,
+    }),
     actions: T.shape({
       searchProperties: T.func,
     }).isRequired,
@@ -168,13 +154,11 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.getConfig(props);
-
     this.state = {
       mobileViewMode: 'map',
       currentPage: 1,
+      userFocusOnPropertiesWithId: [],
     };
-    // this.goFilter(props.location);
   }
 
   handleResize = () => {
@@ -219,11 +203,6 @@ class Home extends Component {
     document.removeEventListener('scroll', this.handleScroll);
   }
 
-  getConfig = (props) => {
-    const { fetchConfigs } = props.actions;
-    fetchConfigs();
-  }
-
   handleScroll = () => {
     // const scroolHeight = document.body.scrollTop + window.innerHeight;
     // const bodyHeight = document.getElementsByClassName('layout-right')[0].clientHeight + this.headerHeight;
@@ -256,7 +235,6 @@ class Home extends Component {
 
     const center = map.getCenter();
     const zoom = map.getZoom();
-    console.log('MapBoundChanged', ne, sw, center);
     /*
     const searchParameters = this.props.searchParameters;
     // searchParameters.location = `${center.lat()},${center.lng()},${zoom}z`;
@@ -291,8 +269,23 @@ class Home extends Component {
     searchProperties(convertParamsToSearchAPI(searchParameters));
   }
 
+  handleMouseEnterPropertyItem = (property) => {
+    const { userFocusOnProperty } = this.props.actions;
+    userFocusOnProperty(property.id);
+    // this.setState({
+    //   userFocusOnPropertiesWithId: _.uniq([...this.state.userFocusOnPropertiesWithId, property.id]),
+    // });
+  }
+
+  handleMouseLeavePropertyItem = (property) => {
+    const { userFocusOnProperty } = this.props.actions;
+    userFocusOnProperty(property.id, false);
+    // this.setState({
+    //   userFocusOnPropertiesWithId: _.reject(this.state.userFocusOnPropertiesWithId, id => id === property.id),
+    // });
+  }
+
   renderSearchFilter = (loading, searchParameters) => {
-    const { areaDataSource } = this.props;
     return (
       <div>
         {loading === true ? (
@@ -301,7 +294,6 @@ class Home extends Component {
           <PropertySearch
             activeTab="area"
             searchParameters={searchParameters}
-            areaDataSource={areaDataSource}
             onUpdate={this.setUrl}
           />
         )}
@@ -315,14 +307,18 @@ class Home extends Component {
         {loading === true ? (
           <LoadingComponent />
         ) : (
-          <div className="list clearfix">
+          <div className="list">
             <h3>แสดง {items.length} รายการจาก {total} ผลการค้นหา</h3>
-            <ul>
+            <ul className="clearfix">
               {
                 _.map(items, (item, index) => {
                   return (
                     <li key={index} className="item col-sm-4 col-lg-6 col-lg-4">
-                      <PropertyItemThumbnail item={item} />
+                      <PropertyItemThumbnail
+                        item={item}
+                        onMouseEnter={this.handleMouseEnterPropertyItem}
+                        onMouseLeave={this.handleMouseLeavePropertyItem}
+                      />
                     </li>
                   );
                 })
@@ -382,12 +378,15 @@ class Home extends Component {
 
   renderSplitScreen = () => {
     const { searchParameters, realestate } = this.props;
+    const { userFocusOnPropertiesWithId } = this.state;
+    console.log('renderSplitScreen', userFocusOnPropertiesWithId);
     return (
       <div id="Home">
         <MapWrapper>
           <MapLocation
             area={searchParameters.area}
             nearby={realestate.data}
+            hilightMarkersWithId={userFocusOnPropertiesWithId}
             onBoundChanged={this.handleMapBoundChanged}
           />
         </MapWrapper>
@@ -410,4 +409,4 @@ class Home extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(PropertySearchPage);
