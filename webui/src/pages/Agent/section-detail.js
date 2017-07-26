@@ -17,7 +17,7 @@ import AgentReferenceItem from '../../components/AgentReferenceItem';
 import ActivityItem from '../../components/ActivityItem';
 
 
-import realEstateData from '../../../public/data/realEstateData.json';
+// import realEstateData from '../../../public/data/realEstateData.json';
 
 const TabPane = Tabs.TabPane;
 
@@ -217,7 +217,7 @@ class AgentDetail extends Component {
       about,
     } = agent;
 
-    const realEstate = _.filter(realEstateData, ['agentId', agentId]);
+    const realEstate = []; // _.filter(realEstateData, ['agentId', agentId]);
 
     return (
       <div id="AgentDetail">

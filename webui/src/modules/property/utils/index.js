@@ -3,6 +3,11 @@ import queryString from 'query-string';
 
 const PAGE_SIZE = 30;
 
+const defaultParam = {
+  for: 'sale',
+  propertyType: ['condominium'],
+};
+
 const getAreaParamFromSlug = (areaSlug, areaEntities) => {
   const [areaName, boundStr] = _.split(areaSlug, '@');
   let areaBound;
@@ -53,10 +58,11 @@ export const convertRouterPropsToParams = (props, areaEntities) => {
   const area = _.get(props, 'match.params.area');
   return {
     area: getAreaParamFromSlug(area, areaEntities),
-    // location: _.get(areaEntities, `${area}.location`),
-    for: _.replace(_.get(props, 'match.params.for'), 'for-', ''),
-    propertyType: _.split(_.get(props, 'match.params.propertyType'), ','),
-
+    for: _.replace(_.get(props, 'match.params.for'), 'for-', '') || defaultParam.for,
+    propertyType: !_.isEmpty(_.get(props, 'match.params.propertyType')) ?
+      _.split(_.get(props, 'match.params.propertyType'), ',')
+      :
+      defaultParam.propertyType,
     // Query Parameters
     bedroom: _.get(search, 'bedroom') ? _.toNumber(_.get(search, 'bedroom')) : undefined,
     bathroom: _.get(search, 'bathroom') ? _.toNumber(_.get(search, 'bathroom')) : undefined,
@@ -87,7 +93,6 @@ export const convertParamsToLocationObject = (params) => {
 const convertToURLParam = data => `?${_.join(_.map(_.omitBy(data, val => val === undefined), (value, key) => `${key}=${value}`), '&')}`;
 
 export const convertParamsToSearchAPI = (params) => {
-  console.log('convertParamsToSearchAPI', params);
   return convertToURLParam({
     // id: undefined,
     // ids: undefined,

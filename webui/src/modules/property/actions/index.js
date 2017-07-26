@@ -1,5 +1,16 @@
 import _ from 'lodash';
+import moment from 'moment';
 import { getPropertyIDs, getProperties } from '../api';
+import toURLParam from '../utils/toURLParam';
+
+
+export const setHilightProperty = (propertyId, value = true) => {
+  return {
+    type: 'PROPERTY/SET_HILIGHT',
+    propertyId,
+    value,
+  };
+};
 
 const propertySearchStart = (domain = 'default') => {
   return {
@@ -56,5 +67,22 @@ export const search = (searchParams, domain = 'default') => {
         dispatch(propertySearchEnd(domain));
       })
     });
+  };
+};
+
+export const getLandingItems = () => {
+  return (dispatch) => {
+
+    const condoParams = toURLParam({
+      propertyType: 'Condominium',
+      limit: 5,
+    });
+    dispatch(search(condoParams, 'landing-condo'));
+
+    const homeParams = toURLParam({
+      propertyType: 'Home',
+      limit: 5,
+    });
+    dispatch(search(homeParams, 'landing-home'));
   };
 };
