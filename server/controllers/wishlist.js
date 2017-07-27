@@ -106,7 +106,6 @@ export const updateWishlist = async (req, res, next) => {
     });
   }
 };
-
 export const checkStackWishlist = async (userId, propertyId) => {
   const entries = await client.getEntries({
     content_type: 'wishList',
