@@ -117,7 +117,7 @@ export const checkStackWishlist = async (userId, propertyId) => {
 
 export const getWishlist = async (req, res, next) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
     const entries = await client.getEntries({
       content_type: 'wishList',
       'fields.guestId': id,

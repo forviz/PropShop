@@ -25,14 +25,6 @@ import * as WishListActions from '../../actions/wishlist-actions';
 
 const BREAKPOINT = 768;
 
-const generateGuestId = () => {
-  if (_.isEmpty(localStorage.guestId)) {
-    localStorage.guestId = cuid();
-  }
-  console.log('localStorage.guestId', localStorage.guestId);
-  return localStorage.guestId;
-};
-
 const selectPropertyFromDomain = (state, domain) => {
   const domainReducer = _.get(state, `entities.properties.search.${domain}`);
   if (!domainReducer) return { result: [], total: 0 };
@@ -166,21 +158,33 @@ class Landing extends Component {
     const { user, wishlist } = this.props;
     const { getWishlist } = this.props.actions;
     const guestId = localStorage.guestId;
+    if (!guestId) {
+      localStorage.guestId = cuid();
+    }
+
     if (_.isEmpty(wishlist)) {
       if (_.isEmpty(user)) {
-        await getWishlist(guestId);
-      } else if (!_.isEmpty(user)) {
-        await getWishlist(user.id);
+        await getWishlist(localStorage.guestId);
       } else {
-        await generateGuestId();
+        await getWishlist(user.id);
       }
-
-      const localWishlist = JSON.parse(localStorage.wishList);
-      _.map(wishlist, (value) => {
-        localWishlist.push(value.id);
-      });
-      localStorage.wishList = JSON.stringify(_.union(localWishlist));
     }
+
+    this.setLocalWishlist();
+  }
+
+  setLocalWishlist = () => {
+    let localWishlist = [];
+    if (localStorage.wishList) {
+      localWishlist = JSON.parse(localStorage.wishList);
+    }
+
+    const { wishlist } = this.props;
+    localStorage.wishList = '[]';
+    _.map(wishlist, (value) => {
+      localWishlist.push(value.id);
+    });
+    localStorage.wishList = JSON.stringify(_.union(localWishlist));
   }
 
   delay = (() => {
@@ -217,7 +221,6 @@ class Landing extends Component {
 
   renderList = () => {
     const { landingItems } = this.props;
-    console.log('landqweqweingItems', landingItems);
     return (
       <div className="result">
         {

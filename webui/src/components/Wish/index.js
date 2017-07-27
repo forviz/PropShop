@@ -25,7 +25,7 @@ class Wish extends Component {
   }
 
   componentDidMount = async () => {
-    // await this.setLocaleWishlist();
+    
   }
 
   handleWishList = async (item, wished) => {
@@ -43,7 +43,11 @@ class Wish extends Component {
     if (_.isEmpty(prevLocalWishlist)) {
       localStorage.wishList = await `["${item.id}"]`;
     } else {
-      const localWishlist = JSON.parse(localStorage.wishList);
+      const { wishList } = localStorage;
+      let localWishlist = '';
+      if (wishList) {
+        localWishlist = JSON.parse(wishList);
+      }
       const indexItem = _.indexOf(localWishlist, item.id);
       if (wished || indexItem !== -1) {
         localWishlist.splice(indexItem, 1);
