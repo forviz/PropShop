@@ -95,8 +95,13 @@ class Wish extends Component {
 
   render() {
     const { item, wishlist, user } = this.props;
-    const localWishlist = JSON.parse(localStorage.wishList);
     let { wished } = this.state;
+
+    const { wishList } = localStorage;
+    let localWishlist = '';
+    if (wishList) {
+      localWishlist = JSON.parse(wishList);
+    }
 
     if (item) {
       _.map(localWishlist, (value) => {
