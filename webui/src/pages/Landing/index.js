@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import cuid from 'cuid';
 
 import BannerRealEstate from '../../containers/BannerRealEstate';
 
@@ -15,12 +16,22 @@ import {
   convertRouterPropsToParams,
   convertParamsToLocationObject,
   PropertyItemThumbnail,
+  PropertyItemThumbnailWithWish,
   PropertySearch,
 } from '../../modules/property';
 
 import { handleError } from '../../actions/errors';
+import * as WishListActions from '../../actions/wishlist-actions';
 
 const BREAKPOINT = 768;
+
+const generateGuestId = () => {
+  if (_.isEmpty(localStorage.guestId)) {
+    localStorage.guestId = cuid();
+  }
+  console.log('localStorage.guestId', localStorage.guestId);
+  return localStorage.guestId;
+};
 
 const selectPropertyFromDomain = (state, domain) => {
   const domainReducer = _.get(state, `entities.properties.search.${domain}`);
@@ -47,6 +58,8 @@ const mapStateToProps = (state, ownProps) => {
         ...selectPropertyFromDomain(state, 'landing-home'),
       },
     ],
+    wishlist: state.domain.accountWishlist.data,
+    user: state.user.data,
   };
 };
 
@@ -57,6 +70,7 @@ const actions = {
       dispatch(PropertyActions.getLandingItems());
     };
   },
+  getWishlist: WishListActions.getWishlist,
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -144,8 +158,30 @@ class Landing extends Component {
 
     const { onInitPage } = this.props.actions;
     onInitPage();
+
+    this.settingWishlist();
   }
 
+  settingWishlist = async () => {
+    const { user, wishlist } = this.props;
+    const { getWishlist } = this.props.actions;
+    const guestId = localStorage.guestId;
+    if (_.isEmpty(wishlist)) {
+      if (_.isEmpty(user)) {
+        await getWishlist(guestId);
+      } else if (!_.isEmpty(user)) {
+        await getWishlist(user.id);
+      } else {
+        await generateGuestId();
+      }
+
+      const localWishlist = JSON.parse(localStorage.wishList);
+      _.map(wishlist, (value) => {
+        localWishlist.push(value.id);
+      });
+      localStorage.wishList = JSON.stringify(_.union(localWishlist));
+    }
+  }
 
   delay = (() => {
     let timer = 0;
@@ -181,6 +217,7 @@ class Landing extends Component {
 
   renderList = () => {
     const { landingItems } = this.props;
+    console.log('landqweqweingItems', landingItems);
     return (
       <div className="result">
         {
@@ -192,7 +229,7 @@ class Landing extends Component {
                   _.map(group.result, (item, index) => {
                     return (
                       <li key={`${group.title}-${index}`} className="item col-sm-4 col-lg-6 col-lg-4">
-                        <PropertyItemThumbnail item={item} />
+                        <PropertyItemThumbnailWithWish item={item} />
                       </li>
                     );
                   })

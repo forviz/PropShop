@@ -2,17 +2,8 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
-import { notification, Icon } from 'antd';
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
-
-const openNotification = () => {
-  notification.open({
-    message: 'บันทึกเรียบร้อย',
-    description: 'รายการที่บันทึกจะอยู่ในส่วนของผู้ใช้.',
-    icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
-  });
-};
 
 class PropertyItem extends Component {
 
@@ -23,17 +14,20 @@ class PropertyItem extends Component {
   }
 
   handleMouseEnter = (e) => {
-    this.props.onMouseEnter(this.props.item);
+    if (this.props.onMouseEnter) {
+      this.props.onMouseEnter(this.props.item);
+    }
   }
 
   handleMouseLeave = (e) => {
-    this.props.onMouseLeave(this.props.item);
+    if (this.props.onMouseLeave) {
+      this.props.onMouseLeave(this.props.item);
+    }
   }
 
   render() {
     const { type, item } = this.props;
 
-    let wished = false;
     if (!item) return (<div />);
 
     return (
@@ -43,7 +37,7 @@ class PropertyItem extends Component {
         </NavLink>
         <div className="content">
           <NavLink exact to={`/realestate/${item.id}`}>
-            <div className="name">{item.project}</div>
+            <div className="name" title={item.topic}>{item.topic}</div>
           </NavLink>
           <div className="price">{numeral(item.price).format('0,0')} บาท</div>
           <div className="place">{item.street} - {item.province}</div>
@@ -59,13 +53,7 @@ class PropertyItem extends Component {
               </ul>
             </div>
           }
-
         </div>
-        <FontAwesome
-          onClick={() => this.handleWishList(item.id)}
-          className="wishList"
-          name={wished ? 'heart' : 'heart-o'}
-        />
       </div>
     );
   }

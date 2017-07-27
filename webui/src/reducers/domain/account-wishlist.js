@@ -1,6 +1,8 @@
+import _ from 'lodash';
+
 const initialState = {
   fetching: false,
-  fetchStatus: '', // success, fail
+  fetchStatus: '',
   data: [],
 };
 
@@ -23,7 +25,7 @@ const reducers = (state = initialState, action) => {
     case 'DOMAIN/WISHLIST/RESULT_RECEIVED': {
       return {
         ...state,
-        data: action.items,
+        data: _.uniqBy(action.items, 'id'),
       };
     }
 

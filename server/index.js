@@ -84,7 +84,10 @@ app.get(`${apiPrefix}/property/:id`, propertyController.getEntry);
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
 app.post(`${apiPrefix}/user/:id`, userController.updateUser);
 
+app.get(`${apiPrefix}/wishlist/:id`, wishlistController.getWishlist);
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
+app.delete(`${apiPrefix}/wishlist/delete`, wishlistController.deleteWishlist);
+app.put(`${apiPrefix}/wishlist/update`, wishlistController.updateWishlist);
 
 /**
  * CIC App codebase: WEBUI
