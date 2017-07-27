@@ -8,7 +8,10 @@ import { bindActionCreators } from 'redux';
 import numeral from 'numeral';
 import _ from 'lodash';
 
-import ContactAgent from '../../components/ContactAgent';
+// import ContactAgent from '../../components/ContactAgent';
+
+import { AgentContact } from '../../modules/agent';
+
 import MapComponent from '../../components/Map/MapWithStreetView';
 import NearbyPlace from '../../components/Map/MapNearbyPlace';
 
@@ -17,7 +20,7 @@ import { receivePropertyEntity } from '../../modules/property/actions';
 
 const mapStateToProps = (state, ownProps) => {
   const propertyId = _.get(ownProps, 'match.params.id');
-  const property = _.get(state, `entities.properties.entities.${propertyId}[0]`);
+  const property = _.get(state, `entities.properties.entities.${propertyId}`);
   return {
     propertyId,
     data: property,
@@ -29,7 +32,7 @@ const actions = {
     return (dispatch) => {
       getProperties(`?id=${propertyId}`)
       .then((result) => {
-        dispatch(receivePropertyEntity(propertyId, result));
+        dispatch(receivePropertyEntity(propertyId, result.data[0]));
       });
     };
   },
@@ -87,8 +90,6 @@ class Property extends Component {
 
   render() {
     const { data } = this.props;
-
-    console.log('asdpojasopdj', data);
 
     if (data === undefined) return <div />;
 
@@ -225,38 +226,40 @@ class Property extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-4" style={{ paddingLeft: 0 }} >
-                      <div className="contact-block">
-                        <div className="agent-block">
-                          <div className="row">
-                            <div className="col-md-4 vcenter">
-                              <div className="agent-image">
-                                {_.get(data, 'agent.image') &&
-                                  <img src={_.get(data, 'agent.image')} alt={`${_.get(data, 'agent.name')} ${_.get(data, 'agent.lastname')}`} />
-                                }
-                              </div>
-                            </div>
-                            <div className="col-md-8 vcenter">
-                              <div className="agent-info">
-                                {(_.get(data, 'agent.name') || _.get(data, 'agent.lastname')) &&
-                                  <div className="name">{_.get(data, 'agent.name')} {_.get(data, 'agent.lastname')}</div>
-                                }
-                                {/*
-                                <div className="rating">
-                                  <Rate disabled defaultValue={data.agent.rate.rating} />
-                                  <span>({agent.rate.count})</span>
+                    {_.get(data, 'agent.id') &&
+                      <div className="col-md-4" style={{ paddingLeft: 0 }} >
+                        <div className="contact-block">
+                          <div className="agent-block">
+                            <div className="row">
+                              <div className="col-md-4 vcenter">
+                                <div className="agent-image">
+                                  {_.get(data, 'agent.image') &&
+                                    <img src={_.get(data, 'agent.image')} alt={`${_.get(data, 'agent.name')} ${_.get(data, 'agent.lastname')}`} />
+                                  }
                                 </div>
-                                */}
-                                {_.get(data, 'agent.phone') &&
-                                  <div className="phone">{_.get(data, 'agent.phone')}</div>
-                                }
+                              </div>
+                              <div className="col-md-8 vcenter">
+                                <div className="agent-info">
+                                  {(_.get(data, 'agent.name') || _.get(data, 'agent.lastname')) &&
+                                    <div className="name">{_.get(data, 'agent.name')} {_.get(data, 'agent.lastname')}</div>
+                                  }
+                                  {/*
+                                  <div className="rating">
+                                    <Rate disabled defaultValue={data.agent.rate.rating} />
+                                    <span>({agent.rate.count})</span>
+                                  </div>
+                                  */}
+                                  {_.get(data, 'agent.phone') &&
+                                    <div className="phone">{_.get(data, 'agent.phone')}</div>
+                                  }
+                                </div>
                               </div>
                             </div>
                           </div>
+                          <AgentContact domain="property" agentId={data.agent.id} emailTo={data.agent.email} />
                         </div>
-                        <ContactAgent />
                       </div>
-                    </div>
+                    }
                   </div>
                 </div>
               </div>

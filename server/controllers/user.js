@@ -3,6 +3,8 @@ import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 import moment from 'moment';
 
+const Mail = require('../libraries/email');
+
 const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE,
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN,
@@ -71,3 +73,85 @@ export const updateUser = async (req, res, next) => {
     });
   }
 };
+
+export const contactAgent = async (req, res, next) => {
+  try {
+    const { name, emailFrom, emailTo, mobile, body, agentId } = req.body;
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then((space) => space.createEntry('contact', {
+      fields: {
+        contactName: {
+          'en-US': name,
+        },
+        contactEmail: {
+          'en-US': emailFrom,
+        },
+        contactMobile: {
+          'en-US': mobile,
+        },
+        body: {
+          'en-US': body,
+        },
+        recepient: {
+          'en-US': {
+            sys: {
+              id: agentId,
+              linkType: 'Entry',
+              type: 'Link',
+            },
+          },
+        },
+        sendEmailStatus: {
+          'en-US': false,
+        },
+      },
+    }))
+    .then((entry) => {
+      return entry.publish();
+    });
+
+    if (!_.get(response, 'sys.id')) {
+      res.status(500).json({
+        status: '500',
+        code: 'Internal Server Error',
+      });
+    }
+
+    const contactId = response.sys.id;
+
+    const mail = new Mail({
+      from: emailFrom,
+      to: emailTo,
+      subject: 'ติดต่อ Agent',
+      html: body,
+      successCallback: function(suc) {
+
+        const updateSendEmailStatus = clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+        .then((space) => space.getEntry(contactId))
+        .then((entry) => {
+          entry.fields.sendEmailStatus['en-US'] = true;
+          return entry.update();
+        });
+
+        res.json({
+          status: 'success',
+        });
+
+      },
+      errorCallback: function(err) {
+        res.json({
+          status: 'success',
+        });
+      }
+    });
+
+    mail.send();
+  } catch (e) {
+    res.status(500).json({
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
+    });
+  }
+}

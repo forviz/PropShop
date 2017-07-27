@@ -76,7 +76,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         entities: {
           ...state.entities,
-          [propertyId]: { ...state.entities[propertyId], ...action.property.data },
+          [propertyId]: { ...state.entities[propertyId], ...action.property },
         },
         fetchStatus: {
           ...state.fetchStatus,

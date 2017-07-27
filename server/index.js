@@ -85,6 +85,7 @@ app.post(`${apiPrefix}/property/:id`, propertyController.update);
 
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
 app.post(`${apiPrefix}/user/:id`, userController.updateUser);
+app.post(`${apiPrefix}/contact/agent`, userController.contactAgent);
 
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
 

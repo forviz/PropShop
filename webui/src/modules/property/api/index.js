@@ -79,6 +79,8 @@ export const mapContentFulPropertyToMyField = (data) => {
           name: _.get(elem, 'fields.agent.fields.name'),
           lastname: _.get(elem, 'fields.agent.fields.lastname'),
           phone: _.get(elem, 'fields.agent.fields.phone'),
+          email: _.get(elem, 'fields.agent.fields.email'),
+          username: _.get(elem, 'fields.agent.fields.username'),
         },
       },
     };

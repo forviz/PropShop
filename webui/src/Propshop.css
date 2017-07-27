@@ -1480,12 +1480,29 @@ body .btn-main:visited span {
   font-size: 14px;
   color: #ffffff; }
 
+body .ant-btn-danger,
+body .ant-btn-danger:active,
+body .ant-btn-danger:hover,
+body .ant-btn-danger:focus,
+body .ant-btn-danger:visited {
+  background-image: linear-gradient(to bottom, #E0001A, #D10016); }
+
+body .ant-btn-danger span,
+body .ant-btn-danger:active span,
+body .ant-btn-danger:hover span,
+body .ant-btn-danger:focus span,
+body .ant-btn-danger:visited span {
+  font-family: "SukhumvitSet-Bold";
+  font-size: 16px;
+  color: #ffffff; }
+
 body .ant-input {
   font-size: 14px;
   border-color: #cccccc; }
 
 body .ant-input[type="text"],
-body .ant-input[type="password"] {
+body .ant-input[type="password"],
+body .ant-input[type="email"] {
   height: 38px;
   line-height: 39px;
   padding: 0 10px; }
@@ -1926,3 +1943,6 @@ body .ant-notification {
   width: 38px;
   height: 38px;
   line-height: 38px; }
+
+.AgentContact .contact-form .ant-form-item {
+  margin-bottom: 10px; }
