@@ -1,4 +1,4 @@
-.RealEstateItem {
+.PropertyItem {
 
 	.Thumbnail {
 		border: 1px solid $border-color;
@@ -70,6 +70,39 @@
 		.actions {
 			.fa {
 				font-size: 18px;
+			}
+		}
+		.area-size {
+			margin-top: 10px;
+		}
+		.option {
+			margin-top: 10px;
+		}
+		.info {
+			.project {
+				font-weight: bold;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				/* autoprefixer: off */
+				-webkit-box-orient: vertical;
+				/* autoprefixer: on */
+			}
+			.price {
+				font-weight: bold;
+				font-size: 16px;
+				color: $text-green;
+			}
+			.description {
+				margin-top: 10px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				/* autoprefixer: off */
+				-webkit-box-orient: vertical;
+				/* autoprefixer: on */
 			}
 		}
 	}

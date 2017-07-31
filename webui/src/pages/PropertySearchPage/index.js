@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
+import { NavLink } from 'react-router-dom';
 import { Button, Pagination } from 'antd';
 
 import styled from 'styled-components';
@@ -18,13 +19,14 @@ import {
   convertRouterPropsToParams,
   convertParamsToLocationObject,
   convertParamsToSearchAPI,
-  PropertyItemMini,
-  PropertyItemThumbnail,
+  PropertyItem,
   PropertySearch,
 } from '../../modules/property';
 
 import Slider from '../../components/Slider';
 import { handleError } from '../../actions/errors';
+
+import PropertyDisplayType from '../../components/PropertyDisplayType';
 
 const BREAKPOINT = 768;
 const PAGE_SIZE = 30;
@@ -159,6 +161,10 @@ class PropertySearchPage extends Component {
       currentPage: 1,
       userFocusOnPropertiesWithId: [],
     };
+  }
+
+  state = {
+    displayType: 'thumbnail',
   }
 
   handleResize = () => {
@@ -302,29 +308,41 @@ class PropertySearchPage extends Component {
   }
 
   renderList = (loading, items, total) => {
+    const { displayType } = this.state;
     return (
       <div className="result">
         {loading === true ? (
           <LoadingComponent />
         ) : (
-          <div className="list">
-            <h3>แสดง {items.length} รายการจาก {total} ผลการค้นหา</h3>
-            <ul className="clearfix">
-              {
-                _.map(items, (item, index) => {
-                  return (
-                    <li key={index} className="item col-sm-4 col-lg-6 col-lg-4">
-                      <PropertyItemThumbnail
-                        item={item}
-                        onMouseEnter={this.handleMouseEnterPropertyItem}
-                        onMouseLeave={this.handleMouseLeavePropertyItem}
-                      />
-                    </li>
-                  );
-                })
-              }
-            </ul>
-            <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
+          <div>
+            <div className="pull-right">
+              <div className="display-type">
+                <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
+              </div>
+            </div>
+            <div className="list">
+              <h3>แสดง {items.length} รายการจาก {total} ผลการค้นหา</h3>
+              <ul className="clearfix">
+                {
+                  _.map(items, (item, index) => {
+                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-4 col-lg-6 col-lg-4';
+                    return (
+                      <li key={index} className={`item ${col}`}>
+                        <NavLink exact to={`/property/${item.id}`}>
+                          <PropertyItem
+                            type={displayType}
+                            item={item}
+                            onMouseEnter={this.handleMouseEnterPropertyItem}
+                            onMouseLeave={this.handleMouseLeavePropertyItem}
+                          />
+                        </NavLink>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
+              <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
+            </div>
           </div>
         )}
       </div>
@@ -351,7 +369,7 @@ class PropertySearchPage extends Component {
                     {
                       _.map(realestate.data, (item) => {
                         return (
-                          <PropertyItemMini key={item.id} {...item} />
+                          <PropertyItem type="mini" key={item.id} {...item} />
                         );
                       })
                     }
@@ -397,6 +415,12 @@ class PropertySearchPage extends Component {
         </ListWrapper>
       </div>
     );
+  }
+
+  handleDisplayType = (displayType) => {
+    this.setState({
+      displayType,
+    });
   }
 
   render() {

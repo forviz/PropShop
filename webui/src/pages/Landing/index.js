@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,12 +10,13 @@ import _ from 'lodash';
 import BannerRealEstate from '../../containers/BannerRealEstate';
 
 import LoadingComponent from '../../components/Loading';
+import PropertyDisplayType from '../../components/PropertyDisplayType';
 
 import {
   actions as PropertyActions,
   convertRouterPropsToParams,
   convertParamsToLocationObject,
-  PropertyItemThumbnail,
+  PropertyItem,
   PropertySearch,
 } from '../../modules/property';
 
@@ -67,8 +69,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const MapWrapper = styled.div`
   position: fixed;
-  top:50px;
-  bottom: 0px;
+  height: 100%;
   right: ${props => (props.hide ? '100%' : '0')};
   left: ${props => (props.hide ? '-100%' : '0')};
   visibility: ${props => (props.hide ? 'none' : 'visible')};
@@ -137,6 +138,9 @@ class Landing extends Component {
     };
   }
 
+  state = {
+    displayType: 'thumbnail',
+  }
 
   componentDidMount() {
     document.getElementById('Footer').style.visibility = 'hidden';
@@ -161,6 +165,12 @@ class Landing extends Component {
     else this.setState({ mobileViewMode: 'map' });
   }
 
+  handleDisplayType = (displayType) => {
+    this.setState({
+      displayType,
+    });
+  }
+
   renderSearchFilter = (loading, searchParameters) => {
     const { history, areas } = this.props;
     return (
@@ -180,9 +190,15 @@ class Landing extends Component {
   }
 
   renderList = () => {
+    const { displayType } = this.state;
     const { landingItems } = this.props;
     return (
       <div className="result">
+        <div className="pull-right">
+          <div className="display-type">
+            <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
+          </div>
+        </div>
         {
           _.map(landingItems, group =>
             (<div key={group.title} className="list clearfix">
@@ -190,9 +206,14 @@ class Landing extends Component {
               <ul>
                 {
                   _.map(group.result, (item, index) => {
+                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-4 col-lg-6 col-lg-4';
                     return (
-                      <li key={`${group.title}-${index}`} className="item col-sm-4 col-lg-6 col-lg-4">
-                        <PropertyItemThumbnail item={item} />
+                      <li key={`${group.title}-${index}`} className={`item ${col}`}>
+                        {_.get(item, 'id') &&
+                          <NavLink exact to={`/property/${item.id}`}>
+                            <PropertyItem type={displayType} item={item} />
+                          </NavLink>
+                        }
                       </li>
                     );
                   })

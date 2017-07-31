@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import FontAwesome from 'react-fontawesome';
 
-class DisplayType extends Component {
+class PropertyDisplayType extends Component {
 
   static propTypes = {
     active: T.string.isRequired,
@@ -20,7 +20,7 @@ class DisplayType extends Component {
   render() {
     const { active } = this.props;
     return (
-      <div className="DisplayType">
+      <div className="PropertyDisplayType">
         <ul>
           <li className={active === 'thumbnail' ? 'active' : ''}>
             <FontAwesome name="th-large" onClick={() => this.handleDisplayType('thumbnail')} />
@@ -34,4 +34,4 @@ class DisplayType extends Component {
   }
 }
 
-export default DisplayType;
+export default PropertyDisplayType;

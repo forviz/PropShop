@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import * as PropertyActions from '../../../actions/property-actions';
 import RealEstateItem from '../../../components/RealEstateItem';
-import DisplayType from '../../../components/DisplayType';
+import PropertyDisplayType from '../../../components/PropertyDisplayType';
 
 class Property extends Component {
 
@@ -67,7 +67,7 @@ class Property extends Component {
           </div>
           <div className="pull-right">
             <div className="display-type">
-              <DisplayType active={displayType} onChange={this.handleDisplayType} />
+              <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
             </div>
           </div>
         </div>

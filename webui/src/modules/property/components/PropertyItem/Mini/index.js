@@ -47,11 +47,13 @@ const PriceWrapper = styled.div`
   text-align: right;
 `;
 
-class PropertyItem extends Component {
+class Mini extends Component {
 
   static propTypes = {
     mainImage: T.string,
     price: T.number,
+    bedroom: T.number,
+    bathroom: T.number,
   }
 
   render() {
@@ -74,4 +76,4 @@ class PropertyItem extends Component {
   }
 }
 
-export default PropertyItem;
+export default Mini;
