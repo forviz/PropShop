@@ -93,6 +93,8 @@ class Property extends Component {
 
     if (data === undefined) return <div />;
 
+    console.log('asdasd', data);
+
     let images = [];
     images.push({
       original: data.mainImage,
@@ -256,7 +258,14 @@ class Property extends Component {
                               </div>
                             </div>
                           </div>
-                          <AgentContact domain="property" agentId={data.agent.id} emailTo={data.agent.email} />
+                          <AgentContact
+                            domain="property"
+                            agentId={data.agent.id}
+                            emailTo={data.agent.email}
+                            agentName={data.agent.username}
+                            propertyId={data.id}
+                            projectName={data.project}
+                          />
                         </div>
                       </div>
                     }

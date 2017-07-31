@@ -15,6 +15,9 @@ class AgentContact extends Component {
     actions: T.shape().isRequired,
     form: T.shape().isRequired,
     agentId: T.string.isRequired,
+    agentName: T.string.isRequired,
+    propertyId: T.string.isRequired,
+    projectName: T.string.isRequired,
     emailTo: T.string.isRequired,
     domain: T.string.isRequired,
     submitting: T.bool.isRequired,
@@ -37,27 +40,28 @@ class AgentContact extends Component {
     initDomain(domain);
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const { agentId, emailTo, domain } = this.props;
-        const name = _.get(values, 'name');
-        const emailFrom = _.get(values, 'email');
-        const mobile = _.get(values, 'mobile');
-        const body = _.get(values, 'body');
-        const { contactAgent } = this.props.actions;
-        contactAgent(domain, name, emailFrom, emailTo, mobile, body, agentId);
-      }
-    });
-  }
-
   getSendSuccessMessage = (sendSuccess) => {
     const option = {
       message: sendSuccess === 'yes' ? 'ส่งข้อความสำเร็จ' : 'ส่งข้อความล้มเหลว',
       type: sendSuccess === 'yes' ? 'success' : 'error',
     };
     return <Alert {...option} />;
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const { agentId, emailTo, domain, agentName, propertyId, projectName } = this.props;
+        const name = _.get(values, 'name');
+        const emailFrom = _.get(values, 'email');
+        const mobile = _.get(values, 'mobile');
+        const body = _.get(values, 'body');
+        const propertyUrl = `property/${propertyId}`;
+        const { contactAgent } = this.props.actions;
+        contactAgent(domain, name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName);
+      }
+    });
   }
 
   render() {

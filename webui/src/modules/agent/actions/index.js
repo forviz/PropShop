@@ -27,11 +27,11 @@ const contactAgentSuccess = (domain, sendSuccess) => {
   };
 };
 
-export const contactAgent = (domain, name, emailFrom, emailTo, mobile, body, agentId) => {
+export const contactAgent = (domain, name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName) => {
   return (dispatch) => {
     dispatch(contactAgentSuccess(domain, ''));
     dispatch(contactAgentSubmitting(domain, true));
-    createContactAgent(name, emailFrom, emailTo, mobile, body, agentId).then((result) => {
+    createContactAgent(name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName).then((result) => {
       dispatch(contactAgentSubmitting(domain, false));
       if (result.status === 'success') {
         dispatch(contactAgentSuccess(domain, 'yes'));
