@@ -152,6 +152,7 @@ class Landing extends Component {
     onInitPage();
 
     this.settingWishlist();
+    console.log('USERSER', this.props.user);
   }
 
   settingWishlist = async () => {

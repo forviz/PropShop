@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Input, Alert, Spin, notification } from 'antd';
 
 import * as firebase from '../../api/firebase';
+import { sendEmailVerified } from '../../api/email';
 import * as helpers from '../../helpers';
 
 // import BannerRealEstate from '../../containers/BannerRealEstate';
@@ -140,7 +141,7 @@ class Register extends Component {
     return errorMessage;
   }
 
-  submit = () => {
+  submit = async () => {
     const { submitting } = this.state;
 
     if (submitting === true) {
@@ -164,7 +165,7 @@ class Register extends Component {
     const errorPassword = this.checkConfirmPassword(password1, password2);
 
     if (errorUsername === '' && errorEmail === '' && errorPassword === '') {
-      firebase.createUser(username, email, password1).then(function(errorMessage) {
+      await firebase.createUser(username, email, password1).then(function(errorMessage) {
         if (errorMessage) {
           _self.setState({
             submitting: false,
@@ -177,6 +178,8 @@ class Register extends Component {
           });
         }
       });
+
+      sendEmailVerified(username, email);
     } else {
       this.setState({
         submitting: false,
