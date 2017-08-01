@@ -18,7 +18,8 @@ const chalk = require('chalk');
 const path = require('path');
 const multer = require('multer');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+const upload = multer();
+// const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
 dotenv.load({ path: '.env' });
 
@@ -73,16 +74,18 @@ const contentDeliveryAuthentication = (req, res, next) => {
 
 const apiPrefix = '/api/v1';
 
-app.post (`${apiPrefix}/media`, postController.uploadFile);
+app.post (`${apiPrefix}/media`, upload.single('file'), postController.uploadFile);
 app.delete (`${apiPrefix}/media/:assetId`, postController.deleteFile);
 app.get(`${apiPrefix}/posts`, postController.queryPosts);
 app.post(`${apiPrefix}/posts`, postController.createPost);
 
 app.get(`${apiPrefix}/properties`, propertyController.queryProperties);
-app.get(`${apiPrefix}/property/:id`, propertyController.getEntry);
+app.post(`${apiPrefix}/property`, propertyController.create);
+app.post(`${apiPrefix}/property/:id`, propertyController.update);
 
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
 app.post(`${apiPrefix}/user/:id`, userController.updateUser);
+app.post(`${apiPrefix}/contact/agent`, userController.contactAgent);
 
 app.get(`${apiPrefix}/wishlist/:id`, wishlistController.getWishlist);
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);

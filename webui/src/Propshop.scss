@@ -20,7 +20,7 @@
 @import 'stylesheet/pages/sell';
 @import 'stylesheet/pages/agent';
 @import 'stylesheet/pages/agent-detail';
-@import 'stylesheet/pages/realestate';
+@import 'stylesheet/pages/property';
 @import 'stylesheet/pages/login';
 @import 'stylesheet/pages/register';
 @import 'stylesheet/pages/forgotpassword';
@@ -48,12 +48,15 @@
 @import 'stylesheet/components/checkbox';
 @import 'stylesheet/components/radio';
 @import 'stylesheet/components/rate';
-@import 'stylesheet/components/realestate-item';
+@import 'stylesheet/components/property-item';
 @import 'stylesheet/components/notification';
 @import 'stylesheet/components/select-price';
 @import 'stylesheet/components/map-location';
 @import 'stylesheet/components/news-item';
 @import 'stylesheet/components/hot-news';
 @import 'stylesheet/components/news-banner';
+@import 'stylesheet/components/display-type';
+@import 'stylesheet/components/form';
+@import 'stylesheet/components/contact-agent';
 @import 'stylesheet/components/wish-item';
 @import 'stylesheet/components/wish';

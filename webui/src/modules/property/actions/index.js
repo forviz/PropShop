@@ -43,6 +43,14 @@ export const receivePropertiesEntity = (properties) => {
   };
 };
 
+export const receivePropertyEntity = (propertyId, property) => {
+  return {
+    type: 'PROPERTY/ENTITY/RECEIVED',
+    propertyId,
+    property,
+  };
+};
+
 export const search = (searchParams, domain = 'default') => {
   console.log('searchPropertiesAction', searchParams);
   return (dispatch, getState) => {

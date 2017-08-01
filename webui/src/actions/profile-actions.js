@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { fetchUserAPI, updateUserAPI } from '../api/user';
 import { uploadMediaAPI, deleteMediaAPI } from '../api/media';
 
@@ -68,23 +69,18 @@ export const updateUserProfile = (id, data) => {
   };
 };
 
-export const updateAvatar = (id, file, fileName, oldAssetId = '') => {
+export const updateAvatar = (id, file, oldAssetId = '') => {
   return (dispatch) => {
     dispatch(setErrorMessage(''));
     dispatch(profileEditing(true));
     dispatch(profileEditSuccess(false));
-    uploadMediaAPI(file, fileName).then((result) => {
+    uploadMediaAPI(file).then((result) => {
       dispatch(profileEditing(false));
       if (result.status === 'success') {
         if (oldAssetId) deleteMediaAPI(oldAssetId);
         const newAssetId = result.data.sys.id;
-        const data = {
-          image: {
-            sys: {
-              id: newAssetId,
-            },
-          },
-        };
+        const data = {};
+        _.set(data, 'image.sys.id', newAssetId);
         updateUserAPI(id, data).then((updateResult) => {
           if (updateResult.status === 'SUCCESS') {
             dispatch(profileEditSuccess(true));

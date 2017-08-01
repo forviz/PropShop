@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Spin } from 'antd';
 import _ from 'lodash';
 
+// const MarkerWithLabel = require('markerwithlabel')(google.maps);
+
 const typeList = [
   { key: 'school', name: 'School' },
   { key: 'bank', name: 'Bank' },
@@ -37,7 +39,7 @@ class MapNearbyPlace extends Component {
     return resultJSON;
   }
 
-  setNearbyData = async (data) => {
+  setNearbyData = async (type, data) => {
     const newData = await Promise.all(data.map(async (value) => {
       const distance = await this.getDistance(value.geometry.location.lat, value.geometry.location.lng);
       return {
@@ -50,9 +52,12 @@ class MapNearbyPlace extends Component {
       loading: false,
       results: newData,
     }, () => {
-      this.initializeMap();
+      this.initializeMap(type);
     });
   }
+
+  map;
+  infowindow;
 
   handleType = (key) => {
     this.setState({
@@ -68,14 +73,14 @@ class MapNearbyPlace extends Component {
     });
 
     const { lat, lng, radius } = this.props;
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}$key=${process.env.REACT_APP_APIKEY}`;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${process.env.REACT_APP_APIKEY}`;
     fetch(url)
     .then((response) => {
       if (response.status !== 200) {
         return false;
       }
       response.json().then((data) => {
-        this.setNearbyData(data.results);
+        this.setNearbyData(type, data.results);
       });
       return true;
     },
@@ -85,43 +90,57 @@ class MapNearbyPlace extends Component {
     });
   }
 
-  /*global google */
-  initializeMap = () => {
+  /* global google */
+  initializeMap = (type) => {
     const center = new google.maps.LatLng(this.props.lat, this.props.lng);
 
-    const map = new google.maps.Map(this.map, {
+    const _self = this;
+
+    this.map = new google.maps.Map(this.map, {
       center,
       zoom: 15,
     });
 
-    const infowindow = new google.maps.InfoWindow();
+    this.infowindow = new google.maps.InfoWindow();
     let marker;
 
     marker = new google.maps.Marker({
       position: center,
-      map,
-      icon: 'images/static/googlemap/marker.png',
+      map: _self.map,
+      icon: 'images/googlemap/marker/default.png',
     });
 
     _.forEach(this.state.results, (value, key) => {
       marker = new google.maps.Marker({
         position: new google.maps.LatLng(value.geometry.location.lat, value.geometry.location.lng),
-        map,
+        map: _self.map,
+        icon: `images/googlemap/marker/${type}.png`,
       });
 
-      google.maps.event.addListener(marker, 'click', ((mark) => {
+      _.set(this.state.results[key], 'marker', marker);
+
+      google.maps.event.addListener(marker, 'mouseover', ((mark) => {
         return () => {
-          infowindow.setContent(value.name);
-          infowindow.open(map, mark);
+          _self.infowindow.setContent(value.name);
+          _self.infowindow.open(_self.map, mark);
         };
       })(marker, key));
     });
 
-    marker.setMap(map);
+    this.setState({
+      results: this.state.results,
+    });
+  }
+
+  handleHoverNearbyPlace = (label, marker) => {
+    this.infowindow.setContent(label);
+    this.infowindow.open(this.map, marker);
   }
 
   render() {
     const { currentSelect, results, loading } = this.state;
+
+    console.log('results', results);
 
     return (
       <div className="NearbyPlace">
@@ -132,13 +151,19 @@ class MapNearbyPlace extends Component {
                 {
                   _.map(typeList, (list, index) => {
                     return (
-                      <div role="button" tabIndex="0" key={index} className={"type " + (list.key === currentSelect ? 'active' : '')} onClick={() => this.handleType(list.key)} >
+                      <div
+                        role="button"
+                        tabIndex="0"
+                        key={index}
+                        className={`type ${list.key === currentSelect ? 'active' : ''}`}
+                        onClick={() => this.handleType(list.key)}
+                      >
                         <div className="item">
-                          <div className={`icon icon-${list.key}`}></div>
+                          <div className={`icon icon-${list.key}`} />
                           <div className="text">{list.name}</div>
                         </div>
                       </div>
-                    )
+                    );
                   })
                 }
               </div>
@@ -147,16 +172,18 @@ class MapNearbyPlace extends Component {
                   <center><Spin /></center>
                 ) : (
                   <div>
-                    {
+                    {_.size(results) > 0 ? (
                       _.map(results, (result, index) => {
                         return (
-                          <div key={index} className="clearfix">
+                          <div key={index} className="clearfix" onMouseEnter={() => this.handleHoverNearbyPlace(result.name, result.marker)}>
                             <div className="pull-left">{result.name}</div>
                             <div className="pull-right">{result.distance}</div>
                           </div>
-                        )
+                        );
                       })
-                    }
+                    ) : (
+                      <center>ไม่พบข้อมูล</center>
+                    )}
                   </div>
                 )}
               </div>

@@ -1,5 +1,7 @@
 // import { createRealEstate } from '../api/contentful';
-import { createPost } from '../api/property';
+import _ from 'lodash';
+import { createPost, createProperty, updateProperty } from '../api/property';
+import { uploadMediaAPI } from '../api/media';
 
 const goSaveStep = (step, data) => {
   return {
@@ -58,20 +60,72 @@ export const removeRequiredField = (field) => {
   };
 };
 
-export const doCreateRealEstate = (sell, user) => {
-  return (dispatch) => {
+export const doCreateRealEstate = (sell, userId) => {
+  return async (dispatch) => {
     dispatch(sendingData(true));
-    // createRealEstate(sell, user).then(result => {
-    //   dispatch(sendDataSuccess(true));
-    //   dispatch(sendingData(false));
-    // });
+    dispatch(sendDataSuccess(''));
 
-    createPost(sell, user).then((result) => {
-      console.log('create post success', result);
-      dispatch(sendDataSuccess());
-    }).catch((error) => {
-      // dispatch(sendDataSuccess());
-      console.log('error', error);
+    if (_.get(sell, 'step2.mainImage.newImage')) {
+      const mainImage = await uploadMediaAPI(_.get(sell, 'step2.mainImage.newImage'));
+      if (_.get(mainImage, 'data.sys.id')) {
+        _.set(sell, 'coverImageId', _.get(mainImage, 'data.sys.id'));
+      }
+    }
+
+    if (_.get(sell, 'step2.images[0].newImage')) {
+      const imagesId = await Promise.all(_.map(_.get(sell, 'step2.images'), async (value) => {
+        const images = await uploadMediaAPI(value.newImage);
+        return _.get(images, 'data.sys.id');
+      }));
+      _.set(sell, 'imagesId', imagesId);
+    }
+
+    createProperty(sell, userId).then((result) => {
+      dispatch(sendingData(false));
+      if (result.data.sys.id) {
+        dispatch(sendDataSuccess('yes'));
+      } else {
+        dispatch(sendDataSuccess('no'));
+      }
+    });
+  };
+};
+
+export const doUpdateProperty = (id, sell) => {
+  return async (dispatch) => {
+    dispatch(sendingData(true));
+    dispatch(sendDataSuccess(''));
+
+    if (_.get(sell, 'step2.mainImage.newImage')) {
+      const mainImage = await uploadMediaAPI(_.get(sell, 'step2.mainImage.newImage'));
+      if (_.get(mainImage, 'data.sys.id')) {
+        _.set(sell, 'coverImageId', _.get(mainImage, 'data.sys.id'));
+      }
+    }
+
+    if (_.get(sell, 'step2.images[0].newImage')) {
+      const imagesId = await Promise.all(_.map(_.get(sell, 'step2.images'), async (value) => {
+        const images = await uploadMediaAPI(value.newImage);
+        return _.get(images, 'data.sys.id');
+      }));
+      _.set(sell, 'imagesId', imagesId);
+    }
+
+    updateProperty(id, sell).then((result) => {
+      dispatch(sendingData(false));
+      if (result.data.sys.id) {
+        dispatch(sendDataSuccess('yes'));
+      } else {
+        dispatch(sendDataSuccess('no'));
+      }
+    });
+  };
+};
+
+export const clearForm = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SELL/CLEAR/FORM',
     });
   };
 };

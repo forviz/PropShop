@@ -3,7 +3,7 @@ const initialState = {
   result: '', // ok, no
   data: [],
   page: 1,
-  limit: 16,
+  limit: 10,
   total: 0,
 };
 

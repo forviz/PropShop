@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Dropzone from 'react-dropzone';
@@ -10,65 +11,96 @@ const TabPane = Tabs.TabPane;
 
 class Step2 extends Component {
 
+  static propTypes = {
+    mainImage: T.shape(),
+    images: T.array,
+    actions: T.shape().isRequired,
+    step2: T.shape().isRequired,
+  }
+
   state = {
     currentEdit: '',
   }
 
-  setMainImage = (accepted, rejected) => {
+  setMainImage = (accepted) => {
     if (accepted.length > 0) {
-      const { defaultValue } = this.props;
       const data = {
-        ...defaultValue,
-        mainImage: accepted[0]
-      }
-      // const file = accepted[0];
-      // contentful.uploadFile(file.name, file.type, file).then((entry) => {
-      //   console.log('entry', entry);
-      // });
+        ...this.props.step2,
+        mainImage: {
+          file: {
+            contentType: accepted[0].type,
+            url: accepted[0].preview,
+            details: {
+              size: accepted[0].size,
+            },
+          },
+          title: accepted[0].name,
+          newImage: accepted[0],
+        },
+      };
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
     } else {
       alert('นามสกุลไฟล์ต้องเป็น jpg,png หรือ video เท่านั้น และขนาดไฟล์ไม่เกิน 4 MB');
-      return false;
     }
   }
 
-  setImages = (accepted, rejected) => {
+  setImages = (accepted) => {
     if (accepted.length > 0) {
-      const { defaultValue } = this.props;
-      let images = defaultValue.images;
+      let { images } = this.props;
 
-      if ( this.state.currentEdit !== '' ) {
-        images[this.state.currentEdit] = accepted[0];
+      if (!_.get(images, '0.file.details.size')) {
+        images = [];
+      }
+
+      if (this.state.currentEdit !== '') {
+        images[this.state.currentEdit] = {
+          file: {
+            contentType: accepted[0].type,
+            url: accepted[0].preview,
+            details: {
+              size: accepted[0].size,
+            },
+          },
+          title: accepted[0].name,
+          newImage: accepted[0],
+        };
       } else {
-        _.map(accepted, (accept, index) => {
-          images.push(accept);
+        _.map(accepted, (accept) => {
+          images.push({
+            file: {
+              contentType: accept.type,
+              url: accept.preview,
+              details: {
+                size: accept.size,
+              },
+            },
+            title: accept.name,
+            newImage: accept,
+          });
         });
       }
 
       const data = {
-        ...defaultValue,
-        images: images
-      }
+        ...this.props.step2,
+        images,
+      };
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
 
       this.setState({
         currentEdit: '',
       });
-
     } else {
       alert('นามสกุลไฟล์ต้องเป็น jpg,png หรือ video เท่านั้น และขนาดไฟล์ไม่เกิน 4 MB');
-      return false;
     }
   }
 
   handleDeleteMainImage = () => {
-    const { defaultValue } = this.props;
     const data = {
-      ...defaultValue,
-      mainImage: {}
-    }
+      ...this.props.step2,
+      mainImage: {},
+    };
     const { saveStep } = this.props.actions;
     saveStep('step2', data);
   }
@@ -85,25 +117,18 @@ class Step2 extends Component {
   }
 
   deleteImages = (index) => {
-    const { defaultValue } = this.props;
-    let images = defaultValue.images;
+    const { images } = this.props;
     images.splice(index, 1);
     const data = {
-      ...defaultValue,
-      mainImage: images
-    }
+      ...this.props.step2,
+      images,
+    };
     const { saveStep } = this.props.actions;
     saveStep('step2', data);
   }
 
   render() {
-
-    const { defaultValue } = this.props;
-
-    console.log('defaultValue', defaultValue);
-
-    const hasMainImage = Object.keys(defaultValue.mainImage).length > 0 ? true : false;
-    const hasImages = Object.keys(defaultValue.images).length > 0 ? true : false;
+    const { mainImage, images } = this.props;
 
     const dropzoneStyle = {
       width: '100%',
@@ -113,20 +138,28 @@ class Step2 extends Component {
       borderStyle: 'dashed',
       borderRradius: 5,
       padding: '40px 0',
-    }
+    };
 
     return (
       <div id="Step2">
         <div className="container">
-      		<div className="row">
-	        	<div className="col-md-8 col-md-offset-2">
-	        		<h1>อัพโหลดรูปภาพ</h1>
+          <div className="row">
+            <div className="col-md-8 col-md-offset-2">
+              <h1>อัพโหลดรูปภาพ</h1>
               <Tabs type="card">
                 <TabPane tab="รูปภาพหลัก" key="1">
                   <div className="row">
-                    <div className={"col-md-" + (hasMainImage ? 6 : 12) }>
+                    <div className={`col-md-${_.get(mainImage, 'file.details.size') ? 6 : 12}`}>
                       <div style={{ textAlign: 'center' }} >
-                        <Dropzone accept="image/jpeg, image/png, video/*" maxSize={4000000} multiple={false} name="mainImage" ref={(node) => { this.dropzoneRefMainImage = node; }} onDrop={(accepted, rejected) => { this.setMainImage(accepted, rejected) }} style={dropzoneStyle} >
+                        <Dropzone
+                          accept="image/jpeg, image/png, video/*"
+                          maxSize={4000000}
+                          multiple={false}
+                          name="mainImage"
+                          ref={(node) => { this.dropzoneRefMainImage = node; }}
+                          onDrop={(accepted, rejected) => { this.setMainImage(accepted, rejected); }}
+                          style={dropzoneStyle}
+                        >
                           <p><Icon type="plus" style={{ fontSize: 80, color: '#cccccc' }} /></p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >ลากไฟล์มาวาง</p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >เพื่ออัพโหลดรูปภาพหลัก</p>
@@ -136,25 +169,25 @@ class Step2 extends Component {
                         </Dropzone>
                       </div>
                     </div>
-                    {hasMainImage === true &&
+                    {_.get(mainImage, 'file.details.size') &&
                       <div className="col-md-6">
                         <div className="main-image">
                           <div className="image">
-                            <img src={defaultValue.mainImage.preview} alt={defaultValue.mainImage.name} />
+                            <img src={_.get(mainImage, 'file.url')} alt={_.get(mainImage, 'title')} />
                           </div>
                           <div className="image-detail">
-                            <div className="image-name">{defaultValue.mainImage.name}</div>
-                            <div className="image-size">{defaultValue.mainImage.type} / {defaultValue.mainImage.size} kb</div>
+                            <div className="image-name">{_.get(mainImage, 'title')}</div>
+                            <div className="image-size">{_.get(mainImage, 'file.contentType')} / {_.get(mainImage, 'file.details.size')} kb</div>
                           </div>
                           <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                             <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
                               <div className="edit text-center">
-                                <a onClick={() => { this.dropzoneRefMainImage.open() }}><Icon type="edit" /></a>
+                                <a role="button" tabIndex="0" onClick={() => { this.dropzoneRefMainImage.open(); }}><Icon type="edit" /></a>
                               </div>
                             </div>
                             <div className="pull-right" style={{ width: '50%', border: '1px solid #cccccc', borderLeft: 0 }} >
                               <div className="delete text-center">
-                                <a onClick={this.handleDeleteMainImage}><Icon type="delete" /></a>
+                                <a role="button" tabIndex="0" onClick={this.handleDeleteMainImage}><Icon type="delete" /></a>
                               </div>
                             </div>
                           </div>
@@ -165,9 +198,17 @@ class Step2 extends Component {
                 </TabPane>
                 <TabPane tab="รูปภาพประกอบ" key="2">
                   <div className="row">
-                    <div className={"col-md-" + (hasImages ? 6 : 12) }>
+                    <div className={`col-md-${_.get(images, '0.file.details.size') ? 6 : 12}`}>
                       <div style={{ textAlign: 'center' }} >
-                        <Dropzone accept="image/jpeg, image/png, video/*" maxSize={4000000} multiple={true} name="images" ref={(node) => { this.dropzoneRefImages = node; }} onDrop={(accepted, rejected) => { this.setImages(accepted, rejected) }} style={dropzoneStyle} >
+                        <Dropzone
+                          accept="image/jpeg, image/png, video/*"
+                          maxSize={4000000}
+                          multiple={true}
+                          name="images"
+                          ref={(node) => { this.dropzoneRefImages = node; }}
+                          onDrop={(accepted, rejected) => { this.setImages(accepted, rejected); }}
+                          style={dropzoneStyle}
+                        >
                           <p><Icon type="plus" style={{ fontSize: 80, color: '#cccccc' }} /></p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >ลากไฟล์มาวาง</p>
                           <p style={{ fontFamily: 'SukhumvitSet-SemiBold', fontSize: 24 }} >เพื่ออัพโหลดรูปภาพประกอบ</p>
@@ -178,36 +219,36 @@ class Step2 extends Component {
                         </Dropzone>
                       </div>
                     </div>
-                    {hasImages === true &&
+                    {_.get(images, '0.file.details.size') &&
                       <div className="col-md-6">
                         <div className="row">
                           {
-                            _.map(defaultValue.images, (image, index) => {
+                            _.map(images, (image, index) => {
                               return (
                                 <div key={index} className="col-md-6" draggable="true">
                                   <div className="main-image">
                                     <div className="image">
-                                      <img src={image.preview} alt={image.name} />
+                                      <img src={_.get(image, 'file.url')} alt={_.get(image, 'title')} />
                                     </div>
                                     <div className="image-detail">
-                                      <div className="image-name">{image.name}</div>
-                                      <div className="image-size">{image.type} / {image.size} kb</div>
+                                      <div className="image-name">{_.get(image, 'title')}</div>
+                                      <div className="image-size">{_.get(image, 'file.contentType')} / {_.get(image, 'file.details.size')} kb</div>
                                     </div>
                                     <div className="image-actions clearfix" style={{ marginTop: 5 }} >
                                       <div className="pull-left" style={{ width: '50%', border: '1px solid #cccccc' }} >
                                         <div className="edit text-center">
-                                          <a onClick={() => this.handleEditImages(index)}><Icon type="edit" /></a>
+                                          <a role="button" tabIndex="0" onClick={() => this.handleEditImages(index)}><Icon type="edit" /></a>
                                         </div>
                                       </div>
                                       <div className="pull-right" style={{ width: '50%', border: '1px solid #cccccc', borderLeft: 0 }} >
                                         <div className="delete text-center">
-                                          <a onClick={() => this.handleDeleteImages(index)}><Icon type="delete" /></a>
+                                          <a role="button" tabIndex="0" onClick={() => this.handleDeleteImages(index)}><Icon type="delete" /></a>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              )
+                              );
                             })
                           }
                         </div>
@@ -216,30 +257,30 @@ class Step2 extends Component {
                   </div>
                 </TabPane>
               </Tabs>
-	        	</div>
-	        </div>
-	      </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    defaultValue: state.sell.step2,
+    step2: state.sell.step2,
+    mainImage: state.sell.step2.mainImage,
+    images: state.sell.step2.images,
   };
-}
+};
 
 const actions = {
   saveStep: SellActions.saveStep,
-  prevStep: SellActions.prevStep,
-  nextStep: SellActions.nextStep,
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    actions: bindActionCreators(actions, dispatch),
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Step2);

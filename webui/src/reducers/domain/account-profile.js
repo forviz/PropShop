@@ -90,12 +90,6 @@ const reducers = (state = initialState, action) => {
           about: {
             value: action.user.about,
           },
-          password1: {
-            value: '',
-          },
-          password2: {
-            value: '',
-          },
         },
       };
     }

@@ -8,10 +8,8 @@ import * as api from './api';
 import { getBoundSlug, convertRouterPropsToParams, convertParamsToLocationObject, convertParamsToSearchAPI } from './utils';
 
 // Components
-import PropertyItemMini from './components/PropertyItem/Mini';
-import PropertyItemThumbnail from './components/PropertyItem/Thumbnail';
+import PropertyItem from './components/PropertyItem';
 import PropertySearch from './components/PropertySearch';
-import PropertyItemThumbnailWithWish from './components/PropertyItem/ThumbnailWithWish';
 
 // Reducer
 import reducer from './reducers';
@@ -28,8 +26,6 @@ export {
   convertParamsToLocationObject,
   convertParamsToSearchAPI,
 
-  PropertyItemMini,
-  PropertyItemThumbnail,
-  PropertyItemThumbnailWithWish,
+  PropertyItem,
   PropertySearch,
 };

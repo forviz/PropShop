@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Input, Spin, Alert, notification } from 'antd';
+import { Select, Input, Spin, Alert } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
@@ -88,25 +88,12 @@ class Profile extends Component {
   }
 
   handleInputImage = (accepted) => {
-    let data = this.props.data.image;
-
+    const data = this.props.data.image;
     if (accepted.length > 0) {
-      data = {
-        ...this.props.data.image,
-        value: {
-          ...this.props.data.image.value,
-          fields: {
-            ...this.props.data.image.value.fields,
-            file: {
-              ...this.props.data.image.value.fields.file,
-              url: accepted[0].preview,
-            },
-            title: accepted[0].name,
-          },
-        },
-      };
+      _.set(data, 'value.fields.file.url', accepted[0].preview);
+      _.set(data, 'value.fields.title', accepted[0].name);
+      _.set(data, 'value.newImage', accepted[0]);
     }
-
     data.errorMessage = accepted.length > 0 ? false : true;
     this.setInput('image', data);
   }
@@ -197,20 +184,20 @@ class Profile extends Component {
     return errorMessage;
   }
 
-  checkPassword = (password1, password2) => {
-    let errorMessage = '';
-    if (password1 || password2) {
-      if (password1 !== password2) {
-        errorMessage = 'รหัสผ่านไม่ตรงกัน';
-      }
-    }
-    const data = {
-      ...this.props.data.password1,
-      errorMessage,
-    };
-    this.setInput('password1', data);
-    return errorMessage;
-  }
+  // checkPassword = (password1, password2) => {
+  //   let errorMessage = '';
+  //   if (password1 || password2) {
+  //     if (password1 !== password2) {
+  //       errorMessage = 'รหัสผ่านไม่ตรงกัน';
+  //     }
+  //   }
+  //   const data = {
+  //     ...this.props.data.password1,
+  //     errorMessage,
+  //   };
+  //   this.setInput('password1', data);
+  //   return errorMessage;
+  // }
 
   errorMessageTemplate = (message) => {
     if (!message) return message;
@@ -250,14 +237,13 @@ class Profile extends Component {
     const errorName = this.checkName(data.name.value);
     const errorLastname = this.checkLastname(data.lastname.value);
     const errorPhone = this.checkPhone(data.phone.value);
-    const errorPassword = this.checkPassword(data.password1.value, data.password2.value);
+    // const errorPassword = this.checkPassword(data.password1.value, data.password2.value);
 
     if (errorUsername === '' &&
         errorPrefixName === '' &&
         errorName === '' &&
         errorLastname === '' &&
-        errorPhone === '' &&
-        errorPassword === ''
+        errorPhone === ''
       ) {
       const { updateUserProfile } = this.props.actions;
       updateUserProfile(user.id, this.getOnlyValue(data));
@@ -267,10 +253,10 @@ class Profile extends Component {
   handleUpdateAvatar = () => {
     const { data, user } = this.props;
     const { updateAvatar } = this.props.actions;
-    if (_.get(data, 'image.value.fields.file.url') && _.get(data, 'image.errorMessage') === false) {
-      const file = _.get(data, 'image.value.fields.file');
-      const fileName = _.get(data, 'image.value.fields.file.fileName');
-      updateAvatar(user.id, file, fileName);
+    if (_.get(data, 'image.value.newImage') && _.get(data, 'image.errorMessage') === false) {
+      const file = _.get(data, 'image.value.newImage');
+      const oldAssetId = _.get(data, 'image.value.sys.id');
+      updateAvatar(user.id, file, oldAssetId);
     }
   }
 
@@ -278,6 +264,8 @@ class Profile extends Component {
     const { data, editing, editSuccess } = this.props;
 
     if (_.size(data) === 0) return <center><Spin /></center>;
+
+    console.log('sdkiadjisad', data);
 
     return (
       <div id="Profile">
@@ -298,7 +286,7 @@ class Profile extends Component {
                     </div>
                   }
                   <div className="form">
-                    {/* <section>
+                    <section>
                       <div className="title">รูปสมาชิก</div>
                       <div className="row">
                         <div className="col-md-6 col-md-offset-3">
@@ -307,13 +295,13 @@ class Profile extends Component {
                               รูปควรมีขนาดไม่เกิน 500 kb. และเป็นไฟล์นามสกุล .gif, .jpg หรือ .png
                             </label>
                             <Dropzone
-                              className={`uploadImage-block ${data.image.value ? 'has-image' : ''}`}
+                              className={`uploadImage-block ${_.get(data, 'image.value.fields.file.url') ? 'has-image' : ''}`}
                               accept="image/jpeg, image/png , image/gif"
                               maxSize={500000}
                               multiple={false}
                               onDrop={(accepted, rejected) => { this.handleInputImage(accepted, rejected); }}
                             >
-                              {data.image.value ? (
+                              {_.get(data, 'image.value.fields.file.url') ? (
                                 <img src={data.image.value.fields.file.url} alt={data.image.value.fields.title} />
                               ) : (
                                 <div className="uploadImage-bg">
@@ -325,7 +313,7 @@ class Profile extends Component {
                           <button className="btn btn-primary" onClick={this.handleUpdateAvatar} >อัพเดทรูปภาพ</button>
                         </div>
                       </div>
-                    </section>*/}
+                    </section>
                     <section>
                       <div className="title">ข้อมูลทั่วไป</div>
                       <div className="row">

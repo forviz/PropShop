@@ -23,12 +23,12 @@ export const realestateServiceReturnWithSuccess = (result) => {
   };
 };
 
-export const receivePropertiesEntity = (properties) => {
-  return {
-    type: 'ENTITY/PROPERTIES/RECEIVED',
-    properties,
-  }
-};
+// export const receivePropertiesEntity = (properties) => {
+//   return {
+//     type: 'ENTITY/PROPERTIES/RECEIVED',
+//     properties,
+//   }
+// };
 
 // export const propertyServiceReturnWithSuccess = (result) => {
 //   console.log('propertyServiceReturnWithSuccess', result);
