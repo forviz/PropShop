@@ -859,6 +859,8 @@ class Step0 extends Component {
                               initialValue: data.zipcode,
                               rules: [{
                                 required: true, message: 'Required!',
+                              }, {
+                                pattern: /^(\d{5})?$/, message: 'ต้องเป็นตัวเลข 5 หลัก!',
                               }],
                             })(
                               <Input type="text" value={data.zipcode} onChange={this.handleZipcode} maxLength="5" />,

@@ -12,7 +12,7 @@ class Step3 extends Component {
   static propTypes = {
     actions: T.shape().isRequired,
     data: T.shape().isRequired,
-    form: T.func.isRequired,
+    form: T.shape().isRequired,
   }
 
   setData = (newData) => {

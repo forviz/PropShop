@@ -12,8 +12,8 @@ const TabPane = Tabs.TabPane;
 class Step2 extends Component {
 
   static propTypes = {
-    mainImage: T.shape().isRequired,
-    images: T.arrayOf().isRequired,
+    mainImage: T.shape(),
+    images: T.array,
     actions: T.shape().isRequired,
     step2: T.shape().isRequired,
   }

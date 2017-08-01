@@ -65,16 +65,16 @@ export const doCreateRealEstate = (sell, userId) => {
     dispatch(sendingData(true));
     dispatch(sendDataSuccess(''));
 
-    if (_.size(_.get(sell, 'step2.mainImage')) > 0) {
-      const mainImage = await uploadMediaAPI(_.get(sell, 'step2.mainImage'));
+    if (_.get(sell, 'step2.mainImage.newImage')) {
+      const mainImage = await uploadMediaAPI(_.get(sell, 'step2.mainImage.newImage'));
       if (_.get(mainImage, 'data.sys.id')) {
         _.set(sell, 'coverImageId', _.get(mainImage, 'data.sys.id'));
       }
     }
 
-    if (_.size(_.get(sell, 'step2.images')) > 0) {
-      const imagesId = await Promise.all(_.map(_.get(sell, 'step2.images'), async (file) => {
-        const images = await uploadMediaAPI(file);
+    if (_.get(sell, 'step2.images[0].newImage')) {
+      const imagesId = await Promise.all(_.map(_.get(sell, 'step2.images'), async (value) => {
+        const images = await uploadMediaAPI(value.newImage);
         return _.get(images, 'data.sys.id');
       }));
       _.set(sell, 'imagesId', imagesId);
