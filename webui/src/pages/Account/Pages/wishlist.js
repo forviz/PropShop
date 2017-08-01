@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Input, Alert, Spin } from 'antd';
-import { NavLink } from 'react-router-dom';
+// import T from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Spin } from 'antd';
 import _ from 'lodash';
 
 import WishItem from '../../../components/WishItem';
@@ -11,30 +11,59 @@ import * as WishListActions from '../../../actions/wishlist-actions';
 
 class WishList extends Component {
 
-  componentDidMount() {
-    const { createWishlist, getWishlist } = this.props.actions;
-    const { user } = this.props;
-    const wishList = JSON.parse(localStorage.wishList);
-    // _.map(wishList, (value,key) => {
-    //   createWishlist('R1qSQRWv9LRpCjBGD1tsGfgFupm1', key);
-    // });
-    console.log('USERID', user);
-    getWishlist(user.id);
+  // static propTypes = {
+  //   // actions: T.shape({
+  //   //   getWishlist: T.func,
+  //   //   updateWishlist: T.func,
+  //   //   deleteWishlist: T.func,
+  //   // }),
+  //   wishlist: T.shape().isRequired,
+  //   fetching: T.bool.isRequired,
+  // }
+
+  componentDidMount = async () => {
+    const { getWishlist, updateWishlist } = this.props.actions;
+    const { user, wishlist } = this.props;
+    const { guestId } = localStorage;
+    await updateWishlist(guestId, user.id);
+    if (_.isEmpty(wishlist)) {
+      await getWishlist(user.id);
+    }
+    // setTimeout(() => { getWishlist(user.id); }, 10000);
+  }
+
+  handleDelete = async (propertyId) => {
+    this.setState({ focus: propertyId });
+    const localWishlist = JSON.parse(localStorage.wishList);
+    const indexItem = _.indexOf(localWishlist, propertyId);
+    if (indexItem !== -1) {
+      localWishlist.splice(indexItem, 1);
+    }
+    localStorage.wishList = JSON.stringify(localWishlist);
+
+    const { deleteWishlist } = this.props.actions;
+    const { user, wishlist } = this.props;
+    await deleteWishlist(wishlist, user.id, propertyId);
   }
 
   render() {
-    const wishList = JSON.parse(localStorage.wishList);
-    const { items, history } = this.props;
+    const { wishlist, fetching } = this.props;
 
     return (
       <div id="WishList">
-        <div className="container">
-          <div className="row">
-            <div className="head"> รายการที่บันทึกไว้ </div>
-          </div>
-          <div className="row">
-            <div className="col-md-9">
-              <WishItem items={items} />
+        <div className="row">
+          <div className="col-xs-12">
+            <div className="row">
+              <div className="head"> รายการที่บันทึกไว้ </div>
+            </div>
+            <div className="row">
+              <Spin spinning={fetching}>
+                {
+                  _.map(wishlist, (wish) => {
+                    return <WishItem item={wish} onDelete={this.handleDelete} />;
+                  })
+                }
+              </Spin>
             </div>
           </div>
         </div>
@@ -45,14 +74,16 @@ class WishList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    items: state.domain.accountWishlist.data,
+    wishlist: state.domain.accountWishlist.data,
     user: state.user.data,
+    fetching: state.domain.accountWishlist.fetching,
   };
 };
 
 const actions = {
-  createWishlist: WishListActions.createWishlist,
   getWishlist: WishListActions.getWishlist,
+  updateWishlist: WishListActions.updateWishlist,
+  deleteWishlist: WishListActions.deleteWishlist,
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -62,4 +93,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WishList);
-
