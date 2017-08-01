@@ -56,9 +56,6 @@ img {
 .form-inline .form-group:last-child {
   margin-right: 0; }
 
-#Content {
-  padding-top: 50px; }
-
 .vcenter {
   display: inline-block;
   vertical-align: middle;
@@ -331,20 +328,29 @@ img {
 #AgentDetail .property_list.odd .address {
   color: #409ee1; }
 
-#Realestate {
+#Property {
   padding-bottom: 40px; }
+<<<<<<< HEAD
   #Realestate .action .backhome {
+=======
+  #Property .action .backhome {
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
     display: inline-block;
     background-image: linear-gradient(to top, #ececec, white);
     border: 1px solid #cccccc;
     border-radius: 4px;
     padding: 8px 16px;
     cursor: pointer; }
+<<<<<<< HEAD
     #Realestate .action .backhome .fa {
+=======
+    #Property .action .backhome .fa {
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
       font-size: 16px;
       font-weight: bold;
       vertical-align: text-bottom;
       margin-right: 4px; }
+<<<<<<< HEAD
   #Realestate .action .address {
     display: inline-block;
     margin-left: 15px; }
@@ -407,10 +413,89 @@ img {
       font-size: 18px;
       color: #999999; }
     #Realestate .content .address-block .options ul li {
+=======
+  #Property .action .address {
+    display: inline-block;
+    margin-left: 15px; }
+  #Property .content .cover {
+    border: 1px solid #eeeeee; }
+    #Property .content .cover .street-view .block {
+      height: 500px; }
+    #Property .content .cover .street-view,
+    #Property .content .cover .image-gallery-slide-wrapper {
+      transition: opacity 1s ease-out;
+      opacity: 0;
+      height: 0;
+      overflow: hidden; }
+    #Property .content .cover.show-street-view .street-view {
+      opacity: 1;
+      height: auto; }
+    #Property .content .cover.show-banner .image-gallery-slide-wrapper {
+      opacity: 1;
+      height: auto; }
+    #Property .content .cover .google-map {
+      width: 29%;
+      float: right;
+      padding-top: 8px; }
+      #Property .content .cover .google-map img {
+        cursor: pointer; }
+    #Property .content .cover .image-gallery-slide img {
+      height: 500px; }
+    #Property .content .cover .image-gallery-thumbnail {
+      width: 140px; }
+      #Property .content .cover .image-gallery-thumbnail img {
+        height: 100px; }
+    #Property .content .cover .image-gallery-thumbnails-wrapper {
+      width: 70%;
+      float: left; }
+    #Property .content .cover .image-gallery-content.fullscreen .image-gallery-slide {
+      text-align: center; }
+      #Property .content .cover .image-gallery-content.fullscreen .image-gallery-slide img {
+        width: 65%;
+        height: inherit; }
+    #Property .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnail {
+      width: 100px; }
+      #Property .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnail img {
+        height: 70px; }
+    #Property .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnails-wrapper {
+      width: inherit;
+      float: none; }
+  #Property .content .main-info {
+    border: 1px solid #eeeeee;
+    border-top: 0; }
+  #Property .content .detail-block {
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    margin-top: 20px; }
+  #Property .content .price-block {
+    padding: 15px;
+    border-right: 1px solid #eeeeee; }
+    #Property .content .price-block .for {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 18px;
+      color: #4d790a; }
+    #Property .content .price-block .price {
+      font-family: 'Myriad Pro';
+      font-size: 48px; }
+    #Property .content .price-block .create_date {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 18px; }
+  #Property .content .address-block {
+    padding: 15px; }
+    #Property .content .address-block .address_1 {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 30px; }
+    #Property .content .address-block .address_2 {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 18px;
+      color: #999999; }
+    #Property .content .address-block .options ul li {
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
       display: inline-block;
       margin: 0 10px;
       font-family: "SukhumvitSet-Bold";
       font-size: 18px; }
+<<<<<<< HEAD
     #Realestate .content .address-block .options ul li:first-child {
       margin-left: 0; }
     #Realestate .content .address-block .options ul li:last-child {
@@ -446,6 +531,49 @@ img {
     border-top: 0; }
     #Realestate .nearby_place .place-list {
       padding: 15px; }
+=======
+    #Property .content .address-block .options ul li:first-child {
+      margin-left: 0; }
+    #Property .content .address-block .options ul li:last-child {
+      margin-right: 0; }
+  #Property .content section.info {
+    padding: 15px;
+    border: 1px solid #eeeeee;
+    border-top: 0; }
+    #Property .content section.info h2 {
+      font-family: "SukhumvitSet-Bold";
+      font-size: 30px;
+      margin-bottom: 10px; }
+    #Property .content section.info h4 {
+      font-family: "SukhumvitSet-Bold";
+      font-style: 18px;
+      margin-top: 20px; }
+  #Property .content section.info.detail {
+    border-right: 0;
+    border-bottom: 0;
+    min-height: 293px; }
+  #Property .content .contact-block {
+    background: #f6f6f6;
+    padding: 25px; }
+  #Property .content .agent-block {
+    margin-bottom: 20px; }
+  #Property .content .agent-info .name {
+    color: #8ebc42; }
+  #Property .content .agent-info .phone {
+    color: #999999;
+    font-weight: bold; }
+  #Property .nearby_place .result-lists .clearfix {
+    cursor: pointer;
+    transition: .3s; }
+    #Property .nearby_place .result-lists .clearfix div {
+      transition: .3s; }
+    #Property .nearby_place .result-lists .clearfix:hover {
+      background: #8ebc42; }
+      #Property .nearby_place .result-lists .clearfix:hover div {
+        color: #ffffff; }
+  #Property .facilities-block i.anticon-check-circle {
+    color: #8ebc42; }
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
 
 #Login {
   height: 100%; }
@@ -608,7 +736,10 @@ img {
     padding: 0;
     background: #f6f6f6; }
   #Profile .layout-right .layout-container h1 {
+<<<<<<< HEAD
     text-align: center;
+=======
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
     font-family: "SukhumvitSet-Bold";
     font-size: 36px;
     color: #8ebc42; }
@@ -661,7 +792,10 @@ img {
     padding: 0;
     background: #f6f6f6; }
   #Changepassword .layout-right .layout-container h1 {
+<<<<<<< HEAD
     text-align: center;
+=======
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
     font-family: "SukhumvitSet-Bold";
     font-size: 36px;
     color: #8ebc42; }
@@ -781,6 +915,7 @@ img {
   color: #8ebc42;
   font-size: 36px; }
 
+<<<<<<< HEAD
 #MyProperty .property-list .property-block .thumbnail {
   cursor: pointer; }
   #MyProperty .property-list .property-block .thumbnail:hover {
@@ -792,6 +927,10 @@ img {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden; }
+=======
+#MyProperty .property-list .property-block {
+  margin-bottom: 20px; }
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
 
 #MyProperty .property-pagination {
   text-align: center; }
@@ -806,7 +945,10 @@ img {
   margin-left: 0; }
 
 #Header .container {
-  width: 100%; }
+  width: 100%;
+  padding: 0;
+  padding-left: 15px;
+  margin: 0; }
 
 .navbar-default {
   background: #88b840;
@@ -1238,13 +1380,32 @@ body .btn-main:visited {
     font-family: "SukhumvitSet-Bold";
     font-size: 14px;
     color: #ffffff; }
+<<<<<<< HEAD
+=======
+
+body .ant-btn-danger,
+body .ant-btn-danger:active,
+body .ant-btn-danger:hover,
+body .ant-btn-danger:focus,
+body .ant-btn-danger:visited {
+  background-image: linear-gradient(to bottom, #E0001A, #D10016); }
+  body .ant-btn-danger span,
+  body .ant-btn-danger:active span,
+  body .ant-btn-danger:hover span,
+  body .ant-btn-danger:focus span,
+  body .ant-btn-danger:visited span {
+    font-family: "SukhumvitSet-Bold";
+    font-size: 16px;
+    color: #ffffff; }
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
 
 body .ant-input {
   font-size: 14px;
   border-color: #cccccc; }
 
 body .ant-input[type="text"],
-body .ant-input[type="password"] {
+body .ant-input[type="password"],
+body .ant-input[type="email"] {
   height: 38px;
   line-height: 39px;
   padding: 0 10px; }
@@ -1331,6 +1492,7 @@ body .rating span {
   margin-left: 5px;
   vertical-align: middle; }
 
+<<<<<<< HEAD
 .RealEstateItem {
   border: 1px solid #eeeeee;
   padding-bottom: 10px; }
@@ -1358,11 +1520,45 @@ body .rating span {
     .RealEstateItem .content .option ul li:last-child {
       margin-right: 0; }
     .RealEstateItem .content .option ul li span {
+=======
+.PropertyItem .Thumbnail {
+  border: 1px solid #eeeeee; }
+  .PropertyItem .Thumbnail:hover {
+    border: 1px solid #8ebc42; }
+  .PropertyItem .Thumbnail .image {
+    width: 100%;
+    height: 180px; }
+  .PropertyItem .Thumbnail .content {
+    z-index: 2;
+    padding: 10px;
+    padding-bottom: 2px; }
+    .PropertyItem .Thumbnail .content .name {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap; }
+    .PropertyItem .Thumbnail .content .price {
+      font-size: 14px;
+      color: #88b840;
+      font-weight: bold; }
+    .PropertyItem .Thumbnail .content .place {
+      font-size: 12px;
+      color: #484849; }
+    .PropertyItem .Thumbnail .content .option {
+      margin-top: 3px; }
+    .PropertyItem .Thumbnail .content .option ul li {
+      display: inline-block; }
+    .PropertyItem .Thumbnail .content .option ul li:first-child {
+      margin-left: 0; }
+    .PropertyItem .Thumbnail .content .option ul li:last-child {
+      margin-right: 0; }
+    .PropertyItem .Thumbnail .content .option ul li span {
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
       float: left;
       font-size: 12px;
       color: #484849;
       font-weight: bold;
       margin-right: 10px; }
+<<<<<<< HEAD
     .RealEstateItem .content .option ul li span:first-child {
       font-size: 14px; }
   .RealEstateItem .wishList {
@@ -1403,6 +1599,49 @@ body .rating span {
   .RealEstateItem.detail .price {
     font-weight: bold;
     font-size: 18px; }
+=======
+    .PropertyItem .Thumbnail .content .option ul li span:first-child {
+      font-size: 14px; }
+  .PropertyItem .Thumbnail .wishList {
+    font-size: 18px;
+    z-index: 2; }
+  .PropertyItem .Thumbnail .wishList.active,
+  .PropertyItem .Thumbnail .wishList:hover {
+    color: #8ebc42; }
+
+.PropertyItem .List {
+  border: 1px solid #eeeeee; }
+  .PropertyItem .List:hover {
+    border: 1px solid #8ebc42; }
+  .PropertyItem .List .actions .fa {
+    font-size: 18px; }
+  .PropertyItem .List .area-size {
+    margin-top: 10px; }
+  .PropertyItem .List .option {
+    margin-top: 10px; }
+  .PropertyItem .List .info .project {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */ }
+  .PropertyItem .List .info .price {
+    font-weight: bold;
+    font-size: 16px;
+    color: #8ebc42; }
+  .PropertyItem .List .info .description {
+    margin-top: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */ }
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
 
 body .ant-notification {
   z-index: 2000; }
@@ -1595,6 +1834,36 @@ body .ant-notification {
       background: #8ebc42; }
   .NewsBanner .image-gallery-left-nav:hover, .NewsBanner .image-gallery-right-nav:hover, .NewsBanner .image-gallery-left-nav:target, .NewsBanner .image-gallery-right-nav:target {
     color: white; }
+<<<<<<< HEAD
+=======
+
+.PropertyDisplayType ul li {
+  display: inline-block;
+  margin: 0 2px;
+  font-size: 24px;
+  cursor: pointer; }
+  .PropertyDisplayType ul li span {
+    color: #E5E5E5;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px;
+    padding: 2px 4px; }
+  .PropertyDisplayType ul li.active span, .PropertyDisplayType ul li:hover span {
+    color: #484849;
+    border: 1px solid transparent; }
+
+.ant-form .ant-form-item-label {
+  line-height: initial; }
+  .ant-form .ant-form-item-label label {
+    color: #484849; }
+
+.ant-form .has-feedback:after {
+  width: 38px;
+  height: 38px;
+  line-height: 38px; }
+
+.AgentContact .contact-form .ant-form-item {
+  margin-bottom: 10px; }
+>>>>>>> 0509e66e3ed09edd697bab0e579b2791447657d2
 
 .WishItem {
   font-size: 14px;

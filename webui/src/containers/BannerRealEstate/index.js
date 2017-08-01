@@ -19,13 +19,13 @@ class BannerRealEstate extends Component {
 
   renderSlide = (item) => {
     const backgroundStyle = {
-      background: `url(${item.mainImage})`,
+      background: `url(${item.mainImage.file.url})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     };
 
     return (
-      <NavLink exact to={`/realestate/${item.id}`}>
+      <NavLink exact to={`/property/${item.id}`}>
         <div className="image-gallery-image" style={backgroundStyle}>
           <div className="image-gallery-gradient"></div>
           <div className="image-gallery-description">
@@ -50,8 +50,6 @@ class BannerRealEstate extends Component {
     const { banners, loading } = this.props;
 
     if (loading === true) return <Spin />;
-
-    console.log('sdqwdq', banners);
 
     return (
       <div className="BannerRealEstate">

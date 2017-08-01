@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import SelectComponent from '../Select';
 
 class SelectSellType extends Component {
 
+  static propTypes = {
+    type: T.string.isRequired,
+    items: T.shape().isRequired,
+    placeholder: T.string,
+    value: T.string.isRequired,
+    onChange: T.func.isRequired,
+  }
+
   static defaultProps = {
     type: 'seller',
     items: {
-      buyer: [{ title: 'ขาย', value: 'sale' }, { title: 'เช่า', value: 'rent' }],
-      // seller: ['ขาย', 'เช่า', 'ขายใบจอง', 'ขายดาวน์', 'ขายหลังโอนกรรมสิทธิ์', 'ยูนิตของโครงการโดยตรง', 'ขายเท่าทุ่น', 'ขายขาดทุน'],
+      buyer: ['ซื้อ', 'เช่า'],
+      seller: ['ขาย', 'เช่า'],
     },
     placeholder: [],
-    value: 'sale',
   }
 
   handleOnChange = (value) => {
@@ -19,7 +27,6 @@ class SelectSellType extends Component {
 
   render() {
     const { type, items, placeholder, value } = this.props;
-
     return (
       <SelectComponent
         items={items[type]}

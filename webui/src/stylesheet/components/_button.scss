@@ -114,4 +114,20 @@ body {
 		}
 	}
 
+	.ant-btn-danger,
+	.ant-btn-danger:active,
+	.ant-btn-danger:hover,
+	.ant-btn-danger:focus,
+	.ant-btn-danger:visited {
+		background-image: linear-gradient(to bottom, #E0001A, #D10016);
+		span {
+			font-family: $sukumvit-bold;
+			font-size: 16px;
+			color: #ffffff;
+		}
+	}
+	.ant-btn-danger:hover {
+		
+	}
+
 }

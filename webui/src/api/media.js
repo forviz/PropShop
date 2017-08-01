@@ -1,36 +1,22 @@
 import _ from 'lodash';
 
-const BASEURL = 'http://localhost:4000/api/v1';
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
-export const uploadMediaAPI = (file, fileName) => {
-  return fetch(`${BASEURL}/media`, {
+export const uploadMediaAPI = async (file) => {
+  const data = new FormData();
+  data.append('file', file);
+  const result = await fetch(`${BASEURL}/media`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      file,
-      fileName,
-    }),
+    body: data,
   })
   .then((response) => {
     return response.json();
-  })
-  .then((response) => {
-    if (_.get(response, 'sys.id')) {
-      return {
-        status: 'success',
-        data: response,
-      };
-    }
-    return {
-      status: 'fail',
-    };
   });
+  return result;
 };
 
-export const deleteMediaAPI = (assetId) => {
-  return fetch(`${BASEURL}/media/${assetId}`, {
+export const deleteMediaAPI = async (assetId) => {
+  const result = await fetch(`${BASEURL}/media/${assetId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -38,16 +24,6 @@ export const deleteMediaAPI = (assetId) => {
   })
   .then((response) => {
     return response.json();
-  })
-  .then((response) => {
-    if (_.get(response, 'sys.id')) {
-      return {
-        status: 'success',
-        data: response,
-      };
-    }
-    return {
-      status: 'fail',
-    };
   });
+  return result;
 };

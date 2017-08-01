@@ -6,8 +6,6 @@ import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect, pathToJS } from 'react-redux-firebase';
 import _ from 'lodash';
 
-// import * as firebase from '../../../api/firebase';
-import * as UserActions from '../../../actions/user-actions';
 import * as ChangepasswordActions from '../../../actions/changepassword-actions';
 
 class Changepassword extends Component {
@@ -61,13 +59,13 @@ class Changepassword extends Component {
   }
 
   submit = () => {
-    const { firebase, editing } = this.props;
+    const { editing } = this.props;
 
     if (editing === true) {
       return;
     }
 
-    const { data, user } = this.props;
+    const { data } = this.props;
     const errorPassword = this.checkPassword(data.password1.value, data.password2.value);
 
     if (errorPassword === '') {
@@ -77,7 +75,7 @@ class Changepassword extends Component {
   }
 
   render() {
-    const { data, editing, editSuccess, errorMessage, authError } = this.props;
+    const { data, editing, editSuccess, errorMessage } = this.props;
 
     return (
       <div id="Changepassword">

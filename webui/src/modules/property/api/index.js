@@ -1,11 +1,12 @@
 import _ from 'lodash';
+import moment from 'moment';
 import * as contentfulManagement from 'contentful-management';
 
 const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.REACT_APP_ACCESSTOKEN_MANAGEMENT,
 });
 
-const BASEURL = 'http://localhost:4000/api/v1';
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 export const uploadFile = (fileName = '', fileType = '', file = '') => {
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
@@ -37,7 +38,6 @@ export const mapContentFulPropertyToMyField = (data) => {
       [index]: {
         id: elem.sys.id,
         address: _.get(elem, 'fields.location.full.th'),
-        agentId: '',
         amphur: _.get(elem, 'fields.location.district'),
         announceDetails: _.get(elem, 'fields.description.th', ''),
         areaSize: _.get(elem, 'fields.areaUsable.value'),
@@ -71,6 +71,17 @@ export const mapContentFulPropertyToMyField = (data) => {
         unitNo: _.get(elem, 'fields.location.unitNo'),
         floorNo: _.get(elem, 'fields.location.floorNo'),
         buildingNo: _.get(elem, 'fields.location.buildingNo'),
+        inWebsite: moment().diff(moment(elem.sys.createdAt), 'days') === 0 ? 1 : moment().diff(moment(elem.sys.createdAt), 'days'),
+        lastUpdate: moment(elem.sys.updatedAt).format('D/M/YYYY h:mm A'),
+        agent: {
+          id: _.get(elem, 'fields.agent.sys.id'),
+          image: _.get(elem, 'fields.agent.fields.image.fields.file.url'),
+          name: _.get(elem, 'fields.agent.fields.name'),
+          lastname: _.get(elem, 'fields.agent.fields.lastname'),
+          phone: _.get(elem, 'fields.agent.fields.phone'),
+          email: _.get(elem, 'fields.agent.fields.email'),
+          username: _.get(elem, 'fields.agent.fields.username'),
+        },
       },
     };
   }, {});
@@ -97,6 +108,7 @@ export const getProperties = (search) => {
   })
   .then(response => response.json())
   .then((response) => {
+    console.log('getProperties', response);
     return {
       data: mapContentFulPropertyToMyField(response.items),
       total: response.total,

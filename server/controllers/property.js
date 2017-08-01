@@ -3,9 +3,15 @@ import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 import moment from 'moment';
 
+const BASEURL = 'http://localhost:4000/api/v1';
+
 const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE,
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN,
+});
+
+const clientManagement = contentfulManagement.createClient({
+  accessToken: process.env.CONTENTFUL_ACCESSTOKEN_MANAGEMENT,
 });
 
 const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.809Z
@@ -15,7 +21,6 @@ export const queryProperties = async (req, res, next) => {
     console.log('req.query', req.query);
     const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, location, select, agentId, limit, skip } = req.query;
     const _for = req.query.for;
-
     const propertyQuery = _.omitBy({
       content_type: 'property',
       'sys.id': id,
@@ -30,8 +35,8 @@ export const queryProperties = async (req, res, next) => {
       'fields.priceSaleValue[lte]': _for === 'sale' && priceMax ? _.toNumber(priceMax) : undefined,
       'fields.priceRentValue[gte]': _for === 'rent' && priceMin ? _.toNumber(priceMin) : undefined,
       'fields.priceRentValue[lte]': _for === 'rent' && priceMax ? _.toNumber(priceMax) : undefined,
-      'fields.locationMarker[within]': bound || location,
-      'fields.agent.sys.id': agentId,
+      'fields.locationMarker[within]': bound ? bound : undefined,
+      'fields.agent.sys.id': agentId ? agentId : undefined,
       select: select ? select : undefined,
       limit: limit ? limit : undefined,
       skip: skip ? skip : undefined,
@@ -47,15 +52,341 @@ export const queryProperties = async (req, res, next) => {
   }
 }
 
-export const getEntry = async (req, res, next) => {
+export const create = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const response = await client.getEntry(id);
-    res.json(response);
+    const { data, userId } = req.body;
+
+    let images = [];
+    if (_.get(data, 'imagesId')) {
+      images = _.map(_.get(data, 'imagesId'), (id) => {
+        return {
+          sys: {
+            id,
+            linkType: 'Asset',
+            type: 'Link',
+          }
+        };
+      });
+    }
+
+    let tags = [];
+    if (_.get(data, 'step1.specialFeatureFacilities') || 
+      _.get(data, 'step1.specialFeatureNearbyPlaces') || 
+      _.get(data, 'step1.specialFeaturePrivate') || 
+      _.get(data, 'step1.specialFeatureView')) {
+        tags = _.concat(_.get(data, 'step1.specialFeatureFacilities'), _.get(data, 'step1.specialFeatureNearbyPlaces'), _.get(data, 'step1.specialFeaturePrivate'), _.get(data, 'step1.specialFeatureView'));
+    }
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then((space) => space.createEntry('property', {
+      fields: {
+        propertyType: {
+          'en-US': _.get(data, 'step0.residentialType'),
+        },
+        nameTh: {
+          'en-US': _.get(data, 'step0.topic'),
+        },
+        description: {
+          'en-US': {
+            en: '',
+            th: _.get(data, 'step0.announcementDetails'),
+          },
+        },
+        location: {
+          'en-US': {
+            "soi": "",
+            "full": {
+              "en": "",
+              "th": ""
+            },
+            "areas": [],
+            "mooNo": "",
+            "street": _.get(data, 'step0.street'),
+            "unitNo": _.get(data, 'step0.address'),
+            "floorNo": "",
+            "summary": {
+              "en": "",
+              "th": ""
+            },
+            "zipcode": _.get(data, 'step0.zipcode'),
+            "district": _.get(data, 'step0.district'),
+            "latitude": _.get(data, 'step0.googleMap.markers[0].position.lat'),
+            "province": _.get(data, 'step0.province'),
+            "longitude": _.get(data, 'step0.googleMap.markers[0].position.lng'),
+            "buildingNo": "",
+            "subDistrict": _.get(data, 'step0.amphur'),
+            "publicTransports": [
+              {
+                "name": "0",
+                "type": "BTS",
+                "distance": 0
+              },
+              {
+                "name": "0",
+                "type": "MRT",
+                "distance": 0
+              },
+              {
+                "name": "0",
+                "type": "BRT",
+                "distance": 0
+              }
+            ]
+          },
+        },
+        attributes: {
+          'en-US': {
+            numFloors: "",
+            yearBuilt: "",
+            numBedrooms: _.get(data, 'step0.bedroom'),
+            numBathrooms: _.get(data, 'step0.bathroom'),
+          }
+        },
+        areaLand: {
+          'en-US': {
+            "unit": "sqm",
+            "value": "",
+            "width": "",
+            "detail": "",
+            "height": ""
+          },
+        },
+        forSale: {
+          'en-US': _.get(data, 'step0.for') === 'ขาย' ? true : false,
+        },
+        forRent: {
+          'en-US': _.get(data, 'step0.for') === 'เช่า' ? true : false,
+        },
+        priceSale: {
+          'en-US': {
+            "type": "",
+            "until": "",
+            "value": _.get(data, 'step0.for') === 'ขาย' ? _.get(data, 'step0.price') : '',
+            "detail": "",
+            "currency": "thb",
+            "discount": 0
+          },
+        },
+        priceRent: {
+          'en-US': {
+            "type": "",
+            "until": "",
+            "value": _.get(data, 'step0.for') === 'เช่า' ? _.get(data, 'step0.price') : '',
+            "detail": "",
+            "currency": "thb",
+            "discount": 0
+          },
+        },
+        coverImage: {
+          'en-US': {
+            sys: {
+              id: _.get(data, 'coverImageId'),
+              linkType: 'Asset',
+              type: 'Link',
+            }
+          },
+        },
+        images: {
+          'en-US': images,
+        },
+        tags: {
+          'en-US': tags,
+        },
+        numBedrooms: {
+          'en-US': _.toNumber(_.get(data, 'step0.bedroom')),
+        },
+        numBathrooms: {
+          'en-US': _.toNumber(_.get(data, 'step0.bathroom')),
+        },
+        locationMarker: {
+          'en-US': {
+            lon: _.get(data, 'step0.googleMap.markers[0].position.lng'),
+            lat: _.get(data, 'step0.googleMap.markers[0].position.lat'),
+          }
+        },
+        priceSaleValue: {
+          'en-US': _.get(data, 'step0.for') === 'ขาย' ? _.toNumber(_.get(data, 'step0.price')) : 0,
+        },
+        priceRentValue: {
+          'en-US': _.get(data, 'step0.for') === 'เช่า' ? _.toNumber(_.get(data, 'step0.price')) : 0,
+        },
+        province: {
+          'en-US': _.get(data, 'step0.province'),
+        },
+        projectName: {
+          'en-US': _.get(data, 'step0.project'),
+        },
+        areaSize: {
+          'en-US': _.toNumber(_.get(data, 'step0.areaSize')),
+        },
+        agent: {
+          'en-US': {
+            sys: {
+              type: "Link",
+              linkType: "Entry",
+              id: userId,
+            }
+          }
+        }
+      }
+    }))
+    .then((entry) => {
+      return entry;
+    });
+
+    res.json({
+      data: response,
+    });
   } catch (e) {
     res.status(500).json({
-      status: 'ERROR',
-      message: e.message,
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
+    });
+  }
+}
+
+export const update = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const { id } = req.params;
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then((space) => space.getEntry(id))
+    .then((entry) => {
+      if (_.get(data, 'step0.residentialType')) _.set(entry.fields, "propertyType['en-US']", data.step0.residentialType);
+      if (_.get(data, 'step0.topic')) _.set(entry.fields, "nameTh['en-US']", data.step0.topic);
+      if (_.get(data, 'step0.announcementDetails')) {
+        _.set(entry.fields, "description['en-US']", {
+          "en": "",
+          "th": data.step0.announcementDetails
+        });
+      }
+      _.set(entry.fields, "location['en-US']", {
+        "soi": "",
+        "full": {
+          "en": "",
+          "th": ""
+        },
+        "areas": [],
+        "mooNo": "",
+        "street": _.get(data, 'step0.street'),
+        "unitNo": _.get(data, 'step0.address'),
+        "floorNo": "",
+        "summary": {
+          "en": "",
+          "th": ""
+        },
+        "zipcode": _.get(data, 'step0.zipcode'),
+        "district": _.get(data, 'step0.district'),
+        "latitude": _.get(data, 'step0.googleMap.markers[0].position.lat'),
+        "province": _.get(data, 'step0.province'),
+        "longitude": _.get(data, 'step0.googleMap.markers[0].position.lng'),
+        "buildingNo": "",
+        "subDistrict": _.get(data, 'step0.amphur'),
+        "publicTransports": [
+          {
+            "name": "0",
+            "type": "BTS",
+            "distance": 0
+          },
+          {
+            "name": "0",
+            "type": "MRT",
+            "distance": 0
+          },
+          {
+            "name": "0",
+            "type": "BRT",
+            "distance": 0
+          }
+        ]
+      });
+      _.set(entry.fields, "attributes['en-US']", {
+        "numFloors": "",
+        "yearBuilt": "",
+        "numBedrooms": _.get(data, 'step0.bedroom'),
+        "numBathrooms": _.get(data, 'step0.bathroom'),
+      });
+      _.set(entry.fields, "areaLand['en-US']", {
+        "unit": "sqm",
+        "value": _.get(data, 'step0.areaSize'),
+        "width": "",
+        "detail": "",
+        "height": ""
+      });
+      if (_.get(data, 'step0.for')) _.set(entry.fields, "forSale['en-US']", _.get(data, 'step0.for') === 'ขาย' ? true : false);
+      if (_.get(data, 'step0.for')) _.set(entry.fields, "forRent['en-US']", _.get(data, 'step0.for') === 'เช่า' ? true : false);
+      if (_.get(data, 'step0.for') === 'ขาย') {
+        _.set(entry.fields, "priceSale['en-US']", {
+          "type": "",
+          "until": "",
+          "value": _.get(data, 'step0.price'),
+          "detail": "",
+          "currency": "thb",
+          "discount": 0
+        });
+      }
+      if (_.get(data, 'step0.for') === 'เช่า') {
+        _.set(entry.fields, "priceRent['en-US']", {
+          "type": "",
+          "until": "",
+          "value": _.get(data, 'step0.price'),
+          "detail": "",
+          "currency": "thb",
+          "discount": 0
+        });
+      }
+      if (_.get(data, 'coverImageId')) {
+        _.set(entry.fields, "coverImage['en-US'].sys.id", _.get(data, 'coverImageId'));
+        _.set(entry.fields, "coverImage['en-US'].sys.linkType", 'Asset');
+        _.set(entry.fields, "coverImage['en-US'].sys.type", 'Link');
+      }
+      if (_.get(data, 'imagesId')) {
+        const images = _.map(_.get(data, 'imagesId'), (id) => {
+          return {
+            sys: {
+              id,
+              linkType: 'Asset',
+              type: 'Link',
+            }
+          };
+        });
+        _.set(entry.fields, "images['en-US']", images);
+      }
+      if (_.get(data, 'step1.specialFeatureFacilities') || 
+        _.get(data, 'step1.specialFeatureNearbyPlaces') || 
+        _.get(data, 'step1.specialFeaturePrivate') || 
+        _.get(data, 'step1.specialFeatureView')) {
+          const tags = _.concat(_.get(data, 'step1.specialFeatureFacilities'), _.get(data, 'step1.specialFeatureNearbyPlaces'), _.get(data, 'step1.specialFeaturePrivate'), _.get(data, 'step1.specialFeatureView'));
+          _.set(entry.fields, "tags['en-US']", tags);
+      }
+      if (_.get(data, 'step0.bedroom')) _.set(entry.fields, "numBedrooms['en-US']", data.step0.bedroom);
+      if (_.get(data, 'step0.bathroom')) _.set(entry.fields, "numBathrooms['en-US']", data.step0.bathroom);
+      _.set(entry.fields, "locationMarker['en-US']", {
+        lon: _.get(data, 'step0.googleMap.markers[0].position.lng'),
+        lat: _.get(data, 'step0.googleMap.markers[0].position.lat'),
+      });
+      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceSaleValue['en-US']", _.get(data, 'step0.for') === 'ขาย' ? _.get(data, 'step0.price') : 0);
+      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceRentValue['en-US']", _.get(data, 'step0.for') === 'เช่า' ? _.get(data, 'step0.price') : 0);
+      if (_.get(data, 'step0.province')) _.set(entry.fields, "province['en-US']", data.step0.province);
+      if (_.get(data, 'step0.project')) _.set(entry.fields, "projectName['en-US']", data.step0.project);
+      if (_.get(data, 'step0.areaSize')) _.set(entry.fields, "areaSize['en-US']", data.step0.areaSize);
+
+      return entry.update();
+    })
+    .then((entry) => {
+      return entry.publish();
+    });
+
+    res.json({
+      data: response,
+    });
+  } catch (e) {
+    res.status(500).json({
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
     });
   }
 }

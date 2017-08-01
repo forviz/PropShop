@@ -10,7 +10,8 @@ class PropertyEdit extends Component {
 
   static propTypes = {
     id: T.string.isRequired,
-    actions: T.object.isRequired,
+    actions: T.shape().isRequired,
+    history: T.shape().isRequired,
   }
 
   constructor(props) {
@@ -27,7 +28,7 @@ class PropertyEdit extends Component {
   render() {
     return (
       <div id="PropertyEdit">
-        <Sell />
+        <Sell history={this.props.history} />
       </div>
     );
   }

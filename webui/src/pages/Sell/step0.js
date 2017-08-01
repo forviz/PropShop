@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { Input, Select, Button, Spin } from 'antd';
+import { Input, Select, Button, Spin, Form } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
-import withScriptjs from "react-google-maps/lib/async/withScriptjs";
+import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+import withScriptjs from 'react-google-maps/lib/async/withScriptjs';
 import _ from 'lodash';
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
+import NumberFormat from 'react-number-format';
 
 import SelectSellType from '../../components/SelectSellType';
 import SelectResidentialType from '../../components/SelectResidentialType';
@@ -20,14 +21,15 @@ import districtJSON from './district.json';
 import * as SellActions from '../../actions/sell-actions';
 
 const Option = Select.Option;
+const FormItem = Form.Item;
 
 const AsyncGettingStartedExampleGoogleMap = withScriptjs(
   withGoogleMap(
     props => (
       <GoogleMap
         ref={props.onMapLoad}
-        zoom={props.zoom}
-        center={props.center}
+        defaultZoom={props.zoom}
+        defaultCenter={props.center}
         onClick={props.onMapClick}
       >
         {props.markers.map(marker => (
@@ -38,52 +40,32 @@ const AsyncGettingStartedExampleGoogleMap = withScriptjs(
           />
         ))}
       </GoogleMap>
-    )
-  )
+    ),
+  ),
 );
 
 class Step0 extends Component {
 
   static propTypes = {
-    data: T.object,
-  }
-
-  delay = (() => {
-    let timer = 0;
-    return (callback, ms) => {
-      clearTimeout (timer);
-      timer = setTimeout(callback, ms);
-    };
-  })();
-
-  getProvince = (id) => {
-    return _.find(provinceJSON, (province) => { return province.PROVINCE_ID === id });
-  }
-
-  getAmphur = (id) => {
-    return _.find(amphurJSON, (amphur) => { return amphur.AMPHUR_ID === id });
-  }
-
-  getDistrict = (id) => {
-    return _.find(districtJSON, (district) => { return district.DISTRICT_ID === id });
+    data: T.shape().isRequired,
+    form: T.func.isRequired,
   }
 
   setLocation = () => {
-    console.log('setLocation', this.props.data);
     let address = '';
-    address = this.props.data.province ? this.getProvince(this.props.data.provinceId).PROVINCE_NAME : '';
-    if ( this.props.data.district ) {
-      address += '+'+this.getDistrict(this.props.data.districtId).DISTRICT_NAME;
-    } else if ( this.props.data.amphur ) {
-      address += '+'+this.getAmphur(this.props.data.amphurId).AMPHUR_NAME;
+    address = this.props.data.province ? this.findProvince(this.props.data.provinceId).PROVINCE_NAME : '';
+    if (this.props.data.district) {
+      address += `+${this.findDistrict(this.props.data.districtId).DISTRICT_NAME}`;
+    } else if (this.props.data.amphur) {
+      address += `+${this.findAmphur(this.props.data.amphurId).AMPHUR_NAME}`;
     }
-    const url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+address;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}`;
     fetch(url)
     .then(response => response.json())
     .then((result) => {
       const newData = {
         ...this.props.data,
-        'googleMap': {
+        googleMap: {
           ...this.props.data.googleMap,
           zoom: 13,
           markers: [{
@@ -93,12 +75,17 @@ class Step0 extends Component {
             },
             key: Date.now(),
             defaultAnimation: 2,
-          }]
-        }
-      }
+          }],
+        },
+      };
       this.setData(newData);
     })
     .catch(err => console.error(err));
+  }
+
+  setData = (newData) => {
+    const { saveStep } = this.props.actions;
+    return saveStep('step0', newData);
   }
 
   handleMapLoad = this.handleMapLoad.bind(this);
@@ -125,11 +112,11 @@ class Step0 extends Component {
 
     const newData = {
       ...this.props.data,
-      'googleMap': {
+      googleMap: {
         ...this.props.data.googleMap,
         markers: nextMarkers,
-      }
-    }
+      },
+    };
     this.setData(newData);
 
     // if (nextMarkers.length === 3) {
@@ -147,18 +134,19 @@ class Step0 extends Component {
   //   });
   // }
 
-
-
-  setData = (newData) => {
-    const { saveStep } = this.props.actions;
-    return saveStep('step0', newData);
-  }
+  delay = (() => {
+    let timer = 0;
+    return (callback, ms) => {
+      clearTimeout(timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
 
   handleSelectFor = (value) => {
     const newData = {
       ...this.props.data,
-      'for': value
-    }
+      for: value,
+    };
     this.setData(newData);
   }
 
@@ -170,7 +158,7 @@ class Step0 extends Component {
     this.setData(newData);
 
     const { addRequiredField, removeRequiredField } = this.props.actions;
-    const lists = ["Town-home", "House", "Land"];
+    const lists = ['Town-home', 'House', 'Land'];
     lists.includes(value) ? addRequiredField('landSize') : removeRequiredField('landSize');
     value === 'Land' ? removeRequiredField('areaSize') : addRequiredField('areaSize');
   }
@@ -179,8 +167,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'topic': value
-    }
+      topic: value,
+    };
     this.setData(newData);
   }
 
@@ -188,18 +176,18 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'announcementDetails': value
-    }
+      announcementDetails: value,
+    };
     this.setData(newData);
   }
 
   sumAreaSize = () => {
-    if ( this.props.data.areaSize0 && this.props.data.areaSize1 ) {
-      const sumAreaSize = this.props.data.areaSize0*this.props.data.areaSize1;
+    if (this.props.data.areaSize0 && this.props.data.areaSize1) {
+      const sumAreaSize = this.props.data.areaSize0 * this.props.data.areaSize1;
       const newData = {
         ...this.props.data,
-        'areaSize': sumAreaSize
-      }
+        areaSize: sumAreaSize,
+      };
       this.setData(newData).then(() => {
         this.findPricePerUnit();
       });
@@ -210,8 +198,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'areaSize0': value.replace(/\D/g, '')
-    }
+      areaSize0: value.replace(/\D/g, ''),
+    };
     this.setData(newData).then(() => {
       this.sumAreaSize();
     });
@@ -221,8 +209,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'areaSize1': value.replace(/\D/g, '')
-    }
+      areaSize1: value.replace(/\D/g, ''),
+    };
     this.setData(newData).then(() => {
       this.sumAreaSize();
     });
@@ -230,12 +218,12 @@ class Step0 extends Component {
 
   findPricePerUnit = () => {
     const size = this.props.data.residentialType === 'Land' ? this.props.data.landSize * 4 : this.props.data.areaSize;
-    if ( size && this.props.data.price ) {
+    if (size && this.props.data.price) {
       const pricePerUnit = this.props.data.price / size;
       const newData = {
         ...this.props.data,
-        'pricePerUnit': pricePerUnit
-      }
+        pricePerUnit,
+      };
       this.setData(newData);
     }
   }
@@ -244,22 +232,22 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'areaSize': value.replace(/\D/g, ''),
-      'areaSize0': '',
-      'areaSize1': '',
-    }
+      areaSize: value.replace(/\D/g, ''),
+      areaSize0: '',
+      areaSize1: '',
+    };
     this.setData(newData).then(() => {
       this.findPricePerUnit();
     });
   }
 
   sumLandSize = () => {
-    if ( this.props.data.landSize0 && this.props.data.landSize1 ) {
-      const sumLandSize = Math.round(this.props.data.landSize0 * this.props.data.landSize1 / 4);
+    if (this.props.data.landSize0 && this.props.data.landSize1) {
+      const sumLandSize = Math.round((this.props.data.landSize0 * this.props.data.landSize1) / 4);
       const newData = {
         ...this.props.data,
-        'landSize': sumLandSize
-      }
+        landSize: sumLandSize,
+      };
       this.setData(newData).then(() => {
         this.findPricePerUnit();
       });
@@ -270,8 +258,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'landSize0': value.replace(/\D/g, '')
-    }
+      landSize0: value.replace(/\D/g, ''),
+    };
     this.setData(newData).then(() => {
       this.sumLandSize();
     });
@@ -281,8 +269,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'landSize1': value.replace(/\D/g, '')
-    }
+      landSize1: value.replace(/\D/g, ''),
+    };
     this.setData(newData).then(() => {
       this.sumLandSize();
     });
@@ -292,10 +280,10 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'landSize': value.replace(/\D/g, ''),
-      'landSize0': '',
-      'landSize1': '',
-    }
+      landSize: value.replace(/\D/g, ''),
+      landSize0: '',
+      landSize1: '',
+    };
     this.setData(newData).then(() => {
       this.findPricePerUnit();
     });
@@ -304,16 +292,16 @@ class Step0 extends Component {
   handleSelectBedRoom = (value) => {
     const newData = {
       ...this.props.data,
-      'bedroom': value
-    }
+      bedroom: value,
+    };
     this.setData(newData);
   }
 
   handleSelectBathRoom = (value) => {
     const newData = {
       ...this.props.data,
-      'bathroom': value
-    }
+      bathroom: value,
+    };
     this.setData(newData);
   }
 
@@ -321,8 +309,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'price': value.replace(/\D/g, ''),
-    }
+      price: value.replace(/\D/g, ''),
+    };
     this.setData(newData).then(() => {
       this.findPricePerUnit();
     });
@@ -332,8 +320,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'pricePerUnit': value
-    }
+      pricePerUnit: value,
+    };
     this.setData(newData);
   }
 
@@ -341,8 +329,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'fee': value.replace(/\D/g, '')
-    }
+      fee: value.replace(/\D/g, ''),
+    };
     this.setData(newData);
   }
 
@@ -350,19 +338,19 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'project': value
-    }
+      project: value,
+    };
     this.setData(newData);
   }
 
   handleSelectProvince = (value) => {
     const newData = {
       ...this.props.data,
-      'provinceId': value,
-      'province': this.getProvince(value).PROVINCE_NAME,
-      'amphur': '',
-      'district': '',
-    }
+      provinceId: value,
+      province: this.findProvince(value).PROVINCE_NAME,
+      amphur: '',
+      district: '',
+    };
     this.setData(newData).then(() => {
       this.setLocation();
     });
@@ -371,10 +359,10 @@ class Step0 extends Component {
   handleSelectAmphur = (value) => {
     const newData = {
       ...this.props.data,
-      'amphurId': value,
-      'amphur': this.getAmphur(value).AMPHUR_NAME,
-      'district': '',
-    }
+      amphurId: value,
+      amphur: this.findAmphur(value).AMPHUR_NAME,
+      district: '',
+    };
     this.setData(newData).then(() => {
       this.setLocation();
     });
@@ -383,9 +371,9 @@ class Step0 extends Component {
   handleSelectDistrict = (value) => {
     const newData = {
       ...this.props.data,
-      'districtId': value,
-      'district': this.getDistrict(value).DISTRICT_NAME,
-    }
+      districtId: value,
+      district: this.findDistrict(value).DISTRICT_NAME,
+    };
     this.setData(newData).then(() => {
       this.setLocation();
     });
@@ -395,8 +383,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'address': value
-    }
+      address: value,
+    };
     this.setData(newData);
   }
 
@@ -404,8 +392,8 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'street': value
-    }
+      street: value,
+    };
     this.setData(newData);
   }
 
@@ -413,30 +401,56 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      'zipcode': value.replace(/\D/g, ''),
-    }
+      zipcode: value.replace(/\D/g, ''),
+    };
     this.setData(newData);
   }
 
-  render() {
-
+  getDistrict = () => {
     const { data } = this.props;
-
-    let amphurData = [];
-    if ( data.province !== '' ) {
-      const amphurJSONFilter = _.filter(amphurJSON, (amphur) => { return amphur.PROVINCE_ID === data.provinceId });
-      amphurData = _.map(amphurJSONFilter, (value, index) => {
-        return <Option key={index} value={value.AMPHUR_ID} >{value.AMPHUR_NAME}</Option>;
-      });
-    }
-
-    let districtData = [];
-    if ( data.amphur !== '' ) {
-      const districtJSONFilter = _.filter(districtJSON, (district) => { return district.AMPHUR_ID === data.amphurId });
-      districtData = _.map(districtJSONFilter, (value, index) => {
+    if (data.amphur !== '') {
+      const districtJSONFilter = _.filter(districtJSON, (district) => { return district.AMPHUR_ID === data.amphurId; });
+      return _.map(districtJSONFilter, (value, index) => {
         return <Option key={index} value={value.DISTRICT_ID} >{value.DISTRICT_NAME}</Option>;
       });
     }
+    return [];
+  }
+
+  getAmphur = () => {
+    const { data } = this.props;
+    if (data.province !== '') {
+      const amphurJSONFilter = _.filter(amphurJSON, (amphur) => { return amphur.PROVINCE_ID === data.provinceId; });
+      return _.map(amphurJSONFilter, (value, index) => {
+        return <Option key={index} value={value.AMPHUR_ID} >{value.AMPHUR_NAME}</Option>;
+      });
+    }
+    return [];
+  }
+
+  getProvince = () => {
+    return _.map(provinceJSON, (value, index) => {
+      return (
+        <Option key={index} value={value.PROVINCE_ID}>{value.PROVINCE_NAME}</Option>
+      );
+    });
+  }
+
+  findProvince = (id) => {
+    return _.find(provinceJSON, (province) => { return province.PROVINCE_ID === id; });
+  }
+
+  findAmphur = (id) => {
+    return _.find(amphurJSON, (amphur) => { return amphur.AMPHUR_ID === id; });
+  }
+
+  findDistrict = (id) => {
+    return _.find(districtJSON, (district) => { return district.DISTRICT_ID === id; });
+  }
+
+  render() {
+    const { data } = this.props;
+    const { getFieldDecorator } = this.props.form;
 
     return (
       <div id="Step0">
@@ -451,58 +465,100 @@ class Step0 extends Component {
                     <div className="col-md-10 col-md-offset-1 custom-col">
                       <div className="row">
                         <div className="col-md-6">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('for') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              ประกาศประเภท
-                            </label>
-                            <div style={{ width: '100%' }}>
-                              <SelectSellType placeholder="เลือก" value={data.for} onChange={this.handleSelectFor} />
-                            </div>
-                          </div>
+                          <FormItem
+                            label="ประกาศประเภท"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('for', {
+                              initialValue: data.for,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <SelectSellType
+                                type="seller"
+                                placeholder="เลือก"
+                                value={data.for}
+                                onChange={this.handleSelectFor}
+                              />,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-6">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('residentialType') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              ประกาศอสังหาฯ
-                            </label>
-                            <div style={{ width: '100%' }} >
-                              <SelectResidentialType placeholder="เลือก" value={data.residentialType} onChange={this.handleSelectResidentialType} />
-                            </div>
-                          </div>
+                          <FormItem
+                            label="ประกาศอสังหาฯ"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('residentialType', {
+                              initialValue: data.residentialType,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <SelectResidentialType
+                                placeholder="เลือก"
+                                value={data.residentialType}
+                                onChange={this.handleSelectResidentialType}
+                              />,
+                            )}
+                          </FormItem>
                         </div>
                       </div>
-                      <div className="form-group">
-                        <label>
-                          {data.requiredField.includes('topic') &&
-                            <span className="text-red">*&nbsp;</span>
-                          }
-                          หัวข้อประกาศ
-                        </label>
-                        <Input value={data.topic} onChange={this.handleInputTopic} />
-                      </div>
-                      <div className="form-group">
-                        <label>
-                          {data.requiredField.includes('announcementDetails') &&
-                            <span className="text-red">*&nbsp;</span>
-                          }
-                          รายละเอียดเกี่ยวกับประกาศ
-                        </label>
-                        <Input type="textarea" rows={4} value={data.announcementDetails ? data.announcementDetails : []} onChange={this.handleInputAnnouncementDetails} />
-                      </div>
+                      <FormItem
+                        label="หัวข้อประกาศ"
+                        hasFeedback
+                        colon={false}
+                      >
+                        {getFieldDecorator('topic', {
+                          initialValue: data.topic,
+                          rules: [{
+                            required: true, message: 'Required!',
+                          }],
+                        })(
+                          <Input value={data.topic} onChange={this.handleInputTopic} />,
+                        )}
+                      </FormItem>
+                      <FormItem
+                        label="รายละเอียดเกี่ยวกับประกาศ"
+                        hasFeedback
+                        colon={false}
+                      >
+                        {getFieldDecorator('announcementDetails', {
+                          initialValue: data.announcementDetails,
+                          rules: [{
+                            required: true, message: 'Required!',
+                          }],
+                        })(
+                          <Input
+                            type="textarea"
+                            rows={4}
+                            value={data.announcementDetails ? data.announcementDetails : []}
+                            onChange={this.handleInputAnnouncementDetails}
+                          />,
+                        )}
+                      </FormItem>
                       <div className="row">
                         <div className="col-md-3">
                           <div className="form-group">
                             <label>ขนาดพื้นที่</label>
                             <div>
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.areaSize0} onChange={this.handleInputAreaSize0} disabled={!data.requiredField.includes('areaSize')} />
+                              <Input
+                                type="text"
+                                style={{ width: '40%', display: 'inline-block' }}
+                                value={data.areaSize0}
+                                onChange={this.handleInputAreaSize0}
+                                disabled={!data.requiredField.includes('areaSize')}
+                              />
                               &nbsp;<span>X</span>&nbsp;
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.areaSize1} onChange={this.handleInputAreaSize1} disabled={!data.requiredField.includes('areaSize')} /> ม.
+                              <Input
+                                type="text"
+                                style={{ width: '40%', display: 'inline-block' }}
+                                value={data.areaSize1}
+                                onChange={this.handleInputAreaSize1}
+                                disabled={!data.requiredField.includes('areaSize')}
+                              /> ม.
                             </div>
                           </div>
                         </div>
@@ -515,7 +571,13 @@ class Step0 extends Component {
                               พื้นที่ใช้สอย
                             </label>
                             <div>
-                              <Input type="text" style={{ width: '80%', display: 'inline-block' }} value={data.areaSize} onChange={this.handleInputSumAreaSize} disabled={!data.requiredField.includes('areaSize')} /> ตร.ม.
+                              <Input
+                                type="text"
+                                style={{ width: '80%', display: 'inline-block' }}
+                                value={data.areaSize}
+                                onChange={this.handleInputSumAreaSize}
+                                disabled={!data.requiredField.includes('areaSize')}
+                              /> ตร.ม.
                             </div>
                           </div>
                         </div>
@@ -523,9 +585,21 @@ class Step0 extends Component {
                           <div className="form-group">
                             <label>ขนาดที่ดิน</label>
                             <div>
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.landSize0} onChange={this.handleInputLandSize0} disabled={!data.requiredField.includes('landSize')} />
+                              <Input
+                                type="text"
+                                style={{ width: '40%', display: 'inline-block' }}
+                                value={data.landSize0}
+                                onChange={this.handleInputLandSize0}
+                                disabled={!data.requiredField.includes('landSize')}
+                              />
                               &nbsp;<span>X</span>&nbsp;
-                              <Input type="text" style={{ width: '40%', display: 'inline-block' }} value={data.landSize1} onChange={this.handleInputLandSize1} disabled={!data.requiredField.includes('landSize')} /> ม.
+                              <Input
+                                type="text"
+                                style={{ width: '40%', display: 'inline-block' }}
+                                value={data.landSize1}
+                                onChange={this.handleInputLandSize1}
+                                disabled={!data.requiredField.includes('landSize')}
+                              /> ม.
                             </div>
                           </div>
                         </div>
@@ -538,62 +612,83 @@ class Step0 extends Component {
                               จำนวนที่ดิน
                             </label>
                             <div>
-                              <Input type="text" style={{ width: '49%', display: 'inline-block' }} value={data.landSize} onChange={this.handleInputSumLandSize} disabled={!data.requiredField.includes('landSize')} /> ตร.ว.
-                              {/*
-                              <Select defaultValue="ตร.ว." style={{ width: '48%', display: 'inline-block' }} disabled={!data.requiredField.includes('landSize')} >
-                                <Option value="ตร.ว.">ตร.ว.</Option>
-                                <Option value="งาน">งาน</Option>
-                                <Option value="ไร่">ไร่</Option>
-                              </Select>
-                              */}
+                              <Input
+                                type="text"
+                                style={{ width: '78%', display: 'inline-block' }}
+                                value={data.landSize}
+                                onChange={this.handleInputSumLandSize}
+                                disabled={!data.requiredField.includes('landSize')}
+                              /> ตร.ว.
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-3">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('bedroom') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              ห้องนอน
-                            </label>
-                            <div style={{ width: '100%' }} >
-                              <SelectRoom placeholder="--" value={data.bedroom} onChange={this.handleSelectBedRoom} />
-                            </div>
-                          </div>
+                          <FormItem
+                            label="ห้องนอน"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('bedroom', {
+                              initialValue: data.bedroom,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <SelectRoom placeholder="ห้องนอน" value={data.bedroom} onChange={this.handleSelectBedRoom} />,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-3">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('bathroom') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              ห้องน้ำ
-                            </label>
-                            <div style={{ width: '100%' }} >
-                              <SelectRoom placeholder="--" value={data.bathroom} onChange={this.handleSelectBathRoom} />
-                            </div>
-                          </div>
+                          <FormItem
+                            label="ห้องนอน"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('bathroom', {
+                              initialValue: data.bathroom,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <SelectRoom placeholder="ห้องน้ำ" value={data.bathroom} onChange={this.handleSelectBathRoom} />,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-6">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('price') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              ราคา
-                            </label>
-                            <Input type="text" style={{ width: '90%', display: 'inline-block' }} value={data.price} onChange={this.handleInputPrice} /> บาท
-                          </div>
+                          <FormItem
+                            label="ราคา"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('price', {
+                              initialValue: data.price,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <NumberFormat
+                                className="ant-input"
+                                thousandSeparator={true}
+                                value={data.price}
+                                onChange={this.handleInputPrice}
+                                suffix=" บาท"
+                              />,
+                            )}
+                          </FormItem>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-3">
                           <div className="form-group">
                             <label>ราคาต่อหน่วย</label>
-                            <Input type="text" value={numeral(data.pricePerUnit).format('0,0.00')} onChange={this.handleInputPricePerUnit} disabled={true} />
+                            <Input
+                              type="text"
+                              value={numeral(data.pricePerUnit).format('0,0')}
+                              onChange={this.handleInputPricePerUnit}
+                              disabled={true}
+                            />
                           </div>
                         </div>
                         <div className="col-md-3">
@@ -612,7 +707,13 @@ class Step0 extends Component {
                               }
                               ค่าธรรมเนียมและภาษีโดยประมาณ
                             </label>
-                            <Input type="text" style={{ width: '90%', display: 'inline-block' }} value={data.fee} onChange={this.handleInputFee} /> บาท
+                            <NumberFormat
+                              className="ant-input"
+                              thousandSeparator={true}
+                              value={data.fee}
+                              onChange={this.handleInputFee}
+                              suffix=" บาท"
+                            />
                           </div>
                         </div>
                       </div>
@@ -635,129 +736,156 @@ class Step0 extends Component {
                       </div>
                       <div className="row">
                         <div className="col-md-4">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('province') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              จังหวัด
-                            </label>
-                            <Select
-                              placeholder="เลือก"
-                              value={data.province ? data.province : []}
-                              onChange={this.handleSelectProvince}
-                              style={{ width: '100%' }}
-                            >
-                              {
-                                _.map(provinceJSON, (value, index) => {
-                                  return (
-                                    <Option key={index} value={value.PROVINCE_ID}>{value.PROVINCE_NAME}</Option>
-                                  );
-                                })
-                              }
-                            </Select>
-                          </div>
+                          <FormItem
+                            label="จังหวัด"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('province', {
+                              initialValue: data.province,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <div>
+                                <Select
+                                  size="default"
+                                  placeholder="เลือก"
+                                  value={data.province ? data.province : []}
+                                  onChange={this.handleSelectProvince}
+                                  style={{ width: '100%' }}
+                                >
+                                  {this.getProvince()}
+                                </Select>
+                              </div>,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-4">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('amphur') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              อำเภอ/เขต
-                            </label>
-                            <Select
-                              placeholder="เลือกจังหวัด"
-                              value={data.amphur ? data.amphur : []}
-                              disabled={data.province !== '' ? false : true}
-                              onChange={this.handleSelectAmphur}
-                              style={{ width: '100%' }}
-                            >
-                              {amphurData}
-                            </Select>
-                          </div>
+                          <FormItem
+                            label="อำเภอ/เขต"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('amphur', {
+                              initialValue: data.amphur,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <div>
+                                <Select
+                                  size="default"
+                                  placeholder="เลือกจังหวัดก่อน"
+                                  value={data.amphur ? data.amphur : []}
+                                  disabled={data.province !== '' ? false : true}
+                                  onChange={this.handleSelectAmphur}
+                                  style={{ width: '100%' }}
+                                >
+                                  {this.getAmphur()}
+                                </Select>
+                              </div>,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-4">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('district') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              ตำบล/แขวง
-                            </label>
-                            <Select
-                              placeholder="เลือกอำเภอ/เขต"
-                              value={data.district ? data.district : []}
-                              disabled={data.amphur !== '' ? false : true}
-                              onChange={this.handleSelectDistrict}
-                              style={{ width: '100%' }}
-                            >
-                              {districtData}
-                            </Select>
-                          </div>
+                          <FormItem
+                            label="ตำบล/แขวง"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('district', {
+                              initialValue: data.district,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <div>
+                                <Select
+                                  size="default"
+                                  placeholder="เลือกอำเภอ/เขตก่อน"
+                                  value={data.district ? data.district : []}
+                                  disabled={data.amphur !== '' ? false : true}
+                                  onChange={this.handleSelectDistrict}
+                                  style={{ width: '100%' }}
+                                >
+                                  {this.getDistrict()}
+                                </Select>
+                              </div>,
+                            )}
+                          </FormItem>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-3">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('address') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              เลขที่
-                            </label>
-                            <Input type="text" value={data.address} onChange={this.handleAddress} />
-                          </div>
+                          <FormItem
+                            label="เลขที่"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('address', {
+                              initialValue: data.address,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <Input type="text" value={data.address} onChange={this.handleAddress} />,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-3">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('street') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              ถนน
-                            </label>
-                            <Input type="text" value={data.street} onChange={this.handleStreet} />
-                          </div>
+                          <FormItem
+                            label="ถนน"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('street', {
+                              initialValue: data.street,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }],
+                            })(
+                              <Input type="text" value={data.street} onChange={this.handleStreet} />,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-3">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('zipcode') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              รหัสไปรษณีย์
-                            </label>
-                            <Input type="text" value={data.zipcode} onChange={this.handleZipcode} maxLength="5" />
-                          </div>
+                          <FormItem
+                            label="รหัสไปรษณีย์"
+                            hasFeedback
+                            colon={false}
+                          >
+                            {getFieldDecorator('zipcode', {
+                              initialValue: data.zipcode,
+                              rules: [{
+                                required: true, message: 'Required!',
+                              }, {
+                                pattern: /^(\d{5})?$/, message: 'ต้องเป็นตัวเลข 5 หลัก!',
+                              }],
+                            })(
+                              <Input type="text" value={data.zipcode} onChange={this.handleZipcode} maxLength="5" />,
+                            )}
+                          </FormItem>
                         </div>
                         <div className="col-md-3">
-                          <div className="form-group">
-                            <label>
-                              {data.requiredField.includes('location') &&
-                                <span className="text-red">*&nbsp;</span>
-                              }
-                              แผนที่
-                            </label>
-                            <div>
-                              <Button type="select" style={{ width: '100%' }} >
-                                คลิกที่แผนที่เพื่อปักหมุด <FontAwesome name="map-marker" style={{ fontSize: 18 }} />
-                              </Button>
-                            </div>
-                          </div>
+                          <FormItem label="แผนที่">
+                            <Button type="select" style={{ width: '100%' }} >
+                              คลิกที่แผนที่เพื่อปักหมุด <FontAwesome name="map-marker" style={{ fontSize: 18 }} />
+                            </Button>
+                          </FormItem>
                         </div>
                       </div>
                       <div className="row">
                         <div className="col-md-12">
                           <div style={{ width: '100%', height: 500 }}>
                             <AsyncGettingStartedExampleGoogleMap
-                              googleMapURL={"https://maps.googleapis.com/maps/api/js?v=3.exp&key="+process.env.REACT_APP_APIKEY}
+                              googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&key=${process.env.REACT_APP_APIKEY}`}
                               loadingElement={<Spin />}
                               containerElement={
-                                <div style={{ height: `100%` }} />
+                                <div style={{ height: '100%' }} />
                               }
                               mapElement={
-                                <div style={{ height: `100%` }} />
+                                <div style={{ height: '100%' }} />
                               }
                               zoom={data.googleMap.zoom}
                               center={data.googleMap.markers[0].position}
@@ -781,11 +909,11 @@ class Step0 extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     data: state.sell.step0,
   };
-}
+};
 
 const mapStep0DataToSubmitData = (data) => {
   console.log('data', data);
@@ -801,17 +929,17 @@ const actions = {
         type: 'POST/SUBMIT/STEP0',
         data: submitData,
       });
-    }
+    };
   },
   saveStep: SellActions.saveStep,
   addRequiredField: SellActions.addRequiredField,
   removeRequiredField: SellActions.removeRequiredField,
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    actions: bindActionCreators(actions, dispatch),
   };
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Step0);

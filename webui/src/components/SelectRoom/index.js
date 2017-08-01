@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 import { Select } from 'antd';
 import _ from 'lodash';
 
 const Option = Select.Option;
 
 class SelectRoom extends Component {
+
+  static propTypes = {
+    maxRoom: T.number.isRequired,
+    placeholder: T.string,
+    value: T.string,
+    onChange: T.func.isRequired,
+  }
 
   static defaultProps = {
     maxRoom: 5,
@@ -31,7 +39,7 @@ class SelectRoom extends Component {
     const active = _.size(value) === 0 ? '' : 'active';
     return (
       <div className={`SelectRoom ${active}`}>
-        <Select placeholder={placeholder} value={value} style={{ width: '100%' }} onChange={this.handleOnChange} >
+        <Select placeholder={placeholder} value={value ? value : []} style={{ width: '100%' }} onChange={this.handleOnChange} >
           {this.renderRoom(maxRoom)}
         </Select>
       </div>
