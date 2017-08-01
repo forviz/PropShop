@@ -1,4 +1,4 @@
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 export const createContactAgent = (name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName) => {
   return fetch(`${BASEURL}/contact/agent`, {

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { uploadFile } from './contentful';
 
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 // const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
 

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import mapAgentEntryToEntity from './utils/mapAgentEntryToEntity';
 
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 export const fetchUserAPI = (uid) => {
   return fetch(`${BASEURL}/user/${uid}`, {

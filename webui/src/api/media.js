@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 export const uploadMediaAPI = async (file) => {
   const data = new FormData();

@@ -6,7 +6,7 @@ const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.REACT_APP_ACCESSTOKEN_MANAGEMENT,
 });
 
-const BASEURL = process.env.REACT_APP_BASE_URL;
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 export const uploadFile = (fileName = '', fileType = '', file = '') => {
   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
