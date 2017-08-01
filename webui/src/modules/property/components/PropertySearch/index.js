@@ -95,30 +95,38 @@ class PropertySearch extends Component {
     return (
       <PropertySearchWrapper>
         <div>
-          <InputGroup compact>
-            <Select
-              style={{ width: '20%' }}
-              defaultValue="sale"
-              onChange={value => this.onUpdateSearchParameters({ ...searchParameters, for: value })}
-            >
-              <Option value="sale">ขาย</Option>
-              <Option value="rent">เช่า</Option>
-            </Select>
-            <Select
-              prefix={<Icon type="notification" />}
-              style={{ width: '30%' }}
-              defaultValue="Condominium"
-              onChange={value => this.onUpdateSearchParameters({ ...searchParameters, propertyType: value })}
-            >
-              {_.map(propertyTypes, type => <Option key={type} value={type}>{type}</Option>)}
-            </Select>
-            <div style={{ width: '50%' }}>
-              <InputAreaSearch
-                value={_.find(areas, a => searchParameters.area.name === a.value)}
-                options={areas}
-                onChange={this.handleSelectArea}
-              />
-            </div>
+          <InputGroup>
+            <Row gutter={8}>
+              <Col xs={24} sm={24} md={5} lg={5} xl={5}>
+                <Select
+                  style={{ width: '100%' }}
+                  placeholder="ประเภทประกาศ"
+                  onChange={value => this.onUpdateSearchParameters({ ...searchParameters, for: value })}
+                >
+                  <Option value="sale">ขาย</Option>
+                  <Option value="rent">เช่า</Option>
+                </Select>
+              </Col>
+              <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+                <Select
+                  prefix={<Icon type="notification" />}
+                  style={{ width: '100%' }}
+                  placeholder="ประเภทอสังหาฯ"
+                  onChange={value => this.onUpdateSearchParameters({ ...searchParameters, propertyType: value })}
+                >
+                  {_.map(propertyTypes, type => <Option key={type} value={type}>{type}</Option>)}
+                </Select>
+              </Col>
+              <Col xs={24} sm={24} md={13} lg={13} xl={13}>
+                <div style={{ width: '100%' }}>
+                  <InputAreaSearch
+                    value={_.find(areas, a => searchParameters.area.name === a.value)}
+                    options={areas}
+                    onChange={this.handleSelectArea}
+                  />
+                </div>
+              </Col>
+            </Row>
           </InputGroup>
         </div>
         <div>
