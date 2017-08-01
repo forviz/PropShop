@@ -1,7 +1,7 @@
 import React from 'react';
 import { notification, Icon } from 'antd';
 
-const BASEURL = 'http://process.env.REACT_APP_BASE_URL/v1';
+const BASEURL = process.env.REACT_APP_BASE_URL;
 
 export const fetchGetWishlist = async (userId) => {
   return fetch(`${BASEURL}/wishlist/${userId}`, {
