@@ -8,8 +8,10 @@ import { Spin, Alert, Pagination } from 'antd';
 import _ from 'lodash';
 
 import * as PropertyActions from '../../../actions/property-actions';
-import RealEstateItem from '../../../components/RealEstateItem';
+// import RealEstateItem from '../../../components/RealEstateItem';
 import PropertyDisplayType from '../../../components/PropertyDisplayType';
+
+import PropertyItem from '../../../modules/property/components/PropertyItem';
 
 class Property extends Component {
 
@@ -80,7 +82,7 @@ class Property extends Component {
                     <div className={displayType === 'thumbnail' ? 'col-md-3' : 'col-md-12'} key={key}>
                       <div className="property-block">
                         <NavLink exact to={`/account/property?id=${item.id}`}>
-                          <RealEstateItem item={item} type={displayType} />
+                          <PropertyItem type={displayType} item={item} />
                         </NavLink>
                       </div>
                     </div>
