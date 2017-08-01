@@ -1,13 +1,14 @@
-import { fetchGetWishlist, fetchCreateWishlist, fetchDeleteWishlist } from '../api/wishlist';
+import _ from 'lodash';
+import { fetchGetWishlist, fetchCreateWishlist, fetchUpdateWishlist, fetchDeleteWishlist } from '../api/wishlist';
 
-const fetching = (fetching) => {
+const fetching = (fetch) => {
   return {
     type: 'DOMAIN/WISHLIST/FETCHING',
-    fetching,
+    fetching: fetch,
   };
 };
 
-const fetchWishlistItems = (items) => {
+const wishlistItems = (items) => {
   return {
     type: 'DOMAIN/WISHLIST/RESULT_RECEIVED',
     items,
@@ -21,42 +22,47 @@ export const fetchWishlist = () => {
 };
 
 export const getWishlist = (userId) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(fetching(true));
-    fetchGetWishlist(userId)
-    .then((items) => {
-      dispatch(fetchWishlistItems(items));
-      dispatch(fetching(false));
-    });
+    const items = await fetchGetWishlist(userId);
+    await dispatch(wishlistItems(items));
+    dispatch(fetching(false));
   };
 };
 
-export const createWishlist = (userId, propertyId) => {
-  return (dispatch) => {
-    dispatch(fetching(true));
+export const createWishlist = (prevWishlist, userId, property) => {
+  return async (dispatch) => {
+    await dispatch(fetching(true));
 
-    fetchCreateWishlist(userId, propertyId)
-    .then(() => {
-      fetchGetWishlist(userId)
-      .then((items) => {
-        dispatch(fetchWishlistItems(items));
-      });
-    });
+    prevWishlist.push(property);
+    dispatch(wishlistItems(prevWishlist));
+
+    await fetchCreateWishlist(userId, property.id);
+    await dispatch(fetching(false));
+    // await dispatch(getWishlist(userId));
   };
 };
 
-export const deleteWishlist = (userId, entryId) => {
-  console.log('USERSS',userId)
-  return (dispatch) => {
-    dispatch(fetching(true));
+export const updateWishlist = (guestId, userId) => {
+  return async (dispatch) => {
+    await dispatch(fetching(true));
 
-    fetchDeleteWishlist(entryId)
-    .then(() => {
-      fetchGetWishlist(userId)
-      .then((items) => {
-        dispatch(fetchWishlistItems(items));
-      });
-    });
+    await fetchUpdateWishlist(guestId, userId);
+
+    dispatch(fetching(false));
+  };
+};
+
+export const deleteWishlist = (wishlist, userId, propertyId) => {
+  return async (dispatch) => {
+    await dispatch(fetching(true));
+
+    _.pullAt(wishlist, _.findIndex(wishlist, ['id', propertyId]));
+    dispatch(wishlistItems(wishlist));
+
+    fetchDeleteWishlist(userId, propertyId);
+    dispatch(fetching(false));
+    // await dispatch(getWishlist(userId));
   };
 };
 

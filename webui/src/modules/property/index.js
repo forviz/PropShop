@@ -11,6 +11,7 @@ import { getBoundSlug, convertRouterPropsToParams, convertParamsToLocationObject
 import PropertyItemMini from './components/PropertyItem/Mini';
 import PropertyItemThumbnail from './components/PropertyItem/Thumbnail';
 import PropertySearch from './components/PropertySearch';
+import PropertyItemThumbnailWithWish from './components/PropertyItem/ThumbnailWithWish';
 
 // Reducer
 import reducer from './reducers';
@@ -29,5 +30,6 @@ export {
 
   PropertyItemMini,
   PropertyItemThumbnail,
+  PropertyItemThumbnailWithWish,
   PropertySearch,
 };
