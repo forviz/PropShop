@@ -22,16 +22,16 @@ export const mapFirebaseErrorMessage = (errorMessage) => {
   data['There is no user record corresponding to this identifier. The user may have been deleted.'] = 'ไม่พบอีเมลนี้';
   data['createUserWithEmailAndPassword failed: Second argument "password" must be a valid string.'] = 'รหัสผ่านต้องเป็นภาษาอังกฤษเท่านั้น';
   return data[errorMessage] ? data[errorMessage] : errorMessage;
-}
+};
 
 export const core = () => {
   return firebase;
-}
+};
 
 export const createUser = (username, email, password) => {
   return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
     user['username'] = username;
-    return contentful.createUser(user).then((userContentful) => { // create user to contentful
+    return contentful.createUser(user, false).then((userContentful) => { // create user to contentful
       // window.location = "/";
       return user.sendEmailVerification().then(function() { // firebase send mail verification
         return;
@@ -43,7 +43,7 @@ export const createUser = (username, email, password) => {
   }).catch(function(error) {
     return mapFirebaseErrorMessage(error.message);
   });
-}
+};
 
 export const signIn = (email, password) => {
   return firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
@@ -91,7 +91,7 @@ const signInWithProvider = async (provider) => {
     const user = result.user;
     user.username = result.displayName ? result.displayName : result.email;
     UserActions.fetchUserData(user.uid);
-    contentful.createUser(user).then(() => {
+    contentful.createUser(user, true).then(() => {
       return false;
     });
   }).catch((error) => {
@@ -153,12 +153,12 @@ export const verifiedUser = (user) => {
     }
   }
   return verified;
-}
+};
 
 export const updatePassword = (newPassword) => {
-  return firebase.auth().currentUser.updatePassword(newPassword).then(function() {
+  return firebase.auth().currentUser.updatePassword(newPassword).then(() => {
     return;
-  }, function(error) {
+  }, (error) => {
     return error;
   });
-}
+};

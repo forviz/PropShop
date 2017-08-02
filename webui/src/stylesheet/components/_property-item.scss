@@ -53,13 +53,11 @@
 
 			}
 		}
-		.wishList {
-			font-size: 18px;
+		.wish {
 			z-index: 2;
-		}
-		.wishList.active,
-		.wishList:hover {
-			color: $text-green;
+			position: absolute;
+			bottom: 15px;
+			right: 15px;
 		}
 	}
 	.List {

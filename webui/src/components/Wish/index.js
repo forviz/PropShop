@@ -24,10 +24,6 @@ class Wish extends Component {
     wished: false,
   }
 
-  componentDidMount = async () => {
-    
-  }
-
   handleWishList = async (item, wished) => {
     await this.updateLocalStorage(item, wished);
 
@@ -115,7 +111,11 @@ class Wish extends Component {
 
     return (
       <FontAwesome
-        onClick={() => this.handleWishList(item, wished)}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          this.handleWishList(item, wished);
+        }}
         className={wished ? 'Wish animation' : 'Wish'}
         name={wished ? 'heart' : 'heart-o'}
       />

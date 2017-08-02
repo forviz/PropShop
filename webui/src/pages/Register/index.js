@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Input, Alert, Spin, notification } from 'antd';
+import _ from 'lodash';
+import queryString from 'query-string';
 
 import * as firebase from '../../api/firebase';
-import { sendEmailVerified } from '../../api/email';
 import * as helpers from '../../helpers';
 
 // import BannerRealEstate from '../../containers/BannerRealEstate';
@@ -35,7 +36,7 @@ class Register extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-    firebase.core().auth().onAuthStateChanged(function(user) {
+    firebase.core().auth().onAuthStateChanged((user) => {
       if (user && user.emailVerified === true) {
         history.push({
           pathname: '/',
@@ -165,7 +166,7 @@ class Register extends Component {
     const errorPassword = this.checkConfirmPassword(password1, password2);
 
     if (errorUsername === '' && errorEmail === '' && errorPassword === '') {
-      await firebase.createUser(username, email, password1).then(function(errorMessage) {
+      await firebase.createUser(username, email, password1).then((errorMessage) => {
         if (errorMessage) {
           _self.setState({
             submitting: false,
@@ -178,8 +179,6 @@ class Register extends Component {
           });
         }
       });
-
-      sendEmailVerified(username, email);
     } else {
       this.setState({
         submitting: false,

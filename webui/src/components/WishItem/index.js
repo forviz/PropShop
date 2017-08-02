@@ -22,11 +22,11 @@ class WishItem extends Component {
 
     return (
       <div className="WishItem col-xs-12">
-        <NavLink exact to={`/realestate/${item.id}`}>
+        <NavLink exact to={`/property/${item.id}`}>
           <img src={_.get(item, 'imageUrl')} alt="" className="image" />
         </NavLink>
         <div className="detail col-xs-2 col-md-3">
-          <NavLink exact to={`/realestate/${item.id}`}>
+          <NavLink exact to={`/property/${item.id}`}>
             <div className="title" title={_.get(item, 'name.th')}>{_.get(item, 'name.th')}</div>
           </NavLink>
           <div className="price">{numeral(_.get(item, 'price.value')).format('0,0')} {_.get(item, 'price.currency')}</div>
@@ -47,7 +47,7 @@ class WishItem extends Component {
         </div>
         <div className="option">
           <div className="view">
-            <NavLink exact to={`/realestate/${item.id}`}>
+            <NavLink exact to={`/property/${item.id}`}>
               <button>
                 <FontAwesome
                   name="eye"

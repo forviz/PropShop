@@ -51,6 +51,7 @@ export const updateUser = async (req, res, next) => {
     if (_.get(data, 'specialization')) _.set(entry.fields, "specialization['en-US']", data.specialization);
     if (_.get(data, 'licenseNumber')) _.set(entry.fields, "licenseNumber['en-US']", data.licenseNumber);
     if (_.get(data, 'about')) _.set(entry.fields, "about['en-US']", data.about);
+    if (_.get(data, 'verify')) _.set(entry.fields, "verify['en-US']", data.verify);
     if (_.get(data, 'image.sys.id')) {
       _.set(entry.fields, "image['en-US'].sys.type", 'Link');
       _.set(entry.fields, "image['en-US'].sys.linkType", 'Asset');
@@ -178,6 +179,50 @@ export const contactAgent = async (req, res, next) => {
       status: '500',
       code: 'Internal Server Error',
       title: e.message,
+    });
+  }
+}
+
+export const emailVerify = async (req, res, next) => {
+  try {
+    const URL = 'http://localhost:3000/#/'
+
+    const { entryId, username, email } = req.body;
+    const imagesDir = path.join(__dirname, 'views/email/images');
+    fs.readFile(path.join(__dirname, '../views/email/template/user-verify', 'index.html'), 'utf8', function (err, html) {
+      if (err) {
+        throw err; 
+      }
+
+      html = html.replace(/\%BASE_IMAGES_URL%/g, imagesDir);
+      html = html.replace("%USERNAME%", username);
+      html = html.replace("%REDIRECT_URL%", `${URL}login?verify=${entryId}`);
+
+      const mail = new Mail({
+        from: 'punchkub147@gmail.com',
+        to: 'punchkub147@gmail.com',
+        subject: 'Verify Email PropShop',
+        html,
+        successCallback: function(suc) {
+          console.log('SEND EMAIL COMPLETE')
+          res.json({
+            status: 'success',
+          });
+
+        },
+        errorCallback: function(err) {
+          res.json({
+            status: 'success',
+          });
+        }
+      });
+      mail.send();
+      console.log('SEND EMAIL')
+    });
+  } catch (e) {
+    res.status(500).json({
+      status: 'ERROR',
+      message: e.message,
     });
   }
 }
