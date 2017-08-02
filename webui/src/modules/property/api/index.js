@@ -32,66 +32,73 @@ export const uploadFile = (fileName = '', fileType = '', file = '') => {
 export const mapContentFulPropertyToMyField = (data) => {
   // const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
   return _.reduce(data, (acc, elem, index) => {
-    console.log('elem', elem);
     const forSale = _.get(elem, 'fields.forSale') === true;
-    if (_.get(elem, 'fields.coverImage.fields.file.url')) {
-      return {
-        ...acc,
-        [index]: {
-          id: elem.sys.id,
-          address: _.get(elem, 'fields.location.full.th'),
-          amphur: _.get(elem, 'fields.location.district'),
-          announceDetails: _.get(elem, 'fields.description.th', ''),
-          areaSize: _.get(elem, 'fields.areaSize'),
-          bathroom: _.get(elem, 'fields.numBedrooms'),
-          bedroom: _.get(elem, 'fields.numBathrooms'),
-          district: _.get(elem, 'fields.location.subDistrict'),
-          fee: 0,
-          for: forSale ? 'ขาย' : 'เช่า',
-          location: {
-            lat: _.get(elem, 'fields.locationMarker.lat'),
-            lon: _.get(elem, 'fields.locationMarker.lon'),
-          },
-          price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
-          project: _.get(elem, 'fields.projectName'),
-          province: _.get(elem, 'fields.location.province'),
-          residentialType: _.get(elem, 'fields.propertyType'),
-          sold: false,
-          specialFeatureFacilities: _.get(elem, 'fields.tags'),
-          specialFeatureNearbyPlaces: [],
-          street: _.get(elem, 'fields.location.street'),
-          topic: _.get(elem, 'fields.nameTh'),
-          zipcode: _.get(elem, 'fields.location.zipcode'),
-          createdAt: elem.sys.createdAt,
-          updatedAt: elem.sys.updatedAt,
-          mainImage: _.get(elem, 'fields.coverImage.fields'),
-          images: _.get(elem, 'fields.images.fields'),
-          // mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields.file.url') : noImage,
-          // images: _.map(_.get(elem, 'fields.images'), (image) => {
-          //   return _.get(image, 'fields.file.url') ? _.get(image, 'fields.file.url') : noImage;
-          // }),
-          // Extra
-          publicTransports: _.get(elem, 'fields.location.publicTransports'),
-          unitNo: _.get(elem, 'fields.location.unitNo'),
-          floorNo: _.get(elem, 'fields.location.floorNo'),
-          buildingNo: _.get(elem, 'fields.location.buildingNo'),
-          inWebsite: moment().diff(moment(elem.sys.createdAt), 'days') === 0 ? 1 : moment().diff(moment(elem.sys.createdAt), 'days'),
-          lastUpdate: moment(elem.sys.updatedAt).format('D/M/YYYY h:mm A'),
-          agent: {
-            id: _.get(elem, 'fields.agent.sys.id'),
-            image: _.get(elem, 'fields.agent.fields.image.fields.file.url'),
-            name: _.get(elem, 'fields.agent.fields.name'),
-            lastname: _.get(elem, 'fields.agent.fields.lastname'),
-            phone: _.get(elem, 'fields.agent.fields.phone'),
-            email: _.get(elem, 'fields.agent.fields.email'),
-            username: _.get(elem, 'fields.agent.fields.username'),
-          },
-          postDate: moment(elem.sys.createdAt).locale('th').format('d MMM YYYY'),
-          enable: _.get(elem, 'fields.enable') ? _.get(elem, 'fields.enable') : false,
-          approve: _.get(elem, 'fields.approve') ? _.get(elem, 'fields.approve') : false,
+    const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
+    return {
+      ...acc,
+      [index]: {
+        id: elem.sys.id,
+        address: _.get(elem, 'fields.location.unitNo'),
+        amphur: _.get(elem, 'fields.location.district'),
+        announceDetails: _.get(elem, 'fields.description.th', ''),
+        areaSize: _.get(elem, 'fields.areaSize'),
+        bathroom: _.get(elem, 'fields.numBedrooms'),
+        bedroom: _.get(elem, 'fields.numBathrooms'),
+        district: _.get(elem, 'fields.location.subDistrict'),
+        fee: 0,
+        for: forSale ? 'ขาย' : 'เช่า',
+        location: {
+          lat: _.get(elem, 'fields.locationMarker.lat'),
+          lon: _.get(elem, 'fields.locationMarker.lon'),
         },
-      };
-    }
+        price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
+        project: _.get(elem, 'fields.projectName'),
+        province: _.get(elem, 'fields.location.province'),
+        residentialType: _.get(elem, 'fields.propertyType'),
+        sold: false,
+        // specialFeatureFacilities: _.get(elem, 'fields.tags'),
+        // specialFeatureNearbyPlaces: [],
+        street: _.get(elem, 'fields.location.street'),
+        tags: _.get(elem, 'fields.tags'),
+        topic: _.get(elem, 'fields.nameTh'),
+        zipcode: _.get(elem, 'fields.location.zipcode'),
+        createdAt: elem.sys.createdAt,
+        updatedAt: elem.sys.updatedAt,
+        // mainImage: _.get(elem, 'fields.coverImage.fields'),
+        // images: _.get(elem, 'fields.images.fields'),
+        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields') : {
+          file: {
+            url: noImage,
+          },
+        },
+        images: _.map(_.get(elem, 'fields.images'), (image) => {
+          return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : {
+            file: {
+              url: noImage,
+            },
+          };
+        }),
+        // Extra
+        publicTransports: _.get(elem, 'fields.location.publicTransports'),
+        unitNo: _.get(elem, 'fields.location.unitNo'),
+        floorNo: _.get(elem, 'fields.location.floorNo'),
+        buildingNo: _.get(elem, 'fields.location.buildingNo'),
+        inWebsite: moment().diff(moment(elem.sys.createdAt), 'days') === 0 ? 1 : moment().diff(moment(elem.sys.createdAt), 'days'),
+        lastUpdate: moment(elem.sys.updatedAt).format('D/M/YYYY h:mm A'),
+        agent: {
+          id: _.get(elem, 'fields.agent.sys.id'),
+          image: _.get(elem, 'fields.agent.fields.image.fields.file.url'),
+          name: _.get(elem, 'fields.agent.fields.name'),
+          lastname: _.get(elem, 'fields.agent.fields.lastname'),
+          phone: _.get(elem, 'fields.agent.fields.phone'),
+          email: _.get(elem, 'fields.agent.fields.email'),
+          username: _.get(elem, 'fields.agent.fields.username'),
+        },
+        postDate: moment(elem.sys.createdAt).locale('th').format('d MMM YYYY'),
+        enable: _.get(elem, 'fields.enable') ? _.get(elem, 'fields.enable') : false,
+        approve: _.get(elem, 'fields.approve') ? _.get(elem, 'fields.approve') : false,
+      },
+    };
   }, {});
 };
 

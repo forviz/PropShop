@@ -110,6 +110,13 @@ const reducers = (state = initalState, action) => {
           }],
         },
       },
+      step1: {
+        ...state.step1,
+        specialFeatureView: action.data.tags,
+        specialFeatureFacilities: action.data.tags,
+        specialFeatureNearbyPlaces: action.data.tags,
+        specialFeaturePrivate: action.data.tags,
+      },
       step2: {
         ...state.step2,
         mainImage: action.data.mainImage,

@@ -106,7 +106,7 @@ class List extends Component {
                 <ul>
                   <li>
                     <Tooltip title="Preview">
-                      <a href={`/#/property/${item.id}`} target="_blank">
+                      <a href={`/#/property/${item.id}?preview=true`} target="_blank">
                         <FontAwesome name="eye" />
                       </a>
                     </Tooltip>

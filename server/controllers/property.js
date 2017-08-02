@@ -19,7 +19,7 @@ const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.80
 export const queryProperties = async (req, res, next) => {
   try {
     console.log('req.query', req.query);
-    const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, location, select, agentId, limit, skip } = req.query;
+    const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, location, select, agentId, limit, skip, enable, approve } = req.query;
     const _for = req.query.for;
     const propertyQuery = _.omitBy({
       content_type: 'property',
@@ -37,6 +37,8 @@ export const queryProperties = async (req, res, next) => {
       'fields.priceRentValue[lte]': _for === 'rent' && priceMax ? _.toNumber(priceMax) : undefined,
       'fields.locationMarker[within]': bound ? bound : undefined,
       'fields.agent.sys.id': agentId ? agentId : undefined,
+      'fields.enable': enable ? enable : undefined,
+      'fields.approve': approve ? approve : undefined,
       select: select ? select : undefined,
       limit: limit ? limit : undefined,
       skip: skip ? skip : undefined,
@@ -367,19 +369,19 @@ export const update = async (req, res, next) => {
           const tags = _.concat(_.get(data, 'step1.specialFeatureFacilities'), _.get(data, 'step1.specialFeatureNearbyPlaces'), _.get(data, 'step1.specialFeaturePrivate'), _.get(data, 'step1.specialFeatureView'));
           _.set(entry.fields, "tags['en-US']", tags);
       }
-      if (_.get(data, 'step0.bedroom')) _.set(entry.fields, "numBedrooms['en-US']", data.step0.bedroom);
-      if (_.get(data, 'step0.bathroom')) _.set(entry.fields, "numBathrooms['en-US']", data.step0.bathroom);
+      if (_.get(data, 'step0.bedroom')) _.set(entry.fields, "numBedrooms['en-US']", _.toNumber(data.step0.bedroom));
+      if (_.get(data, 'step0.bathroom')) _.set(entry.fields, "numBathrooms['en-US']", _.toNumber(data.step0.bathroom));
       if (_.get(data, 'step0.googleMap.markers[0].position.lng') && _.get(data, 'step0.googleMap.markers[0].position.lat')) {
         _.set(entry.fields, "locationMarker['en-US']", {
           lon: _.get(data, 'step0.googleMap.markers[0].position.lng'),
           lat: _.get(data, 'step0.googleMap.markers[0].position.lat'),
         });
       }
-      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceSaleValue['en-US']", _.get(data, 'step0.for') === 'ขาย' ? _.get(data, 'step0.price') : 0);
-      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceRentValue['en-US']", _.get(data, 'step0.for') === 'เช่า' ? _.get(data, 'step0.price') : 0);
+      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceSaleValue['en-US']", _.get(data, 'step0.for') === 'ขาย' ? _.toNumber(_.get(data, 'step0.price')) : 0);
+      if (_.get(data, 'step0.price')) _.set(entry.fields, "priceRentValue['en-US']", _.get(data, 'step0.for') === 'เช่า' ? _.toNumber(_.get(data, 'step0.price')) : 0);
       if (_.get(data, 'step0.province')) _.set(entry.fields, "province['en-US']", data.step0.province);
       if (_.get(data, 'step0.project')) _.set(entry.fields, "projectName['en-US']", data.step0.project);
-      if (_.get(data, 'step0.areaSize')) _.set(entry.fields, "areaSize['en-US']", data.step0.areaSize);
+      if (_.get(data, 'step0.areaSize')) _.set(entry.fields, "areaSize['en-US']", _.toNumber(data.step0.areaSize));
       if (_.get(data, 'enable') === true || _.get(data, 'enable') === false) {
         _.set(entry.fields, "enable['en-US']", data.enable);
       }

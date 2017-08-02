@@ -6,13 +6,6 @@ const CheckboxGroup = Checkbox.Group;
 
 class SpecialFeature extends Component {
 
-  constructor(props) {
-    super(props);
-    if ( Object.keys(props.defaultValue).length > 0 ) {
-      this.state.selected = props.defaultValue;
-    }
-  }
-
   static defaultProps = {
     items: {},
     defaultValue: {
@@ -20,6 +13,13 @@ class SpecialFeature extends Component {
       specialFeatureFacilities: [],
       specialFeatureNearbyPlaces: [],
       specialFeaturePrivate: [],
+    },
+  }
+
+  constructor(props) {
+    super(props);
+    if (Object.keys(props.defaultValue).length > 0) {
+      this.state.selected = props.defaultValue;
     }
   }
 
@@ -30,7 +30,7 @@ class SpecialFeature extends Component {
       specialFeatureFacilities: [],
       specialFeatureNearbyPlaces: [],
       specialFeaturePrivate: [],
-    }
+    },
   }
 
   onSpecialFeatureViewChange = (checkedValues) => {
@@ -71,18 +71,17 @@ class SpecialFeature extends Component {
   // }
 
   render() {
-
     const { items, defaultValue } = this.props;
     const { selected } = this.state;
 
-    if ( !items ) return <div></div>;
+    if (!items) return <div />;
 
     const setValue = {
       specialFeatureView: _.size(selected.specialFeatureView) > 0 ? selected.specialFeatureView : defaultValue.specialFeatureView,
       specialFeatureFacilities: _.size(selected.specialFeatureFacilities) > 0 ? selected.specialFeatureFacilities : defaultValue.specialFeatureFacilities,
       specialFeatureNearbyPlaces: _.size(selected.specialFeatureNearbyPlaces) > 0 ? selected.specialFeatureNearbyPlaces : defaultValue.specialFeatureNearbyPlaces,
       specialFeaturePrivate: _.size(selected.specialFeaturePrivate) > 0 ? selected.specialFeaturePrivate : defaultValue.specialFeaturePrivate,
-    }
+    };
 
     return (
       <div className="SpecialFeature">
@@ -92,7 +91,7 @@ class SpecialFeature extends Component {
               <h4>คุณสมบัติพิเศษ</h4>
             </div>
             <div className="pull-right">
-              {/*<Checkbox checked={checkAll} onChange={this.handleCheckAll}>เลือกทั้งหมด</Checkbox>*/}
+              { /* <Checkbox checked={checkAll} onChange={this.handleCheckAll}>เลือกทั้งหมด</Checkbox> */ }
             </div>
           </div>
         </div>
@@ -101,25 +100,41 @@ class SpecialFeature extends Component {
             <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeatureView.name}</div>
               <div className="filter">
-                <CheckboxGroup options={items.specialFeatureView.data} value={setValue.specialFeatureView} onChange={this.onSpecialFeatureViewChange} />
+                <CheckboxGroup
+                  options={items.specialFeatureView.data}
+                  value={setValue.specialFeatureView}
+                  onChange={this.onSpecialFeatureViewChange}
+                />
               </div>
             </div>
             <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeatureFacilities.name}</div>
               <div className="filter">
-                <CheckboxGroup options={items.specialFeatureFacilities.data} value={setValue.specialFeatureFacilities} onChange={this.onSpecialFeatureFacilitiesChange} />
+                <CheckboxGroup
+                  options={items.specialFeatureFacilities.data}
+                  value={setValue.specialFeatureFacilities}
+                  onChange={this.onSpecialFeatureFacilitiesChange}
+                />
               </div>
             </div>
             <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeatureNearbyPlaces.name}</div>
               <div className="filter">
-                <CheckboxGroup options={items.specialFeatureNearbyPlaces.data} value={setValue.specialFeatureNearbyPlaces} onChange={this.onSpecialFeatureNearbyPlacesChange} />
+                <CheckboxGroup
+                  options={items.specialFeatureNearbyPlaces.data}
+                  value={setValue.specialFeatureNearbyPlaces}
+                  onChange={this.onSpecialFeatureNearbyPlacesChange}
+                />
               </div>
             </div>
             <div className="col-sm-3 col-md-3">
               <div className="title">{items.specialFeaturePrivate.name}</div>
               <div className="filter">
-                <CheckboxGroup options={items.specialFeaturePrivate.data} value={setValue.specialFeaturePrivate} onChange={this.onSpecialFeaturePrivateChange} />
+                <CheckboxGroup
+                  options={items.specialFeaturePrivate.data}
+                  value={setValue.specialFeaturePrivate}
+                  onChange={this.onSpecialFeaturePrivateChange}
+                />
               </div>
             </div>
           </div>
@@ -130,7 +145,7 @@ class SpecialFeature extends Component {
               <span className="remark">*สามารถเลือกได้หลายข้อ</span>
             </div>
             <div className="pull-right">
-              <Button className="btn-main" onClick={this.handleFilter} style={{width:100}} >ตกลง</Button>
+              <Button className="btn-main" onClick={this.handleFilter} style={{ width: 100 }} >ตกลง</Button>
             </div>
           </div>
         </div>
