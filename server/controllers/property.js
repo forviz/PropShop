@@ -227,11 +227,14 @@ export const create = async (req, res, next) => {
               id: userId,
             }
           }
-        }
+        },
+        enable: {
+          'en-US': false,
+        },
       }
     }))
     .then((entry) => {
-      return entry;
+      return entry.publish();
     });
 
     res.json({
