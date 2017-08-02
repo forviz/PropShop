@@ -74,9 +74,17 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
+const SearchbarWrapper = styled.div`
+  position: absolute;
+  top: 48px;
+  width: 100%;
+  background: white;
+  z-index: 10;
+`;
+
 const MapWrapper = styled.div`
   position: fixed;
-  top:50px;
+  top:126px;
   bottom: 0px;
   right: ${props => (props.hide ? '100%' : '0')};
   left: ${props => (props.hide ? '-100%' : '0')};
@@ -112,6 +120,7 @@ const ListWrapper = styled.div`
     right: 0;
     left: 50%;
     width: 50%;
+    padding-top: 80px;
   }
 `;
 
@@ -300,6 +309,8 @@ class PropertySearchPage extends Component {
           <PropertySearch
             activeTab="area"
             searchParameters={searchParameters}
+            trigger="change"
+            showSearchButton={false}
             onUpdate={this.setUrl}
           />
         )}
@@ -355,6 +366,15 @@ class PropertySearchPage extends Component {
 
     return (
       <div id="Home">
+        <SearchbarWrapper>
+          <PropertySearch
+            activeTab="area"
+            searchParameters={searchParameters}
+            trigger="none"
+            showSearchButton
+            onSubmit={this.setUrl}
+          />
+        </SearchbarWrapper>
         {
           <MapWrapper hide={mobileViewMode === 'list'}>
             <MapLocation
@@ -382,8 +402,6 @@ class PropertySearchPage extends Component {
         {
           (mobileViewMode === 'list') &&
             <ListWrapper mode={mobileViewMode}>
-              {this.renderSearchFilter(false, searchParameters)}
-              <hr />
               {this.renderList(realestate.loading, realestate.data, realestate.total)}
             </ListWrapper>
         }
@@ -397,9 +415,17 @@ class PropertySearchPage extends Component {
   renderSplitScreen = () => {
     const { searchParameters, realestate } = this.props;
     const { userFocusOnPropertiesWithId } = this.state;
-    console.log('renderSplitScreen', userFocusOnPropertiesWithId);
     return (
       <div id="Home">
+        <SearchbarWrapper>
+          <PropertySearch
+            activeTab="area"
+            searchParameters={searchParameters}
+            trigger="change"
+            showSearchButton={false}
+            onUpdate={this.setUrl}
+          />
+        </SearchbarWrapper>
         <MapWrapper>
           <MapLocation
             area={searchParameters.area}
@@ -409,8 +435,7 @@ class PropertySearchPage extends Component {
           />
         </MapWrapper>
         <ListWrapper>
-          {this.renderSearchFilter(false, searchParameters)}
-          <hr />
+          { /* this.renderSearchFilter(false, searchParameters) */ }
           {this.renderList(realestate.loading, realestate.data, realestate.total)}
         </ListWrapper>
       </div>
