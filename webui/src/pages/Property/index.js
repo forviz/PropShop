@@ -93,19 +93,17 @@ class Property extends Component {
 
     if (data === undefined) return <div />;
 
-    console.log('asdasd', data);
-
     let images = [];
     images.push({
-      original: data.mainImage,
-      thumbnail: data.mainImage,
+      original: data.mainImage.file.url,
+      thumbnail: data.mainImage.file.url,
     });
 
     if (data.images) {
       images = _.map(data.images, (image) => {
         return {
-          original: image,
-          thumbnail: image,
+          original: image.file.url,
+          thumbnail: image.file.url,
         };
       });
     }
