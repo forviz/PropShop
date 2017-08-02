@@ -199,8 +199,8 @@ export const emailVerify = async (req, res, next) => {
       html = html.replace("%REDIRECT_URL%", `${URL}login?verify=${entryId}`);
 
       const mail = new Mail({
-        from: 'punchkub147@gmail.com',
-        to: 'punchkub147@gmail.com',
+        from: 'propshop@gmail.com',
+        to: email,
         subject: 'Verify Email PropShop',
         html,
         successCallback: function(suc) {
