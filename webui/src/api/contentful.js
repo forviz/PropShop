@@ -3,7 +3,8 @@ import * as contentfulManagement from 'contentful-management';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { mapContentFulPropertyToMyField } from './property';
+// import { mapContentFulPropertyToMyField } from './property';
+import { mapContentFulPropertyToMyField } from '../modules/property/api';
 import mapAgentEntryToEntity from './utils/mapAgentEntryToEntity';
 
 const client = contentful.createClient({

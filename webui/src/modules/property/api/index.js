@@ -32,6 +32,7 @@ export const uploadFile = (fileName = '', fileType = '', file = '') => {
 export const mapContentFulPropertyToMyField = (data) => {
   // const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
   return _.reduce(data, (acc, elem, index) => {
+    console.log('elem', elem);
     const forSale = _.get(elem, 'fields.forSale') === true;
     if (_.get(elem, 'fields.coverImage.fields.file.url')) {
       return {
@@ -41,25 +42,25 @@ export const mapContentFulPropertyToMyField = (data) => {
           address: _.get(elem, 'fields.location.full.th'),
           amphur: _.get(elem, 'fields.location.district'),
           announceDetails: _.get(elem, 'fields.description.th', ''),
-          areaSize: _.get(elem, 'fields.areaUsable.value'),
+          areaSize: _.get(elem, 'fields.areaSize'),
           bathroom: _.get(elem, 'fields.numBedrooms'),
           bedroom: _.get(elem, 'fields.numBathrooms'),
           district: _.get(elem, 'fields.location.subDistrict'),
           fee: 0,
           for: forSale ? 'ขาย' : 'เช่า',
           location: {
-            lat: _.get(elem, 'fields.location.latitude'),
-            lon: _.get(elem, 'fields.location.longitude'),
+            lat: _.get(elem, 'fields.locationMarker.lat'),
+            lon: _.get(elem, 'fields.locationMarker.lon'),
           },
           price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
-          project: _.replace(_.get(elem, 'fields.name.eh'), `Unit ${_.get(elem, 'fields.location.unitNo')}`),
+          project: _.get(elem, 'fields.projectName'),
           province: _.get(elem, 'fields.location.province'),
           residentialType: _.get(elem, 'fields.propertyType'),
           sold: false,
           specialFeatureFacilities: _.get(elem, 'fields.tags'),
           specialFeatureNearbyPlaces: [],
           street: _.get(elem, 'fields.location.street'),
-          topic: _.get(elem, 'fields.name.th'),
+          topic: _.get(elem, 'fields.nameTh'),
           zipcode: _.get(elem, 'fields.location.zipcode'),
           createdAt: elem.sys.createdAt,
           updatedAt: elem.sys.updatedAt,
@@ -85,8 +86,9 @@ export const mapContentFulPropertyToMyField = (data) => {
             email: _.get(elem, 'fields.agent.fields.email'),
             username: _.get(elem, 'fields.agent.fields.username'),
           },
-          postDate: moment(elem.sys.createdAt).lang('th').format('d MMM YYY'),
-          enable: _.get(elem, 'fields.name.enable') ? _.get(elem, 'fields.name.enable') : false,
+          postDate: moment(elem.sys.createdAt).locale('th').format('d MMM YYYY'),
+          enable: _.get(elem, 'fields.enable') ? _.get(elem, 'fields.enable') : false,
+          approve: _.get(elem, 'fields.approve') ? _.get(elem, 'fields.approve') : false,
         },
       };
     }
@@ -213,5 +215,27 @@ export const getPropertyById = (id) => {
     data[0] = response;
     const result = mapContentFulPropertyToMyField(data);
     return result[0];
+  });
+};
+
+export const updatePropertyApi = (id, data) => {
+  return fetch(`${BASEURL}/property/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ...data }),
+  })
+  .then((response) => {
+    return response.json();
+  });
+};
+
+export const deletePropertyApi = (id) => {
+  return fetch(`${BASEURL}/property/${id}`, {
+    method: 'DELETE',
+  })
+  .then((response) => {
+    return response.json();
   });
 };

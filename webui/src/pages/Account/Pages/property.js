@@ -20,7 +20,6 @@ class Property extends Component {
       fetchPropertiesByAgent: T.func,
     }).isRequired,
     user: T.shape().isRequired,
-    properties: T.array.isRequired,
     fetching: T.bool.isRequired,
     result: T.string.isRequired,
     page: T.number.isRequired,
@@ -81,9 +80,7 @@ class Property extends Component {
                   return (
                     <div className={displayType === 'thumbnail' ? 'col-md-3' : 'col-md-12'} key={key}>
                       <div className="property-block">
-                        <NavLink exact to={`/account/property?id=${item.id}`}>
-                          <PropertyItem type={displayType} item={item} mode="edit" />
-                        </NavLink>
+                        <PropertyItem type={displayType} item={item} mode="edit" />
                       </div>
                     </div>
                   );

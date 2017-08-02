@@ -82,6 +82,7 @@ app.post(`${apiPrefix}/posts`, postController.createPost);
 app.get(`${apiPrefix}/properties`, propertyController.queryProperties);
 app.post(`${apiPrefix}/property`, propertyController.create);
 app.post(`${apiPrefix}/property/:id`, propertyController.update);
+app.delete(`${apiPrefix}/property/:id`, propertyController.deleteProperty);
 
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
 app.post(`${apiPrefix}/user/:id`, userController.updateUser);

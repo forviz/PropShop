@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 // import { notification, Icon } from 'antd';
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
-import _ from 'lodash';
 
 import * as WishListActions from '../../../../../../actions/wishlist-actions';
 
