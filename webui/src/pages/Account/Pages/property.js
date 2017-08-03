@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import * as PropertyActions from '../../../actions/property-actions';
 // import RealEstateItem from '../../../components/RealEstateItem';
-import PropertyDisplayType from '../../../components/PropertyDisplayType';
+// import PropertyDisplayType from '../../../components/PropertyDisplayType';
 
 import PropertyItem from '../../../modules/property/components/PropertyItem';
 
@@ -20,7 +20,6 @@ class Property extends Component {
       fetchPropertiesByAgent: T.func,
     }).isRequired,
     user: T.shape().isRequired,
-    properties: T.array.isRequired,
     fetching: T.bool.isRequired,
     result: T.string.isRequired,
     page: T.number.isRequired,
@@ -34,7 +33,7 @@ class Property extends Component {
   }
 
   state = {
-    displayType: 'thumbnail',
+    displayType: 'list',
   }
 
   getPropertiesByAgent = () => {
@@ -67,11 +66,11 @@ class Property extends Component {
               <h1>รายการอสังหาฯของฉัน</h1>
             </div>
           </div>
-          <div className="pull-right">
+          {/* <div className="pull-right">
             <div className="display-type">
               <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="property-list">
           <div className="row">
@@ -81,9 +80,7 @@ class Property extends Component {
                   return (
                     <div className={displayType === 'thumbnail' ? 'col-md-3' : 'col-md-12'} key={key}>
                       <div className="property-block">
-                        <NavLink exact to={`/account/property?id=${item.id}`}>
-                          <PropertyItem type={displayType} item={item} />
-                        </NavLink>
+                        <PropertyItem type={displayType} item={item} mode="edit" />
                       </div>
                     </div>
                   );

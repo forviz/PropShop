@@ -1,8 +1,6 @@
 import _ from 'lodash';
-import moment from 'moment';
-import { getPropertyIDs, getProperties } from '../api';
+import { getPropertyIDs, getProperties, updatePropertyApi, deletePropertyApi } from '../api';
 import toURLParam from '../utils/toURLParam';
-
 
 export const setHilightProperty = (propertyId, value = true) => {
   return {
@@ -73,14 +71,13 @@ export const search = (searchParams, domain = 'default') => {
       .catch((e) => {
         console.log(e);
         dispatch(propertySearchEnd(domain));
-      })
+      });
     });
   };
 };
 
 export const getLandingItems = () => {
   return (dispatch) => {
-
     const condoParams = toURLParam({
       propertyType: 'Condominium',
       limit: 5,
@@ -93,4 +90,12 @@ export const getLandingItems = () => {
     });
     dispatch(search(homeParams, 'landing-home'));
   };
+};
+
+export const updateProperty = (id, data) => {
+  updatePropertyApi(id, data);
+};
+
+export const deleteProperty = (id) => {
+  deletePropertyApi(id);
 };

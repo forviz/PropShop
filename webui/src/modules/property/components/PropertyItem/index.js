@@ -13,12 +13,12 @@ class PropertyItem extends Component {
   }
 
   getPropertyItem = () => {
-    const { type, item } = this.props;
+    const { type, mode, item } = this.props;
     switch (type) {
-      case 'thumbnail': return <PropertyThumbnail item={item} />;
-      case 'list': return <PropertyList item={item} />;
-      case 'mini': return <PropertyMini item={item} />;
-      default: return <PropertyThumbnail item={item} />;
+      case 'thumbnail': return <PropertyThumbnail item={item} mode={mode} />;
+      case 'list': return <PropertyList item={item} mode={mode} />;
+      case 'mini': return <PropertyMini item={item} mode={mode} />;
+      default: return <PropertyThumbnail item={item} mode={mode} />;
     }
   }
 

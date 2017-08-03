@@ -10,14 +10,13 @@ class SelectRoom extends Component {
   static propTypes = {
     maxRoom: T.number.isRequired,
     placeholder: T.string,
-    value: T.string,
     onChange: T.func.isRequired,
   }
 
   static defaultProps = {
     maxRoom: 5,
     placeholder: [],
-    value: [],
+    value: '',
   }
 
   handleOnChange = (value) => {

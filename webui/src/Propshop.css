@@ -1433,6 +1433,39 @@ body .rating span {
     /* autoprefixer: off */
     -webkit-box-orient: vertical;
     /* autoprefixer: on */ }
+  .PropertyItem .List .mode-edit .post-date {
+    margin-top: 20px; }
+  .PropertyItem .List .mode-edit .property-status {
+    margin-top: 20px; }
+    .PropertyItem .List .mode-edit .property-status .waiting-approve {
+      background: #e0bd06;
+      border: 1px solid #e0bd06;
+      border-radius: 4px;
+      padding: 4px 8px;
+      color: #ffffff; }
+    .PropertyItem .List .mode-edit .property-status .label-status {
+      margin-top: 2px;
+      text-decoration: none; }
+      .PropertyItem .List .mode-edit .property-status .label-status.enable {
+        background: #484849;
+        border: 1px solid #484849;
+        border-radius: 4px;
+        padding: 4px 8px;
+        color: #ffffff; }
+        .PropertyItem .List .mode-edit .property-status .label-status.enable .fa {
+          color: #8ebc42;
+          margin-right: 4px; }
+      .PropertyItem .List .mode-edit .property-status .label-status.disable {
+        background: #cccccc;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        padding: 4px 8px;
+        color: #484849; }
+  .PropertyItem .List .mode-edit .property-actions ul li {
+    text-align: center;
+    margin: 12px 0; }
+  .PropertyItem .List .mode-edit .property-actions .fa {
+    font-size: 26px; }
 
 body .ant-notification {
   z-index: 2000; }
