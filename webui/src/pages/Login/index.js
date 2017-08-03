@@ -12,6 +12,7 @@ import * as helpers from '../../helpers';
 
 import SocialLogin from '../../containers/SocialLogin';
 import MemberInfo from '../../containers/MemberInfo';
+import { emailVerifying } from '../../api/email';
 
 class Login extends Component {
 
@@ -38,6 +39,17 @@ class Login extends Component {
       value: '',
       errorMessage: '',
     },
+  }
+
+  componentDidMount = async () => {
+    const { history } = this.props;
+    const params = queryString.parse(history.location.search);
+    if (params.verify) {
+      await emailVerifying(params.verify);
+      history.push({
+        pathname: '/',
+      });
+    }
   }
 
   checkLogin = () => {

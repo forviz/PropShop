@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Input, Alert, Spin, notification } from 'antd';
+import _ from 'lodash';
+import queryString from 'query-string';
 
 import * as firebase from '../../api/firebase';
 import * as helpers from '../../helpers';
@@ -34,7 +36,7 @@ class Register extends Component {
 
   componentDidMount() {
     const { history } = this.props;
-    firebase.core().auth().onAuthStateChanged(function(user) {
+    firebase.core().auth().onAuthStateChanged((user) => {
       if (user && user.emailVerified === true) {
         history.push({
           pathname: '/',
@@ -140,7 +142,7 @@ class Register extends Component {
     return errorMessage;
   }
 
-  submit = () => {
+  submit = async () => {
     const { submitting } = this.state;
 
     if (submitting === true) {
@@ -164,7 +166,7 @@ class Register extends Component {
     const errorPassword = this.checkConfirmPassword(password1, password2);
 
     if (errorUsername === '' && errorEmail === '' && errorPassword === '') {
-      firebase.createUser(username, email, password1).then(function(errorMessage) {
+      await firebase.createUser(username, email, password1).then((errorMessage) => {
         if (errorMessage) {
           _self.setState({
             submitting: false,

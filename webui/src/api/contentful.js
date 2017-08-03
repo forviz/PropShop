@@ -6,6 +6,7 @@ import _ from 'lodash';
 // import { mapContentFulPropertyToMyField } from './property';
 import { mapContentFulPropertyToMyField } from '../modules/property/api';
 import mapAgentEntryToEntity from './utils/mapAgentEntryToEntity';
+import { sendEmailVerify } from './email';
 
 const client = contentful.createClient({
   space: process.env.REACT_APP_SPACE,
@@ -190,7 +191,7 @@ export const publishEntry = (entryId) => {
   .catch(console.error);
 };
 
-export const createUser = (user) => {
+export const createUser = (user, verify) => {
   return existUser(user.uid).then((hasUser) => {
     if (!hasUser) {
       return clientManagement.getSpace(process.env.REACT_APP_SPACE)
@@ -205,9 +206,13 @@ export const createUser = (user) => {
           uid: {
             'en-US': user.uid,
           },
+          verify: {
+            'en-US': verify,
+          },
         },
       }))
       .then((entry) => {
+        if (verify === false) sendEmailVerify(entry.sys.id, user.username, user.email);
         return publishEntry(entry.sys.id);
       })
       .catch(console.error);

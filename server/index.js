@@ -87,11 +87,12 @@ app.delete(`${apiPrefix}/property/:id`, propertyController.deleteProperty);
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
 app.post(`${apiPrefix}/user/:id`, userController.updateUser);
 app.post(`${apiPrefix}/contact/agent`, userController.contactAgent);
+app.post(`${apiPrefix}/email/verify`, userController.emailVerify);
 
 app.get(`${apiPrefix}/wishlist/:id`, wishlistController.getWishlist);
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
-app.delete(`${apiPrefix}/wishlist/delete`, wishlistController.deleteWishlist);
 app.put(`${apiPrefix}/wishlist/update`, wishlistController.updateWishlist);
+app.delete(`${apiPrefix}/wishlist/delete`, wishlistController.deleteWishlist);
 
 /**
  * CIC App codebase: WEBUI
