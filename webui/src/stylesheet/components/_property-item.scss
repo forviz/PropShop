@@ -103,5 +103,53 @@
 				/* autoprefixer: on */
 			}
 		}
+		.mode-edit {
+			.post-date {
+				margin-top: 20px;
+			}
+			.property-status {
+				margin-top: 20px;
+				.waiting-approve {
+					background: #e0bd06;
+					border: 1px solid #e0bd06;
+					border-radius: 4px;
+					padding: 4px 8px;
+					color: #ffffff;
+				}
+				.label-status {
+					margin-top: 2px;
+					text-decoration: none;
+					&.enable {
+						.fa {
+							color: $text-green;
+							margin-right: 4px;
+						}
+						background: $text-default;
+						border: 1px solid $text-default;
+						border-radius: 4px;
+						padding: 4px 8px;
+						color: #ffffff;
+					}
+					&.disable {
+						background: #cccccc;
+						border: 1px solid #cccccc;
+						border-radius: 4px;
+						padding: 4px 8px;
+						color: $text-default;
+					}
+				}
+			}
+			.property-actions {
+				ul {
+					li {
+						text-align: center;
+						margin: 12px 0;
+					}
+				}
+				.fa {
+					font-size: 26px;
+				}
+			}
+		}
 	}
 }

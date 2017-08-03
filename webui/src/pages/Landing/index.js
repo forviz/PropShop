@@ -36,10 +36,8 @@ const selectPropertyFromDomain = (state, domain) => {
   };
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const areaEntities = _.get(state, 'entities.areas.entities');
+const mapStateToProps = (state) => {
   return {
-    searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
     banner: state.banners,
     landingItems: [
       {
@@ -106,16 +104,6 @@ const ListWrapper = styled.div`
 class Landing extends Component {
 
   static propTypes = {
-    searchParameters: T.shape({
-      bound: T.string,
-      bedroom: T.number,
-      bathroom: T.number,
-      price: T.shape({
-        min: T.number,
-        max: T.number,
-      }),
-      skip: T.number,
-    }),
     landingItems: T.arrayOf(T.shape({
       title: T.string,
       result: T.array,
@@ -126,11 +114,6 @@ class Landing extends Component {
   }
 
   static defaultProps = {
-    searchParameters: {
-      area: undefined,
-      location: undefined,
-      bound: undefined,
-    },
     landingItems: [],
   }
 
@@ -145,6 +128,11 @@ class Landing extends Component {
 
   state = {
     displayType: 'thumbnail',
+    searchParameters: {
+      area: undefined,
+      location: undefined,
+      bound: undefined,
+    },
   }
 
   componentDidMount() {
@@ -210,8 +198,9 @@ class Landing extends Component {
     });
   }
 
-  renderSearchFilter = (loading, searchParameters) => {
+  renderSearchFilter = (loading) => {
     const { history, areas } = this.props;
+    const { searchParams } = this.state;
     return (
       <div>
         {loading === true ? (
@@ -219,9 +208,11 @@ class Landing extends Component {
         ) : (
           <PropertySearch
             activeTab="area"
-            searchParameters={searchParameters}
-            areas={areas}
-            onUpdate={params => history.push(convertParamsToLocationObject(params))}
+            searchParameters={searchParams}
+            simpleMode
+            trigger="none"
+            onUpdate={params => this.setState({ searchParams: params })}
+            onSubmit={params => history.push(convertParamsToLocationObject(params))}
           />
         )}
       </div>

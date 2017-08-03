@@ -31,7 +31,7 @@ class Sell extends Component {
     actions: T.shape().isRequired,
     sell: T.shape().isRequired,
     user: T.shape().isRequired,
-    form: T.func.isRequired,
+    form: T.shape().isRequired,
   }
 
   constructor(props) {
@@ -203,9 +203,9 @@ class Sell extends Component {
     const { sell, user } = this.props;
     const { doCreateRealEstate, doUpdateProperty } = this.props.actions;
     if (sell.sendingData === false) {
+      console.log('submit', sell);
       const id = this.getParameterByName('id');
       if (id) {
-        console.log('submit', sell);
         doUpdateProperty(id, sell);
       } else {
         doCreateRealEstate(sell, user.id);

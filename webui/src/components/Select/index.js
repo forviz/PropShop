@@ -8,7 +8,7 @@ const Option = Select.Option;
 class SelectComponent extends Component {
 
   static propTypes = {
-    items: T.shape().isRequired,
+    items: T.array.isRequired,
     placeholder: T.string,
     value: T.string,
     onChange: T.func.isRequired,

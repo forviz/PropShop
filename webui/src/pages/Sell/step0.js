@@ -48,7 +48,7 @@ class Step0 extends Component {
 
   static propTypes = {
     data: T.shape().isRequired,
-    form: T.func.isRequired,
+    form: T.shape().isRequired,
   }
 
   setLocation = () => {
@@ -451,6 +451,8 @@ class Step0 extends Component {
   render() {
     const { data } = this.props;
     const { getFieldDecorator } = this.props.form;
+
+    console.log('dsadpsad', data);
 
     return (
       <div id="Step0">

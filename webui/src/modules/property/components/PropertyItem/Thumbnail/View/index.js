@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
+import _ from 'lodash';
 
 import Wish from '../../../../../../components/Wish';
 
@@ -14,13 +14,13 @@ class Thumbnail extends Component {
     onMouseLeave: T.func,
   }
 
-  handleMouseEnter = (e) => {
+  handleMouseEnter = () => {
     if (this.props.onMouseEnter) {
       this.props.onMouseEnter(this.props.item);
     }
   }
 
-  handleMouseLeave = (e) => {
+  handleMouseLeave = () => {
     if (this.props.onMouseLeave) {
       this.props.onMouseLeave(this.props.item);
     }
@@ -29,12 +29,17 @@ class Thumbnail extends Component {
   render() {
     const { item } = this.props;
 
-    // let wished = false;
-    if (!item) return (<div />);
+    if (!item) return <div />;
+
+    const imageStyle = {
+      background: `url(${item.mainImage.file.url})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    };
 
     return (
       <div className="Thumbnail" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
-        <img src={`${item.mainImage}?w=180&h=180&fit=fill`} alt={item.project} className="image" />
+        <div className="image" style={imageStyle} />
         <div className="content">
           <div className="name">{item.project}</div>
           <div className="price">{numeral(item.price).format('0,0')} บาท</div>

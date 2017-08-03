@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import numeral from 'numeral';
 import _ from 'lodash';
+import queryString from 'query-string';
 
 // import ContactAgent from '../../components/ContactAgent';
 
@@ -28,11 +29,12 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const actions = {
-  getPropertyEntity: (propertyId) => {
+  getPropertyEntity: (propertyId, params) => {
     return (dispatch) => {
-      getProperties(`?id=${propertyId}`)
+      const xx = `?id=${propertyId}${params}`;
+      getProperties(`?id=${propertyId}${params}`)
       .then((result) => {
-        dispatch(receivePropertyEntity(propertyId, result.data[0]));
+        dispatch(receivePropertyEntity(propertyId, _.get(result, 'data.0')));
       });
     };
   },
@@ -52,6 +54,7 @@ class Property extends Component {
     data: T.shape({
       id: T.string,
     }),
+    location: T.shape().isRequired,
     actions: T.shape({
       getPropertyEntity: T.func,
     }).isRequired,
@@ -61,7 +64,14 @@ class Property extends Component {
   constructor(props) {
     super(props);
     const { getPropertyEntity } = props.actions;
-    getPropertyEntity(props.propertyId);
+    let params = '&enable=true&approve=true';
+    if (props.location.search) {
+      const search = queryString.parse(props.location.search);
+      if (_.get(search, 'preview') === 'true') {
+        params = '';
+      }
+    }
+    getPropertyEntity(props.propertyId, params);
   }
 
   state = {
@@ -91,21 +101,21 @@ class Property extends Component {
   render() {
     const { data } = this.props;
 
-    if (data === undefined) return <div />;
+    if (!_.size(data)) return <div />;
 
-    console.log('asdasd', data);
+    console.log('dasdasdas', data);
 
     let images = [];
     images.push({
-      original: data.mainImage,
-      thumbnail: data.mainImage,
+      original: _.get(data, 'mainImage.file.url'),
+      thumbnail: _.get(data, 'mainImage.file.url'),
     });
 
     if (data.images) {
       images = _.map(data.images, (image) => {
         return {
-          original: image,
-          thumbnail: image,
+          original: _.get(image, 'file.url'),
+          thumbnail: _.get(image, 'file.url'),
         };
       });
     }

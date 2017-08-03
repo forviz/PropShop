@@ -1,65 +1,66 @@
 import _ from 'lodash';
 import { uploadFile } from './contentful';
+import { mapContentFulPropertyToMyField } from '../modules/property/api';
 
 const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 // const convertToURLParam = data => `?${_.join(_.map(data, (value, key) => `${key}=${value}`), '&')}`;
 
-export const mapContentFulPropertyToMyField = (data) => {
-  const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
-  return _.reduce(data, (acc, elem, index) => {
-    const forSale = _.get(elem, 'fields.forSale') === true;
-    return {
-      ...acc,
-      [index]: {
-        id: elem.sys.id,
-        address: _.get(elem, 'fields.location.unitNo'),
-        agentId: '',
-        amphur: _.get(elem, 'fields.location.district'),
-        announceDetails: _.get(elem, 'fields.description.th', ''),
-        areaSize: _.get(elem, 'fields.areaUsable.value'),
-        bathroom: _.get(elem, 'fields.numBedrooms'),
-        bedroom: _.get(elem, 'fields.numBathrooms'),
-        district: _.get(elem, 'fields.location.subDistrict'),
-        fee: 0,
-        for: forSale ? 'ขาย' : 'เช่า',
-        location: {
-          lat: _.get(elem, 'fields.location.latitude'),
-          lon: _.get(elem, 'fields.location.longitude'),
-        },
-        price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
-        project: _.replace(_.get(elem, 'fields.name.eh'), `Unit ${_.get(elem, 'fields.location.unitNo')}`),
-        province: _.get(elem, 'fields.location.province'),
-        residentialType: _.get(elem, 'fields.propertyType'),
-        sold: false,
-        specialFeatureFacilities: _.get(elem, 'fields.tags'),
-        specialFeatureNearbyPlaces: [],
-        street: _.get(elem, 'fields.location.street'),
-        topic: _.get(elem, 'fields.name.th'),
-        zipcode: _.get(elem, 'fields.location.zipcode'),
-        createdAt: elem.sys.createdAt,
-        updatedAt: elem.sys.updatedAt,
-        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields') : {
-          file: {
-            url: noImage,
-          },
-        },
-        images: _.map(_.get(elem, 'fields.images'), (image) => {
-          return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : {
-            file: {
-              url: noImage,
-            },
-          };
-        }),
-        // Extra
-        publicTransports: _.get(elem, 'fields.location.publicTransports'),
-        unitNo: _.get(elem, 'fields.location.unitNo'),
-        floorNo: _.get(elem, 'fields.location.floorNo'),
-        buildingNo: _.get(elem, 'fields.location.buildingNo'),
-      },
-    };
-  }, {});
-};
+// export const mapContentFulPropertyToMyField = (data) => {
+//   const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
+//   return _.reduce(data, (acc, elem, index) => {
+//     const forSale = _.get(elem, 'fields.forSale') === true;
+//     return {
+//       ...acc,
+//       [index]: {
+//         id: elem.sys.id,
+//         address: _.get(elem, 'fields.location.unitNo'),
+//         agentId: '',
+//         amphur: _.get(elem, 'fields.location.district'),
+//         announceDetails: _.get(elem, 'fields.description.th', ''),
+//         areaSize: _.get(elem, 'fields.areaUsable.value'),
+//         bathroom: _.get(elem, 'fields.numBedrooms'),
+//         bedroom: _.get(elem, 'fields.numBathrooms'),
+//         district: _.get(elem, 'fields.location.subDistrict'),
+//         fee: 0,
+//         for: forSale ? 'ขาย' : 'เช่า',
+//         location: {
+//           lat: _.get(elem, 'fields.location.latitude'),
+//           lon: _.get(elem, 'fields.location.longitude'),
+//         },
+//         price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
+//         project: _.replace(_.get(elem, 'fields.name.eh'), `Unit ${_.get(elem, 'fields.location.unitNo')}`),
+//         province: _.get(elem, 'fields.location.province'),
+//         residentialType: _.get(elem, 'fields.propertyType'),
+//         sold: false,
+//         specialFeatureFacilities: _.get(elem, 'fields.tags'),
+//         specialFeatureNearbyPlaces: [],
+//         street: _.get(elem, 'fields.location.street'),
+//         topic: _.get(elem, 'fields.name.th'),
+//         zipcode: _.get(elem, 'fields.location.zipcode'),
+//         createdAt: elem.sys.createdAt,
+//         updatedAt: elem.sys.updatedAt,
+//         mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields') : {
+//           file: {
+//             url: noImage,
+//           },
+//         },
+//         images: _.map(_.get(elem, 'fields.images'), (image) => {
+//           return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : {
+//             file: {
+//               url: noImage,
+//             },
+//           };
+//         }),
+//         // Extra
+//         publicTransports: _.get(elem, 'fields.location.publicTransports'),
+//         unitNo: _.get(elem, 'fields.location.unitNo'),
+//         floorNo: _.get(elem, 'fields.location.floorNo'),
+//         buildingNo: _.get(elem, 'fields.location.buildingNo'),
+//       },
+//     };
+//   }, {});
+// };
 
 export const getPropertyIDs = (search) => {
   // console.log('getPropertyIDs', search);
