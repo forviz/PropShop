@@ -41,11 +41,11 @@ class Login extends Component {
     },
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     const { history } = this.props;
     const params = queryString.parse(history.location.search);
-    if (!_.isEmpty(params.verifiy)) {
-      emailVerifying(params.verify);
+    if (params.verify) {
+      await emailVerifying(params.verify);
       history.push({
         pathname: '/',
       });

@@ -34,7 +34,7 @@ export const getUser = async (req, res, next) => {
 }
 
 export const updateUser = async (req, res, next) => {
-   try {
+  try {
     const data = req.body;
     const { id } = req.params;
 
@@ -65,12 +65,15 @@ export const updateUser = async (req, res, next) => {
       res.json({
         status: 'SUCCESS',
       });
+      process.exit();
+    } else {
+      res.json({
+        status: 'FAIL',
+      });
     }
 
-    res.json({
-      status: 'FAIL',
-    });
   } catch (e) {
+    console.log('ERRORRRR', e.message)
     res.status(500).json({
       status: 'ERROR',
       message: e.message,
