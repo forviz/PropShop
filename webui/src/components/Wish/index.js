@@ -66,7 +66,7 @@ class Wish extends Component {
     } else {
       await createWishlist(wishlist, userId, {
         id: item.id,
-        imageUrl: item.images[0],
+        imageUrl: item.mainImage.file.url,
         area: {
           value: item.areaSize,
         },
@@ -83,7 +83,7 @@ class Wish extends Component {
         },
         price: {
           value: item.price,
-          currency: 'baht',
+          currency: 'บาท',
         },
         type: item.for,
         amphur: item.amphur,

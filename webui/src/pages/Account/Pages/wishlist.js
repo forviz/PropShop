@@ -29,7 +29,7 @@ class WishList extends Component {
     if (_.isEmpty(wishlist)) {
       await getWishlist(user.id);
     }
-    // setTimeout(() => { getWishlist(user.id); }, 10000);
+    // await getWishlist(user.id);
   }
 
   handleDelete = async (propertyId) => {
