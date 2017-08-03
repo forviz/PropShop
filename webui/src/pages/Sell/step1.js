@@ -32,8 +32,6 @@ class Step1 extends Component {
   render() {
     const { configRealestate, data } = this.props;
 
-    console.log('asdsadasdq', data);
-
     const layout = this.getParameterByName('id') ? 'col-md-12' : 'col-md-8 col-md-offset-2';
 
     return (

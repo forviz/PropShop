@@ -102,7 +102,6 @@ class SpecialFeature extends Component {
               <div className="filter">
                 <CheckboxGroup
                   options={items.specialFeatureView.data}
-                  value={setValue.specialFeatureView}
                   onChange={this.onSpecialFeatureViewChange}
                 />
               </div>
@@ -112,7 +111,6 @@ class SpecialFeature extends Component {
               <div className="filter">
                 <CheckboxGroup
                   options={items.specialFeatureFacilities.data}
-                  value={setValue.specialFeatureFacilities}
                   onChange={this.onSpecialFeatureFacilitiesChange}
                 />
               </div>
@@ -122,7 +120,6 @@ class SpecialFeature extends Component {
               <div className="filter">
                 <CheckboxGroup
                   options={items.specialFeatureNearbyPlaces.data}
-                  value={setValue.specialFeatureNearbyPlaces}
                   onChange={this.onSpecialFeatureNearbyPlacesChange}
                 />
               </div>
@@ -132,7 +129,6 @@ class SpecialFeature extends Component {
               <div className="filter">
                 <CheckboxGroup
                   options={items.specialFeaturePrivate.data}
-                  value={setValue.specialFeaturePrivate}
                   onChange={this.onSpecialFeaturePrivateChange}
                 />
               </div>

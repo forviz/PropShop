@@ -8,10 +8,20 @@ const BASEURL = 'http://localhost:4000/api/v1';
 const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE,
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN,
+  headers: {
+    'Cache-Control': 'no-cache',
+    Pragma: 'no-cache',
+    Expires: 0,
+  },
 });
 
 const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN_MANAGEMENT,
+  headers: {
+    'Cache-Control': 'no-cache',
+    Pragma: 'no-cache',
+    Expires: 0,
+  },
 });
 
 const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.809Z
@@ -44,6 +54,7 @@ export const queryProperties = async (req, res, next) => {
       skip: skip ? skip : undefined,
     }, val => val === undefined || val === '' || val === false);
     console.log('propertyQuery', propertyQuery);
+    console.log('client', client);
     const response = await client.getEntries(propertyQuery);
     res.json({ ...response, query: propertyQuery });
   } catch (e) {

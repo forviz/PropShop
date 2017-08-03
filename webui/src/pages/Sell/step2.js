@@ -127,6 +127,15 @@ class Step2 extends Component {
     saveStep('step2', data);
   }
 
+  getParameterByName = (name, url = window.location.href) => {
+    const nameReg = name.replace(/[\[\]]/g, "\\$&");
+    const regex = new RegExp(`[?&]${nameReg}(=([^&#]*)|&|#|$)`);
+    const results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
   render() {
     const { mainImage, images } = this.props;
 
@@ -140,11 +149,13 @@ class Step2 extends Component {
       padding: '40px 0',
     };
 
+    const layout = this.getParameterByName('id') ? 'col-md-12' : 'col-md-8 col-md-offset-2';
+
     return (
       <div id="Step2">
         <div className="container">
           <div className="row">
-            <div className="col-md-8 col-md-offset-2">
+            <div className={layout}>
               <h1>อัพโหลดรูปภาพ</h1>
               <Tabs type="card">
                 <TabPane tab="รูปภาพหลัก" key="1">

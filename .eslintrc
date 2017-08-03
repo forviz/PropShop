@@ -21,6 +21,7 @@
     "arrow-body-style": "off",
     "react/forbid-prop-types": "warn",
     "import/prefer-default-export": "warn",
-    "max-len": ["error", 150]
+    "max-len": ["error", 150],
+    "linebreak-style": "off"
   }
 }
