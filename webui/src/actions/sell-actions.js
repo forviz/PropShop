@@ -60,7 +60,7 @@ export const removeRequiredField = (field) => {
   };
 };
 
-export const doCreateRealEstate = (sell, userId) => {
+export const doCreateRealEstate = (sell, userId, userEmail, userName) => {
   return async (dispatch) => {
     dispatch(sendingData(true));
     dispatch(sendDataSuccess(''));
@@ -80,7 +80,7 @@ export const doCreateRealEstate = (sell, userId) => {
       _.set(sell, 'imagesId', imagesId);
     }
 
-    createProperty(sell, userId).then((result) => {
+    createProperty(sell, userId, userEmail, userName).then((result) => {
       dispatch(sendingData(false));
       if (result.data.sys.id) {
         dispatch(sendDataSuccess('yes'));

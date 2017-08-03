@@ -1,7 +1,6 @@
 import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
-import moment from 'moment';
 
 const path = require('path');
 const fs = require('fs');

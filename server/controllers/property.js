@@ -1,35 +1,30 @@
 import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
-import moment from 'moment';
 
-const BASEURL = 'http://localhost:4000/api/v1';
+const path = require('path');
+const fs = require('fs');
+
+const Mail = require('../libraries/email');
 
 const client = contentful.createClient({
   space: process.env.CONTENTFUL_SPACE,
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN,
-  headers: {
-    'Cache-Control': 'no-cache',
-    Pragma: 'no-cache',
-    Expires: 0,
-  },
 });
 
 const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN_MANAGEMENT,
-  headers: {
-    'Cache-Control': 'no-cache',
-    Pragma: 'no-cache',
-    Expires: 0,
-  },
 });
 
-const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.809Z
+const BASE_URL = process.env.BASE_URL;
+
+// const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.809Z
 
 export const queryProperties = async (req, res, next) => {
   try {
     console.log('req.query', req.query);
-    const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, location, select, agentId, limit, skip, enable, approve } = req.query;
+    const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, select, agentId,
+      limit, skip, enable, approve } = req.query;
     const _for = req.query.for;
     const propertyQuery = _.omitBy({
       content_type: 'property',
@@ -54,7 +49,6 @@ export const queryProperties = async (req, res, next) => {
       skip: skip ? skip : undefined,
     }, val => val === undefined || val === '' || val === false);
     console.log('propertyQuery', propertyQuery);
-    console.log('client', client);
     const response = await client.getEntries(propertyQuery);
     res.json({ ...response, query: propertyQuery });
   } catch (e) {
@@ -67,7 +61,7 @@ export const queryProperties = async (req, res, next) => {
 
 export const create = async (req, res, next) => {
   try {
-    const { data, userId } = req.body;
+    const { data, userId, userEmail, userName } = req.body;
 
     let images = [];
     if (_.get(data, 'imagesId')) {
@@ -77,21 +71,23 @@ export const create = async (req, res, next) => {
             id,
             linkType: 'Asset',
             type: 'Link',
-          }
+          },
         };
       });
     }
 
     let tags = [];
-    if (_.get(data, 'step1.specialFeatureFacilities') || 
-      _.get(data, 'step1.specialFeatureNearbyPlaces') || 
-      _.get(data, 'step1.specialFeaturePrivate') || 
+    if (_.get(data, 'step1.specialFeatureFacilities') ||
+      _.get(data, 'step1.specialFeatureNearbyPlaces') ||
+      _.get(data, 'step1.specialFeaturePrivate') ||
       _.get(data, 'step1.specialFeatureView')) {
-        tags = _.concat(_.get(data, 'step1.specialFeatureFacilities'), _.get(data, 'step1.specialFeatureNearbyPlaces'), _.get(data, 'step1.specialFeaturePrivate'), _.get(data, 'step1.specialFeatureView'));
+      tags = _.concat(_.get(data, 'step1.specialFeatureFacilities'),
+      _.get(data, 'step1.specialFeatureNearbyPlaces'),
+      _.get(data, 'step1.specialFeaturePrivate'),
+      _.get(data, 'step1.specialFeatureView'));
     }
 
-    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
-    .then((space) => space.createEntry('property', {
+    let fieldsData = {
       fields: {
         propertyType: {
           'en-US': _.get(data, 'step0.residentialType'),
@@ -187,16 +183,7 @@ export const create = async (req, res, next) => {
             "value": _.get(data, 'step0.for') === 'เช่า' ? _.get(data, 'step0.price') : '',
             "detail": "",
             "currency": "thb",
-            "discount": 0
-          },
-        },
-        coverImage: {
-          'en-US': {
-            sys: {
-              id: _.get(data, 'coverImageId'),
-              linkType: 'Asset',
-              type: 'Link',
-            }
+            "discount": 0,
           },
         },
         images: {
@@ -215,7 +202,7 @@ export const create = async (req, res, next) => {
           'en-US': {
             lon: _.get(data, 'step0.googleMap.markers[0].position.lng'),
             lat: _.get(data, 'step0.googleMap.markers[0].position.lat'),
-          }
+          },
         },
         priceSaleValue: {
           'en-US': _.get(data, 'step0.for') === 'ขาย' ? _.toNumber(_.get(data, 'step0.price')) : 0,
@@ -235,11 +222,11 @@ export const create = async (req, res, next) => {
         agent: {
           'en-US': {
             sys: {
-              type: "Link",
-              linkType: "Entry",
+              type: 'Link',
+              linkType: 'Entry',
               id: userId,
-            }
-          }
+            },
+          },
         },
         enable: {
           'en-US': false,
@@ -247,10 +234,58 @@ export const create = async (req, res, next) => {
         approve: {
           'en-US': false,
         },
-      }
-    }))
+      },
+    };
+
+    if (_.get(data, 'coverImageId')) {
+      const coverImage = {
+        'en-US': {
+          sys: {
+            id: _.get(data, 'coverImageId'),
+            linkType: 'Asset',
+            type: 'Link',
+          },
+        },
+      };
+      _.set(fieldsData.fields, 'coverImage', coverImage);
+    }
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.createEntry('property', fieldsData))
     .then((entry) => {
       return entry.publish();
+    });
+
+    const propertyId = _.get(response, 'sys.id');
+    if (!propertyId) {
+      res.status(500).json({
+        status: '500',
+        code: 'Internal Server Error',
+      });
+      process.exit();
+    }
+
+    fs.readFile(path.join(__dirname, '../views/email/template/create-property', 'index.html'), 'utf8', (err, html) => {
+      if (err) {
+        throw err;
+      }
+
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace('%NAME%', userName);
+      htmlx = htmlx.replace('%PROPERTY_ID%', propertyId);
+      htmlx = htmlx.replace('%PROPERTY_URL%', `${BASE_URL}/#/property/${propertyId}?preview=true`);
+
+      const mail = new Mail({
+        to: userEmail,
+        subject: 'Your property has been uploaded',
+        html: htmlx,
+        successCallback: (suc) => {
+        },
+        errorCallback: (err) => {
+        },
+      });
+      mail.send();
     });
 
     res.json({
@@ -263,7 +298,7 @@ export const create = async (req, res, next) => {
       title: e.message,
     });
   }
-}
+};
 
 export const update = async (req, res, next) => {
   try {

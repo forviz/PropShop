@@ -208,7 +208,8 @@ class Sell extends Component {
       if (id) {
         doUpdateProperty(id, sell);
       } else {
-        doCreateRealEstate(sell, user.id);
+        const userName = _.get(user, 'name') && _.get(user, 'lastname') ? `${user.name} ${user.lastname}` : user.username;
+        doCreateRealEstate(sell, user.id, user.email, userName);
       }
     }
   }

@@ -27,6 +27,10 @@ class Account extends Component {
     this.checkLogin();
   }
 
+  componentDidMount() {
+    this.checkLogin();
+  }
+
   checkLogin = () => {
     const { firebase, history } = this.props;
     firebase.auth().onAuthStateChanged((user) => {
