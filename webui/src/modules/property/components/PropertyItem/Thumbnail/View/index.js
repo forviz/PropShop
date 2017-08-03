@@ -57,7 +57,7 @@ class Thumbnail extends Component {
             </div>
           }
         </div>
-        <div className="overlay">
+        <div className="wish">
           <Wish item={item} />
         </div>
       </div>

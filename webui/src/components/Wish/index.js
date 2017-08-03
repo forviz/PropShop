@@ -24,10 +24,6 @@ class Wish extends Component {
     wished: false,
   }
 
-  componentDidMount = async () => {
-    
-  }
-
   handleWishList = async (item, wished) => {
     await this.updateLocalStorage(item, wished);
 
@@ -70,7 +66,7 @@ class Wish extends Component {
     } else {
       await createWishlist(wishlist, userId, {
         id: item.id,
-        imageUrl: item.images[0],
+        imageUrl: item.mainImage.file.url,
         area: {
           value: item.areaSize,
         },
@@ -87,7 +83,7 @@ class Wish extends Component {
         },
         price: {
           value: item.price,
-          currency: 'baht',
+          currency: 'บาท',
         },
         type: item.for,
         amphur: item.amphur,
@@ -115,7 +111,11 @@ class Wish extends Component {
 
     return (
       <FontAwesome
-        onClick={() => this.handleWishList(item, wished)}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          this.handleWishList(item, wished);
+        }}
         className={wished ? 'Wish animation' : 'Wish'}
         name={wished ? 'heart' : 'heart-o'}
       />
