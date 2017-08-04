@@ -75,11 +75,11 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const SearchbarWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 48px;
   width: 100%;
   background: white;
-  z-index: 10;
+  z-index: 5;
 `;
 
 const MapWrapper = styled.div`
