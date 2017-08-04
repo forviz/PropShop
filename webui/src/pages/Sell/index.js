@@ -34,11 +34,6 @@ class Sell extends Component {
     form: T.shape().isRequired,
   }
 
-  constructor(props) {
-    super(props);
-    this.checkLogin();
-  }
-
   componentWillUnmount() {
     if (this.getParameterByName('id')) {
       const { clearForm } = this.props.actions;
@@ -53,16 +48,6 @@ class Sell extends Component {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-
-  checkLogin = () => {
-    const { firebase, history } = this.props;
-    firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        notification.error({ message: 'กรุณาเข้าสู่ระบบก่อน' });
-        history.push({ pathname: '/login', search: '?redirectFrom=sell' });
-      }
-    });
   }
 
   openNotificationWithIcon = (type, message, description) => {

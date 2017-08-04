@@ -45,11 +45,13 @@ class Profile extends Component {
   setProfileToForm = () => {
     const { firebase } = this.props;
     const { fetchUserProfile } = this.props.actions;
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        fetchUserProfile(user.uid);
-      }
-    });
+    const user = firebase.auth().currentUser;
+    if (user) fetchUserProfile(user.uid);
+    // firebase.auth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     fetchUserProfile(user.uid);
+    //   }
+    // });
   }
 
   handleChangePrefixName = (value) => {
