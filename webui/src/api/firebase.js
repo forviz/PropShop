@@ -18,7 +18,7 @@ export const mapFirebaseErrorMessage = (errorMessage) => {
   data['The email address is already in use by another account.'] = 'คุณเคยสมัครอีเมลนี้แล้ว';
   data['Password should be at least 6 characters'] = 'รหัสผ่านควรมี 6 ตัวอักษรขึ้นไป';
   data['auth/user-not-found'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
-  data['The password is invalid or the user does not have a password.'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+  data['The password is invalid or the user does not have a password.'] = 'รหัสผ่านไม่ถูกต้อง';
   data['There is no user record corresponding to this identifier. The user may have been deleted.'] = 'ไม่พบอีเมลนี้';
   data['createUserWithEmailAndPassword failed: Second argument "password" must be a valid string.'] = 'รหัสผ่านต้องเป็นภาษาอังกฤษเท่านั้น';
   return data[errorMessage] ? data[errorMessage] : errorMessage;

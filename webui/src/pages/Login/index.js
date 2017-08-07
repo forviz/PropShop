@@ -13,6 +13,7 @@ import * as helpers from '../../helpers';
 import SocialLogin from '../../containers/SocialLogin';
 import MemberInfo from '../../containers/MemberInfo';
 import { emailVerifying } from '../../api/email';
+import { mapFirebaseErrorMessage } from '../../api/firebase';
 
 class Login extends Component {
 
@@ -21,11 +22,13 @@ class Login extends Component {
     history: PropTypes.shape().isRequired,
     location: PropTypes.shape().isRequired,
     authError: PropTypes.shape(),
+    user: PropTypes.shape(),
+    userFetchSuccess: PropTypes.bool,
   }
 
   constructor(props) {
     super(props);
-    this.checkLogin();
+    this.checkEmailVerifying();
   }
 
   state = {
@@ -39,26 +42,17 @@ class Login extends Component {
       value: '',
       errorMessage: '',
     },
-    isAuthenticated: false,
-    renderOk: false,
   }
 
-  componentDidMount = async () => {
+  checkEmailVerifying = async () => {
     const { history } = this.props;
     const params = queryString.parse(history.location.search);
     if (params.verify) {
       await emailVerifying(params.verify);
-      // history.push({
-      //   pathname: '/',
-      // });
+      history.push({
+        pathname: '/',
+      });
     }
-  }
-
-  setAuthenticated = (verify) => {
-    this.setState({
-      isAuthenticated: verify,
-      renderOk: true,
-    });
   }
 
   handleInputPassword = (e) => {
@@ -100,10 +94,6 @@ class Login extends Component {
       return false;
     }
 
-    this.setState({
-      submitting: true,
-    });
-
     const email = this.state.email.value;
     const password = this.state.password.value;
 
@@ -111,14 +101,17 @@ class Login extends Component {
     const errorPassword = this.checkPassword(password);
 
     if (errorEmail === '' && errorPassword === '') {
+      this.setState({
+        submitting: true,
+      });
       firebase.login({
         email,
         password,
       });
+      this.setState({
+        submitting: false,
+      });
     }
-    this.setState({
-      submitting: false,
-    });
     return true;
   }
 
@@ -155,37 +148,29 @@ class Login extends Component {
     }));
   }
 
-  checkLogin = () => {
-    const _self = this;
-    const { firebase } = this.props;
-    firebase.auth().onAuthStateChanged((user) => {
-      _self.setState({
-        redirectToReferrer: _.get(user, 'emailVerified') ? true : false,
-        renderOk: true,
-      });
-    });
-  }
-
   render() {
-    if (!this.state.renderOk) {
-      if (_.get(this.props.user, 'verify') !== undefined) {
-        this.setAuthenticated(this.props.user.verify);
-      } else {
-        return <div />;
+    const { submitting } = this.state;
+    const { authError, user, userFetchSuccess } = this.props;
+
+    if (!userFetchSuccess) return <div />;
+
+    let from = '/';
+    if (this.props.location.search) {
+      const params = queryString.parse(this.props.location.search);
+      if (_.get(params, 'redirect')) {
+        from = params.redirect;
       }
     }
-
-    const { authError } = this.props;
-    const { submitting, isAuthenticated } = this.state;
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
     const passwordErrorMessage = this.state.password.errorMessage ? <span className="text-red">({this.state.password.errorMessage})</span> : '';
 
-    if (isAuthenticated) {
-      return (
-        <Redirect to={from} />
-      );
+    if (userFetchSuccess === true) {
+      if (user.verify) {
+        return (
+          <Redirect to={from} />
+        );
+      }
     }
 
     return (
@@ -202,7 +187,7 @@ class Login extends Component {
                     <h1>เข้าสู่ระบบ</h1>
                     {_.get(authError, 'message') &&
                       <div className="form-group">
-                        <Alert message={authError.message} type="error" />
+                        <Alert message={mapFirebaseErrorMessage(authError.message)} type="error" />
                       </div>
                     }
                     <div className="form-group">
@@ -241,6 +226,7 @@ const mapStateToProps = (state) => {
   return {
     authError: pathToJS(state.firebase, 'authError'),
     user: state.user.data,
+    userFetchSuccess: state.user.fetchSuccess,
   };
 };
 

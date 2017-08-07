@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 const initalState = {
   data: {},
+  fetchSuccess: false,
 };
 
 const reducers = (state = initalState, action) => {
@@ -11,8 +12,13 @@ const reducers = (state = initalState, action) => {
         ...state,
         data: {
           ...action.user,
-          // verify: _.get(action.user, 'verify') ? _.get(action.user, 'verify') : false,
         },
+      };
+    }
+    case 'USER/FETCH/SUCCESS': {
+      return {
+        ...state,
+        fetchSuccess: action.fetchSuccess,
       };
     }
     default:

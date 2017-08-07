@@ -105,7 +105,7 @@ const PrivateRoute = ({ component: MyComponent, ...rest }) => (
           <Redirect
             to={{
               pathname: '/login',
-              state: { from: props.location },
+              search: `?redirect=${props.location.pathname}`,
             }}
           />
         </div>
@@ -120,6 +120,7 @@ class MyRouter extends Component {
     firebase: PropTypes.shape().isRequired,
     actions: PropTypes.shape().isRequired,
     user: PropTypes.shape(),
+    userFetchSuccess: PropTypes.bool,
   }
 
   constructor(props) {
@@ -127,36 +128,20 @@ class MyRouter extends Component {
     this.getProfile();
   }
 
-  state = {
-    isAuthenticated: false,
-    renderOk: false,
-  }
-
   getProfile = () => {
     const { firebase } = this.props;
     const { fetchUserData } = this.props.actions;
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) fetchUserData(_.get(user, 'uid'));
-    });
-  }
-
-  setAuthenticated = (verify) => {
-    this.setState({
-      isAuthenticated: verify,
-      renderOk: true,
+      fetchUserData(_.get(user, 'uid'));
     });
   }
 
   render() {
-    if (!this.state.renderOk) {
-      if (_.get(this.props.user, 'verify') !== undefined) {
-        this.setAuthenticated(this.props.user.verify);
-      } else {
-        return <div />;
-      }
-    }
+    const { user, userFetchSuccess } = this.props;
 
-    if (_.get(this.props.user, 'verify') === false) {
+    if (!userFetchSuccess) return <div />;
+
+    if (user.verify === false) {
       notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
     }
 
@@ -180,7 +165,7 @@ class MyRouter extends Component {
                     path={route.path}
                     exact={route.exact}
                     component={route.content}
-                    isAuthenticated={this.state.isAuthenticated}
+                    isAuthenticated={user.verify}
                   />
                 ) : (
                   <Route
@@ -210,6 +195,7 @@ class MyRouter extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.data,
+    userFetchSuccess: state.user.fetchSuccess,
   };
 };
 
