@@ -39,7 +39,7 @@ class Login extends Component {
       value: '',
       errorMessage: '',
     },
-    redirectToReferrer: false,
+    isAuthenticated: false,
     renderOk: false,
   }
 
@@ -54,25 +54,11 @@ class Login extends Component {
     }
   }
 
-  checkLogin = () => {
-    const _self = this;
-    const { firebase } = this.props;
-    firebase.auth().onAuthStateChanged((user) => {
-      _self.setState({
-        redirectToReferrer: _.get(user, 'emailVerified') ? true : false,
-        renderOk: true,
-      });
+  setAuthenticated = (verify) => {
+    this.setState({
+      isAuthenticated: verify,
+      renderOk: true,
     });
-  }
-
-  handleInputEmail = (e) => {
-    const value = e.target.value;
-    this.setState(prevState => ({
-      email: {
-        ...prevState.email,
-        value,
-      },
-    }));
   }
 
   handleInputPassword = (e) => {
@@ -159,17 +145,44 @@ class Login extends Component {
     }
   }
 
+  handleInputEmail = (e) => {
+    const value = e.target.value;
+    this.setState(prevState => ({
+      email: {
+        ...prevState.email,
+        value,
+      },
+    }));
+  }
+
+  checkLogin = () => {
+    const _self = this;
+    const { firebase } = this.props;
+    firebase.auth().onAuthStateChanged((user) => {
+      _self.setState({
+        redirectToReferrer: _.get(user, 'emailVerified') ? true : false,
+        renderOk: true,
+      });
+    });
+  }
+
   render() {
-    if (!this.state.renderOk) return <div />;
+    if (!this.state.renderOk) {
+      if (_.get(this.props.user, 'verify') !== undefined) {
+        this.setAuthenticated(this.props.user.verify);
+      } else {
+        return <div />;
+      }
+    }
 
     const { authError } = this.props;
-    const { submitting, redirectToReferrer } = this.state;
+    const { submitting, isAuthenticated } = this.state;
     const { from } = this.props.location.state || { from: { pathname: '/' } };
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
     const passwordErrorMessage = this.state.password.errorMessage ? <span className="text-red">({this.state.password.errorMessage})</span> : '';
 
-    if (redirectToReferrer) {
+    if (isAuthenticated) {
       return (
         <Redirect to={from} />
       );
@@ -227,6 +240,7 @@ class Login extends Component {
 const mapStateToProps = (state) => {
   return {
     authError: pathToJS(state.firebase, 'authError'),
+    user: state.user.data,
   };
 };
 

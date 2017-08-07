@@ -9,6 +9,11 @@ import SocialLogin from '../../containers/SocialLogin';
 
 class Forgotpassword extends Component {
 
+  constructor(props) {
+    super(props);
+    this.checkLogin();
+  }
+
   state = {
     loading: false,
     submit: false,
@@ -19,15 +24,12 @@ class Forgotpassword extends Component {
     },
   }
 
-  componentDidMount() {
-    const { history } = this.props;
-    firebase.core().auth().onAuthStateChanged(function(user) {
-      if (user && user.emailVerified === true) {
-        history.push({
-          pathname: '/',
-        });
-      }
-    });
+  checkLogin = () => {
+    const { firebase, history } = this.props;
+    const user = firebase.auth().currentUser;
+    if (user) {
+      history.push({ pathname: '/' });
+    }
   }
 
   handleInputEmail = (e) => {
@@ -35,8 +37,8 @@ class Forgotpassword extends Component {
     this.setState(prevState => ({
       email: {
         ...prevState.email,
-        value: value,
-      }
+        value,
+      },
     }));
   }
 

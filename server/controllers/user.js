@@ -16,6 +16,8 @@ const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN_MANAGEMENT,
 });
 
+const BASE_URL = process.env.BASE_URL;
+
 export const getUser = async (req, res, next) => {
   try {
     const { uid } = req.params;
@@ -128,19 +130,19 @@ export const contactAgent = async (req, res, next) => {
 
     const imagesDir = path.join(__dirname, 'views/email/images');
 
-    fs.readFile(path.join(__dirname, '../views/email/template/contact-agent', 'index.html'), 'utf8', function (err, html) {
+    fs.readFile(path.join(__dirname, '../views/email/template/contact-agent', 'index.html'), 'utf8', (err, html) => {
       if (err) {
-        throw err; 
+        throw err;
       }
 
       const sendFrom = name ? name : emailFrom;
-
-      html = html.replace(/\%BASE_IMAGES_URL%/g, imagesDir);
-      html = html.replace("%SEND_FROM%", sendFrom);
-      html = html.replace("%PROPERTY_URL%", propertyUrl);
-      html = html.replace("%PROJECT%", projectName);
-      html = html.replace("%OWNER%", agentName);
-      html = html.replace("%MESSAGE%", body);
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace("%SEND_FROM%", sendFrom);
+      htmlx = htmlx.replace("%PROPERTY_URL%", propertyUrl);
+      htmlx = htmlx.replace("%PROJECT%", projectName);
+      htmlx = htmlx.replace("%OWNER%", agentName);
+      htmlx = htmlx.replace("%MESSAGE%", body);
 
       // res.json({
       //   html,
@@ -152,7 +154,7 @@ export const contactAgent = async (req, res, next) => {
         from: emailFrom,
         to: emailTo,
         subject: 'ติดต่อ Agent',
-        html,
+        html: htmlx,
         successCallback: function(suc) {
 
           const updateSendEmailStatus = clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
@@ -183,7 +185,7 @@ export const contactAgent = async (req, res, next) => {
       title: e.message,
     });
   }
-}
+};
 
 export const emailVerify = async (req, res, next) => {
   try {
@@ -191,35 +193,32 @@ export const emailVerify = async (req, res, next) => {
 
     const { entryId, username, email } = req.body;
     const imagesDir = path.join(__dirname, 'views/email/images');
-    fs.readFile(path.join(__dirname, '../views/email/template/user-verify', 'index.html'), 'utf8', function (err, html) {
+    fs.readFile(path.join(__dirname, '../views/email/template/user-verify', 'index.html'), 'utf8', (err, html) => {
       if (err) {
-        throw err; 
+        throw err;
       }
 
-      html = html.replace(/\%BASE_IMAGES_URL%/g, imagesDir);
-      html = html.replace("%USERNAME%", username);
-      html = html.replace("%REDIRECT_URL%", `${URL}login?verify=${entryId}`);
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace('%USERNAME%', username);
+      htmlx = htmlx.replace('%REDIRECT_URL%', `${URL}login?verify=${entryId}`);
 
       const mail = new Mail({
-        from: 'propshop@gmail.com',
         to: email,
         subject: 'Verify Email PropShop',
-        html,
-        successCallback: function(suc) {
-          console.log('SEND EMAIL COMPLETE')
+        html: htmlx,
+        successCallback: (suc) => {
           res.json({
             status: 'success',
           });
-
         },
-        errorCallback: function(err) {
+        errorCallback:(err) => {
           res.json({
             status: 'success',
           });
-        }
+        },
       });
       mail.send();
-      console.log('SEND EMAIL')
     });
   } catch (e) {
     res.status(500).json({
@@ -227,4 +226,4 @@ export const emailVerify = async (req, res, next) => {
       message: e.message,
     });
   }
-}
+};

@@ -20,5 +20,6 @@ export default (entry) => {
     about: _.get(entry, 'fields.about'),
     uid: _.get(entry, 'fields.uid'),
     area: _.get(entry, 'fields.area'),
+    verify: _.get(entry, 'fields.verify'),
   };
 };

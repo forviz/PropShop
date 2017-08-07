@@ -135,8 +135,8 @@ export default connect(mapStateToProps)(
         label: T.string,
         value: T.string,
       })),
-      simpleMode: T.boolean,
-      showSearchButton: T.boolean,
+      simpleMode: T.bool,
+      showSearchButton: T.bool,
       trigger: T.string,
       onUpdate: T.func,
     }

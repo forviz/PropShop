@@ -119,6 +119,7 @@ class MyRouter extends Component {
   static propTypes = {
     firebase: PropTypes.shape().isRequired,
     actions: PropTypes.shape().isRequired,
+    user: PropTypes.shape(),
   }
 
   constructor(props) {
@@ -132,20 +133,33 @@ class MyRouter extends Component {
   }
 
   getProfile = () => {
-    const _self = this;
     const { firebase } = this.props;
     const { fetchUserData } = this.props.actions;
     firebase.auth().onAuthStateChanged((user) => {
-      if (_.get(user, 'emailVerified')) fetchUserData(_.get(user, 'uid'));
-      _self.setState({
-        isAuthenticated: _.get(user, 'emailVerified') ? true : false,
-        renderOk: true,
-      });
+      if (user) fetchUserData(_.get(user, 'uid'));
+    });
+  }
+
+  setAuthenticated = (verify) => {
+    this.setState({
+      isAuthenticated: verify,
+      renderOk: true,
     });
   }
 
   render() {
-    if (!this.state.renderOk) return <div />;
+    if (!this.state.renderOk) {
+      if (_.get(this.props.user, 'verify') !== undefined) {
+        this.setAuthenticated(this.props.user.verify);
+      } else {
+        return <div />;
+      }
+    }
+
+    if (_.get(this.props.user, 'verify') === false) {
+      notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
+    }
+
     return (
       <Router>
         <div className="Router">
@@ -159,7 +173,7 @@ class MyRouter extends Component {
           ))}
           <div id="Content">
             {routes.map(route => (
-              <div>
+              <div key={route.path}>
                 {route.login === true ? (
                   <PrivateRoute
                     key={route.path}
@@ -193,8 +207,10 @@ class MyRouter extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.data,
+  };
 };
 
 const actions = {

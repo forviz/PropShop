@@ -7,9 +7,14 @@ import PropertyMini from './Mini';
 
 class PropertyItem extends Component {
 
+  static defaultProps = {
+    mode: 'view',
+  }
+
   static propTypes = {
     item: T.shape().isRequired,
-    type: T.string.isRequired,
+    type: T.string,
+    mode: T.string.isRequired,
   }
 
   getPropertyItem = () => {

@@ -87,7 +87,7 @@ export const create = async (req, res, next) => {
       _.get(data, 'step1.specialFeatureView'));
     }
 
-    let fieldsData = {
+    const fieldsData = {
       fields: {
         propertyType: {
           'en-US': _.get(data, 'step0.residentialType'),
