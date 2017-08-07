@@ -20,7 +20,9 @@
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 2;
+      /* autoprefixer: off */
       -webkit-box-orient: vertical;
+      /* autoprefixer: on */
     }
     .date{
       font-size: 14px;
@@ -35,7 +37,9 @@
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 4;
+      /* autoprefixer: off */
       -webkit-box-orient: vertical;
+      /* autoprefixer: on */
     }
     .seemore{
       font-size: 14px;

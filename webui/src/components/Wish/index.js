@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import FontAwesome from 'react-fontawesome';
+import { notification, Icon } from 'antd';
 
 import * as WishListActions from '../../actions/wishlist-actions';
 
@@ -64,7 +65,7 @@ class Wish extends Component {
     if (wished) {
       await deleteWishlist(wishlist, userId, item.id);
     } else {
-      await createWishlist(wishlist, userId, {
+      createWishlist(wishlist, userId, {
         id: item.id,
         imageUrl: item.mainImage.file.url,
         area: {
@@ -89,6 +90,11 @@ class Wish extends Component {
         amphur: item.amphur,
         province: item.province,
         propertyType: item.residentialType,
+      });
+      notification.open({
+        message: 'บันทึกเรียบร้อย',
+        description: 'รายการที่บันทึกจะอยู่ในส่วนของผู้ใช้.',
+        icon: <Icon type="heart" style={{ color: '#8ebc42' }} />,
       });
     }
   };

@@ -13,9 +13,10 @@ class NewsItem extends Component {
 
   renderSlide = (data) => {
     const backgroundStyle = {
-      'background-image': `url(${data.acf.banner_images.sizes.large})`,
+      'background-image': `url(${data.acf.banner_images.url})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
     };
 
     const title = strip(data.title.rendered);
@@ -23,7 +24,7 @@ class NewsItem extends Component {
 
     return (
       <div className="banner" style={backgroundStyle}>
-        <a href={data.link} target="_blank"><div className="image-dark" ></div></a>
+        <a href={data.link} target="_blank"><div className="image-dark" /></a>
         <div className="content">
           <a href={data.link} target="_blank"><div className="title">{title}</div></a>
           {
@@ -37,7 +38,6 @@ class NewsItem extends Component {
 
   render() {
     const { datas } = this.props;
-    console.log('DATABANNER', datas);
 
     return (
       <div className="NewsBanner">
