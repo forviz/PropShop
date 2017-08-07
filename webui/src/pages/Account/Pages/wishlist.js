@@ -52,17 +52,19 @@ class WishList extends Component {
     return (
       <div id="WishList">
         <div className="row">
-          <div className="col-xs-12">
-            <div className="row">
-              <div className="head"> รายการที่บันทึกไว้ </div>
-            </div>
-            <div className="row">
-              <Spin spinning={fetching}>
-                {
-                  _.map(wishlist, (wish) => {
-                    return <WishItem item={wish} onDelete={this.handleDelete} />;
-                  })
-                }
+          <div className="col-md-12">
+            <div className="layout-right">
+              <Spin tip="Loading..." spinning={fetching}>
+                <div className="layout-container">
+                  <h1>รายการที่บันทึกไว้</h1>
+                  <div className="wishlist-list">
+                    {
+                      _.map(wishlist, (wish) => {
+                        return <WishItem item={wish} onDelete={this.handleDelete} />;
+                      })
+                    }
+                  </div>
+                </div>
               </Spin>
             </div>
           </div>

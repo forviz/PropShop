@@ -41,10 +41,10 @@ const passwordEditSuccess = (editSuccess) => {
   };
 };
 
-export const changePassword = (newPassword) => {
+export const changePassword = (user, newPassword) => {
   return (dispatch) => {
     dispatch(passwordEditing(true));
-    firebase.core().auth().currentUser.updatePassword(newPassword).then(() => {
+    user.updatePassword(newPassword).then(() => {
       dispatch(passwordEditSuccess(true));
       dispatch(passwordEditing(false));
     }, (error) => {

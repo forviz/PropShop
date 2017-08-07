@@ -88,9 +88,8 @@ const getProviderForProviderId = (providerId) => {
 const signInWithProvider = async (provider) => {
   const data = await firebase.auth().signInWithPopup(provider).then((result) => {
     // const token = result.credential.accessToken;
-    console.log('signInWithProvider', result);
     const user = result.user;
-    user.username = result.displayName ? result.displayName : result.email;
+    user.username = user.displayName ? user.displayName : user.email;
     // UserActions.fetchUserData(user.uid);
     contentful.createUser(user, true).then(() => {
       return false;

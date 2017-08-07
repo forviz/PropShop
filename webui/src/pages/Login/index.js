@@ -166,7 +166,6 @@ class Login extends Component {
     const passwordErrorMessage = this.state.password.errorMessage ? <span className="text-red">({this.state.password.errorMessage})</span> : '';
 
     if (userFetchSuccess === true) {
-      console.log('user', user);
       if (user.verify) {
         return (
           <Redirect to={from} />

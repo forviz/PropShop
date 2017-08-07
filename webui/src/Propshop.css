@@ -795,6 +795,10 @@ img {
 
 #Account {
   margin: 40px 0; }
+  #Account h1 {
+    font-family: "SukhumvitSet-Bold";
+    color: #8ebc42;
+    font-size: 36px; }
   #Account .ant-menu-root {
     border: 1px solid #eeeeee; }
 
