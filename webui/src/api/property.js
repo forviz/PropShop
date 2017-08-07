@@ -196,13 +196,13 @@ export const createPost = async (data) => {
 //   });
 // }
 
-export const createProperty = (data, userId) => {
+export const createProperty = (data, userId, userEmail, userName) => {
   return fetch(`${BASEURL}/property`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ data, userId }),
+    body: JSON.stringify({ data, userId, userEmail, userName }),
   })
   .then((response) => {
     return response.json();

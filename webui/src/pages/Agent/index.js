@@ -103,17 +103,17 @@ class Agent extends Component {
 
   constructor(props) {
     super(props);
-    this.getProfile(props);
+    // this.getProfile(props);
   }
 
-  getProfile = (props) => {
-    firebase.core().auth().onAuthStateChanged((user) => {
-      if (user) {
-        const { fetchUserProfile } = props.actions;
-        fetchUserProfile(user);
-      }
-    });
-  }
+  // getProfile = (props) => {
+  //   firebase.core().auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       const { fetchUserProfile } = props.actions;
+  //       fetchUserProfile(user);
+  //     }
+  //   });
+  // }
 
   handleSearchAgent = (search, area) => {
     const { history } = this.props;

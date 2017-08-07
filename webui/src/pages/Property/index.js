@@ -32,6 +32,7 @@ const actions = {
   getPropertyEntity: (propertyId, params) => {
     return (dispatch) => {
       const xx = `?id=${propertyId}${params}`;
+      console.log('asdsxx', xx);
       getProperties(`?id=${propertyId}${params}`)
       .then((result) => {
         dispatch(receivePropertyEntity(propertyId, _.get(result, 'data.0')));
@@ -71,6 +72,7 @@ class Property extends Component {
         params = '';
       }
     }
+    console.log('params', params);
     getPropertyEntity(props.propertyId, params);
   }
 

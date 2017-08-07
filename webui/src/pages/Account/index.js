@@ -22,21 +22,6 @@ class Account extends Component {
     user: T.shape().isRequired,
   }
 
-  constructor(props) {
-    super(props);
-    this.checkLogin();
-  }
-
-  checkLogin = () => {
-    const { firebase, history } = this.props;
-    firebase.auth().onAuthStateChanged((user) => {
-      if (!user) {
-        notification.error({ message: 'กรุณาเข้าสู่ระบบก่อน' });
-        history.push({ pathname: '/' });
-      }
-    });
-  }
-
   render() {
     const { user } = this.props;
     const page = this.props.match.params.page;

@@ -7,20 +7,20 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'sosersasad@gmail.com',
-    pass: 'jokerboso'
-  }
+    pass: 'jokerboso',
+  },
 });
 
 module.exports = function(params) {
   this.send = function() {
-    var options = {
+    const options = {
       from: '"PropShop" <propshop@gmail.com>',
       to: params.to,
       subject: params.subject,
       html: params.html,
     };
-    transporter.sendMail(options, function(err, suc){
+    transporter.sendMail(options, function(err, suc) {
       err ? params.errorCallback(err) : params.successCallback(suc);
     });
-  }
-}
+  };
+};

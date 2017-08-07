@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Input, Alert, Spin, notification } from 'antd';
-import _ from 'lodash';
-import queryString from 'query-string';
+import { connect } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
+import { firebaseConnect, pathToJS } from 'react-redux-firebase';
 
-import * as firebase from '../../api/firebase';
+import * as MyFirebase from '../../api/firebase';
 import * as helpers from '../../helpers';
 
 // import BannerRealEstate from '../../containers/BannerRealEstate';
@@ -11,6 +13,16 @@ import * as helpers from '../../helpers';
 import MemberInfo from '../../containers/MemberInfo';
 
 class Register extends Component {
+
+  static propTypes = {
+    firebase: PropTypes.shape().isRequired,
+    history: PropTypes.shape().isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.checkLogin();
+  }
 
   state = {
     submitting: false,
@@ -34,26 +46,16 @@ class Register extends Component {
     },
   }
 
-  componentDidMount() {
-    const { history } = this.props;
-    firebase.core().auth().onAuthStateChanged((user) => {
-      if (user && user.emailVerified === true) {
-        history.push({
-          pathname: '/',
-        });
-        // if (user.emailVerified === false) {
-        //   _self.openNotificationEailVerified();
-        // } else {
-        //   history.push({
-        //     pathname: '/',
-        //   });
-        // }
-      }
-    });
+  checkLogin = () => {
+    const { firebase, history } = this.props;
+    const user = firebase.auth().currentUser;
+    if (user) {
+      history.push({ pathname: '/' });
+    }
   }
 
   openNotificationEailVerified = () => {
-    notification['warning']({
+    notification.warning({
       message: 'กรุณายืนยันอีเมลของคุณ',
     });
   }
@@ -166,7 +168,7 @@ class Register extends Component {
     const errorPassword = this.checkConfirmPassword(password1, password2);
 
     if (errorUsername === '' && errorEmail === '' && errorPassword === '') {
-      await firebase.createUser(username, email, password1).then((errorMessage) => {
+      await MyFirebase.createUser(username, email, password1).then((errorMessage) => {
         if (errorMessage) {
           _self.setState({
             submitting: false,
@@ -272,4 +274,20 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = (state) => {
+  return {
+    authError: pathToJS(state.firebase, 'authError'),
+  };
+};
+
+const actions = {
+
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+
+export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(Register);

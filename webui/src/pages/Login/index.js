@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Alert, Spin } from 'antd';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect, pathToJS } from 'react-redux-firebase';
@@ -39,6 +39,8 @@ class Login extends Component {
       value: '',
       errorMessage: '',
     },
+    redirectToReferrer: false,
+    renderOk: false,
   }
 
   componentDidMount = async () => {
@@ -46,18 +48,20 @@ class Login extends Component {
     const params = queryString.parse(history.location.search);
     if (params.verify) {
       await emailVerifying(params.verify);
-      history.push({
-        pathname: '/',
-      });
+      // history.push({
+      //   pathname: '/',
+      // });
     }
   }
 
   checkLogin = () => {
-    const { firebase, history } = this.props;
+    const _self = this;
+    const { firebase } = this.props;
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        history.push({ pathname: '/' });
-      }
+      _self.setState({
+        redirectToReferrer: _.get(user, 'emailVerified') ? true : false,
+        renderOk: true,
+      });
     });
   }
 
@@ -156,11 +160,20 @@ class Login extends Component {
   }
 
   render() {
+    if (!this.state.renderOk) return <div />;
+
     const { authError } = this.props;
-    const { submitting } = this.state;
+    const { submitting, redirectToReferrer } = this.state;
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
     const passwordErrorMessage = this.state.password.errorMessage ? <span className="text-red">({this.state.password.errorMessage})</span> : '';
+
+    if (redirectToReferrer) {
+      return (
+        <Redirect to={from} />
+      );
+    }
 
     return (
       <div id="Login">

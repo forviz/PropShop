@@ -33,12 +33,12 @@ export const createUser = (username, email, password) => {
     user['username'] = username;
     return contentful.createUser(user, false).then((userContentful) => { // create user to contentful
       // window.location = "/";
-      return user.sendEmailVerification().then(function() { // firebase send mail verification
-        return;
-        // window.location = "/";
-      }, function(error) {
-        return error;
-      });
+      // return user.sendEmailVerification().then(function() { // firebase send mail verification
+      //   return;
+      //   // window.location = "/";
+      // }, function(error) {
+      //   return error;
+      // });
     });
   }).catch(function(error) {
     return mapFirebaseErrorMessage(error.message);
