@@ -5,26 +5,34 @@ import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import FontAwesome from 'react-fontawesome';
 
+import { createUser } from '../../api/contentful';
+
 class SocialLogin extends Component {
 
   static propTypes = {
     firebase: PropTypes.shape().isRequired,
   }
 
-  handleFacebookLogin = () => {
+  handleFacebookLogin = async () => {
     const { firebase } = this.props;
-    firebase.login({
+    const facebookLogin = await firebase.login({
       provider: 'facebook',
       type: 'popup',
     });
+    const user = facebookLogin.user;
+    createUser(user, true);
+    // signInWithFacebook();
   }
 
-  handleGoogleLogin = () => {
+  handleGoogleLogin = async () => {
     const { firebase } = this.props;
-    firebase.login({
+    const googleLogin = await firebase.login({
       provider: 'google',
       type: 'popup',
     });
+    const user = googleLogin.user;
+    createUser(user, true);
+    // signInWithGoogle();
   }
 
   render() {

@@ -17,6 +17,8 @@ const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.REACT_APP_ACCESSTOKEN_MANAGEMENT,
 });
 
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
+
 const mapContentFulRealestateToMyField = (data) => {
   return _.reduce(data, (acc, elem, index) => {
     const inWebsite = moment.duration(moment(new Date()).diff(moment(elem.sys.createdAt))).days() === 0;
@@ -42,10 +44,10 @@ const mapContentFulRealestateToMyField = (data) => {
 };
 
 const convertBanner = (entry, string) => {
-  let datas = {};
+  const datas = {};
   let i;
-  for (i = 0; i < 5; i++) {
-    const row = string+(i+1).toString();
+  for (i = 0; i < 5; i += 1) {
+    const row = string + (i + 1).toString();
     if (entry.items[0].fields[row]) {
       const items = entry.items[0].fields[row];
       const data = mapContentFulPropertyToMyField(items);
@@ -125,10 +127,7 @@ export const getBannerRealEstate = () => {
     'sys.id': process.env.REACT_APP_CONTENTFUL_BANNER,
     include: 1,
   }).then((entry) => {
-    console.log('getBannerRealEstate 1', entry);
-    const xx = mapContentFulBannerToMyField(entry);
-    console.log('getBannerRealEstate 2', xx);
-    return xx;
+    return mapContentFulBannerToMyField(entry);
   });
 };
 
@@ -177,8 +176,7 @@ const existUser = (uid) => {
   })
   .then((response) => {
     return response.total === 0 ? false : true;
-  })
-  .catch(console.error);
+  });
 };
 
 export const publishEntry = (entryId) => {
@@ -187,38 +185,59 @@ export const publishEntry = (entryId) => {
   .then(entry => entry.publish())
   .then((entry) => {
     return entry;
-  })
-  .catch(console.error);
+  });
 };
 
 export const createUser = (user, verify) => {
-  return existUser(user.uid).then((hasUser) => {
-    if (!hasUser) {
-      return clientManagement.getSpace(process.env.REACT_APP_SPACE)
-      .then(space => space.createEntry('agent', {
-        fields: {
-          username: {
-            'en-US': user.username,
-          },
-          email: {
-            'en-US': user.email,
-          },
-          uid: {
-            'en-US': user.uid,
-          },
-          verify: {
-            'en-US': verify,
-          },
-        },
-      }))
-      .then((entry) => {
-        if (verify === false) sendEmailVerify(entry.sys.id, user.username, user.email);
-        return publishEntry(entry.sys.id);
-      })
-      .catch(console.error);
-    }
+  console.log('createUser', user);
+  const data = {};
+  data.uid = user.uid;
+  data.verify = verify;
+  data.username = user.displayName ? user.displayName : user.email;
+  data.email = user.email;
+  return fetch(`${BASEURL}/user`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data }),
+  })
+  .then((response) => {
+    return response.json();
   });
 };
+
+// export const createUser = async (user, verify) => {
+//   const hasUser = await existUser(user.uid);
+//   if (hasUser) return false;
+//   if (_.get(user, 'photoURL')) {
+
+//   }
+//   return clientManagement.getSpace(process.env.REACT_APP_SPACE)
+//   .then(space => space.createEntry('agent', {
+//     fields: {
+//       username: {
+//         'en-US': user.username,
+//       },
+//       email: {
+//         'en-US': user.email,
+//       },
+//       phone: {
+//         'en-US': _.get(user, 'phoneNumber'),
+//       },
+//       uid: {
+//         'en-US': user.uid,
+//       },
+//       verify: {
+//         'en-US': verify,
+//       },
+//     },
+//   }))
+//   .then((entry) => {
+//     if (verify === false) sendEmailVerify(entry.sys.id, user.username, user.email);
+//     return publishEntry(entry.sys.id);
+//   });
+// };
 
 export const parseRealEstateData = (data, mainImageId, imageIds) => {
   return {
@@ -230,7 +249,7 @@ export const parseRealEstateData = (data, mainImageId, imageIds) => {
       id: 802,
       name: 'James Bond',
       email: 'jamesbond@agent.com',
-      phone: '09xxxxxxx'
+      phone: '09xxxxxxx',
     },
     property: {
       id: undefined,

@@ -132,7 +132,7 @@ class MyRouter extends Component {
     const { firebase } = this.props;
     const { fetchUserData } = this.props.actions;
     firebase.auth().onAuthStateChanged((user) => {
-      fetchUserData(_.get(user, 'uid'));
+      fetchUserData(_.get(user, 'uid'), user);
     });
   }
 

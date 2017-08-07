@@ -29,9 +29,9 @@ export const core = () => {
 };
 
 export const createUser = (username, email, password) => {
-  return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-    user['username'] = username;
-    return contentful.createUser(user, false).then((userContentful) => { // create user to contentful
+  return firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
+    user.username = username;
+    return contentful.createUser(user, false).then(() => { // create user to contentful
       // window.location = "/";
       // return user.sendEmailVerification().then(function() { // firebase send mail verification
       //   return;
@@ -40,15 +40,15 @@ export const createUser = (username, email, password) => {
       //   return error;
       // });
     });
-  }).catch(function(error) {
+  }).catch((error) => {
     return mapFirebaseErrorMessage(error.message);
   });
 };
 
 export const signIn = (email, password) => {
-  return firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-    window.location = "/";
-  }).catch(function(error) {
+  return firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+    window.location = '/';
+  }).catch((error) => {
     return mapFirebaseErrorMessage(error.message);
   });
 };
@@ -88,9 +88,10 @@ const getProviderForProviderId = (providerId) => {
 const signInWithProvider = async (provider) => {
   const data = await firebase.auth().signInWithPopup(provider).then((result) => {
     // const token = result.credential.accessToken;
+    console.log('signInWithProvider', result);
     const user = result.user;
     user.username = result.displayName ? result.displayName : result.email;
-    UserActions.fetchUserData(user.uid);
+    // UserActions.fetchUserData(user.uid);
     contentful.createUser(user, true).then(() => {
       return false;
     });
@@ -157,7 +158,7 @@ export const verifiedUser = (user) => {
 
 export const updatePassword = (newPassword) => {
   return firebase.auth().currentUser.updatePassword(newPassword).then(() => {
-    return;
+    return false;
   }, (error) => {
     return error;
   });

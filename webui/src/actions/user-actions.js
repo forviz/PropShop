@@ -14,12 +14,15 @@ const userFetchSuccess = (fetchSuccess) => {
   };
 };
 
-export const fetchUserData = (uid) => {
+export const fetchUserData = (uid, firebaseData) => {
   return (dispatch) => {
     dispatch(userFetchSuccess(false));
     if (uid) {
       fetchUserAPI(uid).then((user) => {
-        dispatch(setUserData(user));
+        dispatch(setUserData({
+          ...firebaseData,
+          ...user,
+        }));
         dispatch(userFetchSuccess(true));
       });
     } else {

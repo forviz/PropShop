@@ -2,8 +2,8 @@
 require('babel-register');
 require('babel-polyfill');
 
-const _ = require('lodash');
-const moment = require('moment');
+// const _ = require('lodash');
+// const moment = require('moment');
 const express = require('express');
 const flash = require('express-flash');
 const compression = require('compression');
@@ -64,18 +64,18 @@ app.use((req, res, next) => {
 });
 
 
-const contentDeliveryAuthentication = (req, res, next) => {
-  const token = _.replace(req.get('Authorization'), 'Bearer ', '');
-  if (token !== '') {
-    console.log('token', token);
-  }
-  next();
-};
+// const contentDeliveryAuthentication = (req, res, next) => {
+//   const token = _.replace(req.get('Authorization'), 'Bearer ', '');
+//   if (token !== '') {
+//     console.log('token', token);
+//   }
+//   next();
+// };
 
 const apiPrefix = '/api/v1';
 
-app.post (`${apiPrefix}/media`, upload.single('file'), postController.uploadFile);
-app.delete (`${apiPrefix}/media/:assetId`, postController.deleteFile);
+app.post(`${apiPrefix}/media`, upload.single('file'), postController.uploadFile);
+app.delete(`${apiPrefix}/media/:assetId`, postController.deleteFile);
 app.get(`${apiPrefix}/posts`, postController.queryPosts);
 app.post(`${apiPrefix}/posts`, postController.createPost);
 
@@ -84,10 +84,11 @@ app.post(`${apiPrefix}/property`, propertyController.create);
 app.post(`${apiPrefix}/property/:id`, propertyController.update);
 app.delete(`${apiPrefix}/property/:id`, propertyController.deleteProperty);
 
+app.post(`${apiPrefix}/user`, userController.createUser);
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
 app.post(`${apiPrefix}/user/:id`, userController.updateUser);
 app.post(`${apiPrefix}/contact/agent`, userController.contactAgent);
-app.post(`${apiPrefix}/email/verify`, userController.emailVerify);
+// app.post(`${apiPrefix}/email/verify`, userController.emailVerify);
 
 app.get(`${apiPrefix}/wishlist/:id`, wishlistController.getWishlist);
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
