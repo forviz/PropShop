@@ -174,9 +174,16 @@ img {
     margin-top: 20px; }
   #Home .list h3 {
     font-family: "SukhumvitSet-Bold"; }
+  #Home .search-filter {
+    position: fixed;
+    z-index: 10;
+    background: white;
+    width: 50%; }
   #Home .result {
     padding: 15px;
     position: relative; }
+    #Home .result .list ul {
+      margin-top: 10px; }
     #Home .result .list li.item {
       padding: 0;
       padding: 0 8px 8px 0; }
@@ -815,7 +822,10 @@ img {
   width: 100%;
   padding: 0;
   padding-left: 15px;
-  margin: 0; }
+  margin: 0;
+  position: fixed;
+  background: #88b840;
+  z-index: 10; }
 
 .navbar-default {
   background: #88b840;
@@ -1416,8 +1426,8 @@ body .rating span {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    box-orient: vertical;
     /* autoprefixer: off */
+    -webkit-box-orient: vertical;
     /* autoprefixer: on */ }
   .PropertyItem .List .info .price {
     font-weight: bold;
@@ -1543,7 +1553,9 @@ body .ant-notification {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; }
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */ }
   .NewsItem .list .date {
     font-size: 14px;
     color: #8ebc42;
@@ -1556,7 +1568,9 @@ body .ant-notification {
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical; }
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */ }
   .NewsItem .list .seemore {
     font-size: 14px;
     color: #8ebc42;
@@ -1587,7 +1601,7 @@ body .ant-notification {
   color: #f6f6f6; }
   .NewsBanner .banner {
     width: 100%;
-    height: 460px;
+    min-height: 460px;
     position: relative; }
     .NewsBanner .banner .image-dark {
       width: 100%;
@@ -1620,7 +1634,9 @@ body .ant-notification {
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical; }
+        /* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */ }
       .NewsBanner .banner .content .description {
         font-size: 18px;
         line-height: 30px;
@@ -1635,7 +1651,9 @@ body .ant-notification {
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical; }
+        /* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */ }
       .NewsBanner .banner .content button {
         width: 140px;
         height: 35px;
@@ -1708,25 +1726,22 @@ body .ant-notification {
     font-size: 18px;
     color: #8ebc42; }
   .WishItem .detail .place {
-    display: block;
-    /* Fallback for non-webkit */
-    display: -webkit-box;
-    margin: 0 auto;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
     margin-bottom: 10px; }
   .WishItem .detail .description {
-    display: block;
-    /* Fallback for non-webkit */
-    display: -webkit-box;
-    height: 40px;
-    margin: 0 auto;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis; }
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */ }
   .WishItem .option {
     float: right;
     margin: -20px; }

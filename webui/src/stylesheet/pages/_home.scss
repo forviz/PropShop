@@ -130,10 +130,20 @@
 		}
 	}
 
+	.search-filter{
+		position: fixed;
+		z-index: 10;
+		background: white;
+		width: 50%;
+	}
+
 	.result {
 		padding: 15px;
 		position: relative;
 		.list {
+			ul{
+				margin-top: 10px;
+			}
 			li.item {
 				padding: 0;
 				padding: 0 8px 8px 0;

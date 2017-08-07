@@ -202,7 +202,7 @@ class Landing extends Component {
     const { history, areas } = this.props;
     const { searchParams } = this.state;
     return (
-      <div>
+      <div className="search-filter">
         {loading === true ? (
           <LoadingComponent />
         ) : (
@@ -268,6 +268,7 @@ class Landing extends Component {
         <ListWrapper mode={mobileViewMode}>
           {this.renderSearchFilter(false, searchParameters)}
           <hr />
+          <div style={{ width: '100%', height: '80px' }} />
           {this.renderList()}
         </ListWrapper>
       </div>

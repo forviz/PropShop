@@ -1,6 +1,3 @@
-import React from 'react';
-import { notification, Icon } from 'antd';
-
 const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 export const fetchGetWishlist = async (userId) => {
@@ -31,12 +28,6 @@ export const fetchCreateWishlist = async (userId, propertyId) => {
   .then(response => response.json())
   .then((response) => {
     console.log('CREATE ', response);
-
-    notification.open({
-      message: 'บันทึกเรียบร้อย',
-      description: 'รายการที่บันทึกจะอยู่ในส่วนของผู้ใช้.',
-      icon: <Icon type="heart" style={{ color: '#8ebc42' }} />,
-    });
     return response.data;
   });
 };
