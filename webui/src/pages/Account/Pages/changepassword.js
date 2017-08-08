@@ -16,7 +16,6 @@ class Changepassword extends Component {
     data: PropTypes.shape().isRequired,
     editing: PropTypes.bool.isRequired,
     editSuccess: PropTypes.bool.isRequired,
-    user: PropTypes.shape().isRequired,
     errorMessage: PropTypes.string.isRequired,
     // authError: PropTypes.shape(),
   }
@@ -81,7 +80,7 @@ class Changepassword extends Component {
   }
 
   render() {
-    const { data, user, editing, editSuccess, errorMessage, authError } = this.props;
+    const { data, editing, editSuccess, errorMessage } = this.props;
 
     return (
       <div id="Changepassword">
