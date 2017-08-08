@@ -105,7 +105,6 @@ const ButtonPrimary = styled.button`
   }
 `;
 
-
 const propertyTypes = [
   { value: 'condominium', label: 'Condominium' },
   { value: 'town-home', label: 'Town-home' },
@@ -143,8 +142,10 @@ export default connect(mapStateToProps)(
 
     static defaultProps = {
       searchParameters: {
+        for: 'all',
+        propertyType: 'all',
         area: {
-          name: '',
+          name: 'bangkok',
         },
       },
       areas: [],
@@ -211,6 +212,8 @@ export default connect(mapStateToProps)(
       this.setState({
         showSummaryOnly: true,
       });
+
+      console.log('searchParameters', searchParameters);
 
       this.props.onSubmit(searchParameters);
     }
@@ -302,13 +305,15 @@ export default connect(mapStateToProps)(
         );
       }
 
+      const forValue = _.includes(['sale', 'rent'], searchParameters.for) ? searchParameters.for : [];
+      const propertyTypeValue = _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], _.get(searchParameters, 'propertyType.0')) ? _.get(searchParameters, 'propertyType.0') : [];
       let content = (
         <SearchBarWrapper>
           <InputWrapper>
             <Select
               style={{ width: '100%' }}
               placeholder="ประเภทประกาศ"
-              value={searchParameters.for}
+              defaultValue={forValue}
               onChange={value => this.onUpdateSearchParameters({ ...searchParameters, for: _.toLower(value) })}
             >
               <Option value="sale">ขาย</Option>
@@ -319,7 +324,7 @@ export default connect(mapStateToProps)(
             <Select
               style={{ width: '100%' }}
               placeholder="ประเภทอสังหาฯ"
-              value={searchParameters.propertyType}
+              defaultValue={propertyTypeValue}
               onChange={value => this.onUpdateSearchParameters({ ...searchParameters, propertyType: _.toLower(value) })}
             >
               {_.map(propertyTypes, type => <Option key={type.value} value={type.value}>{type.label}</Option>)}
