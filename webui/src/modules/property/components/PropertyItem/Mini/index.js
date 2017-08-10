@@ -26,25 +26,28 @@ const CoverImgWrapper = styled.div`
   width: 100px;
 `;
 
-const CoverImg = styled.img`
+const CoverImg = styled.div`
   width: 100%;
   height: auto;
+  background: url(${props => props.image});
+  background-size: cover;
+  background-position: center;
 `;
 
 const ContentWrapper = styled.div`
   flex-grow: 1;
-  padding: 15px;
+  padding-left: 15px;
 `;
 
 const PropertyTitle = styled.h3`
-  font-size: 22px;
+  font-size: 12px;
+  font-weight: bold;
 `;
 
 const PriceWrapper = styled.div`
-  display: flex;
-  flex-grow: 0;
-  width: 200px;
-  text-align: right;
+  color: #76ac31;
+  font-size: 14px;
+  font-weight: bold;
 `;
 
 class Mini extends Component {
@@ -62,16 +65,21 @@ class Mini extends Component {
     return (
       <PropertyRow>
         <CoverImgWrapper>
-          <CoverImg src={`${item.mainImage.file.url}?h=100&fit=fill`} alt={item.project} />
+          <CoverImg image={`${item.mainImage.file.url}?h=100&fit=fill`} />
         </CoverImgWrapper>
         <ContentWrapper>
-          <PropertyTitle>{'title'}</PropertyTitle>
-          <div>
-            <FontAwesome name="bed" /><span>{item.bedroom}</span>
-            <FontAwesome name="bath" /><span>{item.bathroom}</span>
-          </div>
+          <PropertyTitle>{item.project || item.topic}</PropertyTitle>
+          <PriceWrapper>{numeral(item.price).format('0,0')}</PriceWrapper>
+          <div className="address">{item.address} {item.street} {item.amphur} {item.distict} {item.province} {item.zipcode}</div>
+          <ul>
+            {item.bedroom > 0 &&
+              <li style={{ display: 'inline-block' }}><FontAwesome name="bed" /> <span>{item.bedroom}</span></li>
+            }
+            {item.bathroom > 0 &&
+              <li style={{ display: 'inline-block', marginLeft: 20 }}><FontAwesome name="bath" /> <span>{item.bathroom}</span></li>
+            }
+          </ul>
         </ContentWrapper>
-        <PriceWrapper>{numeral(item.price).format('0,0')}</PriceWrapper>
       </PropertyRow>
     );
   }

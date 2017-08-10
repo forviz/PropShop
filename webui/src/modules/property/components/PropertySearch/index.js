@@ -49,7 +49,7 @@ const InputWrapper = styled.div`
 `;
 
 const SummaryInput = styled.div`
-  background-color: #787878;
+  background: #3e680b;
   color: white;
   text-align: center;
   border-radius: 4px;
@@ -58,7 +58,7 @@ const SummaryInput = styled.div`
   cursor: pointer;
 
   &:hover {
-    background: #999999;
+    background: #8ebc42;
   }
 `;
 
