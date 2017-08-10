@@ -39,17 +39,15 @@ class List extends Component {
 
     if (!item) return (<div />);
 
-    console.log('sdkowqkowdqoj', item);
-
     return (
       <div className="List">
         <div className="row">
-          <div className="col-md-3 vcenter">
+          <div className="col-sm-12 col-md-3">
             <div className="image">
-              <img src={item.mainImage} alt={item.project} />
+              <img src={item.mainImage.file.url} alt={item.project} />
             </div>
           </div>
-          <div className="col-md-3 vcenter">
+          <div className="col-sm-12 col-md-3">
             <div className="info">
               <div className="project">{item.project || item.address}</div>
               <div className="price">{numeral(item.price).format('0,0')} บาท</div>
@@ -57,15 +55,15 @@ class List extends Component {
               <div className="description">{item.announceDetails}</div>
             </div>
           </div>
-          <div className="col-md-3 vcenter">
+          <div className="col-sm-12 col-md-3">
             <div className="status">ประกาศ: {item.for}</div>
             <div className="area-size">
               <div>พื้นที่ใช้สอย:</div>
               <div>{item.areaSize} ตร.ว.</div>
             </div>
           </div>
-          <div className="col-md-3 vcenter">
-            <div className="area-size">
+          <div className="col-sm-12 col-md-3">
+            <div className="property-type">
               <div>ประเภทอสังหาฯ:</div>
               <div>{item.residentialType}</div>
             </div>

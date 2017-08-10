@@ -944,6 +944,10 @@ img {
     right: -1px;
     width: 30px; }
 
+@media (max-width: 767px) {
+  .navbar-toggle {
+    margin-right: 25px; } }
+
 #Footer {
   background: #494749;
   padding: 15px 25px 25px 25px;
@@ -1415,7 +1419,8 @@ body .rating span {
     right: 15px; }
 
 .PropertyItem .List {
-  border: 1px solid #eeeeee; }
+  border: 1px solid #eeeeee;
+  padding: 15px; }
   .PropertyItem .List:hover {
     border: 1px solid #8ebc42; }
   .PropertyItem .List .actions .fa {

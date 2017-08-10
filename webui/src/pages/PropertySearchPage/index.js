@@ -336,7 +336,7 @@ class PropertySearchPage extends Component {
               <ul className="clearfix">
                 {
                   _.map(items, (item, index) => {
-                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-4 col-lg-6 col-lg-4';
+                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-12 col-md-6 col-lg-4';
                     return (
                       <li key={index} className={`item ${col}`}>
                         <NavLink exact to={`/property/${item.id}`}>
@@ -352,7 +352,9 @@ class PropertySearchPage extends Component {
                   })
                 }
               </ul>
-              <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
+              <div style={{ textAlign: 'center' }}>
+                <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
+              </div>
             </div>
           </div>
         )}
@@ -389,7 +391,7 @@ class PropertySearchPage extends Component {
                     {
                       _.map(realestate.data, (item) => {
                         return (
-                          <PropertyItem type="mini" key={item.id} {...item} />
+                          <PropertyItem type="mini" key={item.id} item={item} />
                         );
                       })
                     }

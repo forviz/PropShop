@@ -62,6 +62,7 @@
 	}
 	.List {
 		border: 1px solid $border-color;
+		padding: 15px;
 		&:hover {
 			border: 1px solid $text-green;
 		}

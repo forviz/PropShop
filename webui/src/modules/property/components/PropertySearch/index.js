@@ -23,7 +23,7 @@ const priceListRent = [0, 2000, 4000, 6000, 8000, 10000, 12000, 15000, 20000, 25
 
 const BREAKPOINT = 768;
 const PropertySearchWrapper = styled.div`
-  padding: 20px;
+  padding: 10px;
   border-bottom: 1px solid #eeeeee;
 `;
 

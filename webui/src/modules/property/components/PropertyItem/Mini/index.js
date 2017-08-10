@@ -50,27 +50,28 @@ const PriceWrapper = styled.div`
 class Mini extends Component {
 
   static propTypes = {
-    mainImage: T.string,
-    price: T.number,
-    bedroom: T.number,
-    bathroom: T.number,
+    // mainImage: T.string,
+    // price: T.number,
+    // bedroom: T.number,
+    // bathroom: T.number,
+    item: T.shape().isRequired,
   }
 
   render() {
-    const { mainImage, price, bedroom, bathroom } = this.props;
+    const { item } = this.props;
     return (
       <PropertyRow>
         <CoverImgWrapper>
-          <CoverImg src={`${mainImage}?h=100&fit=fill`} alt="" />
+          <CoverImg src={`${item.mainImage.file.url}?h=100&fit=fill`} alt={item.project} />
         </CoverImgWrapper>
         <ContentWrapper>
           <PropertyTitle>{'title'}</PropertyTitle>
           <div>
-            <FontAwesome name="bed" /><span>{bedroom}</span>
-            <FontAwesome name="bath" /><span>{bathroom}</span>
+            <FontAwesome name="bed" /><span>{item.bedroom}</span>
+            <FontAwesome name="bath" /><span>{item.bathroom}</span>
           </div>
         </ContentWrapper>
-        <PriceWrapper>{numeral(price).format('0,0')}</PriceWrapper>
+        <PriceWrapper>{numeral(item.price).format('0,0')}</PriceWrapper>
       </PropertyRow>
     );
   }
