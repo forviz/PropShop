@@ -12,9 +12,9 @@ class NewsItem extends Component {
       <div className="NewsItem">
         <div className="row">
           {
-            _.map(datas, (data, key) => {
+            _.map(datas, (data) => {
               return (
-                <NewsItemList data={data} key={key} />
+                <NewsItemList key={data.id} data={data} />
               );
             })
           }
