@@ -154,7 +154,7 @@ export const updateUser = async (req, res) => {
       res.json({
         status: 'SUCCESS',
       });
-      process.exit();
+      return false;
     } else {
       res.json({
         status: 'FAIL',
@@ -243,13 +243,13 @@ export const contactAgent = async (req, res, next) => {
           res.json({
             status: 'success',
           });
-          process.exit();
+          return false;
         },
         errorCallback: () => {
           res.json({
             status: 'success',
           });
-          process.exit();
+          return false;
         },
       });
       mail.send();
