@@ -92,7 +92,7 @@ class News extends Component {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-12 hidden-xs">
               <NewsBanner datas={newsBanner.datas} />
             </div>
           </div>

@@ -752,13 +752,11 @@ img {
   width: 120px; }
 
 #News .ant-tabs-bar {
-  margin-left: 38px;
   box-sizing: border-box;
   border: none; }
 
 #News .ant-tabs-nav .ant-tabs-tab {
   margin-right: 0px;
-  padding-top: 60px;
   color: #999999; }
 
 #News .ant-tabs-nav .ant-tabs-tab-active {
@@ -767,7 +765,6 @@ img {
 #News .tap-title {
   font-size: 30px;
   font-family: "SukhumvitSet-Bold";
-  padding-left: 38px;
   box-sizing: border-box; }
 
 #News .ant-pagination {
@@ -886,7 +883,7 @@ img {
   color: #ffffff;
   background: #484849; }
 
-@media (max-width: 1100px) {
+@media (max-width: 700px) {
   .navbar-default .navbar-toggle {
     background: #ffffff; }
   .navbar-default .navbar-toggle[aria-expanded=true],
@@ -1613,7 +1610,8 @@ body .ant-notification {
   width: 100%;
   height: 460px;
   background: #999999;
-  color: #f6f6f6; }
+  color: #f6f6f6;
+  margin-bottom: 40px; }
   .NewsBanner .banner {
     width: 100%;
     min-height: 460px;

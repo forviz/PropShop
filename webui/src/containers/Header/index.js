@@ -132,12 +132,12 @@ class Header extends Component {
               { /* <li><NavLink exact to="/webboard">{translate('เว็บบอร์ด')}</NavLink></li> */ }
             </ul>
             <ul className="nav navbar-nav navbar-right">
-              <li className="language">
+              {/* <li className="language">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('th')); }}>ไทย</a>
               </li>
               <li className="language last">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('en')); }}>ENG</a>
-              </li>
+              </li> */}
               <li className="login">
                 {loginLabel}
               </li>
