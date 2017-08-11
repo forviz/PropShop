@@ -80,7 +80,7 @@ class News extends Component {
     const { propNow, propTalk, propVerdict, newsBanner } = this.props.newsItem.entities;
     const { fetching } = this.props;
 
-    if (Object.keys(this.props.newsItem.entities).length === 0) return <div />;
+    if (_.size(_.get(newsBanner, 'datas')) === 0) return <div />;
 
     return (
       <div id="News">
