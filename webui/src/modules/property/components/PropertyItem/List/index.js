@@ -9,14 +9,16 @@ class PropertyItemList extends Component {
   static propTypes = {
     item: T.shape().isRequired,
     mode: T.string.isRequired,
+    onMouseEnter: T.func,
+    onMouseLeave: T.func,
   }
 
   getPropertyMode = () => {
-    const { mode, item } = this.props;
+    const { mode, item, onMouseEnter, onMouseLeave } = this.props;
     switch (mode) {
-      case 'view': return <PropertyListViewMode item={item} />;
-      case 'edit': return <PropertyListEditMode item={item} />;
-      default: return <PropertyListViewMode item={item} />;
+      case 'view': return <PropertyListViewMode item={item} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
+      case 'edit': return <PropertyListEditMode item={item} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
+      default: return <PropertyListViewMode item={item} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
     }
   }
 

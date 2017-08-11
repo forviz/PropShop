@@ -142,7 +142,7 @@ class MyRouter extends Component {
     if (!userFetchSuccess) return <div />;
 
     if (user.verify === false) {
-      notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
+      // notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
     }
 
     return (

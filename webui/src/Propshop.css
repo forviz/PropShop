@@ -1539,18 +1539,16 @@ body .ant-notification {
     text-align: center;
     text-decoration: none; }
   .MapLocation .custom-marker.hilight, .MapLocation .custom-marker:hover {
-    z-index: 9999; }
+    z-index: 9999 !important; }
     .MapLocation .custom-marker.hilight .price, .MapLocation .custom-marker:hover .price {
       background: #88b840; }
   .MapLocation .gm-style-iw {
     width: 200px !important;
-    top: 0 !important;
-    left: 0 !important;
+    top: 25px !important;
+    left: 25px !important;
     background: #ffffff; }
-    .MapLocation .gm-style-iw:nth-child(1) {
+    .MapLocation .gm-style-iw div:nth-child(1) {
       display: block !important; }
-    .MapLocation .gm-style-iw:nth-child(2) {
-      display: none !important; }
 
 .NewsItem .list {
   min-height: 520px;

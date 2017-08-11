@@ -49,9 +49,7 @@ class Login extends Component {
     const params = queryString.parse(history.location.search);
     if (params.verify) {
       await emailVerifying(params.verify);
-      history.push({
-        pathname: '/',
-      });
+      window.location = '/';
     }
   }
 

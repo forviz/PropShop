@@ -15,15 +15,17 @@ class PropertyItem extends Component {
     item: T.shape().isRequired,
     type: T.string,
     mode: T.string.isRequired,
+    onMouseEnter: T.func,
+    onMouseLeave: T.func,
   }
 
   getPropertyItem = () => {
-    const { type, mode, item } = this.props;
+    const { type, mode, item, onMouseEnter, onMouseLeave } = this.props;
     switch (type) {
-      case 'thumbnail': return <PropertyThumbnail item={item} mode={mode} />;
-      case 'list': return <PropertyList item={item} mode={mode} />;
-      case 'mini': return <PropertyMini item={item} mode={mode} />;
-      default: return <PropertyThumbnail item={item} mode={mode} />;
+      case 'thumbnail': return <PropertyThumbnail item={item} mode={mode} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
+      case 'list': return <PropertyList item={item} mode={mode} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
+      case 'mini': return <PropertyMini item={item} mode={mode} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
+      default: return <PropertyThumbnail item={item} mode={mode} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
     }
   }
 

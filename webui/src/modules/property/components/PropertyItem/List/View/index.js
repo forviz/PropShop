@@ -20,18 +20,21 @@ import * as WishListActions from '../../../../../../actions/wishlist-actions';
 class List extends Component {
 
   static propTypes = {
-    // actions: T.shape({
-    //   fetchPropertiesByAgent: T.func,
-    // }).isRequired,
     item: T.shape().isRequired,
-    wishlist: T.arrayOf().isRequired,
+    onMouseEnter: T.func,
+    onMouseLeave: T.func,
   }
 
-  handleWishList = (itemId) => {
-    // openNotification();
-    // const { userId } = this.props;
-    // const { createWishlist, getWishlist } = this.props.actions;
-    // createWishlist(userId, itemId);
+  handleMouseEnter = () => {
+    if (this.props.onMouseEnter) {
+      this.props.onMouseEnter(this.props.item);
+    }
+  }
+
+  handleMouseLeave = () => {
+    if (this.props.onMouseLeave) {
+      this.props.onMouseLeave(this.props.item);
+    }
   }
 
   render() {
@@ -40,7 +43,7 @@ class List extends Component {
     if (!item) return (<div />);
 
     return (
-      <div className="List">
+      <div className="List" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
         <div className="row">
           <div className="col-sm-12 col-md-3">
             <div className="image">

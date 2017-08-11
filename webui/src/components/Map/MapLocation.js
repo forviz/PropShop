@@ -87,17 +87,7 @@ class MapLocation extends Component {
 
   }
 
-  createMarker = (markerData) => {
-    // console.log('createMarker', markerData);
-    const marker = new MarkerWithLabel({
-      position: new google.maps.LatLng(markerData.location.lat, markerData.location.lon),
-      map: this.map,
-      labelContent: `<div class="price">${numeral(markerData.price).format('฿0.0a')}</div>`,
-      labelAnchor: new google.maps.Point(22, 25),
-      labelClass: `custom-marker ${markerData.hilight ? 'hilight' : ''}`,
-      icon: 'no',
-    });
-
+  createContentOnMarker = (marker, markerData) => {
     let option = null;
     if (markerData.bedroom > 0 || markerData.bathroom > 0) {
       option = `<div class="option">
@@ -125,18 +115,35 @@ class MapLocation extends Component {
     const _map = this.map;
 
     marker.addListener('click', () => {
+      window.location = `#/property/${markerData.id}?preview=true`;
+      // window.open(`#/property/${markerData.id}?preview=true`, '_blank', 'toolbar=0,location=0,menubar=0');
+    });
+
+    marker.addListener('mouseover', () => {
       infowindow.open(_map, marker);
       const iwOuter = document.getElementsByClassName('gm-style-iw');
       const iwBackground = iwOuter[0].parentElement;
-      console.log('iwBackground 1', iwBackground);
-      iwBackground.children[0].remove();
-      console.log('iwBackground 2', iwBackground);
-      iwBackground.children[1].remove();
+      if (iwBackground.children[0]) iwBackground.children[0].remove();
+      if (iwBackground.children[1]) iwBackground.children[1].remove();
     });
 
-    // marker.addListener('mouseout', () => {
-    //   infowindow.close(_map, marker);
-    // });
+    marker.addListener('mouseout', () => {
+      infowindow.close(_map, marker);
+    });
+  }
+
+  createMarker = (markerData) => {
+    // console.log('createMarker', markerData);
+    const marker = new MarkerWithLabel({
+      position: new google.maps.LatLng(markerData.location.lat, markerData.location.lon),
+      map: this.map,
+      labelContent: `<a href="#/property/${markerData.id}"><div class="price">${numeral(markerData.price).format('฿0.0a')}</div></a>`,
+      labelAnchor: new google.maps.Point(22, 25),
+      labelClass: `custom-marker ${markerData.hilight ? 'hilight' : ''}`,
+      icon: 'no',
+    });
+
+    this.createContentOnMarker(marker, markerData);
 
     _.set(this.markers, markerData.id, marker);
   }
