@@ -10,6 +10,8 @@ import * as helpers from '../../helpers';
 import BannerRealEstate from '../../containers/BannerRealEstate';
 import SocialLogin from '../../containers/SocialLogin';
 
+import MemberInfo from '../../containers/MemberInfo';
+
 class Forgotpassword extends Component {
 
   constructor(props) {
@@ -142,16 +144,16 @@ class Forgotpassword extends Component {
           </div>
         </div>
         <hr />
-        <div className="social_login">
+        {/*<div className="social_login">
           <SocialLogin error={this.handleSocialError} />
-        </div>
+        </div>*/}
       </div>);
 
     return (
       <div id="Forgotpassword">
         <div className="row">
           <div className="hidden-xs hidden-sm col-md-6 layout-left">
-            <BannerRealEstate />
+            <MemberInfo />
           </div>
           <div className="col-md-6 col-md-offset-6 layout-right">
             {loading === true ? (

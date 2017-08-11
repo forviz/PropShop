@@ -254,12 +254,11 @@ class Register extends Component {
                   </div>
                 </div>
               </div>
-              {/*
-              <hr/>
-              <div className="social_login">
+              <hr />
+              {/*<div className="social_login">
                 <SocialLogin error={this.handleSocialError} />
-              </div>
-              */}
+              </div>*/}
+              
             </Spin>
           </div>
         </div>
