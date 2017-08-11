@@ -93,10 +93,51 @@ class MapLocation extends Component {
       position: new google.maps.LatLng(markerData.location.lat, markerData.location.lon),
       map: this.map,
       labelContent: `<div class="price">${numeral(markerData.price).format('฿0.0a')}</div>`,
-      labelAnchor: new google.maps.Point(0, 25),
+      labelAnchor: new google.maps.Point(22, 25),
       labelClass: `custom-marker ${markerData.hilight ? 'hilight' : ''}`,
       icon: 'no',
     });
+
+    let option = null;
+    if (markerData.bedroom > 0 || markerData.bathroom > 0) {
+      option = `<div class="option">
+        <ul>
+          ${markerData.bedroom > 0 ? `<li><span aria-hidden="true" class="fa fa-bed"></span><span>${markerData.bedroom}</span></li>` : ''}
+          ${markerData.bathroom > 0 ? `<li><span aria-hidden="true" class="fa fa-bath"></span><span>${markerData.bathroom}</span></li>` : ''}
+        </ul>
+      </div>`;
+    }
+
+    const infowindow = new google.maps.InfoWindow({
+      content: `<div class="PropertyItem">
+        <div class="Thumbnail">
+          <div class="image" style="background: url(${markerData.mainImage.file.url}) center center / cover;"></div>
+          <div class="content">
+            <div class="name">${markerData.project}</div>
+            <div class="price">${numeral(markerData.price).format('0,0')} บาท</div>
+            <div class="place">${markerData.street} - ${markerData.province}</div>
+            ${option}
+          </div>
+        </div>
+      </div>`,
+    });
+
+    const _map = this.map;
+
+    marker.addListener('click', () => {
+      infowindow.open(_map, marker);
+      const iwOuter = document.getElementsByClassName('gm-style-iw');
+      const iwBackground = iwOuter[0].parentElement;
+      console.log('iwBackground 1', iwBackground);
+      iwBackground.children[0].remove();
+      console.log('iwBackground 2', iwBackground);
+      iwBackground.children[1].remove();
+    });
+
+    // marker.addListener('mouseout', () => {
+    //   infowindow.close(_map, marker);
+    // });
+
     _.set(this.markers, markerData.id, marker);
   }
 

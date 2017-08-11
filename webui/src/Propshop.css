@@ -1542,6 +1542,15 @@ body .ant-notification {
     z-index: 9999; }
     .MapLocation .custom-marker.hilight .price, .MapLocation .custom-marker:hover .price {
       background: #88b840; }
+  .MapLocation .gm-style-iw {
+    width: 200px !important;
+    top: 0 !important;
+    left: 0 !important;
+    background: #ffffff; }
+    .MapLocation .gm-style-iw:nth-child(1) {
+      display: block !important; }
+    .MapLocation .gm-style-iw:nth-child(2) {
+      display: none !important; }
 
 .NewsItem .list {
   min-height: 520px;

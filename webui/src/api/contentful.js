@@ -193,7 +193,7 @@ export const createUser = (user, verify) => {
   const data = {};
   data.uid = user.uid;
   data.verify = verify;
-  data.username = user.displayName ? user.displayName : user.email;
+  data.username = user.username ? user.username : user.email;
   data.email = user.email;
   return fetch(`${BASEURL}/user`, {
     method: 'POST',

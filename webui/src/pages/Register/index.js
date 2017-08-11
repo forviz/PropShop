@@ -169,17 +169,11 @@ class Register extends Component {
 
     if (errorUsername === '' && errorEmail === '' && errorPassword === '') {
       await MyFirebase.createUser(username, email, password1).then((errorMessage) => {
-        if (errorMessage) {
-          _self.setState({
-            submitting: false,
-            errorMessage,
-          });
-        } else {
-          _self.setState({
-            submitting: false,
-            registerSuccess: true,
-          });
-        }
+        _self.setState({
+          submitting: false,
+          registerSuccess: errorMessage ? false : true,
+          errorMessage: errorMessage ? errorMessage : '',
+        });
       });
     } else {
       this.setState({
