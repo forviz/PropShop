@@ -138,7 +138,7 @@ class Landing extends Component {
   }
 
   componentDidMount() {
-    document.getElementById('Footer').style.visibility = 'hidden';
+    document.getElementById('Footer').style.display = 'none';
     this.headerHeight = document.getElementById('Header').clientHeight;
 
     const { onInitPage } = this.props.actions;

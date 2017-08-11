@@ -34,7 +34,6 @@ export const mapContentFulPropertyToMyField = (data) => {
   return _.reduce(data, (acc, elem, index) => {
     const forSale = _.get(elem, 'fields.forSale') === true;
     const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
-    console.log('mapContentFulPropertyToMyField', elem);
     return {
       ...acc,
       [index]: {

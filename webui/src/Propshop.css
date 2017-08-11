@@ -1703,6 +1703,10 @@ body .ant-notification {
     color: #484849;
     border: 1px solid transparent; }
 
+@media (max-width: 1050px) {
+  .PropertyDisplayType {
+    display: none; } }
+
 .ant-form .ant-form-item-label {
   line-height: initial; }
   .ant-form .ant-form-item-label label {
