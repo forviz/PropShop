@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Input, Alert, Spin } from 'antd';
+import { connect } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
+import { firebaseConnect, pathToJS } from 'react-redux-firebase';
 
-import * as firebase from '../../api/firebase';
+import * as Myfirebase from '../../api/firebase';
 import * as helpers from '../../helpers';
 
 import BannerRealEstate from '../../containers/BannerRealEstate';
@@ -48,7 +51,7 @@ class Forgotpassword extends Component {
       email: {
         ...prevState.email,
         errorMessage,
-      }
+      },
     }));
     return errorMessage;
   }
@@ -71,7 +74,7 @@ class Forgotpassword extends Component {
     const errorEmail = this.checkEmail(email);
 
     if (errorEmail === '') {
-      firebase.forgotpassword(email).then(function(errorMessage) {
+      Myfirebase.forgotpassword(email).then((errorMessage) => {
         if (errorMessage) {
           _self.setState({
             loading: false,
@@ -99,13 +102,12 @@ class Forgotpassword extends Component {
         email: {
           ...this.state.email,
           value: error.email,
-        }
+        },
       });
     }
   }
 
   render() {
-
     const { loading, submit } = this.state;
 
     const emailErrorMessage = this.state.email.errorMessage ? <span className="text-red">({this.state.email.errorMessage})</span> : '';
@@ -168,4 +170,21 @@ class Forgotpassword extends Component {
   }
 }
 
-export default Forgotpassword;
+const mapStateToProps = (state) => {
+  return {
+    authError: pathToJS(state.firebase, 'authError'),
+  };
+};
+
+const actions = {
+
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+
+export default compose(firebaseConnect(), connect(mapStateToProps, mapDispatchToProps))(Forgotpassword);
+

@@ -31,8 +31,6 @@ const mapStateToProps = (state, ownProps) => {
 const actions = {
   getPropertyEntity: (propertyId, params) => {
     return (dispatch) => {
-      const xx = `?id=${propertyId}${params}`;
-      console.log('asdsxx', xx);
       getProperties(`?id=${propertyId}${params}`)
       .then((result) => {
         dispatch(receivePropertyEntity(propertyId, _.get(result, 'data.0')));
@@ -72,19 +70,11 @@ class Property extends Component {
         params = '';
       }
     }
-    console.log('params', params);
     getPropertyEntity(props.propertyId, params);
   }
 
   state = {
     showStreetView: false,
-  }
-
-  backToHome = () => {
-    const { history } = this.props;
-    history.push({
-      pathname: '/',
-    });
   }
 
   handleStreerView = () => {
@@ -101,11 +91,9 @@ class Property extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, history } = this.props;
 
     if (!_.size(data)) return <div />;
-
-    console.log('dasdasdas', data);
 
     let images = [];
     images.push({
@@ -113,7 +101,7 @@ class Property extends Component {
       thumbnail: _.get(data, 'mainImage.file.url'),
     });
 
-    if (data.images) {
+    if (_.size(data.images) > 0) {
       images = _.map(data.images, (image) => {
         return {
           original: _.get(image, 'file.url'),
@@ -131,7 +119,7 @@ class Property extends Component {
                 <div className="clearfix" style={{ margin: '30px 0' }} >
                   <div className="pull-left">
                     <div>
-                      <div role="button" tabIndex={0} className="backhome" onClick={this.backToHome} >
+                      <div role="button" tabIndex={0} className="backhome" onClick={() => history.goBack()} >
                         <FontAwesome name="angle-left" /> กลับไปที่ค้นหา
                       </div>
                       <div className="address">

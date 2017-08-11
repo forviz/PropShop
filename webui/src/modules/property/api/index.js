@@ -34,6 +34,7 @@ export const mapContentFulPropertyToMyField = (data) => {
   return _.reduce(data, (acc, elem, index) => {
     const forSale = _.get(elem, 'fields.forSale') === true;
     const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
+    console.log('mapContentFulPropertyToMyField', elem);
     return {
       ...acc,
       [index]: {
@@ -71,13 +72,13 @@ export const mapContentFulPropertyToMyField = (data) => {
             url: noImage,
           },
         },
-        images: _.map(_.get(elem, 'fields.images'), (image) => {
+        images: _.get(elem, 'fields.images') ? _.map(_.get(elem, 'fields.images'), (image) => {
           return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : {
             file: {
               url: noImage,
             },
           };
-        }),
+        }) : [],
         // Extra
         publicTransports: _.get(elem, 'fields.location.publicTransports'),
         unitNo: _.get(elem, 'fields.location.unitNo'),

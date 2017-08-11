@@ -386,7 +386,6 @@ img {
     #Property .content .cover .image-gallery-content.fullscreen .image-gallery-slide {
       text-align: center; }
       #Property .content .cover .image-gallery-content.fullscreen .image-gallery-slide img {
-        width: 65%;
         height: inherit; }
     #Property .content .cover .image-gallery-content.fullscreen .image-gallery-thumbnail {
       width: 100px; }
