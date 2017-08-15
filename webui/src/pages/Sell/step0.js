@@ -452,8 +452,6 @@ class Step0 extends Component {
     const { data } = this.props;
     const { getFieldDecorator } = this.props.form;
 
-    console.log('dsadpsad', data);
-
     return (
       <div id="Step0">
         <div className="container">
@@ -918,14 +916,12 @@ const mapStateToProps = (state) => {
 };
 
 const mapStep0DataToSubmitData = (data) => {
-  console.log('data', data);
   return data;
 };
 
 const actions = {
   submit: (step, propertyData) => {
     return (dispatch) => {
-      console.log('propertyData', propertyData);
       const submitData = mapStep0DataToSubmitData(propertyData);
       dispatch({
         type: 'POST/SUBMIT/STEP0',

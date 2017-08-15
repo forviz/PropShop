@@ -14,11 +14,10 @@ class NewsItem extends Component {
 
   static propTypes = {
     data: T.shape().isRequired,
-    key: T.string.isRequired,
   }
 
   render() {
-    const { data, key } = this.props;
+    const { data } = this.props;
 
     if (_.isEmpty(data)) return <Spin />;
 
@@ -28,7 +27,7 @@ class NewsItem extends Component {
     const getDate = moment(data.date).locale('th').format('DD MMM YYYY');
 
     return (
-      <div key={key} className="list col-md-4">
+      <div className="list col-md-4">
         <div className="image">
           <a href={data.link} target="_blank">
             <img src={data.acf.thumbnail_image} alt="" />

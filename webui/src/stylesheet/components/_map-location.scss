@@ -14,7 +14,16 @@
 
       &.hilight, &:hover {
         .price { background: #88b840; }
-        z-index: 9999;
+        z-index: 9999 !important;
+      }
+    }
+    .gm-style-iw {
+      width: 200px !important;
+      top: 25px !important;
+      left: 25px !important;
+      background: #ffffff;
+      div:nth-child(1) {
+        display: block !important;
       }
     }
 }

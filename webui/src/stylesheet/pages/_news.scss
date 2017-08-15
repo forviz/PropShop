@@ -16,22 +16,18 @@
       }
     }
   }
-
-
   .ant-tabs-ink-bar{
     background: $main-bg;
     height: 4px;
     width: 120px;
   }
   .ant-tabs-bar{
-    margin-left: 38px;
     box-sizing: border-box;
     border: none;
   }
   .ant-tabs-nav {
     .ant-tabs-tab{
       margin-right: 0px;
-      padding-top: 60px;
       color: $text-gray;
     }
     .ant-tabs-tab-active {
@@ -41,7 +37,6 @@
   .tap-title{
     font-size: 30px;
     font-family: $sukumvit-bold;
-    padding-left: 38px;
     box-sizing: border-box; 
   }
 

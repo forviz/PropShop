@@ -60,12 +60,12 @@ class InputPriceRange extends Component {
   }
 
   handlePriceMin = (value) => {
-    if (_.get(this.props, 'value.max') && _.isNumber(_.get(this.props, 'value.max'))) this.setState({ expand: false });
+    if (_.isNumber(_.get(this.props, 'value.max')) && _.isNumber(_.toNumber(value))) this.setState({ expand: false });
     this.props.onChange('priceMin', value);
   }
 
   handlePriceMax = (value) => {
-    if (_.get(this.props, 'value.min') && _.isNumber(_.get(this.props, 'value.min'))) this.setState({ expand: false });
+    if (_.isNumber(_.get(this.props, 'value.min')) && _.isNumber(_.toNumber(value))) this.setState({ expand: false });
     this.props.onChange('priceMax', value);
   }
 

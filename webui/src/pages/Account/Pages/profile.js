@@ -267,8 +267,6 @@ class Profile extends Component {
 
     if (_.size(data) === 0) return <center><Spin /></center>;
 
-    console.log('sdkiadjisad', data);
-
     return (
       <div id="Profile">
         <div className="row">

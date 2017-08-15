@@ -16,7 +16,6 @@ class Changepassword extends Component {
     data: PropTypes.shape().isRequired,
     editing: PropTypes.bool.isRequired,
     editSuccess: PropTypes.bool.isRequired,
-    user: PropTypes.shape().isRequired,
     errorMessage: PropTypes.string.isRequired,
     // authError: PropTypes.shape(),
   }
@@ -59,7 +58,7 @@ class Changepassword extends Component {
   }
 
   submit = () => {
-    const { editing } = this.props;
+    const { editing, firebase } = this.props;
 
     if (editing === true) {
       return;
@@ -69,8 +68,14 @@ class Changepassword extends Component {
     const errorPassword = this.checkPassword(data.password1.value, data.password2.value);
 
     if (errorPassword === '') {
+      const user = firebase.auth().currentUser;
       const { changePassword } = this.props.actions;
-      changePassword(data.password1.value);
+      changePassword(user, data.password1.value);
+      // firebase.resetPassword({
+      //   email: user.email,
+      //   password: data.password1.value,
+      //   username: user.username,
+      // });
     }
   }
 

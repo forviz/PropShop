@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Spin } from 'antd';
 import _ from 'lodash';
 
+import { getNearbySearch, getDistances } from '../../api/map';
+
 // const MarkerWithLabel = require('markerwithlabel')(google.maps);
 
 const typeList = [
@@ -31,26 +33,27 @@ class MapNearbyPlace extends Component {
     this.fetchNearbyPlace(currentSelect);
   }
 
-  getDistance = async (desLat, desLng) => {
-    const { lat, lng } = this.props;
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?key=${process.env.REACT_APP_APIKEY}&origins=${lat},${lng}&destinations=${desLat},${desLng}`;
-    const result = await fetch(url);
-    const resultJSON = await result.json();
-    return resultJSON;
-  }
+  // getDistance = async (desLat, desLng) => {
+  //   const { lat, lng } = this.props;
+  //   const url = `//maps.googleapis.com/maps/api/distancematrix/json?key=${process.env.REACT_APP_APIKEY}&origins=${lat},${lng}&destinations=${desLat},${desLng}`;
+  //   const result = await fetch(url);
+  //   const resultJSON = await result.json();
+  //   return resultJSON;
+  // }
 
   setNearbyData = async (type, data) => {
-    const newData = await Promise.all(data.map(async (value) => {
-      const distance = await this.getDistance(value.geometry.location.lat, value.geometry.location.lng);
-      return {
-        ...value,
-        distance: distance.rows[0].elements[0].distance.text,
-      };
-    }));
-
+    const { lat, lng } = this.props;
+    const distancesData = await getDistances(lat, lng, data);
+    // const newData = await Promise.all(data.map(async (value) => {
+    //   const distance = await this.getDistance(value.geometry.location.lat, value.geometry.location.lng);
+    //   return {
+    //     ...value,
+    //     distance: distance.rows[0].elements[0].distance.text,
+    //   };
+    // }));
     this.setState({
       loading: false,
-      results: newData,
+      results: distancesData.data,
     }, () => {
       this.initializeMap(type);
     });
@@ -66,28 +69,30 @@ class MapNearbyPlace extends Component {
     this.fetchNearbyPlace(key);
   }
 
-  fetchNearbyPlace = (type) => {
+  fetchNearbyPlace = async (type) => {
 
     this.setState({
       loading: true,
     });
 
     const { lat, lng, radius } = this.props;
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${process.env.REACT_APP_APIKEY}`;
-    fetch(url)
-    .then((response) => {
-      if (response.status !== 200) {
-        return false;
-      }
-      response.json().then((data) => {
-        this.setNearbyData(type, data.results);
-      });
-      return true;
-    },
-    )
-    .catch((err) => {
-      console.log('Fetch Error :-S', err);
-    });
+    const nearbySearch = await getNearbySearch(lat, lng, radius, type);
+    this.setNearbyData(type, nearbySearch.data.results);
+    // const url = `//maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&key=${process.env.REACT_APP_APIKEY}`;
+    // fetch(url)
+    // .then((response) => {
+    //   if (response.status !== 200) {
+    //     return false;
+    //   }
+    //   response.json().then((data) => {
+    //     this.setNearbyData(type, data.results);
+    //   });
+    //   return true;
+    // },
+    // )
+    // .catch((err) => {
+    //   console.log('Fetch Error :-S', err);
+    // });
   }
 
   /* global google */

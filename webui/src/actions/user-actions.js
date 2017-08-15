@@ -7,11 +7,28 @@ const setUserData = (user) => {
   };
 };
 
-export const fetchUserData = (uid) => {
+const userFetchSuccess = (fetchSuccess) => {
+  return {
+    type: 'USER/FETCH/SUCCESS',
+    fetchSuccess,
+  };
+};
+
+export const fetchUserData = (uid, firebaseData) => {
   return (dispatch) => {
-    fetchUserAPI(uid).then((user) => {
-      dispatch(setUserData(user));
-    });
+    dispatch(userFetchSuccess(false));
+    if (uid) {
+      fetchUserAPI(uid).then((user) => {
+        dispatch(setUserData({
+          ...firebaseData,
+          ...user,
+        }));
+        dispatch(userFetchSuccess(true));
+      });
+    } else {
+      dispatch(setUserData({}));
+      dispatch(userFetchSuccess(true));
+    }
   };
 };
 

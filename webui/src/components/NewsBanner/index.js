@@ -13,7 +13,7 @@ class NewsItem extends Component {
 
   renderSlide = (data) => {
     const backgroundStyle = {
-      'background-image': `url(${data.acf.banner_images.url})`,
+      backgroundImage: `url(${data.acf.banner_images.url})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

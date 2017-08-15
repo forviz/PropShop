@@ -18,7 +18,7 @@ export const mapFirebaseErrorMessage = (errorMessage) => {
   data['The email address is already in use by another account.'] = 'คุณเคยสมัครอีเมลนี้แล้ว';
   data['Password should be at least 6 characters'] = 'รหัสผ่านควรมี 6 ตัวอักษรขึ้นไป';
   data['auth/user-not-found'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
-  data['The password is invalid or the user does not have a password.'] = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+  data['The password is invalid or the user does not have a password.'] = 'รหัสผ่านไม่ถูกต้อง';
   data['There is no user record corresponding to this identifier. The user may have been deleted.'] = 'ไม่พบอีเมลนี้';
   data['createUserWithEmailAndPassword failed: Second argument "password" must be a valid string.'] = 'รหัสผ่านต้องเป็นภาษาอังกฤษเท่านั้น';
   return data[errorMessage] ? data[errorMessage] : errorMessage;
@@ -29,9 +29,9 @@ export const core = () => {
 };
 
 export const createUser = (username, email, password) => {
-  return firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-    user['username'] = username;
-    return contentful.createUser(user, false).then((userContentful) => { // create user to contentful
+  return firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
+    user.username = username;
+    return contentful.createUser(user, false).then(() => { // create user to contentful
       // window.location = "/";
       // return user.sendEmailVerification().then(function() { // firebase send mail verification
       //   return;
@@ -40,15 +40,15 @@ export const createUser = (username, email, password) => {
       //   return error;
       // });
     });
-  }).catch(function(error) {
+  }).catch((error) => {
     return mapFirebaseErrorMessage(error.message);
   });
 };
 
 export const signIn = (email, password) => {
-  return firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-    window.location = "/";
-  }).catch(function(error) {
+  return firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+    window.location = '/';
+  }).catch((error) => {
     return mapFirebaseErrorMessage(error.message);
   });
 };
@@ -89,8 +89,8 @@ const signInWithProvider = async (provider) => {
   const data = await firebase.auth().signInWithPopup(provider).then((result) => {
     // const token = result.credential.accessToken;
     const user = result.user;
-    user.username = result.displayName ? result.displayName : result.email;
-    UserActions.fetchUserData(user.uid);
+    user.username = user.displayName ? user.displayName : user.email;
+    // UserActions.fetchUserData(user.uid);
     contentful.createUser(user, true).then(() => {
       return false;
     });
@@ -157,7 +157,7 @@ export const verifiedUser = (user) => {
 
 export const updatePassword = (newPassword) => {
   return firebase.auth().currentUser.updatePassword(newPassword).then(() => {
-    return;
+    return false;
   }, (error) => {
     return error;
   });

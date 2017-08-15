@@ -20,16 +20,6 @@ class News extends Component {
   static propTypes = {
     history: T.shape().isRequired,
     location: T.shape().isRequired,
-    actions: T.shape(T.shape({
-      getNewsProp: T.func,
-    })).isRequired,
-    newsItem: T.arrayOf(T.shape({
-      entities: T.shape(),
-      propNow: T.shape(),
-      propTalk: T.shape(),
-      propVerdict: T.shape(),
-      newsBanner: T.shape(),
-    })).isRequired,
     fetching: T.bool.isRequired,
   }
 
@@ -90,7 +80,7 @@ class News extends Component {
     const { propNow, propTalk, propVerdict, newsBanner } = this.props.newsItem.entities;
     const { fetching } = this.props;
 
-    if (Object.keys(this.props.newsItem.entities).length === 0) return <div />;
+    if (_.size(_.get(newsBanner, 'datas')) === 0) return <div />;
 
     return (
       <div id="News">
@@ -102,7 +92,7 @@ class News extends Component {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-12 hidden-xs">
               <NewsBanner datas={newsBanner.datas} />
             </div>
           </div>
@@ -120,7 +110,7 @@ class News extends Component {
                         <NewsItem datas={propNow.datas} />
                         <Pagination
                           defaultCurrent={1}
-                          total={propNow.total}
+                          total={_.toNumber(propNow.total)}
                           onChange={this.handlePage}
                         />
                       </div>
@@ -135,7 +125,7 @@ class News extends Component {
                       <div>
                         <NewsItem datas={propTalk.datas} />
                         <div className="col-md-12">
-                          <Pagination defaultCurrent={1} total={propTalk.total} onChange={this.handlePage} />
+                          <Pagination defaultCurrent={1} total={_.toNumber(propTalk.total)} onChange={this.handlePage} />
                         </div>
                       </div>
                     }
@@ -149,7 +139,7 @@ class News extends Component {
                       <div>
                         <NewsItem datas={propVerdict.datas} />
                         <div className="col-md-12">
-                          <Pagination defaultCurrent={1} total={propVerdict.total} onChange={this.handlePage} />
+                          <Pagination defaultCurrent={1} total={_.toNumber(propVerdict.total)} onChange={this.handlePage} />
                         </div>
                       </div>
                     }

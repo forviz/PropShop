@@ -87,16 +87,64 @@ class MapLocation extends Component {
 
   }
 
+  createContentOnMarker = (marker, markerData) => {
+    let option = null;
+    if (markerData.bedroom > 0 || markerData.bathroom > 0) {
+      option = `<div class="option">
+        <ul>
+          ${markerData.bedroom > 0 ? `<li><span aria-hidden="true" class="fa fa-bed"></span><span>${markerData.bedroom}</span></li>` : ''}
+          ${markerData.bathroom > 0 ? `<li><span aria-hidden="true" class="fa fa-bath"></span><span>${markerData.bathroom}</span></li>` : ''}
+        </ul>
+      </div>`;
+    }
+
+    const infowindow = new google.maps.InfoWindow({
+      content: `<div class="PropertyItem">
+        <div class="Thumbnail">
+          <div class="image" style="background: url(${markerData.mainImage.file.url}) center center / cover;"></div>
+          <div class="content">
+            <div class="name">${markerData.project}</div>
+            <div class="price">${numeral(markerData.price).format('0,0')} บาท</div>
+            <div class="place">${markerData.street} - ${markerData.province}</div>
+            ${option}
+          </div>
+        </div>
+      </div>`,
+    });
+
+    const _map = this.map;
+
+    marker.addListener('click', () => {
+      window.location = `#/property/${markerData.id}?preview=true`;
+      // window.open(`#/property/${markerData.id}?preview=true`, '_blank', 'toolbar=0,location=0,menubar=0');
+    });
+
+    marker.addListener('mouseover', () => {
+      infowindow.open(_map, marker);
+      const iwOuter = document.getElementsByClassName('gm-style-iw');
+      const iwBackground = iwOuter[0].parentElement;
+      if (iwBackground.children[0]) iwBackground.children[0].remove();
+      if (iwBackground.children[1]) iwBackground.children[1].remove();
+    });
+
+    marker.addListener('mouseout', () => {
+      infowindow.close(_map, marker);
+    });
+  }
+
   createMarker = (markerData) => {
     // console.log('createMarker', markerData);
     const marker = new MarkerWithLabel({
       position: new google.maps.LatLng(markerData.location.lat, markerData.location.lon),
       map: this.map,
-      labelContent: `<div class="price">${numeral(markerData.price).format('฿0.0a')}</div>`,
-      labelAnchor: new google.maps.Point(0, 25),
+      labelContent: `<a href="#/property/${markerData.id}"><div class="price">${numeral(markerData.price).format('฿0.0a')}</div></a>`,
+      labelAnchor: new google.maps.Point(22, 25),
       labelClass: `custom-marker ${markerData.hilight ? 'hilight' : ''}`,
       icon: 'no',
     });
+
+    this.createContentOnMarker(marker, markerData);
+
     _.set(this.markers, markerData.id, marker);
   }
 

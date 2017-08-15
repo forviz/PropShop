@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 
 import { NavLink } from 'react-router-dom';
-import { Button, Pagination } from 'antd';
+import { Button, Pagination, Icon } from 'antd';
 
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -105,6 +105,7 @@ const SliderWrapper = styled.div`
   left: 0;
   right: 0;
   background: rgba(255, 255, 255, 0.4);
+  display: ${props => (props.hide ? 'none' : 'block')};
 `;
 
 const ListWrapper = styled.div`
@@ -126,8 +127,8 @@ const ListWrapper = styled.div`
 
 const ToggleButtonWrapper = styled.div`
   position: fixed;
-  bottom: 120px;
-  right: 50px;
+  bottom: 130px;
+  right: 35px;
   z-index:1;
 
   @media (min-width: ${BREAKPOINT}px) {
@@ -336,7 +337,7 @@ class PropertySearchPage extends Component {
               <ul className="clearfix">
                 {
                   _.map(items, (item, index) => {
-                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-4 col-lg-6 col-lg-4';
+                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-12 col-md-6 col-lg-4';
                     return (
                       <li key={index} className={`item ${col}`}>
                         <NavLink exact to={`/property/${item.id}`}>
@@ -352,7 +353,9 @@ class PropertySearchPage extends Component {
                   })
                 }
               </ul>
-              <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
+              <div style={{ textAlign: 'center' }}>
+                <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
+              </div>
             </div>
           </div>
         )}
@@ -384,12 +387,12 @@ class PropertySearchPage extends Component {
             />
             {
               _.size(realestate.data) > 0 &&
-                <SliderWrapper>
+                <SliderWrapper hide={mobileViewMode === 'list'}>
                   <Slider>
                     {
                       _.map(realestate.data, (item) => {
                         return (
-                          <PropertyItem type="mini" key={item.id} {...item} />
+                          <PropertyItem type="mini" key={item.id} item={item} />
                         );
                       })
                     }
@@ -406,7 +409,12 @@ class PropertySearchPage extends Component {
             </ListWrapper>
         }
         <ToggleButtonWrapper>
-          <Button type="primary" size="large" shape="circle" icon="environment" onClick={this.toggleMobileViewMode} />
+          <Button
+            onClick={this.toggleMobileViewMode}
+            style={{ borderRadius: '50%', width: 50, height: 50, backgroundImage: 'linear-gradient(to bottom, #76ac31, #507d0c)' }}
+          >
+            <Icon type="environment-o" style={{ fontSize: 25, verticalAlign: 'middle', color: '#ffffff' }} />
+          </Button>
         </ToggleButtonWrapper>
       </div>
     );

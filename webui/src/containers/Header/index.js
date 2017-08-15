@@ -19,6 +19,7 @@ class Header extends Component {
     translate: PropTypes.func.isRequired,
     user: PropTypes.shape().isRequired,
     actions: PropTypes.shape().isRequired,
+    userFetchSuccess: PropTypes.bool,
   }
 
   state = {
@@ -46,11 +47,13 @@ class Header extends Component {
 
   render() {
     const { showMobileMenu } = this.state;
-    const { user, translate, dispatch } = this.props;
+    const { user, userFetchSuccess, translate, dispatch } = this.props;
+
+    if (!userFetchSuccess) return <div />;
 
     let loginLabel = null;
 
-    if (_.size(user.username) > 0) {
+    if (user.username && user.verify) {
       const menu = (
         <Menu onClick={this.handleMenuClick}>
           <Menu.Item key="property">
@@ -129,12 +132,12 @@ class Header extends Component {
               { /* <li><NavLink exact to="/webboard">{translate('เว็บบอร์ด')}</NavLink></li> */ }
             </ul>
             <ul className="nav navbar-nav navbar-right">
-              <li className="language">
+              {/* <li className="language">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('th')); }}>ไทย</a>
               </li>
               <li className="language last">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('en')); }}>ENG</a>
-              </li>
+              </li> */}
               <li className="login">
                 {loginLabel}
               </li>
@@ -149,6 +152,7 @@ class Header extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.data,
+    userFetchSuccess: state.user.fetchSuccess,
   };
 };
 

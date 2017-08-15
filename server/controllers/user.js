@@ -16,7 +16,9 @@ const clientManagement = contentfulManagement.createClient({
   accessToken: process.env.CONTENTFUL_ACCESSTOKEN_MANAGEMENT,
 });
 
-export const getUser = async (req, res, next) => {
+const BASE_URL = process.env.BASE_URL;
+
+export const getUser = async (req, res) => {
   try {
     const { uid } = req.params;
     const response = await client.getEntries({
@@ -30,9 +32,97 @@ export const getUser = async (req, res, next) => {
       message: e.message,
     });
   }
-}
+};
 
-export const updateUser = async (req, res, next) => {
+const existUser = (uid) => {
+  return client.getEntries({
+    content_type: 'agent',
+    'fields.uid': uid,
+  })
+  .then((response) => {
+    return response.total > 0 ? true : false;
+  });
+};
+
+const sendEmailVerify = (id, username, email) => {
+  try {
+    fs.readFile(path.join(__dirname, '../views/email/template/user-verify', 'index.html'), 'utf8', (err, html) => {
+      if (err) {
+        throw err;
+      }
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace('%USERNAME%', username);
+      htmlx = htmlx.replace('%REDIRECT_URL%', `${BASE_URL}/#/login?verify=${id}`);
+
+      const mail = new Mail({
+        to: email,
+        subject: 'Verify Email PropShop',
+        html: htmlx,
+        successCallback: () => {
+        },
+        errorCallback: () => {
+        },
+      });
+      mail.send();
+    });
+  } catch (e) {
+    console.log('error', e);
+  }
+};
+
+export const createUser = async (req, res) => {
+  try {
+    const { data } = req.body;
+    const hasUser = await existUser(data.uid);
+    if (hasUser) {
+      res.status(200).json({
+        errors: {
+          status: '409',
+          title: 'Version Mismatch',
+        },
+      });
+      return false;
+    }
+    const user = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.createEntry('agent', {
+      fields: {
+        username: {
+          'en-US': data.username,
+        },
+        email: {
+          'en-US': data.email,
+        },
+        phone: {
+          'en-US': _.get(data, 'phoneNumber'),
+        },
+        uid: {
+          'en-US': data.uid,
+        },
+        verify: {
+          'en-US': data.verify,
+        },
+      },
+    }))
+    .then((entry) => {
+      if (data.verify === false) sendEmailVerify(entry.sys.id, data.username, data.email);
+      return entry.publish();
+    });
+    res.status(200).json({
+      data: {
+        user,
+      },
+    });
+    return true;
+  } catch (errors) {
+    res.status(500).json({
+      errors,
+    });
+    return false;
+  }
+};
+
+export const updateUser = async (req, res) => {
   try {
     const data = req.body;
     const { id } = req.params;
@@ -64,15 +154,13 @@ export const updateUser = async (req, res, next) => {
       res.json({
         status: 'SUCCESS',
       });
-      process.exit();
+      return false;
     } else {
       res.json({
         status: 'FAIL',
       });
     }
-
   } catch (e) {
-    console.log('ERRORRRR', e.message)
     res.status(500).json({
       status: 'ERROR',
       message: e.message,
@@ -84,98 +172,88 @@ export const contactAgent = async (req, res, next) => {
   try {
     const { name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName } = req.body;
 
-    // const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
-    // .then((space) => space.createEntry('contact', {
-    //   fields: {
-    //     contactName: {
-    //       'en-US': name,
-    //     },
-    //     contactEmail: {
-    //       'en-US': emailFrom,
-    //     },
-    //     contactMobile: {
-    //       'en-US': mobile,
-    //     },
-    //     body: {
-    //       'en-US': body,
-    //     },
-    //     recepient: {
-    //       'en-US': {
-    //         sys: {
-    //           id: agentId,
-    //           linkType: 'Entry',
-    //           type: 'Link',
-    //         },
-    //       },
-    //     },
-    //     sendEmailStatus: {
-    //       'en-US': false,
-    //     },
-    //   },
-    // }))
-    // .then((entry) => {
-    //   return entry.publish();
-    // });
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.createEntry('contact', {
+      fields: {
+        contactName: {
+          'en-US': name,
+        },
+        contactEmail: {
+          'en-US': emailFrom,
+        },
+        contactMobile: {
+          'en-US': mobile,
+        },
+        body: {
+          'en-US': body,
+        },
+        recepient: {
+          'en-US': {
+            sys: {
+              id: agentId,
+              linkType: 'Entry',
+              type: 'Link',
+            },
+          },
+        },
+        sendEmailStatus: {
+          'en-US': false,
+        },
+      },
+    }))
+    .then((entry) => {
+      return entry.publish();
+    });
 
-    // if (!_.get(response, 'sys.id')) {
-    //   res.status(500).json({
-    //     status: '500',
-    //     code: 'Internal Server Error',
-    //   });
-    // }
+    if (!_.get(response, 'sys.id')) {
+      res.status(500).json({
+        status: '500',
+        code: 'Internal Server Error',
+      });
+    }
 
-    // const contactId = response.sys.id;
+    const contactId = response.sys.id;
 
-    const imagesDir = path.join(__dirname, 'views/email/images');
-
-    fs.readFile(path.join(__dirname, '../views/email/template/contact-agent', 'index.html'), 'utf8', function (err, html) {
+    fs.readFile(path.join(__dirname, '../views/email/template/contact-agent', 'index.html'), 'utf8', (err, html) => {
       if (err) {
-        throw err; 
+        throw err;
       }
 
       const sendFrom = name ? name : emailFrom;
-
-      html = html.replace(/\%BASE_IMAGES_URL%/g, imagesDir);
-      html = html.replace("%SEND_FROM%", sendFrom);
-      html = html.replace("%PROPERTY_URL%", propertyUrl);
-      html = html.replace("%PROJECT%", projectName);
-      html = html.replace("%OWNER%", agentName);
-      html = html.replace("%MESSAGE%", body);
-
-      // res.json({
-      //   html,
-      // });
-
-      // return false;
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace('%SEND_FROM%', sendFrom);
+      htmlx = htmlx.replace('%PROPERTY_URL%', propertyUrl);
+      htmlx = htmlx.replace('%PROJECT%', projectName);
+      htmlx = htmlx.replace('%OWNER%', agentName);
+      htmlx = htmlx.replace('%MESSAGE%', body);
 
       const mail = new Mail({
         from: emailFrom,
         to: emailTo,
         subject: 'ติดต่อ Agent',
-        html,
-        successCallback: function(suc) {
-
-          const updateSendEmailStatus = clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
-          .then((space) => space.getEntry(contactId))
+        html: htmlx,
+        successCallback: () => {
+          clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+          .then(space => space.getEntry(contactId))
           .then((entry) => {
             entry.fields.sendEmailStatus['en-US'] = true;
             return entry.update();
           });
-
           res.json({
             status: 'success',
           });
-
+          return false;
         },
-        errorCallback: function(err) {
+        errorCallback: () => {
           res.json({
             status: 'success',
           });
-        }
+          return false;
+        },
       });
       mail.send();
     });
-      
   } catch (e) {
     res.status(500).json({
       status: '500',
@@ -183,48 +261,4 @@ export const contactAgent = async (req, res, next) => {
       title: e.message,
     });
   }
-}
-
-export const emailVerify = async (req, res, next) => {
-  try {
-    const URL = 'http://localhost:3000/#/'
-
-    const { entryId, username, email } = req.body;
-    const imagesDir = path.join(__dirname, 'views/email/images');
-    fs.readFile(path.join(__dirname, '../views/email/template/user-verify', 'index.html'), 'utf8', function (err, html) {
-      if (err) {
-        throw err; 
-      }
-
-      html = html.replace(/\%BASE_IMAGES_URL%/g, imagesDir);
-      html = html.replace("%USERNAME%", username);
-      html = html.replace("%REDIRECT_URL%", `${URL}login?verify=${entryId}`);
-
-      const mail = new Mail({
-        from: 'propshop@gmail.com',
-        to: email,
-        subject: 'Verify Email PropShop',
-        html,
-        successCallback: function(suc) {
-          console.log('SEND EMAIL COMPLETE')
-          res.json({
-            status: 'success',
-          });
-
-        },
-        errorCallback: function(err) {
-          res.json({
-            status: 'success',
-          });
-        }
-      });
-      mail.send();
-      console.log('SEND EMAIL')
-    });
-  } catch (e) {
-    res.status(500).json({
-      status: 'ERROR',
-      message: e.message,
-    });
-  }
-}
+};

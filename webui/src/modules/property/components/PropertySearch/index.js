@@ -23,7 +23,7 @@ const priceListRent = [0, 2000, 4000, 6000, 8000, 10000, 12000, 15000, 20000, 25
 
 const BREAKPOINT = 768;
 const PropertySearchWrapper = styled.div`
-  padding: 20px;
+  padding: 10px;
   border-bottom: 1px solid #eeeeee;
 `;
 
@@ -49,7 +49,7 @@ const InputWrapper = styled.div`
 `;
 
 const SummaryInput = styled.div`
-  background-color: #787878;
+  background: #3e680b;
   color: white;
   text-align: center;
   border-radius: 4px;
@@ -58,7 +58,7 @@ const SummaryInput = styled.div`
   cursor: pointer;
 
   &:hover {
-    background: #999999;
+    background: #8ebc42;
   }
 `;
 
@@ -105,7 +105,6 @@ const ButtonPrimary = styled.button`
   }
 `;
 
-
 const propertyTypes = [
   { value: 'condominium', label: 'Condominium' },
   { value: 'town-home', label: 'Town-home' },
@@ -135,16 +134,18 @@ export default connect(mapStateToProps)(
         label: T.string,
         value: T.string,
       })),
-      simpleMode: T.boolean,
-      showSearchButton: T.boolean,
+      simpleMode: T.bool,
+      showSearchButton: T.bool,
       trigger: T.string,
       onUpdate: T.func,
     }
 
     static defaultProps = {
       searchParameters: {
+        for: 'all',
+        propertyType: 'all',
         area: {
-          name: '',
+          name: 'bangkok',
         },
       },
       areas: [],
@@ -211,6 +212,8 @@ export default connect(mapStateToProps)(
       this.setState({
         showSummaryOnly: true,
       });
+
+      console.log('searchParameters', searchParameters);
 
       this.props.onSubmit(searchParameters);
     }
@@ -302,13 +305,15 @@ export default connect(mapStateToProps)(
         );
       }
 
+      const forValue = _.includes(['sale', 'rent'], searchParameters.for) ? searchParameters.for : [];
+      const propertyTypeValue = _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], _.get(searchParameters, 'propertyType.0')) ? _.get(searchParameters, 'propertyType.0') : [];
       let content = (
         <SearchBarWrapper>
           <InputWrapper>
             <Select
               style={{ width: '100%' }}
               placeholder="ประเภทประกาศ"
-              value={searchParameters.for}
+              defaultValue={forValue}
               onChange={value => this.onUpdateSearchParameters({ ...searchParameters, for: _.toLower(value) })}
             >
               <Option value="sale">ขาย</Option>
@@ -319,7 +324,7 @@ export default connect(mapStateToProps)(
             <Select
               style={{ width: '100%' }}
               placeholder="ประเภทอสังหาฯ"
-              value={searchParameters.propertyType}
+              defaultValue={propertyTypeValue}
               onChange={value => this.onUpdateSearchParameters({ ...searchParameters, propertyType: _.toLower(value) })}
             >
               {_.map(propertyTypes, type => <Option key={type.value} value={type.value}>{type.label}</Option>)}

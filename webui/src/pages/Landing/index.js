@@ -71,6 +71,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const MapWrapper = styled.div`
+  display: none;
   position: fixed;
   height: 100%;
   right: ${props => (props.hide ? '100%' : '0')};
@@ -78,6 +79,7 @@ const MapWrapper = styled.div`
   visibility: ${props => (props.hide ? 'none' : 'visible')};
 
   @media (min-width: ${BREAKPOINT}px) {
+    display: block;
     right: auto;
     left: 0;
     width: 50%;
@@ -88,7 +90,7 @@ const ListWrapper = styled.div`
   // Mobile
   position: relative;
   background: white;
-  display: ${props => (props.mode === 'list' ? 'block' : 'none')};
+  // display: ${props => (props.mode === 'list' ? 'block' : 'none')};
 
 
   // Desktop
@@ -136,7 +138,7 @@ class Landing extends Component {
   }
 
   componentDidMount() {
-    document.getElementById('Footer').style.visibility = 'hidden';
+    document.getElementById('Footer').style.display = 'none';
     this.headerHeight = document.getElementById('Header').clientHeight;
 
     const { onInitPage } = this.props.actions;
@@ -202,7 +204,7 @@ class Landing extends Component {
     const { history, areas } = this.props;
     const { searchParams } = this.state;
     return (
-      <div className="search-filter">
+      <div>
         {loading === true ? (
           <LoadingComponent />
         ) : (
@@ -236,7 +238,7 @@ class Landing extends Component {
               <ul>
                 {
                   _.map(group.result, (item, index) => {
-                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-4 col-lg-6 col-lg-4';
+                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-12 col-md-6 col-lg-4';
                     return (
                       <li key={`${group.title}-${index}`} className={`item ${col}`}>
                         {_.get(item, 'id') &&
@@ -268,7 +270,6 @@ class Landing extends Component {
         <ListWrapper mode={mobileViewMode}>
           {this.renderSearchFilter(false, searchParameters)}
           <hr />
-          <div style={{ width: '100%', height: '80px' }} />
           {this.renderList()}
         </ListWrapper>
       </div>

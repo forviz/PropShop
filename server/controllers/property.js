@@ -33,7 +33,8 @@ export const queryProperties = async (req, res, next) => {
       query,
       'fields.forSale': _for === 'sale' || _for === 'ขาย',
       'fields.forRent': _for === 'rent' || _for === 'เช่า',
-      'fields.propertyType[match]': propertyType || residentialType,
+      'fields.propertyType[match]': _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], propertyType) ? propertyType : '' ||
+        _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], residentialType) ? residentialType : '',
       'fields.numBedrooms[gte]': bedroom ? _.toNumber(bedroom) : undefined,
       'fields.numBathrooms[gte]': bathroom ? _.toNumber(bathroom) : undefined,
       'fields.priceSaleValue[gte]': _for === 'sale' && priceMin ? _.toNumber(priceMin) : undefined,
@@ -57,7 +58,7 @@ export const queryProperties = async (req, res, next) => {
       message: e.message,
     });
   }
-}
+};
 
 export const create = async (req, res, next) => {
   try {
@@ -87,7 +88,7 @@ export const create = async (req, res, next) => {
       _.get(data, 'step1.specialFeatureView'));
     }
 
-    let fieldsData = {
+    const fieldsData = {
       fields: {
         propertyType: {
           'en-US': _.get(data, 'step0.residentialType'),

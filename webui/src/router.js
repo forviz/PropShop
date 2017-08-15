@@ -105,7 +105,7 @@ const PrivateRoute = ({ component: MyComponent, ...rest }) => (
           <Redirect
             to={{
               pathname: '/login',
-              state: { from: props.location },
+              search: `?redirect=${props.location.pathname}`,
             }}
           />
         </div>
@@ -119,6 +119,8 @@ class MyRouter extends Component {
   static propTypes = {
     firebase: PropTypes.shape().isRequired,
     actions: PropTypes.shape().isRequired,
+    user: PropTypes.shape(),
+    userFetchSuccess: PropTypes.bool,
   }
 
   constructor(props) {
@@ -126,26 +128,23 @@ class MyRouter extends Component {
     this.getProfile();
   }
 
-  state = {
-    isAuthenticated: false,
-    renderOk: false,
-  }
-
   getProfile = () => {
-    const _self = this;
     const { firebase } = this.props;
     const { fetchUserData } = this.props.actions;
     firebase.auth().onAuthStateChanged((user) => {
-      if (_.get(user, 'emailVerified')) fetchUserData(_.get(user, 'uid'));
-      _self.setState({
-        isAuthenticated: _.get(user, 'emailVerified') ? true : false,
-        renderOk: true,
-      });
+      fetchUserData(_.get(user, 'uid'), user);
     });
   }
 
   render() {
-    if (!this.state.renderOk) return <div />;
+    const { user, userFetchSuccess } = this.props;
+
+    if (!userFetchSuccess) return <div />;
+
+    if (user.verify === false) {
+      // notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
+    }
+
     return (
       <Router>
         <div className="Router">
@@ -159,14 +158,14 @@ class MyRouter extends Component {
           ))}
           <div id="Content">
             {routes.map(route => (
-              <div>
+              <div key={route.path}>
                 {route.login === true ? (
                   <PrivateRoute
                     key={route.path}
                     path={route.path}
                     exact={route.exact}
                     component={route.content}
-                    isAuthenticated={this.state.isAuthenticated}
+                    isAuthenticated={user.verify}
                   />
                 ) : (
                   <Route
@@ -193,8 +192,11 @@ class MyRouter extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.data,
+    userFetchSuccess: state.user.fetchSuccess,
+  };
 };
 
 const actions = {

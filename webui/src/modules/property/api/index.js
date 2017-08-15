@@ -71,13 +71,13 @@ export const mapContentFulPropertyToMyField = (data) => {
             url: noImage,
           },
         },
-        images: _.map(_.get(elem, 'fields.images'), (image) => {
+        images: _.get(elem, 'fields.images') ? _.map(_.get(elem, 'fields.images'), (image) => {
           return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : {
             file: {
               url: noImage,
             },
           };
-        }),
+        }) : [],
         // Extra
         publicTransports: _.get(elem, 'fields.location.publicTransports'),
         unitNo: _.get(elem, 'fields.location.unitNo'),
