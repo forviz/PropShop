@@ -474,3 +474,68 @@ export const deleteProperty = async (req, res, next) => {
     });
   }
 };
+
+export const addImage = async (req, res, next) => {
+  try {
+    const { imageId } = req.body;
+    const { id } = req.params;
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then((space) => space.getEntry(id))
+    .then((entry) => {
+      _.set(entry.fields, "coverImage['en-US'].sys.id", 'imageId');
+      _.set(entry.fields, "coverImage['en-US'].sys.linkType", 'Asset');
+      _.set(entry.fields, "coverImage['en-US'].sys.type", 'Link');
+      return entry.update();
+    })
+    .then((entry) => {
+      return entry.publish();
+    });
+
+    res.json({
+      data: response,
+    });
+  } catch (e) {
+    res.status(500).json({
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
+    });
+  }
+}
+
+export const addImages = async (req, res, next) => {
+  try {
+    const { imagesId } = req.body;
+    const { id } = req.params;
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then((space) => space.getEntry(id))
+    .then((entry) => {
+      const images = _.map(imagesId, (id) => {
+        return {
+          sys: {
+            id,
+            linkType: 'Asset',
+            type: 'Link',
+          }
+        };
+      });
+      _.set(entry.fields, "images['en-US']", images);
+      return entry.update();
+    })
+    .then((entry) => {
+      return entry.publish();
+    });
+
+    res.json({
+      data: response,
+    });
+  } catch (e) {
+    res.status(500).json({
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
+    });
+  }
+}
