@@ -6,7 +6,6 @@ export const fetchNewsProp = (tabName, page) => {
   return fetch(`http://propholic.com/wp-json/wp/v2/${tabName}?page=${page}&per_page=9`, myInit)
   .then((res) => {
     total = res.headers.get('X-WP-Total');
-
     return res.json();
   })
   .then((data) => {

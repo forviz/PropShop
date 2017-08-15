@@ -57,9 +57,8 @@ class AgentContact extends Component {
         const emailFrom = _.get(values, 'email');
         const mobile = _.get(values, 'mobile');
         const body = _.get(values, 'body');
-        const propertyUrl = `property/${propertyId}`;
         const { contactAgent } = this.props.actions;
-        contactAgent(domain, name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName);
+        contactAgent(domain, name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyId, projectName);
       }
     });
   }

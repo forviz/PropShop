@@ -170,7 +170,7 @@ export const updateUser = async (req, res) => {
 
 export const contactAgent = async (req, res, next) => {
   try {
-    const { name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName } = req.body;
+    const { name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyId, projectName } = req.body;
 
     const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
     .then(space => space.createEntry('contact', {
@@ -223,15 +223,43 @@ export const contactAgent = async (req, res, next) => {
       let htmlx = html;
       htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
       htmlx = htmlx.replace('%SEND_FROM%', sendFrom);
-      htmlx = htmlx.replace('%PROPERTY_URL%', propertyUrl);
+      htmlx = htmlx.replace('%PROPERTY_URL%', `${BASE_URL}/#/property/${propertyId}`);
       htmlx = htmlx.replace('%PROJECT%', projectName);
       htmlx = htmlx.replace('%OWNER%', agentName);
       htmlx = htmlx.replace('%MESSAGE%', body);
 
       const mail = new Mail({
-        from: emailFrom,
+        to: emailFrom,
+        subject: `${sendFrom}, thank you for your enquiry`,
+        html: htmlx,
+        successCallback: () => {
+        },
+        errorCallback: () => {
+        },
+      });
+      mail.send();
+    });
+
+    fs.readFile(path.join(__dirname, '../views/email/template/agent-receive', 'index.html'), 'utf8', (err, html) => {
+      if (err) {
+        throw err;
+      }
+
+      const sendFrom = name ? name : emailFrom;
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace('%OWNER%', agentName);
+      htmlx = htmlx.replace('%PROJECT%', projectName);
+      htmlx = htmlx.replace('%MESSAGE%', body);
+      htmlx = htmlx.replace(/\%CONTACT_NAME%/g, sendFrom);
+      htmlx = htmlx.replace('%CONTACT_EMAIL%', emailFrom);
+      htmlx = htmlx.replace('%CONTACT_PHONE%', mobile);
+      htmlx = htmlx.replace('%CONTACT_URL%', `${BASE_URL}/#/account/contact`);
+      htmlx = htmlx.replace('%PROPERTY_URL%', `${BASE_URL}/#/property/${propertyId}`);
+
+      const mail = new Mail({
         to: emailTo,
-        subject: 'ติดต่อ Agent',
+        subject: `${sendFrom} has left you the following message about your property`,
         html: htmlx,
         successCallback: () => {
           clientManagement.getSpace(process.env.CONTENTFUL_SPACE)

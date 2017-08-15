@@ -292,7 +292,7 @@ class Sell extends Component {
             </div>
           </Spin>
         </Form>
-        <DevTool />
+        {/*<DevTool />*/}
       </div>
     );
   }
