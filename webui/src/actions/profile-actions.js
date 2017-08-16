@@ -76,7 +76,7 @@ export const updateAvatar = (id, file, oldAssetId = '') => {
     dispatch(profileEditSuccess(false));
     uploadMediaAPI(file).then((result) => {
       dispatch(profileEditing(false));
-      if (result.status === 'success') {
+      if (_.get(result, 'data.sys.id')) {
         if (oldAssetId) deleteMediaAPI(oldAssetId);
         const newAssetId = result.data.sys.id;
         const data = {};

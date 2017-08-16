@@ -263,7 +263,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { data, editing, editSuccess } = this.props;
+    const { data, editing, editSuccess, errorMessage } = this.props;
 
     if (_.size(data) === 0) return <center><Spin /></center>;
 
@@ -281,6 +281,15 @@ class Profile extends Component {
                       <Alert
                         message="แก้ไขข้อมูลส่วนตัวสำเร็จ"
                         type="success"
+                        showIcon
+                      />
+                    </div>
+                  }
+                  {errorMessage &&
+                    <div className="form-group" style={{ marginTop: 20 }}>
+                      <Alert
+                        message={errorMessage}
+                        type="error"
                         showIcon
                       />
                     </div>
