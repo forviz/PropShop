@@ -137,12 +137,13 @@ class MyRouter extends Component {
   }
 
   render() {
-    const { user, userFetchSuccess } = this.props;
+    const { user, userFetchSuccess, firebase } = this.props;
 
     if (!userFetchSuccess) return <div />;
 
-    if (user.verify === false) {
-      // notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
+    if (_.get(user, 'verify') === false) {
+      notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
+      firebase.logout();
     }
 
     return (
