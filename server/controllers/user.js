@@ -154,7 +154,6 @@ export const updateUser = async (req, res) => {
       res.json({
         status: 'SUCCESS',
       });
-      return false;
     } else {
       res.json({
         status: 'FAIL',

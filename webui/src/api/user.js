@@ -14,7 +14,6 @@ export const fetchUserAPI = (uid) => {
 };
 
 export const updateUserAPI = (id, data) => {
-  console.log('updateUserAPI', id, data);
   return fetch(`${BASEURL}/user/${id}`, {
     method: 'POST',
     headers: {
