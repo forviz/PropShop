@@ -227,10 +227,10 @@ class Sell extends Component {
     }
     return (
       <div className="row">
-        <div className="col-md-6 text-right">
+        <div className="col-xs-6 text-right">
           <button type="button" className="btn btn-default" onClick={this.prevStep}>ย้อนกลับ</button>
         </div>
-        <div className="col-md-6">
+        <div className="col-xs-6">
           <button type="submit" className="btn btn-primary">ต่อไป</button>
         </div>
       </div>

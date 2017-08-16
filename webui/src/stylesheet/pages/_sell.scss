@@ -100,5 +100,23 @@
 	    margin-bottom: 10px;
 		}
 	}
+
+	@media screen and (max-width: 991px) {
+		#Step0 .custom-col > .row > div {
+			padding-right: 15px;
+    	padding-left: 15px;
+		}
+		#Step0 section {
+			padding: 0 20px;
+		}
+	}
+
+	@media screen and (max-width: 555px) {
+		.ant-steps .ant-steps-item {
+			display: block;
+			width: 100% !important;
+			margin: 20px 0;
+		}
+	}
 	
 }

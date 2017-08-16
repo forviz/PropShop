@@ -102,7 +102,7 @@ class Header extends Component {
     }
 
     return (
-      <nav id="Header" className="navbar navbar-default">
+      <nav id="Header" className="navbar navbar-default navbar-fixed-top">
         <div className="container">
           <div className="navbar-header">
             <button

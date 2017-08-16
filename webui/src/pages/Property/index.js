@@ -90,6 +90,20 @@ class Property extends Component {
     });
   }
 
+  renderSlide = (item) => {
+    const backgroundStyle = {
+      background: `url(${item.original})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      width: '100%',
+      height: '100%',
+    };
+
+    return (
+      <div className="image-gallery-image" style={backgroundStyle} />
+    );
+  }
+
   render() {
     const { data, history } = this.props;
 
@@ -109,6 +123,8 @@ class Property extends Component {
         };
       });
     }
+
+    images = _.uniqBy(images, 'original');
 
     return (
       <div id="Property">
@@ -159,6 +175,7 @@ class Property extends Component {
                     slideInterval={2000}
                     showPlayButton={false}
                     onThumbnailClick={this.handleThumbnailClick}
+                    renderItem={this.renderSlide}
                   />
                   <div className="google-map">
                     <div className="clearfix">
@@ -230,18 +247,18 @@ class Property extends Component {
                       </div>
                     </div>
                     {_.get(data, 'agent.id') &&
-                      <div className="col-md-4" style={{ paddingLeft: 0 }} >
+                      <div className="col-sm-6 col-md-4" style={{ paddingLeft: 0 }} >
                         <div className="contact-block">
                           <div className="agent-block">
                             <div className="row">
-                              <div className="col-md-4 vcenter">
+                              <div className="col-xs-4 vcenter">
                                 <div className="agent-image">
                                   {_.get(data, 'agent.image') &&
                                     <img src={_.get(data, 'agent.image')} alt={`${_.get(data, 'agent.name')} ${_.get(data, 'agent.lastname')}`} />
                                   }
                                 </div>
                               </div>
-                              <div className="col-md-8 vcenter">
+                              <div className="col-xs-8 vcenter">
                                 <div className="agent-info">
                                   {(_.get(data, 'agent.name') || _.get(data, 'agent.lastname')) &&
                                     <div className="name">{_.get(data, 'agent.name')} {_.get(data, 'agent.lastname')}</div>
