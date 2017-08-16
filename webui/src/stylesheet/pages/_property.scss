@@ -52,7 +52,7 @@
 				}
 			}
 			.google-map {
-				width: 29%;
+				width: 14%;
 		    float: right;
 		    padding-top: 8px;
 		    img {
@@ -127,11 +127,25 @@
 			.address_1 {
 				font-family: $sukumvit-bold;
 				font-size: 30px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				/* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */
 			}
 			.address_2 {
 				font-family: $sukumvit-bold;
 				font-size: 18px;
 				color: $text-gray;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 1;
+				/* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */
 			}
 			.options {
 				ul li {

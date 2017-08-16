@@ -369,7 +369,7 @@ img {
       opacity: 1;
       height: auto; }
     #Property .content .cover .google-map {
-      width: 29%;
+      width: 14%;
       float: right;
       padding-top: 8px; }
       #Property .content .cover .google-map img {
@@ -418,11 +418,25 @@ img {
     padding: 15px; }
     #Property .content .address-block .address_1 {
       font-family: "SukhumvitSet-Bold";
-      font-size: 30px; }
+      font-size: 30px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* autoprefixer: off */
+      -webkit-box-orient: vertical;
+      /* autoprefixer: on */ }
     #Property .content .address-block .address_2 {
       font-family: "SukhumvitSet-Bold";
       font-size: 18px;
-      color: #999999; }
+      color: #999999;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      /* autoprefixer: off */
+      -webkit-box-orient: vertical;
+      /* autoprefixer: on */ }
     #Property .content .address-block .options ul li {
       display: inline-block;
       margin: 0 10px;

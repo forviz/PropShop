@@ -123,8 +123,8 @@ class Property extends Component {
                         <FontAwesome name="angle-left" /> กลับไปที่ค้นหา
                       </div>
                       <div className="address">
-                        <b>สำหรับ{data.for} {'>'} {data.province} {'>'} {data.amphur} {'>'} {data.district} {'>'} </b>
-                        <span className="text-gray">{data.address} ถนน{data.street}</span>
+                        <b>สำหรับ{data.for} {'>'} {/* {data.province} {'>'} {data.amphur} {'>'} {data.district} {'>'} */} </b>
+                        <span className="text-gray">{data.address}</span>
                       </div>
                     </div>
                   </div>
@@ -166,14 +166,14 @@ class Property extends Component {
                         <div role="button" tabIndex="0" onClick={this.handleStreerView}>
                           <img src={`${process.env.PUBLIC_URL} /images/googlemap/map-mark.jpg`} alt="Map View" />
                         </div>
-                        <div>Map View</div>
+                        <div>Map/Street View</div>
                       </div>
-                      <div className="pull-right text-center">
+                      {/*<div className="pull-right text-center">
                         <div role="button" tabIndex="0" onClick={this.handleStreerView}>
                           <img src={`${process.env.PUBLIC_URL} /images/googlemap/map-street.jpg`} alt="Street View" />
                         </div>
                         <div>Street View</div>
-                      </div>
+                      </div>*/}
                     </div>
                   </div>
                 </div>
@@ -188,17 +188,18 @@ class Property extends Component {
                         <div className="col-md-12">
                           <div className="main-info">
                             <div className="row">
-                              <div className="col-md-5">
+                              <div className="col-md-5 vcenter">
                                 <div className="price-block">
                                   <div className="for">{data.for}</div>
                                   <div className="price">฿{numeral(data.price).format('0,0')}</div>
                                   <div className="create_date">อยู่ในพรอพช็อปมาแล้ว {data.inWebsite} วัน</div>
                                 </div>
                               </div>
-                              <div className="col-md-7">
+                              <div className="col-md-7 vcenter">
                                 <div className="address-block">
-                                  <div className="address_1">{data.address}</div>
-                                  <div className="address_2">ถนน{data.street} เขต{data.amphur} {data.province} {data.zipcode}</div>
+                                  <div className="address_1">{data.project}</div>
+                                  <div className="address_2">{data.address}</div>
+                                  {/*<div className="address_2">ถนน{data.street} เขต{data.amphur} {data.province} {data.zipcode}</div>*/}
                                   <div className="options">
                                     <ul>
                                       <li><FontAwesome name="bed" /> {data.bedroom} ห้องนอน</li>
@@ -288,7 +289,16 @@ class Property extends Component {
                   <div className="facilities-block">
                     <h4>สิ่งอำนวยความสะดวก:</h4>
                     <div className="row">
-                      {_.size(_.get(data, 'specialFeatureView')) > 0 &&
+                      {_.size(_.get(data, 'tags')) > 0 &&
+                        <span>
+                          {
+                            _.map(data.tags, (value) => {
+                              return <div className="col-md-3" key={value}><Icon type="check-circle" /> {value}</div>;
+                            })
+                          }
+                        </span>
+                      }
+                      {/*{_.size(_.get(data, 'specialFeatureView')) > 0 &&
                         <span>
                           {
                             _.map(data.specialFeatureView, (value) => {
@@ -323,7 +333,7 @@ class Property extends Component {
                             })
                           }
                         </span>
-                      }
+                      }*/}
                     </div>
                   </div>
                   <div className="row">

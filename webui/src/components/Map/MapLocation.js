@@ -105,7 +105,7 @@ class MapLocation extends Component {
           <div class="content">
             <div class="name">${markerData.project}</div>
             <div class="price">${numeral(markerData.price).format('0,0')} บาท</div>
-            <div class="place">${markerData.street} - ${markerData.province}</div>
+            <div class="place">${markerData.province}</div>
             ${option}
           </div>
         </div>

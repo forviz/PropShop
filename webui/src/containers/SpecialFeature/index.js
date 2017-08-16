@@ -50,7 +50,7 @@ class SpecialFeature extends Component {
   }
 
   setSelected = (key, value) => {
-    this.setState({selected: { ...this.state.selected, [key]: value }}, () => {
+    this.setState({ selected: { ...this.state.selected, [key]: value } }, () => {
       this.props.onChange(this.state.selected);
     });
   }
@@ -71,16 +71,20 @@ class SpecialFeature extends Component {
   // }
 
   render() {
-    const { items, defaultValue } = this.props;
+    const { items } = this.props;
     const { selected } = this.state;
 
     if (!items) return <div />;
 
     const setValue = {
-      specialFeatureView: _.size(selected.specialFeatureView) > 0 ? selected.specialFeatureView : defaultValue.specialFeatureView,
-      specialFeatureFacilities: _.size(selected.specialFeatureFacilities) > 0 ? selected.specialFeatureFacilities : defaultValue.specialFeatureFacilities,
-      specialFeatureNearbyPlaces: _.size(selected.specialFeatureNearbyPlaces) > 0 ? selected.specialFeatureNearbyPlaces : defaultValue.specialFeatureNearbyPlaces,
-      specialFeaturePrivate: _.size(selected.specialFeaturePrivate) > 0 ? selected.specialFeaturePrivate : defaultValue.specialFeaturePrivate,
+      specialFeatureView: _.size(selected.specialFeatureView) > 0 ?
+      _.filter(selected.specialFeatureView, (value) => { return _.includes(items.specialFeatureView.data, value); }) : [],
+      specialFeatureFacilities: _.size(selected.specialFeatureFacilities) > 0 ?
+      _.filter(selected.specialFeatureFacilities, (value) => { return _.includes(items.specialFeatureFacilities.data, value); }) : [],
+      specialFeatureNearbyPlaces: _.size(selected.specialFeatureNearbyPlaces) > 0 ?
+      _.filter(selected.specialFeatureNearbyPlaces, (value) => { return _.includes(items.specialFeatureNearbyPlaces.data, value); }) : [],
+      specialFeaturePrivate: _.size(selected.specialFeaturePrivate) > 0 ?
+      _.filter(selected.specialFeaturePrivate, (value) => { return _.includes(items.specialFeaturePrivate.data, value); }) : [],
     };
 
     return (
@@ -103,6 +107,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeatureView.data}
                   onChange={this.onSpecialFeatureViewChange}
+                  value={setValue.specialFeatureView}
                 />
               </div>
             </div>
@@ -112,6 +117,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeatureFacilities.data}
                   onChange={this.onSpecialFeatureFacilitiesChange}
+                  value={setValue.specialFeatureFacilities}
                 />
               </div>
             </div>
@@ -121,6 +127,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeatureNearbyPlaces.data}
                   onChange={this.onSpecialFeatureNearbyPlacesChange}
+                  value={setValue.specialFeatureNearbyPlaces}
                 />
               </div>
             </div>
@@ -130,6 +137,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeaturePrivate.data}
                   onChange={this.onSpecialFeaturePrivateChange}
+                  value={setValue.specialFeaturePrivate}
                 />
               </div>
             </div>

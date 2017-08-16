@@ -107,12 +107,12 @@ export const create = async (req, res, next) => {
             "soi": "",
             "full": {
               "en": "",
-              "th": ""
+              "th": _.get(data, 'step0.address'),
             },
             "areas": [],
             "mooNo": "",
             "street": _.get(data, 'step0.street'),
-            "unitNo": _.get(data, 'step0.address'),
+            "unitNo": '',
             "floorNo": "",
             "summary": {
               "en": "",
@@ -201,8 +201,8 @@ export const create = async (req, res, next) => {
         },
         locationMarker: {
           'en-US': {
-            lon: _.get(data, 'step0.googleMap.markers[0].position.lng'),
-            lat: _.get(data, 'step0.googleMap.markers[0].position.lat'),
+            lon: _.get(data, 'step0.googleMap.markers.position.lng'),
+            lat: _.get(data, 'step0.googleMap.markers.position.lat'),
           },
         },
         priceSaleValue: {
@@ -314,19 +314,19 @@ export const update = async (req, res, next) => {
       if (_.get(data, 'step0.announcementDetails')) {
         _.set(entry.fields, "description['en-US']", {
           "en": "",
-          "th": data.step0.announcementDetails
+          "th": data.step0.announcementDetails,
         });
       }
       _.set(entry.fields, "location['en-US']", {
         "soi": "",
         "full": {
           "en": "",
-          "th": ""
+          "th": _.get(data, 'step0.address'),
         },
         "areas": [],
         "mooNo": "",
         "street": _.get(data, 'step0.street'),
-        "unitNo": _.get(data, 'step0.address'),
+        "unitNo": '',
         "floorNo": "",
         "summary": {
           "en": "",
