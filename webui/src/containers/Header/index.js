@@ -55,7 +55,7 @@ class Header extends Component {
 
     if (user.username && user.verify) {
       const menu = (
-        <Menu onClick={this.handleMenuClick}>
+        <Menu onClick={this.handleMenuClick} className="user-menu">
           <Menu.Item key="property">
             <NavLink exact to="/account/property">รายการที่ประกาศ</NavLink>
           </Menu.Item>
@@ -87,7 +87,7 @@ class Header extends Component {
 
       loginLabel = (
         <Dropdown overlay={menu} trigger={['click']}>
-          <a className="ant-dropdown-link user-menu">
+          <a className="ant-dropdown-link">
             {divAvatar} {user.username} <Icon type="down" />
           </a>
         </Dropdown>
