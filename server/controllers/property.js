@@ -33,8 +33,7 @@ export const queryProperties = async (req, res, next) => {
       query,
       'fields.forSale': _for === 'sale' || _for === 'ขาย',
       'fields.forRent': _for === 'rent' || _for === 'เช่า',
-      'fields.propertyType[match]': _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], propertyType) ? propertyType : '' ||
-        _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], residentialType) ? residentialType : '',
+      'fields.propertyType[match]': _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], _.lowerCase(propertyType)) ? _.lowerCase(propertyType) : '',
       'fields.numBedrooms[gte]': bedroom ? _.toNumber(bedroom) : undefined,
       'fields.numBathrooms[gte]': bathroom ? _.toNumber(bathroom) : undefined,
       'fields.priceSaleValue[gte]': _for === 'sale' && priceMin ? _.toNumber(priceMin) : undefined,

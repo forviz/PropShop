@@ -63,8 +63,14 @@
 	.List {
 		border: 1px solid $border-color;
 		padding: 15px;
+		position: relative;
 		&:hover {
 			border: 1px solid $text-green;
+		}
+		.wish {
+			position: absolute;
+			right: 8px;
+			bottom: 5px;
 		}
 		.actions {
 			.fa {

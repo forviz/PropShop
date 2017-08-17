@@ -222,7 +222,7 @@ export const contactAgent = async (req, res, next) => {
       let htmlx = html;
       htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
       htmlx = htmlx.replace('%SEND_FROM%', sendFrom);
-      htmlx = htmlx.replace('%PROPERTY_URL%', `${BASE_URL}/#/property/${propertyId}`);
+      htmlx = htmlx.replace(/\%PROPERTY_URL%/g, `${BASE_URL}/#/property/${propertyId}`);
       htmlx = htmlx.replace('%PROJECT%', projectName);
       htmlx = htmlx.replace('%OWNER%', agentName);
       htmlx = htmlx.replace('%MESSAGE%', body);
@@ -254,7 +254,7 @@ export const contactAgent = async (req, res, next) => {
       htmlx = htmlx.replace('%CONTACT_EMAIL%', emailFrom);
       htmlx = htmlx.replace('%CONTACT_PHONE%', mobile);
       htmlx = htmlx.replace('%CONTACT_URL%', `${BASE_URL}/#/account/contact`);
-      htmlx = htmlx.replace('%PROPERTY_URL%', `${BASE_URL}/#/property/${propertyId}`);
+      htmlx = htmlx.replace(/\%PROPERTY_URL%/g, `${BASE_URL}/#/property/${propertyId}`);
 
       const mail = new Mail({
         to: emailTo,

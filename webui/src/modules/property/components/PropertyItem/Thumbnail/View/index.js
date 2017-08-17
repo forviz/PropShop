@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
-import _ from 'lodash';
 
 import Wish from '../../../../../../components/Wish';
 

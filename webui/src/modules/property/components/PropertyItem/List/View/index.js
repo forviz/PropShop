@@ -1,21 +1,9 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-// import { notification, Icon } from 'antd';
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
 
-import * as WishListActions from '../../../../../../actions/wishlist-actions';
-
-// const openNotification = () => {
-//   notification.open({
-//     message: 'บันทึกเรียบร้อย',
-//     description: 'รายการที่บันทึกจะอยู่ในส่วนของผู้ใช้.',
-//     icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
-//   });
-// };
+import Wish from '../../../../../../components/Wish';
 
 class List extends Component {
 
@@ -82,27 +70,12 @@ class List extends Component {
             </div>
           </div>
         </div>
+        <div className="wish">
+          <Wish item={item} />
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    wishlist: state.domain.accountWishlist.data,
-    userId: state.user.data.id,
-  };
-};
-
-const actions = {
-  createWishlist: WishListActions.createWishlist,
-  getWishlist: WishListActions.getWishlist,
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators(actions, dispatch),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default List;

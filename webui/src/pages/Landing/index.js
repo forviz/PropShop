@@ -27,6 +27,7 @@ import * as WishListActions from '../../actions/wishlist-actions';
 const BREAKPOINT = 768;
 
 const selectPropertyFromDomain = (state, domain) => {
+  console.log('selectPropertyFromDomain', state);
   const domainReducer = _.get(state, `entities.properties.search.${domain}`);
   if (!domainReducer) return { result: [], total: 0 };
 

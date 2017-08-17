@@ -57,7 +57,8 @@ img {
   margin-right: 0; }
 
 #Content {
-  margin-top: 50px; }
+  padding-top: 50px;
+  min-height: 100vh; }
 
 .vcenter {
   display: inline-block;
@@ -844,7 +845,7 @@ img {
   text-align: center; }
 
 #Account {
-  margin: 40px 0; }
+  padding: 40px 0; }
   #Account h1 {
     font-family: "SukhumvitSet-Bold";
     color: #8ebc42;
@@ -1484,9 +1485,14 @@ body .rating span {
 
 .PropertyItem .List {
   border: 1px solid #eeeeee;
-  padding: 15px; }
+  padding: 15px;
+  position: relative; }
   .PropertyItem .List:hover {
     border: 1px solid #8ebc42; }
+  .PropertyItem .List .wish {
+    position: absolute;
+    right: 8px;
+    bottom: 5px; }
   .PropertyItem .List .actions .fa {
     font-size: 18px; }
   .PropertyItem .List .area-size {

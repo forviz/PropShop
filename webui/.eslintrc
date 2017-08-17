@@ -7,10 +7,10 @@
   },
   "extends": "airbnb",
   "env": {
-    "browser": true,
+    "browser": true
   },
   "globals": {
-    "google": false,
+    "google": false
   },
   "plugins": [
     "react"

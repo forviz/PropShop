@@ -103,7 +103,7 @@ export const mapContentFulPropertyToMyField = (data) => {
 };
 
 export const getPropertyIDs = (search) => {
-  // console.log('getPropertyIDs', search);
+  console.log('getPropertyIDs', search);
   return fetch(`${BASEURL}/properties${search}&select=sys.id`, {
     'Content-Type': 'application/json',
   })
