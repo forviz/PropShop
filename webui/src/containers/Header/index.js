@@ -47,11 +47,12 @@ class Header extends Component {
 
   render() {
     const { showMobileMenu } = this.state;
-    const { user, userFetchSuccess, translate, dispatch } = this.props;
+    const { user, userFetchSuccess, translate, dispatch, mobileMode } = this.props;
 
     if (!userFetchSuccess) return <div />;
 
     let loginLabel = null;
+    let divAvatar = null;
 
     if (user.username && user.verify) {
       const menu = (
@@ -74,7 +75,6 @@ class Header extends Component {
         </Menu>
       );
 
-      let divAvatar = null;
       if (_.get(user, 'image.fields.file.url')) {
         divAvatar = (
           <div className="avatar">
@@ -124,13 +124,31 @@ class Header extends Component {
             </NavLink>
           </div>
           <div id="navbar" className={`navbar-collapse collapse ${showMobileMenu ? 'in' : ''}`}>
-            <ul className="nav navbar-nav">
-              <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
-              <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
-              { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
-              <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
-              { /* <li><NavLink exact to="/webboard">{translate('เว็บบอร์ด')}</NavLink></li> */ }
-            </ul>
+            {mobileMode && user.username && user.verify ? (
+              <ul className="nav navbar-nav">
+                <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
+                <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
+                { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
+                <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
+                <li role="separator" className="divider" />
+                <li className="dropdown-header">บัญชีผู้ใช้</li>
+                <li><NavLink exact to="/account/property">รายการที่ประกาศ</NavLink></li>
+                <li><NavLink exact to="/account/wishlist">รายการที่บันทึกไว้</NavLink></li>
+                <li><NavLink exact to="/account/profile">การตั้งค่าบัญชีผู้ใช้</NavLink></li>
+                <li><NavLink exact to="/account/profile">การตั้งค่าบัญชีผู้ใช้</NavLink></li>
+                <li><NavLink exact to="/account/changepassword">เปลี่ยนรหัสผ่าน</NavLink></li>
+                <li role="separator" className="divider" />
+                <li><a role="button" tabIndex="0" onClick={() => this.logout()}>ออกจากระบบ</a></li>
+              </ul>
+            ) : (
+              <ul className="nav navbar-nav">
+                <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
+                <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
+                { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
+                <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
+                { /* <li><NavLink exact to="/webboard">{translate('เว็บบอร์ด')}</NavLink></li> */ }
+              </ul>
+            )}
             <ul className="nav navbar-nav navbar-right">
               {/* <li className="language">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('th')); }}>ไทย</a>
@@ -138,9 +156,11 @@ class Header extends Component {
               <li className="language last">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('en')); }}>ENG</a>
               </li> */}
-              <li className="login">
-                {loginLabel}
-              </li>
+              {!mobileMode &&
+                <li className="login">
+                  {loginLabel}
+                </li>
+              }
             </ul>
           </div>
         </div>
@@ -153,6 +173,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.data,
     userFetchSuccess: state.user.fetchSuccess,
+    mobileMode: state.core.mobileMode,
   };
 };
 

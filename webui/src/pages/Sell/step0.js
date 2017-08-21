@@ -164,7 +164,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      areaSize: value.replace(/\D/g, ''),
+      areaSize: value.replace(/[a-zA-Zก-ฮ]/g, ''),
       areaSize0: '',
       areaSize1: '',
     };

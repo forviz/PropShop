@@ -150,8 +150,6 @@ class Login extends Component {
     const { submitting } = this.state;
     const { authError, user, userFetchSuccess } = this.props;
 
-    console.log('submitting', submitting);
-
     if (!userFetchSuccess) return <div />;
 
     let from = '/';

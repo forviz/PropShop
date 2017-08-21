@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import T from 'prop-types';
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
+import _ from 'lodash';
 
 import Wish from '../../../../../../components/Wish';
 
@@ -42,7 +43,9 @@ class Thumbnail extends Component {
         <div className="content">
           <div className="name">{item.project || '\u00A0'}</div>
           <div className="price">{numeral(item.price).format('0,0')} บาท</div>
-          <div className="place">{item.province || '\u00A0'}</div>
+          <div className="place">{item.province || _.get(item, 'location.summary.en') ||
+            _.get(item, 'location.summary.th') || _.get(item, 'location.full.en') ||
+            _.get(item, 'location.full.th') || '\u00A0'}</div>
           {(item.bedroom > 0 || item.bathroom > 0) &&
             <div className="option">
               <ul>

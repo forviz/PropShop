@@ -116,15 +116,17 @@ class Property extends Component {
     });
 
     if (_.size(data.images) > 0) {
-      images = _.map(data.images, (image) => {
-        return {
+      _.forEach(data.images, (image) => {
+        images.push({
           original: _.get(image, 'file.url'),
           thumbnail: _.get(image, 'file.url'),
-        };
+        });
       });
     }
 
     images = _.uniqBy(images, 'original');
+
+    const showThumbnails = _.size(images) > 1 ? true : false;
 
     return (
       <div id="Property">
@@ -175,9 +177,10 @@ class Property extends Component {
                     slideInterval={2000}
                     showPlayButton={false}
                     onThumbnailClick={this.handleThumbnailClick}
+                    showThumbnails={showThumbnails}
                     renderItem={this.renderSlide}
                   />
-                  <div className="google-map">
+                  {/*<div className="google-map">
                     <div className="clearfix">
                       <div className="pull-left text-center">
                         <div role="button" tabIndex="0" onClick={this.handleStreerView}>
@@ -185,14 +188,14 @@ class Property extends Component {
                         </div>
                         <div>Map/Street View</div>
                       </div>
-                      {/*<div className="pull-right text-center">
+                      <div className="pull-right text-center">
                         <div role="button" tabIndex="0" onClick={this.handleStreerView}>
                           <img src={`${process.env.PUBLIC_URL} /images/googlemap/map-street.jpg`} alt="Street View" />
                         </div>
                         <div>Street View</div>
-                      </div>*/}
+                      </div>
                     </div>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </div>

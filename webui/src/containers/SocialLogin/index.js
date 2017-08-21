@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
-import { firebaseConnect } from 'react-redux-firebase';
+import { firebaseConnect, pathToJS } from 'react-redux-firebase';
 import FontAwesome from 'react-fontawesome';
+import _ from 'lodash';
 
 import { createUser } from '../../api/contentful';
 
@@ -36,6 +37,13 @@ class SocialLogin extends Component {
   }
 
   render() {
+    const { authError } = this.props;
+
+    if (_.get(authError, 'code') === 'auth/account-exists-with-different-credential' &&
+      _.get(authError, 'credential.providerId') === 'facebook.com') {
+      this.handleGoogleLogin();
+    }
+
     return (
       <div className="SocialLogin">
         <div className="text">เข้าสู่ระบบด้วย</div>
@@ -54,8 +62,10 @@ class SocialLogin extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+    authError: pathToJS(state.firebase, 'authError'),
+  };
 };
 
 const actions = {};

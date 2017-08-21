@@ -49,13 +49,11 @@
 				.image-gallery-slide-wrapper {
 					opacity: 1;
     			height: 500px;
-					.image-gallery-slides {
+					.image-gallery-swipe,
+					.image-gallery-slides,
+					.image-gallery-slide {
 						width: 100%;
 						height: 100%;
-						.image-gallery-slide {
-							width: 100%;
-							height: 100%;
-						}
 					}
 				}
 			}
@@ -77,8 +75,8 @@
 		    }
 			}
 			.image-gallery-thumbnails-wrapper {
-				width: 70%;
-				float: left;
+				// width: 70%;
+				// float: left;
 			}
 			.image-gallery-content.fullscreen {
 				position: absolute;

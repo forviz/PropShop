@@ -13,6 +13,7 @@ import _ from 'lodash';
 
 import LoadingComponent from '../../components/Loading';
 import MapLocation from '../../components/Map/MapLocation';
+import Sort from '../../components/Sort';
 
 import {
   actions as PropertyActions,
@@ -38,6 +39,7 @@ const mapStateToProps = (state, ownProps) => {
   const properties = _.map(visibleIDs, id => _.get(state, `entities.properties.entities.${id}`));
   const areaEntities = _.get(state, 'entities.areas.entities');
   return {
+    mobileMode: state.core.mobileMode,
     searchParameters: convertRouterPropsToParams(ownProps, areaEntities),
     user: state.user.data,
     banner: state.banners,
@@ -175,29 +177,17 @@ class PropertySearchPage extends Component {
 
   state = {
     displayType: 'thumbnail',
-  }
-
-  handleResize = () => {
-    const showSplitContent = window.matchMedia(`(min-width: ${BREAKPOINT}px)`).matches;
-    if (showSplitContent !== this.state.showSplitContent) {
-      this.setState({
-        showSplitContent,
-      });
-    }
-  }
-
-  componentWillMount() {
-    this.handleResize();
+    currentSort: 'newest',
   }
 
   componentDidMount() {
     document.getElementById('Footer').style.visibility = 'hidden';
-    window.addEventListener('resize', this.handleResize);
     document.addEventListener('scroll', this.handleScroll);
     this.headerHeight = document.getElementById('Header').clientHeight;
 
     const { searchProperties } = this.props.actions;
     // searchProperties(this.props.location.search);
+    console.log('this.props.searchParameters', this.props.searchParameters);
     searchProperties(convertParamsToSearchAPI(this.props.searchParameters));
   }
 
@@ -210,12 +200,12 @@ class PropertySearchPage extends Component {
       // if location is provide, convert to bound
       // console.log('searchparams', nextProps.searchParameters);
       // searchProperties(nextProps.location.search);
+      console.log('componentWillReceiveProps', nextProps.searchParameters);
       searchProperties(convertParamsToSearchAPI(nextProps.searchParameters));
     }
   }
 
   componentWillUnmount() {
-    window.addEventListener('resize', this.handleResize);
     document.removeEventListener('scroll', this.handleScroll);
   }
 
@@ -238,6 +228,14 @@ class PropertySearchPage extends Component {
       timer = setTimeout(callback, ms);
     };
   })();
+
+  onChangeListPage = (page, pageSize) => {
+    this.setState({ currentPage: page });
+    const { searchProperties } = this.props.actions;
+    const searchParameters = _.clone(this.props.searchParameters);
+    searchParameters.skip = (page - 1) * pageSize;
+    searchProperties(convertParamsToSearchAPI(searchParameters));
+  }
 
   setUrl = (params) => {
     const { history } = this.props;
@@ -277,14 +275,6 @@ class PropertySearchPage extends Component {
     else this.setState({ mobileViewMode: 'map' });
   }
 
-  onChangeListPage = (page, pageSize) => {
-    this.setState({ currentPage: page });
-    const { searchProperties } = this.props.actions;
-    const searchParameters = _.clone(this.props.searchParameters);
-    searchParameters.skip = (page - 1) * pageSize;
-    searchProperties(convertParamsToSearchAPI(searchParameters));
-  }
-
   handleMouseEnterPropertyItem = (property) => {
     const { userFocusOnProperty } = this.props.actions;
     userFocusOnProperty(property.id);
@@ -301,7 +291,7 @@ class PropertySearchPage extends Component {
     // });
   }
 
-  renderSearchFilter = (loading, searchParameters) => {
+  /*renderSearchFilter = (loading, searchParameters) => {
     return (
       <div>
         {loading === true ? (
@@ -311,51 +301,70 @@ class PropertySearchPage extends Component {
             activeTab="area"
             searchParameters={searchParameters}
             trigger="change"
+            page="search"
             showSearchButton={false}
+            showSummaryOnly={true}
             onUpdate={this.setUrl}
           />
         )}
       </div>
     );
+  }*/
+
+  handleSortProperty = (currentSort) => {
+    this.setState({
+      currentSort,
+    });
+    const { searchParameters } = this.props;
+    const { searchProperties } = this.props.actions;
+    searchParameters.order = currentSort;
+    console.log('searchParameters', searchParameters);
+    this.setUrl(searchParameters);
+    // searchProperties(convertParamsToSearchAPI(searchParameters));
   }
 
   renderList = (loading, items, total) => {
-    const { displayType } = this.state;
+    const { displayType, currentSort } = this.state;
     return (
       <div className="result">
         {loading === true ? (
           <LoadingComponent />
         ) : (
-          <div>
-            <div className="pull-right">
-              <div className="display-type">
-                <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
+          <div className="list">
+            <div className="clearfix">
+              <div className="pull-left">
+                <h3>แสดง {items.length} รายการจาก {total} ผลการค้นหา</h3>
+              </div>
+              <div className="pull-right">
+                <div className="filter-result">
+                  <Sort current={currentSort} onChange={this.handleSortProperty} />
+                </div>
+                <div className="display-type">
+                  <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
+                </div>
               </div>
             </div>
-            <div className="list">
-              <h3>แสดง {items.length} รายการจาก {total} ผลการค้นหา</h3>
-              <ul className="clearfix">
-                {
-                  _.map(items, (item, index) => {
-                    const col = displayType === 'list' ? 'col-md-12' : 'col-sm-12 col-md-6 col-lg-4';
-                    return (
-                      <li key={index} className={`item ${col}`}>
-                        <NavLink exact to={`/property/${item.id}`}>
-                          <PropertyItem
-                            type={displayType}
-                            item={item}
-                            onMouseEnter={this.handleMouseEnterPropertyItem}
-                            onMouseLeave={this.handleMouseLeavePropertyItem}
-                          />
-                        </NavLink>
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-              <div style={{ textAlign: 'center' }}>
-                <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
-              </div>
+            <ul className="clearfix">
+              {
+                _.map(items, (item, index) => {
+                  const col = displayType === 'list' ? 'col-md-12' : 'col-sm-12 col-md-6 col-lg-4';
+                  return (
+                    <li key={index} className={`item ${col}`}>
+                      <NavLink exact to={`/property/${item.id}`}>
+                        <PropertyItem
+                          type={displayType}
+                          item={item}
+                          onMouseEnter={this.handleMouseEnterPropertyItem}
+                          onMouseLeave={this.handleMouseLeavePropertyItem}
+                        />
+                      </NavLink>
+                    </li>
+                  );
+                })
+              }
+            </ul>
+            <div style={{ textAlign: 'center' }}>
+              <Pagination current={this.state.currentPage} onChange={this.onChangeListPage} pageSize={PAGE_SIZE} total={total} />
             </div>
           </div>
         )}
@@ -374,7 +383,8 @@ class PropertySearchPage extends Component {
             activeTab="area"
             searchParameters={searchParameters}
             trigger="none"
-            showSearchButton
+            showSearchButton={true}
+            showSummaryOnly={true}
             onSubmit={this.setUrl}
           />
         </SearchbarWrapper>
@@ -431,6 +441,7 @@ class PropertySearchPage extends Component {
             searchParameters={searchParameters}
             trigger="change"
             showSearchButton={false}
+            showSummaryOnly={true}
             onUpdate={this.setUrl}
           />
         </SearchbarWrapper>
@@ -457,9 +468,9 @@ class PropertySearchPage extends Component {
   }
 
   render() {
-    const { showSplitContent } = this.state;
+    const { mobileMode } = this.props;
 
-    if (showSplitContent) return this.renderSplitScreen();
+    if (!mobileMode) return this.renderSplitScreen();
 
     // Mobile, Not split screen
     return this.renderMobileScreen();

@@ -31,6 +31,10 @@ const SearchBarWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
+  @media (min-width: ${BREAKPOINT}px) and (max-width: 900px) {
+    display: ${props => (props.page === 'home' ? 'block' : 'flex')};
+  }
+
   @media (min-width: ${BREAKPOINT}px) {
     flex-direction: row;
     margin: 0 -6px;
@@ -42,8 +46,12 @@ const InputWrapper = styled.div`
   flex-grow: 0;
   width: 100%;
 
+  @media (min-width: ${BREAKPOINT}px) and (max-width: 900px) {
+    margin: ${props => (props.page === 'home' ? '10px 0' : '0')};
+  }
+
   @media (min-width: ${BREAKPOINT}px) {
-    flex-grow: 1;
+    flex: ${props => (props.page === 'home' && props.flex ? props.flex : '1')};
     padding: 0 6px;
   }
 `;
@@ -103,6 +111,10 @@ const ButtonPrimary = styled.button`
   @media (min-width: ${BREAKPOINT}px) {
     width: auto;
   }
+
+  @media (min-width: ${BREAKPOINT}px) and (max-width: 900px) {
+    width: ${props => (props.page === 'home' ? '100%' : 'auto')};
+  }
 `;
 
 const propertyTypes = [
@@ -124,6 +136,7 @@ const mapStateToProps = (state) => {
 
   return {
     areas,
+    mobileMode: state.core.mobileMode,
   };
 };
 
@@ -142,8 +155,8 @@ export default connect(mapStateToProps)(
 
     static defaultProps = {
       searchParameters: {
-        for: 'all',
-        propertyType: 'all',
+        for: '',
+        propertyType: [''],
         area: {
           name: 'bangkok',
         },
@@ -153,15 +166,19 @@ export default connect(mapStateToProps)(
       showSearchButton: true,
       trigger: 'change',
       onUpdate: () => {},
+      showSummaryOnly: false,
+    }
+
+    state = {
+      showSummaryOnly: false,
     }
 
     constructor(props) {
       super(props);
       this.state = {
-        showSummaryOnly: true,
-        mobileView: false,
+        showSummaryOnly: props.showSummaryOnly,
         searchParameters: props.searchParameters,
-      }
+      };
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -172,31 +189,9 @@ export default connect(mapStateToProps)(
       }
     }
 
-    componentWillMount() {
-      this.handleResize();
-    }
-
-    handleResize = () => {
-      const mobileView = !window.matchMedia(`(min-width: ${BREAKPOINT}px)`).matches;
-      if (mobileView !== this.state.mobileView) {
-        this.setState({
-          mobileView,
-        });
-      }
-    }
-
-    componentDidMount() {
-      window.addEventListener('resize', this.handleResize);
-    }
-
-    componentWillUnmount() {
-      window.removeEventListener('resize', this.handleResize);
-    }
-
     onUpdateSearchParameters = (newParam) => {
       const searchParameters = this.state.searchParameters;
       const updateParameters = { ...searchParameters, ...newParam };
-      console.log('onUpdateSearchParameters', newParam, updateParameters);
       this.setState({
         searchParameters: updateParameters,
       });
@@ -205,26 +200,25 @@ export default connect(mapStateToProps)(
     }
 
     handleSubmit = (e) => {
-      console.log('handleSubmit');
       // const searchParameters = _.clone(this.props.searchParameters);
       const { searchParameters } = this.state;
+
+      if (searchParameters.for === '') searchParameters.for = 'sale';
+      if (searchParameters.propertyType[0] === '') searchParameters.propertyType[0] = 'condominium';
 
       this.setState({
         showSummaryOnly: true,
       });
 
-      console.log('searchParameters', searchParameters);
-
       this.props.onSubmit(searchParameters);
     }
 
     handleSelectArea = (option) => {
-      console.log('handleSelectArea', option);
       const searchParameters = _.clone(this.props.searchParameters);
       searchParameters.area = {
         name: option !== null ? option.value : '',
         bound: { sw: undefined, ne: undefined },
-      }
+      };
 
       this.onUpdateSearchParameters(searchParameters);
     }
@@ -259,7 +253,6 @@ export default connect(mapStateToProps)(
       const { areas, simpleMode, showSearchButton } = this.props;
       const { searchParameters } = this.state;
 
-      console.log('searchParameters', searchParameters);
       let priceField;
       let bedroomField;
       let bathroomField;
@@ -306,10 +299,11 @@ export default connect(mapStateToProps)(
       }
 
       const forValue = _.includes(['sale', 'rent'], searchParameters.for) ? searchParameters.for : [];
-      const propertyTypeValue = _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], _.get(searchParameters, 'propertyType.0')) ? _.get(searchParameters, 'propertyType.0') : [];
+      const propertyTypeValue = _.includes(['condominium', 'town-home', 'house', 'commercial-space', 'land'], _.get(searchParameters, 'propertyType.0'))
+      ? _.get(searchParameters, 'propertyType.0') : [];
       let content = (
-        <SearchBarWrapper>
-          <InputWrapper>
+        <SearchBarWrapper page={this.props.page}>
+          <InputWrapper page={this.props.page} flex="2">
             <Select
               style={{ width: '100%' }}
               placeholder="ประเภทประกาศ"
@@ -320,7 +314,7 @@ export default connect(mapStateToProps)(
               <Option value="rent">เช่า</Option>
             </Select>
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper page={this.props.page} flex="2">
             <Select
               style={{ width: '100%' }}
               placeholder="ประเภทอสังหาฯ"
@@ -330,7 +324,7 @@ export default connect(mapStateToProps)(
               {_.map(propertyTypes, type => <Option key={type.value} value={type.value}>{type.label}</Option>)}
             </Select>
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper page={this.props.page} flex="3">
             <InputAreaSearch
               value={_.find(areas, a => searchParameters.area.name === a.value)}
               options={areas}
@@ -342,14 +336,14 @@ export default connect(mapStateToProps)(
           {bathroomField}
           {
             showSearchButton &&
-              <InputWrapper>
-                <ButtonPrimary onClick={this.handleSubmit}>ค้นหา</ButtonPrimary>
+              <InputWrapper page={this.props.page} flex="1">
+                <ButtonPrimary page={this.props.page} onClick={this.handleSubmit}>ค้นหา</ButtonPrimary>
               </InputWrapper>
           }
         </SearchBarWrapper>
       );
 
-      if (this.state.mobileView && this.state.showSummaryOnly) {
+      if (this.props.mobileMode && this.state.showSummaryOnly) {
         content = (
           <SearchBarWrapper>
             <InputWrapper>
@@ -367,5 +361,5 @@ export default connect(mapStateToProps)(
         </PropertySearchWrapper>
       );
     }
-  }
+  },
 );

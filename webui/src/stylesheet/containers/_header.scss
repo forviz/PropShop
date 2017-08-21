@@ -1,3 +1,7 @@
+.navbar-fixed-top .navbar-collapse,
+.navbar-fixed-bottom .navbar-collapse {
+	max-height: inherit;
+}
 #Header {
 	background: $main-bg;
 	box-shadow: none;
@@ -5,8 +9,6 @@
 	margin: 0;
 	.container {
 		width: 100%;
-		padding: 0;
-		padding-left: 15px;
 		margin: 0;
 	}
 	.navbar-nav > li > a {
@@ -72,6 +74,18 @@
 	    width: 30px;
 		}
 	}
+	.navbar-nav {
+		.dropdown-header {
+			font-family: $sukumvit-bold;
+			color: $text-default;
+		}
+		.divider {
+			height: 1px;
+			margin: 9px 0;
+			overflow: hidden;
+			background-color: #e5e5e5;
+		}
+	}
 }
 
 @media (max-width: 767px) {
@@ -91,7 +105,7 @@
 		.navbar-collapse.collapse {
 			transition: opacity 1s ease-out;
 			opacity: 0; 
-			height: 0;
+			height: 0 !important;
 			overflow: hidden;
 		}
 		.navbar-toggle {
@@ -120,7 +134,7 @@
 		}
 		.collapse.in {
 			opacity: 1;
-    	height: auto;
+    	height: auto !important;
 		}
 		.navbar-nav > li {
 			float: none;
@@ -128,6 +142,11 @@
 		.navbar-nav > li > a {
 			padding-top: 10px;
 			padding-bottom: 10px;
+			&.active,
+			&:hover {
+				background: $text-default;
+				color: #ffffff;
+			}
 		}
 		.navbar-nav > li > a:after {
 			content: '';
@@ -143,9 +162,6 @@
 		.navbar-right .login {
 			border: 0;
 			box-shadow: none;
-		}
-		.navbar-toggle {
-			margin-right: 25px;
 		}
 		.collapse.in {
 			background: $main-bg;

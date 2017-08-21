@@ -24,7 +24,7 @@ export const queryProperties = async (req, res, next) => {
   try {
     console.log('req.query', req.query);
     const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, select, agentId,
-      limit, skip, enable, approve } = req.query;
+      limit, skip, enable, approve, order, realTime } = req.query;
     const _for = req.query.for;
     const propertyQuery = _.omitBy({
       content_type: 'property',
@@ -47,9 +47,16 @@ export const queryProperties = async (req, res, next) => {
       select: select ? select : undefined,
       limit: limit ? limit : undefined,
       skip: skip ? skip : undefined,
+      order: order ? order : undefined,
     }, val => val === undefined || val === '' || val === false);
     console.log('propertyQuery', propertyQuery);
-    const response = await client.getEntries(propertyQuery);
+    let response = {};
+    if (realTime === '1') {
+      response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+      .then(space => space.getEntries(propertyQuery));
+    } else {
+      response = await client.getEntries(propertyQuery);
+    }
     res.json({ ...response, query: propertyQuery });
   } catch (e) {
     res.status(500).json({

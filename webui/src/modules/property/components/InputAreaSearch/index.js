@@ -185,27 +185,35 @@ class InputAreaSearch extends Component {
 
 
   showSuggestion = () => {
-    this.setState({
-      showSuggestion: true,
-    });
+    if (!this.state.showSuggestion) {
+      this.setState({
+        showSuggestion: true,
+      });
+    }
   }
 
   hideSuggestion = () => {
-    this.setState({
-      showSuggestion: false,
-    });
+    if (this.state.showSuggestion) {
+      this.setState({
+        showSuggestion: false,
+      });
+    }
   }
 
   showAreaList = () => {
-    this.setState({
-      showAreaList: true,
-    });
+    if (!this.state.showAreaList) {
+      this.setState({
+        showAreaList: true,
+      });
+    }
   }
 
   hideAreaList = () => {
-    this.setState({
-      showAreaList: false,
-    });
+    if (this.state.showAreaList) {
+      this.setState({
+        showAreaList: false,
+      });
+    }
   }
 
   handleMouseDown = (event) => {
@@ -265,18 +273,22 @@ class InputAreaSearch extends Component {
     this.searchInput.setSelectionRange(0, this.searchInput.value.length);
 
     // Open Suggestion
-    this.showSuggestion();
+    this.handleSuggestion();
+  }
+
+  handleSuggestion = () => {
+    const { searchValue } = this.state;
+    searchValue ? this.showSuggestion() : this.hideSuggestion();
   }
 
   handleSearchInputChange = (e) => {
     const searchValue = e.target.value;
     this.setState({
       searchValue,
+    }, () => {
+      this.handleSuggestion();
     });
-
-    if (searchValue !== '') {
-      this.showSuggestion();
-    }
+    this.hideAreaList();
   }
 
   render() {
@@ -325,9 +337,9 @@ class InputAreaSearch extends Component {
               </SuggestionList>
             </SuggestionWrapper>
         }
-        <ListButton type="button" onClick={showAreaList ? this.hideAreaList : this.showAreaList}>
+        {/*<ListButton type="button" onClick={showAreaList ? this.hideAreaList : this.showAreaList}>
           <Icon type="bars" />
-        </ListButton>
+        </ListButton>*/}
         {
           showAreaList &&
             <AreaListWrapper>

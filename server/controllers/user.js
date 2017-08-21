@@ -21,10 +21,12 @@ const BASE_URL = process.env.BASE_URL;
 export const getUser = async (req, res) => {
   try {
     const { uid } = req.params;
-    const response = await client.getEntries({
+
+    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.getEntries({
       content_type: 'agent',
       'fields.uid': uid,
-    });
+    }));
     res.json(response);
   } catch (e) {
     res.status(500).json({

@@ -37,6 +37,7 @@ export const mapContentFulPropertyToMyField = (data) => {
     return {
       ...acc,
       [index]: {
+        ...elem.fields,
         id: elem.sys.id,
         address: _.get(elem, 'fields.location.full.th'),
         amphur: _.get(elem, 'fields.location.district'),
@@ -48,11 +49,13 @@ export const mapContentFulPropertyToMyField = (data) => {
         fee: 0,
         for: forSale ? 'ขาย' : 'เช่า',
         location: {
+          ...elem.fields.location,
           lat: _.get(elem, 'fields.locationMarker.lat'),
           lon: _.get(elem, 'fields.locationMarker.lon'),
         },
         price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
-        project: _.get(elem, 'fields.projectNameEn') || _.get(elem, 'fields.nameEn'),
+        project: _.get(elem, 'fields.projectNameEn') || _.get(elem, 'fields.projectNameTh') ||
+        _.get(elem, 'fields.projectName') || _.get(elem, 'fields.nameEn') || _.get(elem, 'fields.nameTh'),
         province: _.get(elem, 'fields.province') || _.get(elem, 'fields.location.province'),
         residentialType: _.get(elem, 'fields.propertyType'),
         sold: false,

@@ -61,6 +61,8 @@ class BannerRealEstate extends Component {
           showPlayButton={false}
           showNav={false}
           showBullets={true}
+          autoPlay={false}
+          slideInterval={5000}
           renderItem={this.renderSlide}
         />
       </div>

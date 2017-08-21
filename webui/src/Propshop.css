@@ -186,11 +186,13 @@ img {
   #Home .result {
     padding: 15px;
     position: relative; }
-    #Home .result .list ul {
-      margin-top: 10px; }
     #Home .result .list li.item {
       padding: 0;
       padding: 0 8px 8px 0; }
+    #Home .result .filter-result,
+    #Home .result .display-type {
+      display: inline-block;
+      vertical-align: middle; }
   @media (max-width: 767px) {
     #Home .filter_real_estate .ant-tabs-tabpane .row_1 {
       margin-bottom: 0; }
@@ -383,12 +385,11 @@ img {
     #Property .content .cover.show-banner .image-gallery-slide-wrapper {
       opacity: 1;
       height: 500px; }
-      #Property .content .cover.show-banner .image-gallery-slide-wrapper .image-gallery-slides {
+      #Property .content .cover.show-banner .image-gallery-slide-wrapper .image-gallery-swipe,
+      #Property .content .cover.show-banner .image-gallery-slide-wrapper .image-gallery-slides,
+      #Property .content .cover.show-banner .image-gallery-slide-wrapper .image-gallery-slide {
         width: 100%;
         height: 100%; }
-        #Property .content .cover.show-banner .image-gallery-slide-wrapper .image-gallery-slides .image-gallery-slide {
-          width: 100%;
-          height: 100%; }
     #Property .content .cover .google-map {
       float: right;
       padding-top: 8px; }
@@ -400,9 +401,6 @@ img {
       width: 140px; }
       #Property .content .cover .image-gallery-thumbnail img {
         height: 100px; }
-    #Property .content .cover .image-gallery-thumbnails-wrapper {
-      width: 70%;
-      float: left; }
     #Property .content .cover .image-gallery-content.fullscreen {
       position: absolute;
       width: 80%;
@@ -873,6 +871,10 @@ img {
   width: 100%;
   margin-left: 0; }
 
+.navbar-fixed-top .navbar-collapse,
+.navbar-fixed-bottom .navbar-collapse {
+  max-height: inherit; }
+
 #Header {
   background: #88b840;
   box-shadow: none;
@@ -880,8 +882,6 @@ img {
   margin: 0; }
   #Header .container {
     width: 100%;
-    padding: 0;
-    padding-left: 15px;
     margin: 0; }
   #Header .navbar-nav > li > a {
     color: #ffffff;
@@ -933,6 +933,14 @@ img {
       top: -3px;
       right: -1px;
       width: 30px; }
+  #Header .navbar-nav .dropdown-header {
+    font-family: "SukhumvitSet-Bold";
+    color: #484849; }
+  #Header .navbar-nav .divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5; }
 
 @media (max-width: 767px) {
   #Header {
@@ -949,7 +957,7 @@ img {
     #Header .navbar-collapse.collapse {
       transition: opacity 1s ease-out;
       opacity: 0;
-      height: 0;
+      height: 0 !important;
       overflow: hidden; }
     #Header .navbar-toggle {
       opacity: 1;
@@ -974,12 +982,15 @@ img {
       overflow: hidden; }
     #Header .collapse.in {
       opacity: 1;
-      height: auto; }
+      height: auto !important; }
     #Header .navbar-nav > li {
       float: none; }
     #Header .navbar-nav > li > a {
       padding-top: 10px;
       padding-bottom: 10px; }
+      #Header .navbar-nav > li > a.active, #Header .navbar-nav > li > a:hover {
+        background: #484849;
+        color: #ffffff; }
     #Header .navbar-nav > li > a:after {
       content: ''; }
     #Header .navbar-nav {
@@ -991,8 +1002,6 @@ img {
     #Header .navbar-right .login {
       border: 0;
       box-shadow: none; }
-    #Header .navbar-toggle {
-      margin-right: 25px; }
     #Header .collapse.in {
       background: #88b840;
       padding: 0; } }
@@ -1016,6 +1025,8 @@ img {
     color: #ffffff; }
   #Footer a:hover {
     text-decoration: none; }
+  #Footer .menu-right {
+    text-align: right; }
   #Footer .menu-left ul li,
   #Footer .menu-right ul li {
     display: inline-block;
@@ -1046,6 +1057,16 @@ img {
     display: inline-block;
     vertical-align: middle;
     margin-left: 15px; }
+  #Footer .social-media {
+    text-align: right; }
+  @media (max-width: 767px) {
+    #Footer .menu-left,
+    #Footer .menu-right,
+    #Footer .copyright,
+    #Footer .social-media {
+      text-align: center; }
+    #Footer .menu-right {
+      margin-top: 10px; } }
 
 .BannerRealEstate {
   height: 100%;
@@ -1092,9 +1113,17 @@ img {
     .BannerRealEstate .image-gallery-slide .image-gallery-description div {
       color: #ffffff; }
     .BannerRealEstate .image-gallery-slide .image-gallery-description .topic {
-      font-size: 36px;
+      font-size: 32px;
       color: #ffffff;
-      margin-bottom: 15px; }
+      margin-bottom: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* autoprefixer: off */
+      -webkit-box-orient: vertical;
+      /* autoprefixer: on */
+      line-height: 43px; }
     .BannerRealEstate .image-gallery-slide .image-gallery-description .price {
       font-size: 24px;
       color: #88b840; }
@@ -1450,6 +1479,9 @@ body .rating span {
   .PropertyItem .Thumbnail .image {
     width: 100%;
     height: 180px; }
+    @media (max-width: 991px) {
+      .PropertyItem .Thumbnail .image {
+        height: 260px; } }
   .PropertyItem .Thumbnail .content {
     z-index: 2;
     padding: 10px;
@@ -1464,7 +1496,10 @@ body .rating span {
       font-weight: bold; }
     .PropertyItem .Thumbnail .content .place {
       font-size: 12px;
-      color: #484849; }
+      color: #484849;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap; }
     .PropertyItem .Thumbnail .content .option {
       margin-top: 3px; }
     .PropertyItem .Thumbnail .content .option ul li {
@@ -1489,7 +1524,6 @@ body .rating span {
 
 .PropertyItem .List {
   border: 1px solid #eeeeee;
-  padding: 15px;
   position: relative; }
   .PropertyItem .List:hover {
     border: 1px solid #8ebc42; }
@@ -1503,6 +1537,9 @@ body .rating span {
     margin-top: 10px; }
   .PropertyItem .List .option {
     margin-top: 10px; }
+  .PropertyItem .List .image {
+    width: 100%;
+    height: 140px; }
   .PropertyItem .List .info .project {
     font-weight: bold;
     overflow: hidden;
@@ -1558,6 +1595,14 @@ body .rating span {
     margin: 12px 0; }
   .PropertyItem .List .mode-edit .property-actions .fa {
     font-size: 26px; }
+  @media (max-width: 991px) {
+    .PropertyItem .List .image {
+      height: 260px; }
+    .PropertyItem .List .info {
+      padding: 15px; } }
+  @media (max-width: 768px) {
+    .PropertyItem .List .vcenter {
+      display: block; } }
 
 body .ant-notification {
   z-index: 2000; }

@@ -68,7 +68,7 @@ export const fetchPropertiesByAgent = (userId, skip, limit) => {
 
 export const fetchPropertiesById = (id) => {
   return (dispatch) => {
-    getProperties(`?id=${id}`)
+    getProperties(`?id=${id}&realTime=1`)
     .then((result) => {
       console.log('fetchPropertiesById', result);
       if (result.total === 1) {
