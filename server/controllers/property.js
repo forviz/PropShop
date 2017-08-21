@@ -57,7 +57,7 @@ export const queryProperties = async (req, res, next) => {
     } else {
       response = await client.getEntries(propertyQuery);
     }
-    res.json({ ...response, query: propertyQuery });
+    res.json({ ...response, query: propertyQuery, realTime });
   } catch (e) {
     res.status(500).json({
       status: 'ERROR',

@@ -97,7 +97,7 @@ export const mapContentFulPropertyToMyField = (data) => {
           email: _.get(elem, 'fields.agent.fields.email'),
           username: _.get(elem, 'fields.agent.fields.username'),
         },
-        postDate: moment(elem.sys.createdAt).locale('th').format('d MMM YYYY'),
+        postDate: moment(elem.sys.createdAt).locale('th').format('DD MMM YYYY'),
         enable: _.get(elem, 'fields.enable') ? _.get(elem, 'fields.enable') : false,
         approve: _.get(elem, 'fields.approve') ? _.get(elem, 'fields.approve') : false,
       },

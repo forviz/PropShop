@@ -48,7 +48,7 @@ const pageAccountProperty = (page) => {
 export const fetchPropertiesByAgent = (userId, skip, limit) => {
   return (dispatch) => {
     dispatch(fetchingAccountProperty(true));
-    getProperties(`?agentId=${userId}&skip=${skip}&limit=${limit}`)
+    getProperties(`?agentId=${userId}&skip=${skip}&limit=${limit}&order=-sys.updatedAt`)
     .then((result) => {
       if (_.size(result.data) > 0) {
         dispatch(receiveAccountProperty(result.data));
