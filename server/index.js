@@ -28,6 +28,7 @@ const propertyController = require('./controllers/property');
 const wishlistController = require('./controllers/wishlist');
 const userController = require('./controllers/user');
 const mapController = require('./controllers/map');
+const newsController = require('./controllers/news');
 
 /**
  * Create Express server.
@@ -101,6 +102,8 @@ app.delete(`${apiPrefix}/wishlist/delete`, wishlistController.deleteWishlist);
 
 app.post(`${apiPrefix}/map/nearbysearch`, mapController.getNearbySearch);
 app.post(`${apiPrefix}/map/distancematrix`, mapController.getDistances);
+
+app.get(`${apiPrefix}/news`, newsController.getNews);
 
 /**
  * CIC App codebase: WEBUI
