@@ -4,6 +4,7 @@
 
 	.action {
 		.backhome {
+			margin: 15px 0;
 			display: inline-block;
 	    background-image: linear-gradient(to top, rgb(236, 236, 236), rgb(255, 255, 255));
 	    border: 1px solid rgb(204, 204, 204);
@@ -20,6 +21,27 @@
 		.address {
 			display: inline-block;
     	margin-left: 15px;
+		}
+		.buttons {
+			margin: 20px 0;
+			text-align: right;
+			.wishlist-button,
+			.share-button {
+				background: #4D790A;
+				border: 1px solid #4D790A;
+				border-radius: 2px;
+				width: 84px;
+				height: 36px;
+				line-height: 36px;
+				text-align: center;
+				color: #ffffff;
+				cursor: pointer;
+				display: inline-block;
+				margin: 0 4px;
+				.fa {
+					color: #ffffff;
+				}
+			}
 		}
 	}
 
@@ -136,6 +158,9 @@
 				font-family: $sukumvit-bold;
 				font-size: 18px;
 			}
+			.last_update {
+				color: $text-gray;
+			}
 		}
 
 		.address-block {
@@ -177,6 +202,10 @@
 					margin-right: 0;
 				}
 			}
+		}
+
+		.announcementDetails {
+			line-height: 24px;
 		}
 
 		section.info {
@@ -255,12 +284,23 @@
 		}
 		.detail-block {
 			.col-md-8 {
-				padding-right: 15px;
+				padding-right: 15px !important;
 			}
 			.col-md-4 {
-				padding-left: 15px;
+				padding-left: 15px !important;
 			}
 		}
 	}
 
+}
+
+.share-list {
+	li {
+		display: inline-block;
+		margin: 0 4px;
+		.fa {
+			font-size: 20px;
+			cursor: pointer;
+		}
+	}
 }

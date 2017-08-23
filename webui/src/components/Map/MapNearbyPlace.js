@@ -145,8 +145,6 @@ class MapNearbyPlace extends Component {
   render() {
     const { currentSelect, results, loading } = this.state;
 
-    console.log('results', results);
-
     return (
       <div className="NearbyPlace">
         <div className="row">

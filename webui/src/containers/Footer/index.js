@@ -16,7 +16,7 @@ class Footer extends Component {
           <div className="col-sm-7">
             <div className="menu-left">
               <ul>
-                <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
+                <li><NavLink exact to="/condominium/for-sale/bangkok">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
                 <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
                 {/*<li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li>*/}
                 <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>

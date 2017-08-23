@@ -42,12 +42,12 @@ export const queryProperties = async (req, res, next) => {
       'fields.priceRentValue[lte]': _for === 'rent' && priceMax ? _.toNumber(priceMax) : undefined,
       'fields.locationMarker[within]': bound ? bound : undefined,
       'fields.agent.sys.id': agentId ? agentId : undefined,
-      'fields.enable': enable ? enable : undefined,
-      'fields.approve': approve ? approve : undefined,
+      // 'fields.enable': enable ? enable : undefined,
+      // 'fields.approve': approve ? approve : undefined,
       select: select ? select : undefined,
+      order: order ? order : undefined,
       limit: limit ? limit : undefined,
       skip: skip ? skip : undefined,
-      order: order ? order : undefined,
     }, val => val === undefined || val === '' || val === false);
     console.log('propertyQuery', propertyQuery);
     let response = {};
@@ -57,6 +57,7 @@ export const queryProperties = async (req, res, next) => {
     } else {
       response = await client.getEntries(propertyQuery);
     }
+    console.log('queryProperties', response.items[0].fields.coverImage);
     res.json({ ...response, query: propertyQuery, realTime });
   } catch (e) {
     res.status(500).json({
@@ -545,3 +546,45 @@ export const addImages = async (req, res, next) => {
     });
   }
 }
+
+export const shareProperty = async (req, res, next) => {
+  try {
+    const { name, email, sendTo, project, propertyUrl } = req.body;
+
+    fs.readFile(path.join(__dirname, '../views/email/template/share-property', 'index.html'), 'utf8', (err, html) => {
+      if (err) {
+        throw err;
+      }
+
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace('%NAME%', name);
+      htmlx = htmlx.replace('%PROJECT%', project);
+      htmlx = htmlx.replace(/\%PROPERTY_URL%/g, propertyUrl);
+
+      const mail = new Mail({
+        to: sendTo,
+        subject: `${name} wants you to see this property`,
+        html: htmlx,
+        replyTo: email,
+        successCallback: (suc) => {
+          res.json({
+            status: 'success',
+          });
+        },
+        errorCallback: (err) => {
+          res.json({
+            status: 'fail',
+          });
+        },
+      });
+      mail.send();
+    });
+  } catch (e) {
+    res.status(500).json({
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
+    });
+  }
+};

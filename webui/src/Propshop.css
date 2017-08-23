@@ -186,9 +186,13 @@ img {
   #Home .result {
     padding: 15px;
     position: relative; }
-    #Home .result .list li.item {
-      padding: 0;
-      padding: 0 8px 8px 0; }
+    #Home .result .list {
+      margin-bottom: 20px; }
+      #Home .result .list:last-child {
+        margin-bottom: 0; }
+      #Home .result .list li.item {
+        padding: 0;
+        padding: 0 8px 8px 0; }
     #Home .result .filter-result,
     #Home .result .display-type {
       display: inline-block;
@@ -355,6 +359,7 @@ img {
 #Property {
   padding-bottom: 40px; }
   #Property .action .backhome {
+    margin: 15px 0;
     display: inline-block;
     background-image: linear-gradient(to top, #ececec, white);
     border: 1px solid #cccccc;
@@ -369,6 +374,25 @@ img {
   #Property .action .address {
     display: inline-block;
     margin-left: 15px; }
+  #Property .action .buttons {
+    margin: 20px 0;
+    text-align: right; }
+    #Property .action .buttons .wishlist-button,
+    #Property .action .buttons .share-button {
+      background: #4D790A;
+      border: 1px solid #4D790A;
+      border-radius: 2px;
+      width: 84px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 4px; }
+      #Property .action .buttons .wishlist-button .fa,
+      #Property .action .buttons .share-button .fa {
+        color: #ffffff; }
   #Property .content .cover {
     border: 1px solid #eeeeee; }
     #Property .content .cover .street-view .block {
@@ -442,6 +466,8 @@ img {
     #Property .content .price-block .create_date {
       font-family: "SukhumvitSet-Bold";
       font-size: 18px; }
+    #Property .content .price-block .last_update {
+      color: #999999; }
   #Property .content .address-block {
     padding: 15px; }
     #Property .content .address-block .address_1 {
@@ -474,6 +500,8 @@ img {
       margin-left: 0; }
     #Property .content .address-block .options ul li:last-child {
       margin-right: 0; }
+  #Property .content .announcementDetails {
+    line-height: 24px; }
   #Property .content section.info {
     padding: 15px;
     border: 1px solid #eeeeee;
@@ -519,9 +547,16 @@ img {
     #Property .google-map {
       width: 110px; }
     #Property .detail-block .col-md-8 {
-      padding-right: 15px; }
+      padding-right: 15px !important; }
     #Property .detail-block .col-md-4 {
-      padding-left: 15px; } }
+      padding-left: 15px !important; } }
+
+.share-list li {
+  display: inline-block;
+  margin: 0 4px; }
+  .share-list li .fa {
+    font-size: 20px;
+    cursor: pointer; }
 
 #Login {
   height: 100%; }
@@ -535,12 +570,12 @@ img {
   #Login .layout-right {
     padding: 0; }
   #Login .form {
-    margin: 40px 0; }
+    margin-top: 100px; }
     #Login .form > .row {
       margin: 0; }
     #Login .form h1 {
       font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
+      font-size: 32px;
       color: #8ebc42;
       margin-bottom: 40px;
       text-align: center; }
@@ -585,12 +620,12 @@ img {
   #Register .layout-right {
     padding: 0; }
   #Register .form {
-    margin: 40px 0; }
+    margin-top: 100px; }
     #Register .form > .row {
       margin: 0; }
     #Register .form h1 {
       font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
+      font-size: 32px;
       color: #8ebc42;
       margin-bottom: 40px;
       text-align: center; }
@@ -635,12 +670,12 @@ img {
   #Forgotpassword .layout-right {
     padding: 0; }
   #Forgotpassword .form {
-    margin: 40px 0; }
+    margin-top: 100px; }
     #Forgotpassword .form > .row {
       margin: 0; }
     #Forgotpassword .form h1 {
       font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
+      font-size: 32px;
       color: #8ebc42;
       margin-bottom: 40px;
       text-align: center; }
@@ -683,12 +718,7 @@ img {
     position: fixed;
     padding: 0;
     background: #f6f6f6; }
-  #Profile .layout-right .layout-container h1 {
-    font-family: "SukhumvitSet-Bold";
-    font-size: 36px;
-    color: #8ebc42; }
   #Profile .layout-right .layout-container .form {
-    margin-top: 20px;
     border: 1px solid #eeeeee;
     border-radius: 4px; }
     #Profile .layout-right .layout-container .form section {
@@ -735,12 +765,7 @@ img {
     position: fixed;
     padding: 0;
     background: #f6f6f6; }
-  #Changepassword .layout-right .layout-container h1 {
-    font-family: "SukhumvitSet-Bold";
-    font-size: 36px;
-    color: #8ebc42; }
   #Changepassword .layout-right .layout-container .form {
-    margin-top: 20px;
     border: 1px solid #eeeeee;
     border-radius: 4px;
     padding-top: 20px; }
@@ -844,12 +869,18 @@ img {
 
 #Account {
   padding: 40px 0; }
-  #Account h1 {
-    font-family: "SukhumvitSet-Bold";
-    color: #8ebc42;
-    font-size: 36px; }
   #Account .ant-menu-root {
     border: 1px solid #eeeeee; }
+    #Account .ant-menu-root .ant-menu-submenu-title {
+      font-size: 14px; }
+    #Account .ant-menu-root li.ant-menu-item a {
+      font-size: 14px; }
+  #Account #Pages .topic {
+    margin-bottom: 10px; }
+    #Account #Pages .topic h1 {
+      font-family: "SukhumvitSet-Bold";
+      color: #8ebc42;
+      font-size: 28px; }
 
 #MyProperty h1 {
   font-family: "SukhumvitSet-Bold";
@@ -870,6 +901,9 @@ img {
 #PropertyEdit #Sell #Step0 > .container > .row > .col-md-10 {
   width: 100%;
   margin-left: 0; }
+
+#PropertyEdit #Sell #Step0 h1 {
+  margin-top: 0; }
 
 .navbar-fixed-top .navbar-collapse,
 .navbar-fixed-bottom .navbar-collapse {
@@ -1113,7 +1147,7 @@ img {
     .BannerRealEstate .image-gallery-slide .image-gallery-description div {
       color: #ffffff; }
     .BannerRealEstate .image-gallery-slide .image-gallery-description .topic {
-      font-size: 32px;
+      font-size: 28px;
       color: #ffffff;
       margin-bottom: 15px;
       overflow: hidden;
@@ -1233,7 +1267,7 @@ img {
     margin: auto; }
     .MemberInfo .layout > .title {
       font-family: "SukhumvitSet-Bold";
-      font-size: 36px;
+      font-size: 32px;
       color: #8ebc42; }
     .MemberInfo .layout > .description {
       margin-top: 10px; }

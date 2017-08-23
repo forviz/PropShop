@@ -75,7 +75,6 @@ export const convertRouterPropsToParams = (props, areaEntities) => {
 };
 
 const convertSort = (sort, _for) => {
-  if (!sort) return '';
   const price = _for === 'rent' ? 'priceRentValue' : 'priceSaleValue';
   switch (sort) {
     case 'newest':
@@ -90,6 +89,7 @@ const convertSort = (sort, _for) => {
 };
 
 export const convertParamsToLocationObject = (params) => {
+  console.log('convertParamsToLocationObject', params);
   const areaSlug = getAreaSlugFromParam(params.area);
   return {
     pathname: `/${params.propertyType}/for-${params.for}/${areaSlug}/`,
@@ -101,7 +101,7 @@ export const convertParamsToLocationObject = (params) => {
         :
         undefined,
       skip: _.get(params, 'skip', 0),
-      order: convertSort(_.get(params, 'order'), params.for),
+      order: _.get(params, 'order'),
     })}`,
   };
 };
@@ -123,7 +123,7 @@ export const convertParamsToSearchAPI = (params) => {
     bound: _.get(params, 'area.bound') ? getBoundSlug(_.get(params, 'area.bound')) : undefined,
     skip: _.get(params, 'skip', 0),
     limit: _.get(params, 'limit', PAGE_SIZE),
-    order: _.get(params, 'order'),
+    order: convertSort(_.get(params, 'order'), params.for),
     // select
   });
 };

@@ -89,7 +89,9 @@ class Changepassword extends Component {
             <div className="layout-right">
               <Spin tip="Loading..." spinning={editing}>
                 <div className="layout-container">
-                  <h1>เปลี่ยนรหัสผ่าน</h1>
+                  <div className="topic">
+                    <h1>เปลี่ยนรหัสผ่าน</h1>
+                  </div>
                   {editSuccess === true &&
                     <div className="form-group" style={{ marginTop: 20 }}>
                       <Alert

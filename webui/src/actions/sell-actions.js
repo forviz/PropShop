@@ -1,6 +1,6 @@
 // import { createRealEstate } from '../api/contentful';
 import _ from 'lodash';
-import { createPost, createProperty, updateProperty } from '../api/property';
+import { createPropertyApi, updatePropertyApi } from '../modules/property/api';
 import { uploadMediaAPI } from '../api/media';
 
 const goSaveStep = (step, data) => {
@@ -80,7 +80,7 @@ export const doCreateRealEstate = (sell, userId, userEmail, userName) => {
       _.set(sell, 'imagesId', imagesId);
     }
 
-    createProperty(sell, userId, userEmail, userName).then((result) => {
+    createPropertyApi(sell, userId, userEmail, userName).then((result) => {
       dispatch(sendingData(false));
       if (result.data.sys.id) {
         dispatch(sendDataSuccess('yes'));
@@ -111,7 +111,7 @@ export const doUpdateProperty = (id, sell) => {
       _.set(sell, 'imagesId', imagesId);
     }
 
-    updateProperty(id, sell).then((result) => {
+    updatePropertyApi(id, sell).then((result) => {
       dispatch(sendingData(false));
       if (result.data.sys.id) {
         dispatch(sendDataSuccess('yes'));

@@ -140,8 +140,6 @@ const ToggleButtonWrapper = styled.div`
 
 class PropertySearchPage extends Component {
 
-  headerHeight: 0;
-
   static propTypes = {
     searchParameters: T.shape({
       bound: T.string,
@@ -181,13 +179,8 @@ class PropertySearchPage extends Component {
   }
 
   componentDidMount() {
-    document.getElementById('Footer').style.visibility = 'hidden';
-    document.addEventListener('scroll', this.handleScroll);
-    this.headerHeight = document.getElementById('Header').clientHeight;
-
     const { searchProperties } = this.props.actions;
     // searchProperties(this.props.location.search);
-    console.log('this.props.searchParameters', this.props.searchParameters);
     searchProperties(convertParamsToSearchAPI(this.props.searchParameters));
   }
 
@@ -200,25 +193,8 @@ class PropertySearchPage extends Component {
       // if location is provide, convert to bound
       // console.log('searchparams', nextProps.searchParameters);
       // searchProperties(nextProps.location.search);
-      console.log('componentWillReceiveProps', nextProps.searchParameters);
       searchProperties(convertParamsToSearchAPI(nextProps.searchParameters));
     }
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('scroll', this.handleScroll);
-  }
-
-  handleScroll = () => {
-    // const scroolHeight = document.body.scrollTop + window.innerHeight;
-    // const bodyHeight = document.getElementsByClassName('layout-right')[0].clientHeight + this.headerHeight;
-    // if (scroolHeight >= bodyHeight) {
-    //   document.getElementsByClassName('PropShop')[0].classList.add('end');
-    // } else {
-    //   if (document.getElementsByClassName('PropShop')[0].classList.contains('end')) {
-    //     document.getElementsByClassName('PropShop')[0].classList.remove('end');
-    //   }
-    // }
   }
 
   delay = (() => {
@@ -318,9 +294,8 @@ class PropertySearchPage extends Component {
     const { searchParameters } = this.props;
     const { searchProperties } = this.props.actions;
     searchParameters.order = currentSort;
-    console.log('searchParameters', searchParameters);
     this.setUrl(searchParameters);
-    // searchProperties(convertParamsToSearchAPI(searchParameters));
+    searchProperties(convertParamsToSearchAPI(searchParameters));
   }
 
   renderList = (loading, items, total) => {

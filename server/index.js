@@ -82,10 +82,11 @@ app.post(`${apiPrefix}/posts`, postController.createPost);
 
 app.get(`${apiPrefix}/properties`, propertyController.queryProperties);
 app.post(`${apiPrefix}/property`, propertyController.create);
-app.post(`${apiPrefix}/property/:id`, propertyController.update);
+app.put(`${apiPrefix}/property/:id`, propertyController.update);
 app.delete(`${apiPrefix}/property/:id`, propertyController.deleteProperty);
 app.post(`${apiPrefix}/property/:id/image`, propertyController.addImage);
 app.post(`${apiPrefix}/property/:id/images`, propertyController.addImages);
+app.post(`${apiPrefix}/property/share/email`, propertyController.shareProperty);
 
 app.post(`${apiPrefix}/user`, userController.createUser);
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);

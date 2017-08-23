@@ -10,6 +10,8 @@ import _ from 'lodash';
 import queryString from 'query-string';
 
 // import ContactAgent from '../../components/ContactAgent';
+import Wishlist from '../../components/Wish';
+import PropertyShare from '../../modules/property/components/PropertyShare';
 
 import { AgentContact } from '../../modules/agent';
 
@@ -75,6 +77,8 @@ class Property extends Component {
 
   state = {
     showStreetView: false,
+    clickWishlist: false,
+    clickShare: false,
   }
 
   handleStreerView = () => {
@@ -104,7 +108,32 @@ class Property extends Component {
     );
   }
 
+  handleWishlist = () => {
+    this.setState({
+      clickWishlist: true,
+    });
+  }
+
+  handleShare = () => {
+    this.setState({
+      clickShare: true,
+    });
+  }
+
+  callbackWishlist = () => {
+    this.setState({
+      clickWishlist: false,
+    });
+  }
+
+  callbackShare = () => {
+    this.setState({
+      clickShare: false,
+    });
+  }
+
   render() {
+    const { clickWishlist, clickShare } = this.state;
     const { data, history } = this.props;
 
     if (!_.size(data)) return <div />;
@@ -133,29 +162,21 @@ class Property extends Component {
         <div className="action">
           <div className="container">
             <div className="row">
-              <div className="col-md-12">
-                <div className="clearfix" style={{ margin: '30px 0' }} >
-                  <div className="pull-left">
-                    <div>
-                      <div role="button" tabIndex={0} className="backhome" onClick={() => history.goBack()} >
-                        <FontAwesome name="angle-left" /> กลับไปที่ค้นหา
-                      </div>
-                      <div className="address">
-                        <b>สำหรับ{data.for} {'>'} {/* {data.province} {'>'} {data.amphur} {'>'} {data.district} {'>'} */} </b>
-                        <span className="text-gray">{data.address}</span>
-                      </div>
-                    </div>
-                  </div>
-                  {/*
-                  <div className="pull-right">
-                    <div style={{ display: 'inline-block', marginRight: 8 }} >
-                      <ButtonAction font="heart-o" text="บันทึก" onClick={this.handleWishList} />
-                    </div>
-                    <div style={{ display: 'inline-block' }} >
-                      <ButtonAction font="envelope-o" text="แบ่งปัน" onClick={this.handleShare} />
-                    </div>
-                  </div>
-                  */}
+              <div className="col-md-9 vcenter">
+                <div role="button" tabIndex="0" className="backhome" onClick={() => history.goBack()} >
+                  <FontAwesome name="angle-left" /> กลับไปที่ค้นหา
+                </div>
+                <div className="address">
+                  <b>สำหรับ{data.for} {'>'} {/* {data.province} {'>'} {data.amphur} {'>'} {data.district} {'>'} */} </b>
+                  <span className="text-gray">{data.address}</span>
+                </div>
+              </div>
+              <div className="col-md-3 vcenter buttons">
+                <div role="button" tabIndex="0" className="wishlist-button" onClick={this.handleWishlist}>
+                  <Wishlist item={data} isClicked={clickWishlist} onChange={this.callbackWishlist} /> บันทึก
+                </div>
+                <div role="button" tabIndex="0" className="share-button" onClick={this.handleShare}>
+                  <PropertyShare item={data} isClicked={clickShare} onChange={this.callbackShare} /> แบ่งบัน
                 </div>
               </div>
             </div>
@@ -213,6 +234,7 @@ class Property extends Component {
                                   <div className="for">{data.for}</div>
                                   <div className="price">฿{numeral(data.price).format('0,0')}</div>
                                   <div className="create_date">อยู่ในพรอพช็อปมาแล้ว {data.inWebsite} วัน</div>
+                                  <div className="last_update">(ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ {data.lastUpdate})</div>
                                 </div>
                               </div>
                               <div className="col-md-7 vcenter">
@@ -298,7 +320,6 @@ class Property extends Component {
               <div className="col-md-12">
                 <section className="info features">
                   <h2>คุณสมบัติต่างๆ</h2>
-                  <div>ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ {data.lastUpdate}:</div>
                   <div className="row">
                     <div className="col-md-3">ราคา: {numeral(data.price).format('0,0')} บาท</div>
                     <div className="col-md-3">สถานะ: สำหรับ{data.for}</div>

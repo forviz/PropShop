@@ -275,7 +275,9 @@ class Profile extends Component {
 
               <Spin tip="Loading..." spinning={editing}>
                 <div className="layout-container">
-                  <h1>แก้ไขข้อมูลส่วนตัว</h1>
+                  <div className="topic">
+                    <h1>แก้ไขข้อมูลส่วนตัว</h1>
+                  </div>
                   {editSuccess === true &&
                     <div className="form-group" style={{ marginTop: 20 }}>
                       <Alert

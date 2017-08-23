@@ -29,77 +29,79 @@ export const uploadFile = (fileName = '', fileType = '', file = '') => {
   .catch(console.error);
 };
 
-export const mapContentFulPropertyToMyField = (data) => {
+export const mapContentFulPropertyToMyField = (data, realTime = '0') => {
   // const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
   return _.reduce(data, (acc, elem, index) => {
-    const forSale = _.get(elem, 'fields.forSale') === true;
+    const newFields = realTime === '1' ? _.mapValues(elem.fields, field => field['en-US']) : elem.fields;
+    const forSale = _.get(newFields, 'forSale') === true;
     const noImage = 'http://www.novelupdates.com/img/noimagefound.jpg';
     return {
       ...acc,
       [index]: {
         ...elem.fields,
         id: elem.sys.id,
-        address: _.get(elem, 'fields.location.full.th'),
-        amphur: _.get(elem, 'fields.location.district'),
-        announceDetails: _.get(elem, 'fields.description.th', ''),
-        areaSize: _.get(elem, 'fields.areaSize'),
-        bathroom: _.get(elem, 'fields.numBedrooms'),
-        bedroom: _.get(elem, 'fields.numBathrooms'),
-        district: _.get(elem, 'fields.location.subDistrict'),
+        address: _.get(newFields, 'location.full.th'),
+        amphur: _.get(newFields, 'location.district'),
+        announceDetails: _.get(newFields, 'description.th', ''),
+        areaSize: _.get(newFields, 'areaSize'),
+        bathroom: _.get(newFields, 'numBedrooms'),
+        bedroom: _.get(newFields, 'numBathrooms'),
+        district: _.get(newFields, 'location.subDistrict'),
         fee: 0,
         for: forSale ? 'ขาย' : 'เช่า',
         location: {
           ...elem.fields.location,
-          lat: _.get(elem, 'fields.locationMarker.lat'),
-          lon: _.get(elem, 'fields.locationMarker.lon'),
+          lat: _.get(newFields, 'locationMarker.lat'),
+          lon: _.get(newFields, 'locationMarker.lon'),
         },
-        price: forSale ? _.get(elem, 'fields.priceSale.value') : _.get(elem, 'fields.priceRent.value'),
-        project: _.get(elem, 'fields.projectNameEn') || _.get(elem, 'fields.projectNameTh') ||
-        _.get(elem, 'fields.projectName') || _.get(elem, 'fields.nameEn') || _.get(elem, 'fields.nameTh'),
-        province: _.get(elem, 'fields.province') || _.get(elem, 'fields.location.province'),
-        residentialType: _.get(elem, 'fields.propertyType'),
+        price: forSale ? _.get(newFields, 'priceSale.value') : _.get(newFields, 'priceRent.value'),
+        project: _.get(newFields, 'projectNameEn') || _.get(newFields, 'projectNameTh') ||
+        _.get(newFields, 'projectName') || _.get(newFields, 'nameEn') || _.get(newFields, 'nameTh'),
+        province: _.get(newFields, 'province') || _.get(newFields, 'location.province'),
+        residentialType: _.get(newFields, 'propertyType'),
         sold: false,
-        // specialFeatureFacilities: _.get(elem, 'fields.tags'),
+        // specialFeatureFacilities: _.get(newFields, 'tags'),
         // specialFeatureNearbyPlaces: [],
-        street: _.get(elem, 'fields.location.street'),
-        tags: _.get(elem, 'fields.tags'),
-        topic: _.get(elem, 'fields.nameTh'),
-        zipcode: _.get(elem, 'fields.location.zipcode'),
+        street: _.get(newFields, 'location.street'),
+        tags: _.get(newFields, 'tags'),
+        topic: _.get(newFields, 'nameTh'),
+        zipcode: _.get(newFields, 'location.zipcode'),
         createdAt: elem.sys.createdAt,
         updatedAt: elem.sys.updatedAt,
-        // mainImage: _.get(elem, 'fields.coverImage.fields'),
-        // images: _.get(elem, 'fields.images.fields'),
-        mainImage: _.get(elem, 'fields.coverImage.fields.file.url') ? _.get(elem, 'fields.coverImage.fields') : {
+        // mainImage: _.get(newFields, 'coverImage.fields'),
+        // images: _.get(newFields, 'images.fields'),
+        mainImage: _.get(newFields, 'coverImage.fields.file.url') ? { ..._.get(newFields, 'coverImage.fields'), id: _.get(newFields, 'coverImage.sys.id') } : {
           file: {
             url: noImage,
           },
         },
-        images: _.get(elem, 'fields.images') ? _.map(_.get(elem, 'fields.images'), (image) => {
-          return _.get(image, 'fields.file.url') ? _.get(image, 'fields') : {
+        images: _.get(newFields, 'images') ? _.map(_.get(newFields, 'images'), (image) => {
+          return _.get(image, 'fields.file.url') ? { ..._.get(image, 'fields'), id: _.get(image, 'sys.id') } : {
             file: {
               url: noImage,
             },
           };
         }) : [],
         // Extra
-        publicTransports: _.get(elem, 'fields.location.publicTransports'),
-        unitNo: _.get(elem, 'fields.location.unitNo'),
-        floorNo: _.get(elem, 'fields.location.floorNo'),
-        buildingNo: _.get(elem, 'fields.location.buildingNo'),
+        publicTransports: _.get(newFields, 'location.publicTransports'),
+        unitNo: _.get(newFields, 'location.unitNo'),
+        floorNo: _.get(newFields, 'location.floorNo'),
+        buildingNo: _.get(newFields, 'location.buildingNo'),
         inWebsite: moment().diff(moment(elem.sys.createdAt), 'days') === 0 ? 1 : moment().diff(moment(elem.sys.createdAt), 'days'),
-        lastUpdate: moment(elem.sys.updatedAt).format('D/M/YYYY h:mm A'),
+        // lastUpdate: moment(elem.sys.updatedAt).format('D/M/YYYY h:mm A'),
+        lastUpdate: moment(elem.sys.updatedAt).format('D/M/YYYY'),
         agent: {
-          id: _.get(elem, 'fields.agent.sys.id'),
-          image: _.get(elem, 'fields.agent.fields.image.fields.file.url'),
-          name: _.get(elem, 'fields.agent.fields.name'),
-          lastname: _.get(elem, 'fields.agent.fields.lastname'),
-          phone: _.get(elem, 'fields.agent.fields.phone'),
-          email: _.get(elem, 'fields.agent.fields.email'),
-          username: _.get(elem, 'fields.agent.fields.username'),
+          id: _.get(newFields, 'agent.sys.id'),
+          image: _.get(newFields, 'agent.fields.image.fields.file.url'),
+          name: _.get(newFields, 'agent.fields.name'),
+          lastname: _.get(newFields, 'agent.fields.lastname'),
+          phone: _.get(newFields, 'agent.fields.phone'),
+          email: _.get(newFields, 'agent.fields.email'),
+          username: _.get(newFields, 'agent.fields.username'),
         },
         postDate: moment(elem.sys.createdAt).locale('th').format('DD MMM YYYY'),
-        enable: _.get(elem, 'fields.enable') ? _.get(elem, 'fields.enable') : false,
-        approve: _.get(elem, 'fields.approve') ? _.get(elem, 'fields.approve') : false,
+        enable: _.get(newFields, 'enable') ? _.get(newFields, 'enable') : false,
+        approve: _.get(newFields, 'approve') ? _.get(newFields, 'approve') : false,
       },
     };
   }, {});
@@ -107,7 +109,7 @@ export const mapContentFulPropertyToMyField = (data) => {
 
 export const getPropertyIDs = (search) => {
   console.log('getPropertyIDs', search);
-  return fetch(`${BASEURL}/properties${search}&select=sys.id`, {
+  return fetch(`${BASEURL}/properties${search}&select=fields.propertyType`, {
     'Content-Type': 'application/json',
   })
   .then(response => response.json())
@@ -126,9 +128,8 @@ export const getProperties = (search) => {
   })
   .then(response => response.json())
   .then((response) => {
-    console.log('getProperties', response);
     return {
-      data: mapContentFulPropertyToMyField(response.items),
+      data: mapContentFulPropertyToMyField(response.items, _.get(response, 'realTime')),
       total: response.total,
     };
   });
@@ -212,8 +213,8 @@ export const createPost = async (data) => {
   .then((response) => {
     console.log(response);
     return response;
-  })
-}
+  });
+};
 
 export const getPropertyById = (id) => {
   return fetch(`${BASEURL}/property/${id}`, {
@@ -228,9 +229,22 @@ export const getPropertyById = (id) => {
   });
 };
 
+export const createPropertyApi = (data, userId, userEmail, userName) => {
+  return fetch(`${BASEURL}/property`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data, userId, userEmail, userName }),
+  })
+  .then((response) => {
+    return response.json();
+  });
+};
+
 export const updatePropertyApi = (id, data) => {
   return fetch(`${BASEURL}/property/${id}`, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -244,6 +258,19 @@ export const updatePropertyApi = (id, data) => {
 export const deletePropertyApi = (id) => {
   return fetch(`${BASEURL}/property/${id}`, {
     method: 'DELETE',
+  })
+  .then((response) => {
+    return response.json();
+  });
+};
+
+export const propertyShare = (name, email, sendTo, project, propertyUrl) => {
+  return fetch(`${BASEURL}/property/share/email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email, sendTo, project, propertyUrl }),
   })
   .then((response) => {
     return response.json();

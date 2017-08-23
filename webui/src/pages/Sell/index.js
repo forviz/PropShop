@@ -215,6 +215,15 @@ class Sell extends Component {
   }
 
   buttonAction = () => {
+    if (this.getParameterByName('id')) {
+      return (
+        <div className="row">
+          <center>
+            <button type="submit" className="btn btn-primary" onClick={this.submit}>บันทึก</button>
+          </center>
+        </div>
+      );
+    }
     const { step } = this.props.sell;
     if (step === 0) {
       return (
@@ -237,7 +246,7 @@ class Sell extends Component {
     );
   }
 
-  renderStep = () => {
+  createMode = () => {
     const { form } = this.props;
     const { step } = this.props.sell;
     switch (step) {
@@ -254,6 +263,25 @@ class Sell extends Component {
     }
   }
 
+  editMode = () => {
+    const { form } = this.props;
+    return (
+      <div>
+        <Step0 form={form} />
+        <Step1 form={form} />
+        <Step2 form={form} />
+      </div>
+    );
+  }
+
+  renderStep = () => {
+    const id = this.getParameterByName('id');
+    if (id) {
+      return this.editMode();
+    }
+    return this.createMode();
+  }
+
   render() {
     const { sell } = this.props;
     const { step, sendingData, sendDataSuccess } = sell;
@@ -268,18 +296,22 @@ class Sell extends Component {
       <div id="Sell">
         <Form onSubmit={this.nextStep}>
           <Spin tip="Loading..." spinning={sendingData}>
-            <div className="container">
-              <div className="row">
-                <div className="col-md-10 col-md-offset-1">
-                  <div className="steps">
-                    <Steps current={step}>
-                      { steps.map(item => <Step key={item.title} title={item.title} />) }
-                    </Steps>
+            {!this.getParameterByName('id') &&
+              <div>
+                <div className="container">
+                  <div className="row">
+                    <div className="col-md-10 col-md-offset-1">
+                      <div className="steps">
+                        <Steps current={step}>
+                          { steps.map(item => <Step key={item.title} title={item.title} />) }
+                        </Steps>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <hr />
               </div>
-            </div>
-            <hr />
+            }
             {this.renderStep()}
             <div className="container">
               <div className="row">

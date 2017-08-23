@@ -56,7 +56,9 @@ class WishList extends Component {
             <div className="layout-right">
               <Spin tip="Loading..." spinning={fetching}>
                 <div className="layout-container">
-                  <h1>รายการที่บันทึกไว้</h1>
+                  <div className="topic">
+                    <h1>รายการที่บันทึกไว้</h1>
+                  </div>
                   <div className="wishlist-list">
                     {
                       _.map(wishlist, (wish) => {

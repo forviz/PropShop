@@ -41,7 +41,7 @@ const mapStateToProps = (state) => {
     banner: state.banners,
     landingItems: [
       {
-        title: 'Condo',
+        title: 'Condominium',
         ...selectPropertyFromDomain(state, 'landing-condo'),
       },
       {

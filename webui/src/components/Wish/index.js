@@ -21,11 +21,19 @@ class Wish extends Component {
   //   item: T.shape().isRequired,
   // }
 
+  static defaultProps = {
+    isClicked: false,
+  }
+
   state = {
     wished: false,
   }
 
   handleWishList = async (item, wished) => {
+    if (this.props.onChange) {
+      this.props.onChange(true);
+    }
+
     await this.updateLocalStorage(item, wished);
 
     this.setState({
@@ -100,7 +108,7 @@ class Wish extends Component {
   };
 
   render() {
-    const { item, wishlist, user } = this.props;
+    const { item, wishlist, user, isClicked } = this.props;
     let { wished } = this.state;
 
     const { wishList } = localStorage;
@@ -113,6 +121,10 @@ class Wish extends Component {
       _.map(localWishlist, (value) => {
         if (value === item.id) wished = true;
       });
+    }
+
+    if (isClicked) {
+      this.handleWishList(item, wished);
     }
 
     return (

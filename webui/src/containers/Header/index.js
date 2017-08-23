@@ -126,7 +126,7 @@ class Header extends Component {
           <div id="navbar" className={`navbar-collapse collapse ${showMobileMenu ? 'in' : ''}`}>
             {mobileMode && user.username && user.verify ? (
               <ul className="nav navbar-nav">
-                <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
+                <li><NavLink exact to="/condominium/for-sale/bangkok">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
                 <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
                 { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
                 <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
@@ -142,7 +142,7 @@ class Header extends Component {
               </ul>
             ) : (
               <ul className="nav navbar-nav">
-                <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
+                <li><NavLink exact to="/condominium/for-sale/bangkok">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
                 <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
                 { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
                 <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>

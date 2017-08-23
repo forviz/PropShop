@@ -47,6 +47,7 @@ const initalState = {
     requiredField: ['mainImage'],
     mainImage: {},
     images: [],
+    deleteImages: [],
   },
   step3: {
     acceptTerms: false,

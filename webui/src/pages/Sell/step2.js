@@ -24,9 +24,21 @@ class Step2 extends Component {
 
   setMainImage = (accepted) => {
     if (accepted.length > 0) {
-      const data = {
+      let data = {};
+
+      if (this.getParameterByName('id')) {
+        if (_.get(this.props.mainImage, 'id')) {
+          data = {
+            ...data,
+            deleteImages: [...this.props.deleteImages, _.get(this.props.mainImage, 'id')],
+          };
+        }
+      }
+
+      data = {
         ...this.props.step2,
         mainImage: {
+          ...this.props.mainImage,
           file: {
             contentType: accepted[0].type,
             url: accepted[0].preview,
@@ -38,6 +50,7 @@ class Step2 extends Component {
           newImage: accepted[0],
         },
       };
+
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
     } else {
@@ -55,6 +68,7 @@ class Step2 extends Component {
 
       if (this.state.currentEdit !== '') {
         images[this.state.currentEdit] = {
+          ...images[this.state.currentEdit],
           file: {
             contentType: accepted[0].type,
             url: accepted[0].preview,
@@ -81,10 +95,18 @@ class Step2 extends Component {
         });
       }
 
-      const data = {
+      let data = {
         ...this.props.step2,
         images,
       };
+
+      if (this.getParameterByName('id')) {
+        data = {
+          ...data,
+          deleteImages: [...this.props.deleteImages, images[this.state.currentEdit].id],
+        };
+      }
+
       const { saveStep } = this.props.actions;
       saveStep('step2', data);
 
@@ -96,11 +118,28 @@ class Step2 extends Component {
     }
   }
 
+  getParameterByName = (name, url = window.location.href) => {
+    const nameReg = name.replace(/[\[\]]/g, "\\$&");
+    const regex = new RegExp(`[?&]${nameReg}(=([^&#]*)|&|#|$)`);
+    const results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
   handleDeleteMainImage = () => {
-    const data = {
+    let data = {
       ...this.props.step2,
       mainImage: {},
     };
+    if (this.getParameterByName('id')) {
+      console.log('handleDeleteMainImage 1', this.props.deleteImages);
+      console.log('handleDeleteMainImage 2', this.props.mainImage.id);
+      data = {
+        ...data,
+        deleteImages: [...this.props.deleteImages, this.props.mainImage.id],
+      };
+    }
     const { saveStep } = this.props.actions;
     saveStep('step2', data);
   }
@@ -112,28 +151,25 @@ class Step2 extends Component {
     this.dropzoneRefImages.open();
   }
 
-  handleDeleteImages = (index) => {
-    this.deleteImages(index);
+  handleDeleteImages = (index, id) => {
+    this.deleteImages(index, id);
   }
 
-  deleteImages = (index) => {
+  deleteImages = (index, id) => {
     const { images } = this.props;
     images.splice(index, 1);
-    const data = {
+    let data = {
       ...this.props.step2,
       images,
     };
+    if (this.getParameterByName('id')) {
+      data = {
+        ...data,
+        deleteImages: [...this.props.deleteImages, id],
+      };
+    }
     const { saveStep } = this.props.actions;
     saveStep('step2', data);
-  }
-
-  getParameterByName = (name, url = window.location.href) => {
-    const nameReg = name.replace(/[\[\]]/g, "\\$&");
-    const regex = new RegExp(`[?&]${nameReg}(=([^&#]*)|&|#|$)`);
-    const results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
   }
 
   render() {
@@ -253,7 +289,7 @@ class Step2 extends Component {
                                       </div>
                                       <div className="pull-right" style={{ width: '50%', border: '1px solid #cccccc', borderLeft: 0 }} >
                                         <div className="delete text-center">
-                                          <a role="button" tabIndex="0" onClick={() => this.handleDeleteImages(index)}><Icon type="delete" /></a>
+                                          <a role="button" tabIndex="0" onClick={() => this.handleDeleteImages(index, _.get(image, 'id'))}><Icon type="delete" /></a>
                                         </div>
                                       </div>
                                     </div>
@@ -281,6 +317,7 @@ const mapStateToProps = (state) => {
     step2: state.sell.step2,
     mainImage: state.sell.step2.mainImage,
     images: state.sell.step2.images,
+    deleteImages: state.sell.step2.deleteImages,
   };
 };
 
