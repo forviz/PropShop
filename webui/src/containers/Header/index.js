@@ -49,6 +49,8 @@ class Header extends Component {
     const { showMobileMenu } = this.state;
     const { user, userFetchSuccess, translate, dispatch, mobileMode } = this.props;
 
+    console.log('user assadsad', user);
+
     if (!userFetchSuccess) return <div />;
 
     let loginLabel = null;

@@ -213,9 +213,10 @@ class PropertyShare extends Component {
     if (this.props.onChange) {
       this.props.onChange(true);
     }
-    this.setState({
-      showPopover: true,
-    });
+    // this.setState({
+    //   showPopover: true,
+    // });
+    this.handleShareEmail();
   }
 
   render() {
@@ -228,7 +229,8 @@ class PropertyShare extends Component {
     const { showEmailModal, showPopover, resultStatus, resultMessage, sending } = this.state;
     return (
       <span className="PropertyShare">
-        <Popover
+        <FontAwesome name="envelope-o" onClick={this.handleShareEmail} />
+        {/*<Popover
           content={this.content()}
           trigger="click"
           placement="bottom"
@@ -236,7 +238,7 @@ class PropertyShare extends Component {
           onVisibleChange={this.handlePopoverChange}
         >
           <FontAwesome name="envelope-o" />
-        </Popover>
+        </Popover>*/}
         {showEmailModal &&
           <EmailShareForm
             ref={this.saveEmailShareForm}

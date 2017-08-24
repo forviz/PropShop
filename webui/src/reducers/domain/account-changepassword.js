@@ -46,6 +46,10 @@ const reducers = (state = initialState, action) => {
       };
     }
 
+    case 'DOMAIN/ACCOUNT_CHANGEPASSWORD/CLEAR': {
+      return initialState;
+    }
+
     default: return state;
   }
 };

@@ -18,15 +18,38 @@ const clientManagement = contentfulManagement.createClient({
 
 const BASE_URL = process.env.BASE_URL;
 
+export const getUserImage = async (id) => {
+  const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+  .then(space => space.getAsset(id));
+  return response;
+};
+
 export const getUser = async (req, res) => {
   try {
     const { uid } = req.params;
+    const { realTime } = req.query;
 
-    const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
-    .then(space => space.getEntries({
-      content_type: 'agent',
-      'fields.uid': uid,
-    }));
+    let response = {};
+
+    if (realTime === '1') {
+      response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+      .then(space => space.getEntries({
+        content_type: 'agent',
+        'fields.uid': uid,
+      }));
+
+      const imageId = _.get(response, "items[0].fields.image['en-US'].sys.id");
+      if (imageId) {
+        const imageData = await getUserImage(imageId);
+        _.set(response, "items[0].fields.image['en-US']", imageData);
+      }
+    } else {
+      response = await client.getEntries({
+        content_type: 'agent',
+        'fields.uid': uid,
+      });
+    }
+
     res.json(response);
   } catch (e) {
     res.status(500).json({
@@ -143,10 +166,10 @@ export const updateUser = async (req, res) => {
     if (_.get(data, 'licenseNumber')) _.set(entry.fields, "licenseNumber['en-US']", data.licenseNumber);
     if (_.get(data, 'about')) _.set(entry.fields, "about['en-US']", data.about);
     if (_.get(data, 'verify')) _.set(entry.fields, "verify['en-US']", data.verify);
-    if (_.get(data, 'image.sys.id')) {
+    if (_.get(data, 'newImage')) {
       _.set(entry.fields, "image['en-US'].sys.type", 'Link');
       _.set(entry.fields, "image['en-US'].sys.linkType", 'Asset');
-      _.set(entry.fields, "image['en-US'].sys.id", data.image.sys.id);
+      _.set(entry.fields, "image['en-US'].sys.id", data.newImage);
     }
 
     const entryUpdate = await entry.update();

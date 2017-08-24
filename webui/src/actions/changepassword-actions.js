@@ -54,3 +54,11 @@ export const changePassword = (user, newPassword) => {
     });
   };
 };
+
+export const clearState = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'DOMAIN/ACCOUNT_CHANGEPASSWORD/CLEAR',
+    });
+  };
+};

@@ -183,12 +183,13 @@
 				overflow: hidden;
 				text-overflow: ellipsis;
 				display: -webkit-box;
-				-webkit-line-clamp: 1;
+				-webkit-line-clamp: 2;
 				/* autoprefixer: off */
         -webkit-box-orient: vertical;
         /* autoprefixer: on */
 			}
 			.options {
+				margin-top: 10px;
 				ul li {
 					display: inline-block;
 					margin: 0 10px;
