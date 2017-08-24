@@ -421,6 +421,150 @@ const initialState = {
         ne: { lat: 13.7247, lng: 100.463 },
       },
     },
+    'hua-lamphong': {
+      title: { en: 'Hua Lamphong', th: 'หัวลำโพง' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.736, lng: 100.516 },
+        ne: { lat: 13.738, lng: 100.521 },
+      },
+    },
+    'sam-yan': {
+      title: { en: 'Sam Yan', th: 'สามย่าน' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.729, lng: 100.525 },
+        ne: { lat: 13.735, lng: 100.533 },
+      },
+    },
+    'si-lom': {
+      title: { en: 'Si Lom', th: 'สีลม' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.725, lng: 100.531 },
+        ne: { lat: 13.732, lng: 100.539 },
+      },
+    },
+    lumphini: {
+      title: { en: 'Lumphini', th: 'ลุมพินี' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.722, lng: 100.537 },
+        ne: { lat: 13.729, lng: 100.550 },
+      },
+    },
+    'klong-toei': {
+      title: { en: 'Klong Toei', th: 'คลองเตย' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.717, lng: 100.547 },
+        ne: { lat: 13.725, lng: 100.559 },
+      },
+    },
+    'queen-sirkit-national-convention-center': {
+      title: { en: 'Queen Sirkit National Convention Center', th: 'ศูนย์ประชุมแห่งชาติสิริกิติ์' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.719, lng: 100.553 },
+        ne: { lat: 13.726, lng: 100.566 },
+      },
+    },
+    sukhumvit: {
+      title: { en: 'Sukhumvit', th: 'สุขุมวิท' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.734, lng: 100.554 },
+        ne: { lat: 13.741, lng: 100.566 },
+      },
+    },
+    phetchaburi: {
+      title: { en: 'Phetchaburi', th: 'เพชรบุรี' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.744, lng: 100.558 },
+        ne: { lat: 13.751, lng: 100.568 },
+      },
+    },
+    'phra-ram-9': {
+      title: { en: 'Phra Ram 9', th: 'พระราม 9' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.753, lng: 100.559 },
+        ne: { lat: 13.760, lng: 100.570 },
+      },
+    },
+    'thailand-cultural-center': {
+      title: { en: 'Thailand Cultural Center', th: 'ศูนย์วัฒนธรรม' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.763, lng: 100.565 },
+        ne: { lat: 13.770, lng: 100.577 },
+      },
+    },
+    'huai-khwang': {
+      title: { en: 'Huai Khwang', th: 'ห้วยขวาง' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.775, lng: 100.568 },
+        ne: { lat: 13.782, lng: 100.589 },
+      },
+    },
+    sutthisan: {
+      title: { en: 'Sutthisan', th: 'สุทธิสาร' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.784, lng: 100.567 },
+        ne: { lat: 13.792, lng: 100.579 },
+      },
+    },
+    ratchadaphisek: {
+      title: { en: 'Ratchadaphisek', th: 'รัชดาภิเษก' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.794, lng: 100.568 },
+        ne: { lat: 13.801, lng: 100.579 },
+      },
+    },
+    'lat-phrao': {
+      title: { en: 'Lat Phrao', th: 'ลาดพร้าว' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.802, lng: 100.567 },
+        ne: { lat: 13.809, lng: 100.579 },
+      },
+    },
+    'phahon-yothin': {
+      title: { en: 'Phahon Yothin', th: 'พหลโยธิน' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.810, lng: 100.553 },
+        ne: { lat: 13.817, lng: 100.566 },
+      },
+    },
+    'chatuchak-park': {
+      title: { en: 'Chatuchak Park', th: 'สวนจตุจักร' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.800, lng: 100.548 },
+        ne: { lat: 13.807, lng: 100.559 },
+      },
+    },
+    'kamphaen-phet': {
+      title: { en: 'Kamphaen Phet', th: 'กำแพงเพชร' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.793, lng: 100.541 },
+        ne: { lat: 13.800, lng: 100.554 },
+      },
+    },
+    'bang-sue': {
+      title: { en: 'Bang Sue', th: 'บางซื่อ' },
+      category: 'MRT',
+      bound: {
+        sw: { lat: 13.799, lng: 100.533 },
+        ne: { lat: 13.806, lng: 100.505 },
+      },
+    },
   },
   fetchStatus: {},
   errors: {},
