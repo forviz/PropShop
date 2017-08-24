@@ -1,5 +1,5 @@
 .PropertyItem {
-
+	position: relative;
 	.Thumbnail {
 		border: 1px solid $border-color;
 		&:hover {
@@ -62,14 +62,13 @@
 		.wish {
 			z-index: 2;
 			position: absolute;
-			bottom: 15px;
-			right: 15px;
+			bottom: 6px;
+    	right: 6px;
 		}
 	}
 	.List {
 		border: 1px solid $border-color;
 		// padding: 15px;
-		position: relative;
 		&:hover {
 			border: 1px solid $text-green;
 		}

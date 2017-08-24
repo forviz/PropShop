@@ -24,12 +24,13 @@ export const queryProperties = async (req, res, next) => {
   try {
     console.log('req.query', req.query);
     const { id, ids, query, propertyType, residentialType, bedroom, bathroom, priceMin, priceMax, bound, select, agentId,
-      limit, skip, enable, approve, order, realTime } = req.query;
+      limit, skip, enable, approve, order, realTime, notId } = req.query;
     const _for = req.query.for;
     const propertyQuery = _.omitBy({
       content_type: 'property',
       'sys.id': id,
       'sys.id[in]': ids,
+      'sys.id[ne]': notId,
       query,
       'fields.forSale': _for === 'sale' || _for === 'ขาย',
       'fields.forRent': _for === 'rent' || _for === 'เช่า',
@@ -57,7 +58,6 @@ export const queryProperties = async (req, res, next) => {
     } else {
       response = await client.getEntries(propertyQuery);
     }
-    console.log('queryProperties', response.items[0].fields.coverImage);
     res.json({ ...response, query: propertyQuery, realTime });
   } catch (e) {
     res.status(500).json({

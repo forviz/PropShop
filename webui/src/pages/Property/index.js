@@ -12,6 +12,7 @@ import queryString from 'query-string';
 // import ContactAgent from '../../components/ContactAgent';
 import Wishlist from '../../components/Wish';
 import PropertyShare from '../../modules/property/components/PropertyShare';
+import PropertyRelate from '../../modules/property/components/PropertyRelate';
 
 import { AgentContact } from '../../modules/agent';
 
@@ -482,6 +483,17 @@ class Property extends Component {
               </div>
             </div>
             */}
+            <div className="row">
+              <div className="col-md-12">
+                <section className="info relate">
+                  <h2>คุณสมบัติใกล้เคียง</h2>
+                  <PropertyRelate
+                    param={`?for=${data.for}&propertyType=${data.propertyType}&near=${data.locationMarker.lat},${data.locationMarker.lon},
+                    &skip=0&limit=4&order=-sys.createdAt&notId=${data.id}`}
+                  />
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </div>

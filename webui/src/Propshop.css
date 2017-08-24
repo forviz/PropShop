@@ -487,19 +487,21 @@ img {
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
-      -webkit-line-clamp: 1;
+      -webkit-line-clamp: 2;
       /* autoprefixer: off */
       -webkit-box-orient: vertical;
       /* autoprefixer: on */ }
-    #Property .content .address-block .options ul li {
-      display: inline-block;
-      margin: 0 10px;
-      font-family: "SukhumvitSet-Bold";
-      font-size: 18px; }
-    #Property .content .address-block .options ul li:first-child {
-      margin-left: 0; }
-    #Property .content .address-block .options ul li:last-child {
-      margin-right: 0; }
+    #Property .content .address-block .options {
+      margin-top: 10px; }
+      #Property .content .address-block .options ul li {
+        display: inline-block;
+        margin: 0 10px;
+        font-family: "SukhumvitSet-Bold";
+        font-size: 18px; }
+      #Property .content .address-block .options ul li:first-child {
+        margin-left: 0; }
+      #Property .content .address-block .options ul li:last-child {
+        margin-right: 0; }
   #Property .content .announcementDetails {
     line-height: 24px; }
   #Property .content section.info {
@@ -1506,137 +1508,137 @@ body .rating span {
   margin-left: 5px;
   vertical-align: middle; }
 
-.PropertyItem .Thumbnail {
-  border: 1px solid #eeeeee; }
-  .PropertyItem .Thumbnail:hover {
-    border: 1px solid #8ebc42; }
-  .PropertyItem .Thumbnail .image {
-    width: 100%;
-    height: 180px; }
-    @media (max-width: 991px) {
-      .PropertyItem .Thumbnail .image {
-        height: 260px; } }
-  .PropertyItem .Thumbnail .content {
-    z-index: 2;
-    padding: 10px;
-    padding-bottom: 2px; }
-    .PropertyItem .Thumbnail .content .name {
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap; }
-    .PropertyItem .Thumbnail .content .price {
-      font-size: 14px;
-      color: #88b840;
-      font-weight: bold; }
-    .PropertyItem .Thumbnail .content .place {
-      font-size: 12px;
-      color: #484849;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap; }
-    .PropertyItem .Thumbnail .content .option {
-      margin-top: 3px; }
-    .PropertyItem .Thumbnail .content .option ul li {
-      display: inline-block; }
-    .PropertyItem .Thumbnail .content .option ul li:first-child {
-      margin-left: 0; }
-    .PropertyItem .Thumbnail .content .option ul li:last-child {
-      margin-right: 0; }
-    .PropertyItem .Thumbnail .content .option ul li span {
-      float: left;
-      font-size: 12px;
-      color: #484849;
-      font-weight: bold;
-      margin-right: 10px; }
-    .PropertyItem .Thumbnail .content .option ul li span:first-child {
-      font-size: 14px; }
-  .PropertyItem .Thumbnail .wish {
-    z-index: 2;
-    position: absolute;
-    bottom: 15px;
-    right: 15px; }
-
-.PropertyItem .List {
-  border: 1px solid #eeeeee;
+.PropertyItem {
   position: relative; }
-  .PropertyItem .List:hover {
-    border: 1px solid #8ebc42; }
-  .PropertyItem .List .wish {
-    position: absolute;
-    right: 8px;
-    bottom: 5px; }
-  .PropertyItem .List .actions .fa {
-    font-size: 18px; }
-  .PropertyItem .List .area-size {
-    margin-top: 10px; }
-  .PropertyItem .List .option {
-    margin-top: 10px; }
-  .PropertyItem .List .image {
-    width: 100%;
-    height: 140px; }
-  .PropertyItem .List .info .project {
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    /* autoprefixer: off */
-    -webkit-box-orient: vertical;
-    /* autoprefixer: on */ }
-  .PropertyItem .List .info .price {
-    font-weight: bold;
-    font-size: 16px;
-    color: #8ebc42; }
-  .PropertyItem .List .info .description {
-    margin-top: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    /* autoprefixer: off */
-    -webkit-box-orient: vertical;
-    /* autoprefixer: on */ }
-  .PropertyItem .List .mode-edit .post-date {
-    margin-top: 20px; }
-  .PropertyItem .List .mode-edit .property-status {
-    margin-top: 20px; }
-    .PropertyItem .List .mode-edit .property-status .waiting-approve {
-      background: #e0bd06;
-      border: 1px solid #e0bd06;
-      border-radius: 4px;
-      padding: 4px 8px;
-      color: #ffffff; }
-    .PropertyItem .List .mode-edit .property-status .label-status {
-      margin-top: 2px;
-      text-decoration: none; }
-      .PropertyItem .List .mode-edit .property-status .label-status.enable {
-        background: #484849;
-        border: 1px solid #484849;
+  .PropertyItem .Thumbnail {
+    border: 1px solid #eeeeee; }
+    .PropertyItem .Thumbnail:hover {
+      border: 1px solid #8ebc42; }
+    .PropertyItem .Thumbnail .image {
+      width: 100%;
+      height: 180px; }
+      @media (max-width: 991px) {
+        .PropertyItem .Thumbnail .image {
+          height: 260px; } }
+    .PropertyItem .Thumbnail .content {
+      z-index: 2;
+      padding: 10px;
+      padding-bottom: 2px; }
+      .PropertyItem .Thumbnail .content .name {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap; }
+      .PropertyItem .Thumbnail .content .price {
+        font-size: 14px;
+        color: #88b840;
+        font-weight: bold; }
+      .PropertyItem .Thumbnail .content .place {
+        font-size: 12px;
+        color: #484849;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap; }
+      .PropertyItem .Thumbnail .content .option {
+        margin-top: 3px; }
+      .PropertyItem .Thumbnail .content .option ul li {
+        display: inline-block; }
+      .PropertyItem .Thumbnail .content .option ul li:first-child {
+        margin-left: 0; }
+      .PropertyItem .Thumbnail .content .option ul li:last-child {
+        margin-right: 0; }
+      .PropertyItem .Thumbnail .content .option ul li span {
+        float: left;
+        font-size: 12px;
+        color: #484849;
+        font-weight: bold;
+        margin-right: 10px; }
+      .PropertyItem .Thumbnail .content .option ul li span:first-child {
+        font-size: 14px; }
+    .PropertyItem .Thumbnail .wish {
+      z-index: 2;
+      position: absolute;
+      bottom: 6px;
+      right: 6px; }
+  .PropertyItem .List {
+    border: 1px solid #eeeeee; }
+    .PropertyItem .List:hover {
+      border: 1px solid #8ebc42; }
+    .PropertyItem .List .wish {
+      position: absolute;
+      right: 8px;
+      bottom: 5px; }
+    .PropertyItem .List .actions .fa {
+      font-size: 18px; }
+    .PropertyItem .List .area-size {
+      margin-top: 10px; }
+    .PropertyItem .List .option {
+      margin-top: 10px; }
+    .PropertyItem .List .image {
+      width: 100%;
+      height: 140px; }
+    .PropertyItem .List .info .project {
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* autoprefixer: off */
+      -webkit-box-orient: vertical;
+      /* autoprefixer: on */ }
+    .PropertyItem .List .info .price {
+      font-weight: bold;
+      font-size: 16px;
+      color: #8ebc42; }
+    .PropertyItem .List .info .description {
+      margin-top: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      /* autoprefixer: off */
+      -webkit-box-orient: vertical;
+      /* autoprefixer: on */ }
+    .PropertyItem .List .mode-edit .post-date {
+      margin-top: 20px; }
+    .PropertyItem .List .mode-edit .property-status {
+      margin-top: 20px; }
+      .PropertyItem .List .mode-edit .property-status .waiting-approve {
+        background: #e0bd06;
+        border: 1px solid #e0bd06;
         border-radius: 4px;
         padding: 4px 8px;
         color: #ffffff; }
-        .PropertyItem .List .mode-edit .property-status .label-status.enable .fa {
-          color: #8ebc42;
-          margin-right: 4px; }
-      .PropertyItem .List .mode-edit .property-status .label-status.disable {
-        background: #cccccc;
-        border: 1px solid #cccccc;
-        border-radius: 4px;
-        padding: 4px 8px;
-        color: #484849; }
-  .PropertyItem .List .mode-edit .property-actions ul li {
-    text-align: center;
-    margin: 12px 0; }
-  .PropertyItem .List .mode-edit .property-actions .fa {
-    font-size: 26px; }
-  @media (max-width: 991px) {
-    .PropertyItem .List .image {
-      height: 260px; }
-    .PropertyItem .List .info {
-      padding: 15px; } }
-  @media (max-width: 768px) {
-    .PropertyItem .List .vcenter {
-      display: block; } }
+      .PropertyItem .List .mode-edit .property-status .label-status {
+        margin-top: 2px;
+        text-decoration: none; }
+        .PropertyItem .List .mode-edit .property-status .label-status.enable {
+          background: #484849;
+          border: 1px solid #484849;
+          border-radius: 4px;
+          padding: 4px 8px;
+          color: #ffffff; }
+          .PropertyItem .List .mode-edit .property-status .label-status.enable .fa {
+            color: #8ebc42;
+            margin-right: 4px; }
+        .PropertyItem .List .mode-edit .property-status .label-status.disable {
+          background: #cccccc;
+          border: 1px solid #cccccc;
+          border-radius: 4px;
+          padding: 4px 8px;
+          color: #484849; }
+    .PropertyItem .List .mode-edit .property-actions ul li {
+      text-align: center;
+      margin: 12px 0; }
+    .PropertyItem .List .mode-edit .property-actions .fa {
+      font-size: 26px; }
+    @media (max-width: 991px) {
+      .PropertyItem .List .image {
+        height: 260px; }
+      .PropertyItem .List .info {
+        padding: 15px; } }
+    @media (max-width: 768px) {
+      .PropertyItem .List .vcenter {
+        display: block; } }
 
 body .ant-notification {
   z-index: 2000; }

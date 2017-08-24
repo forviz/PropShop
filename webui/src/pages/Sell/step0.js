@@ -212,7 +212,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      landSize: value.replace(/\D/g, ''),
+      landSize: value.replace(/[a-zA-Zก-ฮ]/g, ''),
       landSize0: '',
       landSize1: '',
     };
