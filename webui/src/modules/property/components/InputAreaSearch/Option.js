@@ -39,23 +39,31 @@ class Option extends Component {
 
   // MouseDown for mouse & TouchStart for touch devices
   // set dragging to false, back to normal.
-  handleMouseDown = (e) => { this.dragging = false; this.pressing = true; }
+  handleMouseDown = (e) => {
+    this.dragging = false;
+    this.pressing = true;
+    this.pressY = e.screenY;
+  }
   handleTouchStart = (e) => { this.handleMouseDown(e.touches[0]); }
 
   // MouseMove for mouse & TouchMove for touch devices
   // If start moving while pressing, set dragging = true;
-  handleMouseMove = (e) => { if (this.pressing) { this.dragging = true; } }
+  handleMouseMove = (e) => {
+    if (this.pressing && Math.abs(this.pressY - e.screenY) > 40) {
+      this.dragging = true;
+    }
+  }
   handleTouchMove = (e) => { this.handleMouseMove(e.touches[0]); }
 
   // MouseUp for mouse & TouchEnd for touch devices
   // If mouseUp/TouchEnd if user was draggin then not fire handleSelectOption;
   handleMouseUp = (e) => {
     this.pressing = false;
-    if(this.dragging) return;
+    if (this.dragging) return;
 
     // TODO: Not sure why, but this prevent double selectOption from touch devices
     e.preventDefault();
-		e.stopPropagation();
+    e.stopPropagation();
 
     this.handleSelectOption(e);
   }
