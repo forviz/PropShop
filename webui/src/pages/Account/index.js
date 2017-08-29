@@ -33,7 +33,6 @@ class Account extends Component {
           <div className="row">
             <div className="col-md-3">
               <Menu
-                style={{ width: 240 }}
                 selectedKeys={[page]}
                 defaultOpenKeys={['sub1', 'sub2']}
                 mode="inline"

@@ -53,7 +53,7 @@ img {
 }
 #Content {
 	padding-top: 50px;
-	min-height: 100vh;
+	min-height: calc(100vh - 126px);
 }
 .vcenter {
   display: inline-block;

@@ -120,8 +120,25 @@
 			}
 		}
 		.mode-edit {
+			@media (max-width: 991px) {
+				.vcenter {
+					display: block;
+				}
+			}
 			.post-date {
-				margin-top: 20px;
+
+			}
+			.option {
+				margin-top: 0;
+				ul {
+					li {
+						margin-right: 5px;
+						display: inline-block;
+						&:last-child {
+							margin-right: 0;
+						}
+					}
+				}
 			}
 			.property-status {
 				margin-top: 20px;

@@ -64,7 +64,7 @@ class List extends Component {
             <div className="col-md-3 vcenter">
               <div className="image" style={imageStyle} />
             </div>
-            <div className="col-md-3 vcenter">
+            <div className="col-md-5 vcenter">
               <div className="info">
                 <div className="project">{item.project || '\u00A0'}</div>
                 <div className="price">{numeral(item.price).format('0,0')} บาท</div>
@@ -83,21 +83,15 @@ class List extends Component {
                     }
                   </ul>
                 </div>
+                <div className="post-date">
+                  <div>ประกาศเมื่อ: {item.postDate}</div>
+                </div>
                 {/*<div className="description">{item.announceDetails}</div>*/}
               </div>
             </div>
-            <div className="col-md-2 vcenter">
+            <div className="col-md-3 vcenter">
               <div className="status">ประกาศ: {item.for}</div>
-              <div className="post-date">
-                <div>วันที่ประกาศ:</div>
-                <div>{item.postDate}</div>
-              </div>
-            </div>
-            <div className="col-md-2 vcenter">
-              <div className="property-type">
-                <div>ประเภทอสังหาฯ:</div>
-                <div>{item.residentialType}</div>
-              </div>
+              <div className="property-type">{item.residentialType}</div>
               <div className="property-status">
                 <div>สถานะ:</div>
                 {item.approve === true ? (
@@ -119,7 +113,7 @@ class List extends Component {
                 )}
               </div>
             </div>
-            <div className="col-md-2 vcenter">
+            <div className="col-md-1 vcenter">
               <div className="property-actions">
                 <ul>
                   <li>

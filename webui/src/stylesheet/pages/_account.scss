@@ -2,6 +2,9 @@
   padding: 40px 0;
   .ant-menu-root {
     border: 1px solid $border-color;
+    @media screen and (max-width: 991px) {
+      display: none;
+    }
     .ant-menu-submenu-title {
       font-size: 14px;
     }

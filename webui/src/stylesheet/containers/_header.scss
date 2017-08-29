@@ -62,17 +62,13 @@
 		background: $text-default;
 	}
 	.avatar {
-		position: relative;
-    width: 20px;
-    height: 20px;
-    float: left;
-    margin-right: 10px;
-		img {
-			position: absolute;
-	    top: -3px;
-	    right: -1px;
-	    width: 30px;
-		}
+		position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 11px;
+    left: 13px;
+    border-radius: 50%;
+    overflow: hidden;
 	}
 	.navbar-nav {
 		.dropdown-header {

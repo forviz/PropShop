@@ -20,6 +20,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Forgotpassword from './pages/Forgotpassword';
 import Account from './pages/Account';
+import Policy from './pages/Policy';
+import Agreement from './pages/Agreement';
 
 import * as UserActions from './actions/user-actions';
 
@@ -90,6 +92,20 @@ const routes = [
     content: Account,
     footer: Footer,
     login: true,
+  },
+  { path: '/policy',
+    exact: false,
+    header: Header,
+    content: Policy,
+    footer: Footer,
+    login: false,
+  },
+  { path: '/agreement',
+    exact: false,
+    header: Header,
+    content: Agreement,
+    footer: Footer,
+    login: false,
   },
 ];
 

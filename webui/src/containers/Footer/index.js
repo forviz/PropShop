@@ -27,8 +27,8 @@ class Footer extends Component {
           <div className="col-sm-5">
             <div className="menu-right">
               <ul>
-                <li><NavLink exact to="/">Terms & Condition</NavLink></li>
-                <li><NavLink exact to="/">Privacy Policy</NavLink></li>
+                <li><NavLink exact to="/agreement">Terms & Condition</NavLink></li>
+                <li><NavLink exact to="/policy">Privacy Policy</NavLink></li>
               </ul>
             </div>
           </div>

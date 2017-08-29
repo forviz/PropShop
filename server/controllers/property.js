@@ -2,6 +2,8 @@ import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 
+// import Property from '../models/Property';
+
 const path = require('path');
 const fs = require('fs');
 
@@ -17,6 +19,21 @@ const clientManagement = contentfulManagement.createClient({
 });
 
 const BASE_URL = process.env.BASE_URL;
+
+// const save = (req, res) => {
+//   const property = new Property({
+//     name: 'aaaaa',
+//   });
+//   property.save();
+// };
+
+// const get = (req, res) => {
+//   const data = Property.aa;
+//   console.log('get', data);
+// };
+
+// save();
+// get();
 
 // const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.809Z
 

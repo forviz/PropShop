@@ -28,6 +28,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     propertyId,
     data: property,
+    mobileMode: state.core.mobileMode,
   };
 };
 
@@ -135,7 +136,7 @@ class Property extends Component {
 
   render() {
     const { clickWishlist, clickShare } = this.state;
-    const { data, history } = this.props;
+    const { data, history, mobileMode } = this.props;
 
     if (!_.size(data)) return <div />;
 
@@ -230,7 +231,7 @@ class Property extends Component {
                         <div className="col-md-12">
                           <div className="main-info">
                             <div className="row">
-                              <div className="col-md-5 vcenter">
+                              <div className="col-md-5">
                                 <div className="price-block">
                                   <div className="for">{data.for}</div>
                                   <div className="price">฿{numeral(data.price).format('0,0')}</div>
@@ -238,7 +239,7 @@ class Property extends Component {
                                   <div className="last_update">(ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ {data.lastUpdate})</div>
                                 </div>
                               </div>
-                              <div className="col-md-7 vcenter">
+                              <div className="col-md-7">
                                 <div className="address-block">
                                   <div className="address_1">{data.project}</div>
                                   <div className="address_2">{data.address}</div>
@@ -272,7 +273,7 @@ class Property extends Component {
                         </div>
                       </div>
                     </div>
-                    {_.get(data, 'agent.id') &&
+                    {_.get(data, 'agent.id') && !mobileMode &&
                       <div className="col-sm-6 col-md-4" style={{ paddingLeft: 0 }} >
                         <div className="contact-block">
                           <div className="agent-block">
@@ -396,6 +397,49 @@ class Property extends Component {
                     <h2>สถานที่ใกล้เคียง</h2>
                     <NearbyPlace lat={data.location.lat} lng={data.location.lon} />
                   </section>
+                </div>
+              </div>
+            }
+            {_.get(data, 'agent.id') && mobileMode &&
+              <div className="row">
+                <div className="col-xs-12">
+                  <div className="contact-block">
+                    <div className="agent-block">
+                      <div className="row">
+                        <div className="col-xs-4 vcenter">
+                          <div className="agent-image">
+                            {_.get(data, 'agent.image') &&
+                              <img src={_.get(data, 'agent.image')} alt={`${_.get(data, 'agent.name')} ${_.get(data, 'agent.lastname')}`} />
+                            }
+                          </div>
+                        </div>
+                        <div className="col-xs-8 vcenter">
+                          <div className="agent-info">
+                            {(_.get(data, 'agent.name') || _.get(data, 'agent.lastname')) &&
+                              <div className="name">{_.get(data, 'agent.name')} {_.get(data, 'agent.lastname')}</div>
+                            }
+                            {/*
+                            <div className="rating">
+                              <Rate disabled defaultValue={data.agent.rate.rating} />
+                              <span>({agent.rate.count})</span>
+                            </div>
+                            */}
+                            {_.get(data, 'agent.phone') &&
+                              <div className="phone">{_.get(data, 'agent.phone')}</div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <AgentContact
+                      domain="property"
+                      agentId={data.agent.id}
+                      emailTo={data.agent.email}
+                      agentName={data.agent.username}
+                      propertyId={data.id}
+                      projectName={data.project}
+                    />
+                  </div>
                 </div>
               </div>
             }

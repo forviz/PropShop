@@ -6,6 +6,7 @@
 		.backhome {
 			margin: 15px 0;
 			display: inline-block;
+			vertical-align: middle;
 	    background-image: linear-gradient(to top, rgb(236, 236, 236), rgb(255, 255, 255));
 	    border: 1px solid rgb(204, 204, 204);
 	    border-radius: 4px;
@@ -21,6 +22,8 @@
 		.address {
 			display: inline-block;
     	margin-left: 15px;
+			max-width: 80%;
+    	vertical-align: middle;
 		}
 		.buttons {
 			margin: 20px 0;
@@ -133,6 +136,9 @@
 		.main-info {
 			border: 1px solid $border-color;
     	border-top: 0;
+			@media screen and (max-width: 991px) {
+				border-right: 0;
+			}
 		}
 
 		.detail-block {
@@ -144,7 +150,9 @@
 		
 		.price-block {
 			padding: 15px;
-			border-right: 1px solid $border-color;
+			@media screen and (min-width: 992px) {
+				border-right: 1px solid $border-color;
+			}
 			.for {
 				font-family: $sukumvit-bold;
 				font-size: 18px;
@@ -152,7 +160,10 @@
 			}
 			.price {
 				font-family: 'Myriad Pro';
-				font-size: 48px;
+				font-size: 42px;
+				@media screen and (max-width: 768px) {
+					font-size: 32px;
+				}
 			}
 			.create_date {
 				font-family: $sukumvit-bold;
@@ -165,9 +176,12 @@
 
 		.address-block {
 			padding: 15px;
+			@media screen and (min-width: 992px) {
+				padding-left: 0;
+			}
 			.address_1 {
 				font-family: $sukumvit-bold;
-				font-size: 30px;
+				font-size: 28px;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				display: -webkit-box;
@@ -217,6 +231,9 @@
 				font-family: $sukumvit-bold;
 				font-size: 30px;
 				margin-bottom: 10px;
+				@media screen and (max-width: 768px) {
+					font-size: 26px;
+				}
 			}
 			h4 {
 				font-family: $sukumvit-bold;

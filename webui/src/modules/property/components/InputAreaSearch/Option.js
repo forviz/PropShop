@@ -5,6 +5,7 @@ import { renderCategory } from './index';
 
 const OptionLabel = styled.span`
   display: inline-block;
+  margin-left: 10px;
 `;
 
 const defaultRenderOption = option => (

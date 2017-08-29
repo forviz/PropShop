@@ -76,22 +76,32 @@ class Header extends Component {
       );
 
       if (_.get(user, 'image.fields.file.url')) {
+        const avatarStyle = {
+          background: `url(${user.image.fields.file.url})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: '100%',
+          height: '100%',
+        };
+
         divAvatar = (
           <div className="avatar">
-            <img src={user.image.fields.file.url} alt={user.image.fields.file.fileName} className="img-circle" />
+            <div style={avatarStyle} />
           </div>
         );
       } else {
         divAvatar = <FontAwesome name="user-o" />;
       }
 
-      loginLabel = (
-        <Dropdown overlay={menu} trigger={['click']}>
-          <a className="ant-dropdown-link">
-            {divAvatar} {user.username} <Icon type="down" />
-          </a>
-        </Dropdown>
-      );
+      if (!mobileMode) {
+        loginLabel = (
+          <Dropdown overlay={menu} trigger={['click']}>
+            <a className="ant-dropdown-link" style={{ paddingLeft: 55 }}>
+              {divAvatar} {user.username} <Icon type="down" />
+            </a>
+          </Dropdown>
+        );
+      }
     } else {
       loginLabel = (
         <NavLink exact to="/login">
@@ -135,7 +145,6 @@ class Header extends Component {
                 <li><NavLink exact to="/account/property">รายการที่ประกาศ</NavLink></li>
                 <li><NavLink exact to="/account/wishlist">รายการที่บันทึกไว้</NavLink></li>
                 <li><NavLink exact to="/account/profile">การตั้งค่าบัญชีผู้ใช้</NavLink></li>
-                <li><NavLink exact to="/account/profile">การตั้งค่าบัญชีผู้ใช้</NavLink></li>
                 <li><NavLink exact to="/account/changepassword">เปลี่ยนรหัสผ่าน</NavLink></li>
                 <li role="separator" className="divider" />
                 <li><a role="button" tabIndex="0" onClick={() => this.logout()}>ออกจากระบบ</a></li>
@@ -156,11 +165,9 @@ class Header extends Component {
               <li className="language last">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('en')); }}>ENG</a>
               </li> */}
-              {!mobileMode &&
-                <li className="login">
-                  {loginLabel}
-                </li>
-              }
+              <li className="login">
+                {loginLabel}
+              </li>
             </ul>
           </div>
         </div>
