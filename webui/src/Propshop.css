@@ -486,17 +486,19 @@ img {
         padding-left: 0; } }
     #Property .content .address-block .address_1 {
       font-family: "SukhumvitSet-Bold";
-      font-size: 28px;
+      font-size: 24px;
+      line-height: 28px;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       /* autoprefixer: off */
       -webkit-box-orient: vertical;
-      /* autoprefixer: on */ }
+      /* autoprefixer: on */
+      height: 56px; }
     #Property .content .address-block .address_2 {
       font-family: "SukhumvitSet-Bold";
-      font-size: 18px;
+      font-size: 16px;
       color: #999999;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -504,14 +506,15 @@ img {
       -webkit-line-clamp: 2;
       /* autoprefixer: off */
       -webkit-box-orient: vertical;
-      /* autoprefixer: on */ }
+      /* autoprefixer: on */
+      height: 48px; }
     #Property .content .address-block .options {
       margin-top: 10px; }
       #Property .content .address-block .options ul li {
         display: inline-block;
         margin: 0 10px;
         font-family: "SukhumvitSet-Bold";
-        font-size: 18px; }
+        font-size: 16px; }
       #Property .content .address-block .options ul li:first-child {
         margin-left: 0; }
       #Property .content .address-block .options ul li:last-child {
@@ -822,11 +825,11 @@ img {
     text-align: center;
     margin: 40px 0; }
 
-#WishList .head {
-  height: 115px;
-  line-height: 115px;
-  font-size: 24px;
-  font-family: "SukhumvitSet-Bold"; }
+#MyWishlist .wish-list .wishlist-block {
+  margin-bottom: 20px; }
+
+#MyWishlist .wishlist-pagination {
+  text-align: center; }
 
 #News .breadcrumb {
   height: 100px;
@@ -903,11 +906,6 @@ img {
       font-family: "SukhumvitSet-Bold";
       color: #8ebc42;
       font-size: 28px; }
-
-#MyProperty h1 {
-  font-family: "SukhumvitSet-Bold";
-  color: #8ebc42;
-  font-size: 36px; }
 
 #MyProperty .property-list .property-block {
   margin-bottom: 20px; }
@@ -1183,7 +1181,8 @@ img {
       /* autoprefixer: off */
       -webkit-box-orient: vertical;
       /* autoprefixer: on */
-      line-height: 43px; }
+      line-height: 43px;
+      max-height: 84px; }
     .BannerRealEstate .image-gallery-slide .image-gallery-description .price {
       font-size: 24px;
       color: #88b840; }
@@ -1608,7 +1607,8 @@ body .rating span {
       -webkit-line-clamp: 2;
       /* autoprefixer: off */
       -webkit-box-orient: vertical;
-      /* autoprefixer: on */ }
+      /* autoprefixer: on */
+      max-height: 40px; }
     .PropertyItem .List .info .price {
       font-weight: bold;
       font-size: 16px;
@@ -1621,10 +1621,8 @@ body .rating span {
       -webkit-line-clamp: 2;
       /* autoprefixer: off */
       -webkit-box-orient: vertical;
-      /* autoprefixer: on */ }
-    @media (max-width: 991px) {
-      .PropertyItem .List .mode-edit .vcenter {
-        display: block; } }
+      /* autoprefixer: on */
+      max-height: 40px; }
     .PropertyItem .List .mode-edit .option {
       margin-top: 0; }
       .PropertyItem .List .mode-edit .option ul li {
@@ -1658,17 +1656,68 @@ body .rating span {
           border-radius: 4px;
           padding: 4px 8px;
           color: #484849; }
-    .PropertyItem .List .mode-edit .property-actions ul li {
-      text-align: center;
-      margin: 12px 0; }
+    .PropertyItem .List .mode-edit .property-actions ul {
+      display: flex;
+      justify-content: space-around; }
+      @media (min-width: 991px) {
+        .PropertyItem .List .mode-edit .property-actions ul {
+          flex-direction: column; } }
+      @media (max-width: 991px) {
+        .PropertyItem .List .mode-edit .property-actions ul {
+          flex-direction: row; } }
+      .PropertyItem .List .mode-edit .property-actions ul li {
+        text-align: center;
+        padding: 12px 0;
+        border: 1px solid #eeeeee;
+        flex: 1 0 auto; }
+        @media (min-width: 991px) {
+          .PropertyItem .List .mode-edit .property-actions ul li {
+            border-right: 0;
+            border-bottom: 0; }
+            .PropertyItem .List .mode-edit .property-actions ul li:first-child {
+              border-top: 0; } }
+        @media (max-width: 991px) {
+          .PropertyItem .List .mode-edit .property-actions ul li {
+            border-left: 0;
+            border-bottom: 0; }
+            .PropertyItem .List .mode-edit .property-actions ul li:last-child {
+              border-right: 0; } }
     .PropertyItem .List .mode-edit .property-actions .fa {
+      font-size: 26px; }
+    .PropertyItem .List .mode-wishlist .wishlist-actions ul {
+      display: flex;
+      justify-content: space-around; }
+      @media (min-width: 991px) {
+        .PropertyItem .List .mode-wishlist .wishlist-actions ul {
+          flex-direction: column; } }
+      @media (max-width: 991px) {
+        .PropertyItem .List .mode-wishlist .wishlist-actions ul {
+          flex-direction: row; } }
+      .PropertyItem .List .mode-wishlist .wishlist-actions ul li {
+        text-align: center;
+        padding: 12px 0;
+        border: 1px solid #eeeeee;
+        flex: 1 0 auto; }
+        @media (min-width: 991px) {
+          .PropertyItem .List .mode-wishlist .wishlist-actions ul li {
+            border-right: 0;
+            border-bottom: 0; }
+            .PropertyItem .List .mode-wishlist .wishlist-actions ul li:first-child {
+              border-top: 0; } }
+        @media (max-width: 991px) {
+          .PropertyItem .List .mode-wishlist .wishlist-actions ul li {
+            border-left: 0;
+            border-bottom: 0; }
+            .PropertyItem .List .mode-wishlist .wishlist-actions ul li:last-child {
+              border-right: 0; } }
+    .PropertyItem .List .mode-wishlist .wishlist-actions .fa {
       font-size: 26px; }
     @media (max-width: 991px) {
       .PropertyItem .List .image {
         height: 260px; }
       .PropertyItem .List .info {
         padding: 15px; } }
-    @media (max-width: 768px) {
+    @media (max-width: 991px) {
       .PropertyItem .List .vcenter {
         display: block; } }
 
@@ -1759,7 +1808,7 @@ body .ant-notification {
     /* autoprefixer: off */
     -webkit-box-orient: vertical;
     /* autoprefixer: on */
-    height: 52px; }
+    max-height: 52px; }
   .NewsItem .list .date {
     font-size: 14px;
     color: #8ebc42;
@@ -1775,7 +1824,7 @@ body .ant-notification {
     /* autoprefixer: off */
     -webkit-box-orient: vertical;
     /* autoprefixer: on */
-    height: 85px; }
+    max-height: 85px; }
   .NewsItem .list .seemore {
     font-size: 14px;
     color: #8ebc42;
@@ -1838,11 +1887,7 @@ body .ant-notification {
         font-family: "SukhumvitSet-Text";
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        /* autoprefixer: off */
-        -webkit-box-orient: vertical;
-        /* autoprefixer: on */ }
+        white-space: nowrap; }
       .NewsBanner .banner .content .description {
         font-size: 18px;
         line-height: 30px;

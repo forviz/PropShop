@@ -1,8 +1,10 @@
-#WishList{
-  .head{
-    height: 115px;
-    line-height: 115px;
-    font-size: 24px;
-    font-family: $sukumvit-bold;
+#MyWishlist {
+  .wish-list {
+    .wishlist-block {
+      margin-bottom: 20px;
+    }
+  }
+  .wishlist-pagination {
+    text-align: center;
   }
 }

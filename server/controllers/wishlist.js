@@ -130,11 +130,11 @@ export const getWishlist = async (req, res) => {
       content_type: 'wishList',
       'fields.guestId': id,
       order: 'sys.createdAt',
-    })
+    });
     res.json({
       status: 'SUCCESS',
       data: mapEntryWishlist(entries),
-    })
+    });
   } catch (e) {
     res.status(500).json({
       status: 'ERROR',
@@ -170,6 +170,32 @@ export const deleteWishlist = async (req, res) => {
     res.status(500).json({
       status: 'ERROR',
       message: JSON.parse(e.message),
+    });
+  }
+};
+
+export const getUserWishlist = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { skip, limit } = req.query;
+
+    const queryParams = _.omitBy({
+      content_type: 'wishList',
+      'fields.guestId': id,
+      order: '-sys.updatedAt',
+      skip,
+      limit,
+    }, val => val === undefined || val === '' || val === false);
+
+    const result = await client.getEntries(queryParams);
+    res.json({
+      data: result,
+    });
+  } catch (e) {
+    res.status(500).json({
+      status: '500',
+      code: 'Internal Server Error',
+      title: e.message,
     });
   }
 };

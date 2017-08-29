@@ -110,6 +110,7 @@ app.get(`${apiPrefix}/wishlist/:id`, wishlistController.getWishlist);
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
 app.put(`${apiPrefix}/wishlist/update`, wishlistController.updateWishlist);
 app.delete(`${apiPrefix}/wishlist/delete`, wishlistController.deleteWishlist);
+app.get(`${apiPrefix}/wishlist/user/:id`, wishlistController.getUserWishlist);
 
 app.post(`${apiPrefix}/map/nearbysearch`, mapController.getNearbySearch);
 app.post(`${apiPrefix}/map/distancematrix`, mapController.getDistances);

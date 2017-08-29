@@ -1,3 +1,6 @@
+import _ from 'lodash';
+import { mapContentFulPropertyToMyField } from '../modules/property/api';
+
 const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
 export const fetchGetWishlist = async (userId) => {
@@ -9,7 +12,6 @@ export const fetchGetWishlist = async (userId) => {
   })
   .then(response => response.json())
   .then((response) => {
-    console.log('Get Wishlist ', response);
     return response.data;
   });
 };
@@ -27,7 +29,6 @@ export const fetchCreateWishlist = async (userId, propertyId) => {
   })
   .then(response => response.json())
   .then((response) => {
-    console.log('CREATE ', response);
     return response.data;
   });
 };
@@ -45,7 +46,6 @@ export const fetchUpdateWishlist = async (guestId, userId) => {
   })
   .then(response => response.json())
   .then((response) => {
-    console.log('UPDATE ', response);
     return response.data;
   });
 };
@@ -63,7 +63,22 @@ export const fetchDeleteWishlist = async (userId, propertyId) => {
   })
   .then(response => response.json())
   .then((response) => {
-    console.log('DELETE', response);
     return response;
+  });
+};
+
+export const fetchUserWishlistAPI = (userId, params) => {
+  return fetch(`${BASEURL}/wishlist/user/${userId}${params}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then((response) => {
+    return {
+      data: mapContentFulPropertyToMyField(_.map(response.data.items, value => value.fields.propertyId)),
+      total: response.data.total,
+    };
   });
 };

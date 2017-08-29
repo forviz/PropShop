@@ -1,74 +1,117 @@
 import React, { Component } from 'react';
-// import T from 'prop-types';
+import T from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Spin } from 'antd';
+import { Spin, Alert, Pagination } from 'antd';
 import _ from 'lodash';
 
-import WishItem from '../../../components/WishItem';
+import * as WishlistActions from '../../../actions/wishlist-actions';
+import PropertyItem from '../../../modules/property/components/PropertyItem';
 
-import * as WishListActions from '../../../actions/wishlist-actions';
+class Wishlist extends Component {
 
-class WishList extends Component {
-
-  // static propTypes = {
-  //   // actions: T.shape({
-  //   //   getWishlist: T.func,
-  //   //   updateWishlist: T.func,
-  //   //   deleteWishlist: T.func,
-  //   // }),
-  //   wishlist: T.shape().isRequired,
-  //   fetching: T.bool.isRequired,
-  // }
-
-  componentDidMount = async () => {
-    const { getWishlist, updateWishlist } = this.props.actions;
-    const { user, wishlist } = this.props;
-    const { guestId } = localStorage;
-    await updateWishlist(guestId, user.id);
-    if (_.isEmpty(wishlist)) {
-      await getWishlist(user.id);
-    }
-    // await getWishlist(user.id);
+  static propTypes = {
+    actions: T.shape({
+      fetchWishlistByAgent: T.func,
+    }).isRequired,
+    user: T.shape().isRequired,
+    fetching: T.bool.isRequired,
+    fetch: T.bool.isRequired,
+    page: T.number.isRequired,
+    limit: T.number.isRequired,
+    total: T.number.isRequired,
+    data: T.shape().isRequired,
   }
 
-  handleDelete = async (propertyId) => {
-    this.setState({ focus: propertyId });
-    const localWishlist = JSON.parse(localStorage.wishList);
-    const indexItem = _.indexOf(localWishlist, propertyId);
-    if (indexItem !== -1) {
-      localWishlist.splice(indexItem, 1);
-    }
-    localStorage.wishList = JSON.stringify(localWishlist);
+  constructor(props) {
+    super(props);
+    this.getWishlistByAgent();
+  }
 
-    const { deleteWishlist } = this.props.actions;
-    const { user, wishlist } = this.props;
-    await deleteWishlist(wishlist, user.id, propertyId);
+  state = {
+    displayType: 'list',
+  }
+
+  setData = (page) => {
+    const { user, limit } = this.props;
+    const { fetchWishlistByAgent } = this.props.actions;
+    fetchWishlistByAgent(user.id, page - 1, limit);
+  }
+
+  getWishlistByAgent = () => {
+    const { page } = this.props;
+    this.setData(page);
+  }
+
+  handlePagination = (page) => {
+    this.setData(page);
+  }
+
+  handleDisplayType = (displayType) => {
+    this.setState({
+      displayType,
+    });
+  }
+
+  renderWishlist = () => {
+    const { displayType } = this.state;
+    const { data } = this.props;
+    const render = _.map(data, (item, key) => {
+      return (
+        <div className={displayType === 'thumbnail' ? 'col-md-3' : 'col-md-12'} key={key}>
+          <div className="wishlist-block">
+            <PropertyItem type={displayType} item={item} mode="wishlist" />
+          </div>
+        </div>
+      );
+    });
+    return render;
+  }
+
+  renderPagination = () => {
+    const { page, total } = this.props;
+    return (
+      <div className="wishlist-pagination">
+        <Pagination current={page} total={total} onChange={this.handlePagination} />
+      </div>
+    );
   }
 
   render() {
-    const { wishlist, fetching } = this.props;
+    const { data, fetching, fetch, total, limit } = this.props;
 
     return (
-      <div id="WishList">
-        <div className="row">
-          <div className="col-md-12">
-            <div className="layout-right">
-              <Spin tip="Loading..." spinning={fetching}>
-                <div className="layout-container">
-                  <div className="topic">
-                    <h1>รายการที่บันทึกไว้</h1>
-                  </div>
-                  <div className="wishlist-list">
-                    {
-                      _.map(wishlist, (wish) => {
-                        return <WishItem item={wish} onDelete={this.handleDelete} />;
-                      })
-                    }
-                  </div>
-                </div>
-              </Spin>
+      <div id="MyWishlist">
+        <div className="clearfix">
+          <div className="pull-left">
+            <div className="topic">
+              <h1>รายการอสังหาฯที่บันทึกไว้</h1>
             </div>
+          </div>
+          {/* <div className="pull-right">
+            <div className="display-type">
+              <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
+            </div>
+          </div> */}
+        </div>
+        <div className="wish-list">
+          <div className="row">
+            <Spin spinning={fetching}>
+              {fetch &&
+                <div>
+                  {_.size(data) > 0 ? (
+                    <div>
+                      {this.renderWishlist()}
+                      {total > limit &&
+                        this.renderPagination()
+                      }
+                    </div>
+                  ) : (
+                    <Alert message="คุณยังไม่มีรายการที่บันทึกไว้" type="info" />
+                  )}
+                </div>
+              }
+            </Spin>
           </div>
         </div>
       </div>
@@ -78,16 +121,18 @@ class WishList extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    wishlist: state.domain.accountWishlist.data,
     user: state.user.data,
-    fetching: state.domain.accountWishlist.fetching,
+    data: state.domain.accountWishlist.account.data,
+    fetching: state.domain.accountWishlist.account.fetching,
+    fetch: state.domain.accountWishlist.account.fetch,
+    page: state.domain.accountWishlist.account.page,
+    limit: state.domain.accountWishlist.account.limit,
+    total: state.domain.accountWishlist.account.total,
   };
 };
 
 const actions = {
-  getWishlist: WishListActions.getWishlist,
-  updateWishlist: WishListActions.updateWishlist,
-  deleteWishlist: WishListActions.deleteWishlist,
+  fetchWishlistByAgent: WishlistActions.fetchWishlistByAgent,
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -96,4 +141,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(WishList);
+export default connect(mapStateToProps, mapDispatchToProps)(Wishlist);

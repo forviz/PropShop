@@ -102,6 +102,7 @@
 				/* autoprefixer: off */
 				-webkit-box-orient: vertical;
 				/* autoprefixer: on */
+				max-height: 40px;
 			}
 			.price {
 				font-weight: bold;
@@ -117,17 +118,10 @@
 				/* autoprefixer: off */
 				-webkit-box-orient: vertical;
 				/* autoprefixer: on */
+				max-height: 40px;
 			}
 		}
 		.mode-edit {
-			@media (max-width: 991px) {
-				.vcenter {
-					display: block;
-				}
-			}
-			.post-date {
-
-			}
 			.option {
 				margin-top: 0;
 				ul {
@@ -174,9 +168,70 @@
 			}
 			.property-actions {
 				ul {
+					display: flex;
+					justify-content: space-around;
+					@media (min-width: 991px) {
+						flex-direction: column;
+					}
+					@media (max-width: 991px) {
+						flex-direction: row;
+					}
 					li {
 						text-align: center;
-						margin: 12px 0;
+						padding: 12px 0;
+						border: 1px solid #eeeeee;
+						flex: 1 0 auto;
+						@media (min-width: 991px) {
+							border-right: 0;
+							border-bottom: 0;
+							&:first-child {
+								border-top: 0;
+							}
+						}
+						@media (max-width: 991px) {
+							border-left: 0;
+							border-bottom: 0;
+							&:last-child {
+								border-right: 0;
+							}
+						}
+					}
+				}
+				.fa {
+					font-size: 26px;
+				}
+			}
+		}
+		.mode-wishlist {
+			.wishlist-actions {
+				ul {
+					display: flex;
+					justify-content: space-around;
+					@media (min-width: 991px) {
+						flex-direction: column;
+					}
+					@media (max-width: 991px) {
+						flex-direction: row;
+					}
+					li {
+						text-align: center;
+						padding: 12px 0;
+						border: 1px solid #eeeeee;
+						flex: 1 0 auto;
+						@media (min-width: 991px) {
+							border-right: 0;
+							border-bottom: 0;
+							&:first-child {
+								border-top: 0;
+							}
+						}
+						@media (max-width: 991px) {
+							border-left: 0;
+							border-bottom: 0;
+							&:last-child {
+								border-right: 0;
+							}
+						}
 					}
 				}
 				.fa {
@@ -192,7 +247,7 @@
 				padding: 15px;
 			}
 		}
-		@media (max-width: 768px) {
+		@media (max-width: 991px) {
 			.vcenter {
 				display: block;
 			}

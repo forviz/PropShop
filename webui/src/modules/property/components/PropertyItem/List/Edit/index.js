@@ -90,27 +90,29 @@ class List extends Component {
               </div>
             </div>
             <div className="col-md-3 vcenter">
-              <div className="status">ประกาศ: {item.for}</div>
-              <div className="property-type">{item.residentialType}</div>
-              <div className="property-status">
-                <div>สถานะ:</div>
-                {item.approve === true ? (
-                  <Popconfirm
-                    title={enable ? 'คุณต้องการปิดการใช้งาน?' : 'คุณต้องการเปิดการใช้งาน?'}
-                    onConfirm={this.handleChangeStatusConfirm}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <a className={`label-status ${enable ? 'enable' : 'disable'}`}>
-                      {enable &&
-                        <FontAwesome name="check" />
-                      }
-                      {enable ? 'กำลังใช้งาน' : 'ปิดการใช้งาน'}
-                    </a>
-                  </Popconfirm>
-                ) : (
-                  <a className="waiting-approve">รอการอนุมัติ</a>
-                )}
+              <div className="info">
+                <div className="status">ประกาศ: {item.for}</div>
+                <div className="property-type">{item.residentialType}</div>
+                <div className="property-status">
+                  <div>สถานะ:</div>
+                  {item.approve === true ? (
+                    <Popconfirm
+                      title={enable ? 'คุณต้องการปิดการใช้งาน?' : 'คุณต้องการเปิดการใช้งาน?'}
+                      onConfirm={this.handleChangeStatusConfirm}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <a className={`label-status ${enable ? 'enable' : 'disable'}`}>
+                        {enable &&
+                          <FontAwesome name="check" />
+                        }
+                        {enable ? 'กำลังใช้งาน' : 'ปิดการใช้งาน'}
+                      </a>
+                    </Popconfirm>
+                  ) : (
+                    <a className="waiting-approve">รอการอนุมัติ</a>
+                  )}
+                </div>
               </div>
             </div>
             <div className="col-md-1 vcenter">

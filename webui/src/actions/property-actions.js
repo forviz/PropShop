@@ -24,10 +24,10 @@ const fetchingAccountProperty = (fetching) => {
   };
 };
 
-const resultAccountProperty = (result) => {
+const fetchAccountProperty = (fetch) => {
   return {
-    type: 'DOMAIN/ACCOUNT_PROPERTY/RESULT',
-    result,
+    type: 'DOMAIN/ACCOUNT_PROPERTY/FETCH',
+    fetch,
   };
 };
 
@@ -46,24 +46,18 @@ const pageAccountProperty = (page) => {
 };
 
 export const fetchPropertiesByAgent = (userId, skip, limit) => {
-  return (dispatch) => {
+  return async (dispatch) => {
+    dispatch(fetchAccountProperty(false));
     dispatch(fetchingAccountProperty(true));
-    dispatch(receiveAccountProperty([]));
-    getProperties(`?agentId=${userId}&skip=${skip}&limit=${limit}&order=-sys.updatedAt`)
-    .then((result) => {
-      dispatch(fetchingAccountProperty(false));
-      if (_.size(result.data) > 0) {
-        dispatch(receiveAccountProperty(result.data));
-        dispatch(totalAccountProperty(result.total));
-        dispatch(pageAccountProperty(skip + 1));
-        dispatch(resultAccountProperty('ok'));
-      } else {
-        dispatch(resultAccountProperty('no'));
-      }
-    })
-    .catch((error) => {
-      dispatch(handleError(error));
-    });
+    dispatch(receiveAccountProperty({}));
+    const result = await getProperties(`?agentId=${userId}&skip=${skip}&limit=${limit}&order=-sys.updatedAt`);
+    dispatch(fetchAccountProperty(true));
+    dispatch(fetchingAccountProperty(false));
+    if (_.size(result.data) > 0) {
+      dispatch(receiveAccountProperty(result.data));
+      dispatch(totalAccountProperty(result.total));
+      dispatch(pageAccountProperty(skip + 1));
+    }
   };
 };
 

@@ -181,7 +181,8 @@
 			}
 			.address_1 {
 				font-family: $sukumvit-bold;
-				font-size: 28px;
+				font-size: 24px;
+				line-height: 28px;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				display: -webkit-box;
@@ -189,10 +190,11 @@
 				/* autoprefixer: off */
         -webkit-box-orient: vertical;
         /* autoprefixer: on */
+				height: 56px;
 			}
 			.address_2 {
 				font-family: $sukumvit-bold;
-				font-size: 18px;
+				font-size: 16px;
 				color: $text-gray;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -201,6 +203,7 @@
 				/* autoprefixer: off */
         -webkit-box-orient: vertical;
         /* autoprefixer: on */
+				height: 48px;
 			}
 			.options {
 				margin-top: 10px;
@@ -208,7 +211,7 @@
 					display: inline-block;
 					margin: 0 10px;
 					font-family: $sukumvit-bold;
-					font-size: 18px;
+					font-size: 16px;
 				}
 				ul li:first-child {
 					margin-left: 0;

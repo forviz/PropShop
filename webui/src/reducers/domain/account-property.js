@@ -1,25 +1,25 @@
 const initialState = {
+  fetch: false,
   fetching: false,
-  result: '', // ok, no
-  data: [],
+  data: {},
   page: 1,
   limit: 10,
   total: 0,
 };
 
-const agents = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'DOMAIN/ACCOUNT_PROPERTY/FETCH': {
+      return {
+        ...state,
+        fetch: action.fetch,
+      };
+    }
+
     case 'DOMAIN/ACCOUNT_PROPERTY/FETCHING': {
       return {
         ...state,
         fetching: action.fetching,
-      };
-    }
-
-    case 'DOMAIN/ACCOUNT_PROPERTY/RESULT': {
-      return {
-        ...state,
-        result: action.result,
       };
     }
 
@@ -48,4 +48,4 @@ const agents = (state = initialState, action) => {
   }
 };
 
-export default agents;
+export default reducer;
