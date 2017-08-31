@@ -21,6 +21,17 @@ const multer = require('multer');
 const upload = multer();
 // const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
+/* ************ Firebase Verify ************ */
+const admin = require('firebase-admin');
+const serviceAccount = require('../cert/serviceAccountKey.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  // databaseURL: 'https://<DATABASE_NAME>.firebaseio.com',
+  databaseURL: 'https://propshop-638ef.firebaseio.com/',
+});
+/* ************ Firebase Verify End ************ */
+
 dotenv.load({ path: '.env' });
 
 const postController = require('./controllers/post');
@@ -98,6 +109,30 @@ app.delete(`${apiPrefix}/wishlist/delete`, wishlistController.deleteWishlist);
 
 app.post(`${apiPrefix}/map/nearbysearch`, mapController.getNearbySearch);
 app.post(`${apiPrefix}/map/distancematrix`, mapController.getDistances);
+
+app.post(`${apiPrefix}/verifytoken`, (req, res) => {
+  const idToken = req.param('token');
+  // let message = '22';
+
+  admin.auth().verifyIdToken(idToken)
+  .then((decodedToken) => {
+    const uid = decodedToken.uid;
+
+    res.json({
+      data_uid: uid,
+      data: decodedToken,
+      msg: 'ss',
+    });
+    // ...
+  }).catch((error) => {
+    // Handle error
+    res.json({
+      data: error,
+      msg: 'error',
+    });
+    console.log(error);
+  });
+});
 
 /**
  * CIC App codebase: WEBUI

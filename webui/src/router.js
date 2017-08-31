@@ -133,7 +133,35 @@ class MyRouter extends Component {
     const { fetchUserData } = this.props.actions;
     firebase.auth().onAuthStateChanged((user) => {
       fetchUserData(_.get(user, 'uid'), user);
+
+      if (user) {
+        user.getToken().then((idToken) => {
+          console.log('user:: ', user);
+          console.log('idToken:: ', idToken);
+
+          // fetch('/api/v1/verifytoken', {
+          //   method: 'GET',
+          //   body: [
+          //     'token' : idToken,
+          //   ],
+          // });
+        });
+      }
     });
+
+    // firebase.auth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     user.getToken().then((idToken) => {
+    //       console.log('idToken:: ', idToken);
+    //     });
+    //   }
+    // });
+
+    // firebase.auth().currentUser.getToken(true).then((idToken) => {
+    //   console.log('idToken:: ', idToken);
+    // }).catch((error) => {
+    //   console.log('error:: ', error);
+    // });
   }
 
   render() {
