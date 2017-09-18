@@ -2,7 +2,8 @@ import * as contentful from 'contentful';
 import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 
-// import Property from '../models/Property';
+import * as helpers from '../helpers';
+import Property from '../models/Property';
 
 const path = require('path');
 const fs = require('fs');
@@ -22,18 +23,23 @@ const BASE_URL = process.env.BASE_URL;
 
 // const save = (req, res) => {
 //   const property = new Property({
-//     name: 'aaaaa',
+//     for: 'rent',
 //   });
+//   console.log('property', property);
 //   property.save();
 // };
 
-// const get = (req, res) => {
-//   const data = Property.aa;
-//   console.log('get', data);
-// };
+const get = (req, res) => {
+  const property = new Property({
+    for: 'sale',
+  });
+  property.properties((err, data) => {
+    console.log('get', err, data); // woof
+  });
+};
 
 // save();
-// get();
+get();
 
 // const contentfulDateFormat = 'YYYY-MM-DDTHH:mm:s.SSSZ'; //2015-05-18T11:29:46.809Z
 
@@ -604,4 +610,396 @@ export const shareProperty = async (req, res, next) => {
       title: e.message,
     });
   }
+};
+
+const uploadImage = async (url) => {
+  if (!url) {
+    return false;
+  }
+
+  console.log('starting import image...');
+
+  const contentType = await helpers.getImageType(url);
+  const imageName = helpers.getImageName(url);
+
+  const result = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+  .then((space) => space.createAsset({
+    fields: {
+      title: {
+        'en-US': imageName,
+      },
+      file: {
+        'en-US': {
+          contentType,
+          fileName: imageName,
+          upload: url,
+        }
+      }
+    }
+  }))
+  .then(asset => asset.processForAllLocales())
+  .then(asset => asset.publish())
+  .catch(error => error);
+
+  const logMsg = _.get(result, 'sys.id') ? 'success' : 'fail';
+  console.log(logMsg);
+
+  return result;
+}
+
+const deleteImage = async (id) => {
+  if (!id) {
+    return false;
+  }
+  return clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+  .then(space => space.getAsset(id))
+  .then(asset => asset.unpublish())
+  .then(asset => asset.delete())
+  .then(() => console.log('Old Asset deleted.'))
+  .catch(console.error);
+};
+
+const vendorHasProperty = async (referenceKey, referenceName) => {
+  const result = await client.getEntries({
+    content_type: 'property',
+    select: 'sys.id,fields.coverImage,fields.images',
+    'fields.referenceKey': referenceKey,
+    'fields.referenceName': referenceName,
+  })
+  .catch(error => error);
+  const item = _.get(result, 'items.0');
+  return _.get(result, 'items.0.sys.id') ? {
+    id: item.sys.id,
+    coverImage: _.get(item, 'fields.coverImage.sys.id'),
+    images: _.size(_.get(item, 'fields.images')) > 0 ? _.map(item.fields.images, (image) => {
+      return image.sys.id;
+    }) : [],
+  } : false;
+};
+
+export const deletePropertyApi = async (id) => {
+  const entry = await client.getEntry(id).catch(console.error);
+
+  const oldCoverImageId = _.get(entry, 'fields.coverImage.sys.id');
+  const oldImagesIds = _.size(_.get(entry, 'fields.images')) > 0 ? _.map(entry.fields.images, (image) => {
+      return image.sys.id;
+    }) : [];
+
+  const result = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+  .then(space => space.getEntry(id))
+  .then(entry => entry.unpublish())
+  .then(entry => entry.delete())
+  .then(() => console.log('Entry deleted.', id))
+  .catch(console.error);
+
+  await deleteImage(oldCoverImageId);
+
+  for (let k = 0; k < _.size(oldImagesIds); k += 1) {
+    await deleteImage(oldImagesIds[k]);
+  }
+
+  return result;
+};
+
+export const createPropertyApi = async (data, updateImage = 'false') => {
+
+  const referenceKey = _.get(data, 'referenceKey');
+  const referenceName = _.get(data, 'referenceName');
+
+  const hasProperty = await vendorHasProperty(referenceKey, referenceName);
+
+  const updateId = _.get(hasProperty, 'id');
+  const oldCoverImageId = _.get(hasProperty, 'coverImage');
+  const oldImagesIds = _.get(hasProperty, 'images');
+
+  let coverImage = {};
+  let coverImageId = false;
+
+  if ( (!updateId) || (updateImage === 'true' && updateId) ) {
+    if (_.get(data, 'coverImage')) {
+      const coverImageResult = await uploadImage(data.coverImage);
+      if (_.get(coverImageResult, 'sys.id')) {
+        coverImageId = true;
+        coverImage = {
+          sys: {
+            id: coverImageResult.sys.id,
+            linkType: 'Asset',
+            type: 'Link',
+          },
+        };
+      }
+    }
+  }
+
+  let images = [];
+  let imagesId = false;
+
+  if ( (!updateId) || (updateImage === 'true' && updateId) ) {
+    if (_.get(data, 'images')) {
+      for (let i = 0; i < _.size(data.images); i += 1) {
+        const image = data.images[i];
+        const imagesResult = await uploadImage(image);
+        if (_.get(imagesResult, 'sys.id')) {
+          imagesId = true;
+          images.push({
+            sys: {
+              id: imagesResult.sys.id,
+              linkType: 'Asset',
+              type: 'Link',
+            },
+          });
+        }
+      }
+    }
+  }
+
+  const fieldsData = {
+    fields: {
+      propertyType: {
+        'en-US': _.get(data, 'propertyType'),
+      },
+      nameEn: {
+        'en-US': _.get(data, 'nameEn'),
+      },
+      nameTh: {
+        'en-US': _.get(data, 'nameTh'),
+      },
+      description: {
+        'en-US': {
+          en: _.get(data, 'descriptionEn'),
+          th: _.get(data, 'descriptionTh'),
+        },
+      },
+      location: {
+        'en-US': {
+          soi: '',
+          full: {
+            en: _.get(data, 'fullAddressEn'),
+            th: _.get(data, 'fullAddressTh'),
+          },
+          areas: [],
+          mooNo: '',
+          street: '',
+          unitNo: '',
+          floorNo: '',
+          summary: {
+            en: '',
+            th: '',
+          },
+          zipcode: '',
+          district: '',
+          latitude: '',
+          province: '',
+          longitude: '',
+          buildingNo: '',
+          subDistrict: '',
+          publicTransports: [
+            {
+              name: '0',
+              type: 'BTS',
+              distance: 0,
+            },
+            {
+              name: '0',
+              type: 'MRT',
+              distance: 0,
+            },
+            {
+              name: '0',
+              type: 'BRT',
+              distance: 0,
+            },
+          ],
+        },
+      },
+      attributes: {
+        'en-US': {
+          numFloors: '',
+          yearBuilt: '',
+          numBedrooms: '',
+          numBathrooms: '',
+        },
+      },
+      areaLand: {
+        'en-US': {
+          unit: '',
+          value: '',
+          width: '',
+          detail: '',
+          height: '',
+        },
+      },
+      forSale: {
+        'en-US': _.get(data, 'for') === 'sale' ? true : false,
+      },
+      forRent: {
+        'en-US': _.get(data, 'for') === 'rent' ? true : false,
+      },
+      priceSale: {
+        'en-US': {
+          type: '',
+          until: '',
+          value: _.get(data, 'for') === 'sale' ? _.get(data, 'price') : '',
+          detail: '',
+          currency: _.get(data, 'currency'),
+          discount: 0,
+        },
+      },
+      priceRent: {
+        'en-US': {
+          type: '',
+          until: '',
+          value: _.get(data, 'for') === 'rent' ? _.get(data, 'price') : '',
+          detail: '',
+          currency: _.get(data, 'currency'),
+          discount: 0,
+        },
+      },
+      tags: {
+        'en-US': _.get(data, 'tags'),
+      },
+      numBedrooms: {
+        'en-US': _.toNumber(_.get(data, 'bedroom')),
+      },
+      numBathrooms: {
+        'en-US': _.toNumber(_.get(data, 'bathroom')),
+      },
+      locationMarker: {
+        'en-US': {
+          lon: _.toNumber(_.get(data, 'location.lng')),
+          lat: _.toNumber(_.get(data, 'location.lat')),
+        },
+      },
+      priceSaleValue: {
+        'en-US': _.get(data, 'for') === 'sale' ? _.toNumber(_.get(data, 'price')) : 0,
+      },
+      priceRentValue: {
+        'en-US': _.get(data, 'for') === 'rent' ? _.toNumber(_.get(data, 'price')) : 0,
+      },
+      province: {
+        'en-US': _.get(data, 'province'),
+      },
+      projectNameEn: {
+        'en-US': _.get(data, 'project_en'),
+      },
+      projectNameTh: {
+        'en-US': _.get(data, 'project_th'),
+      },
+      areaSize: {
+        'en-US': _.toNumber(_.get(data, 'areaSize')),
+      },
+      agent: {
+        'en-US': {
+          sys: {
+            type: 'Link',
+            linkType: 'Entry',
+            id: _.get(data, 'userId'),
+          },
+        },
+      },
+      enable: {
+        'en-US': true,
+      },
+      approve: {
+        'en-US': true,
+      },
+      referenceName: {
+        'en-US': referenceName,
+      },
+      referenceKey: {
+        'en-US': referenceKey,
+      },
+    },
+  };
+
+  if (coverImageId) {
+    _.set(fieldsData.fields, 'coverImage.en-US', coverImage);
+  }
+
+  if (imagesId) {
+    _.set(fieldsData.fields, 'images.en-US', images);
+  }
+
+  let result = {};
+
+  if (updateId) {
+    result = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.getEntry(updateId))
+    .then((entry) => {
+      _.map(fieldsData.fields, (field, key) => {
+        entry.fields[key] = field;
+      })
+      return entry.update();
+    })
+    .then(entry => entry.publish())
+    .catch(error => error);
+  } else {
+    result = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.createEntry('property', fieldsData))
+    .then(entry => entry.publish())
+    .catch(error => error);
+  }
+
+  if (updateImage === 'true' && updateId) {
+    await deleteImage(oldCoverImageId);
+
+    for (let k = 0; k < _.size(oldImagesIds); k += 1) {
+      await deleteImage(oldImagesIds[k]);
+    }
+  }
+
+  return result;
+};
+
+export const deleteAll = async () => {
+  const result = await client.getAssets({
+    select: 'sys.id',
+  })
+  .catch(error => error);
+  for (let i = 0; i < _.size(result.items); i += 1) {
+    const item = result.items[i];
+    const assetId = item.sys.id;
+    const deleteResult = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.getAsset(assetId))
+    .then(asset => asset.unpublish())
+    .then(asset => asset.delete())
+    .then(() => console.log('Asset deleted.', i))
+    .catch(console.error);
+  }
+  return result;
+};
+
+export const deleteAll2 = async () => {
+  const result = await client.getEntries({
+    content_type: 'property',
+    select: 'sys.id',
+  })
+  .catch(error => error);
+  for (let i = 0; i < _.size(result.items); i += 1) {
+    const item = result.items[i];
+    const entryId = item.sys.id;
+    const deleteResult = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+    .then(space => space.getEntry(entryId))
+    .then(entry => entry.unpublish())
+    .then(entry => entry.delete())
+    .then(() => console.log('Entry deleted.', i))
+    .catch(console.error)
+  }
+  return result;
+};
+
+export const getPropertiesByVendor = async (vendor) => {
+  const result = await client.getEntries({
+    content_type: 'property',
+    select: 'fields.referenceKey',
+    'fields.referenceName': vendor,
+  })
+  .catch(error => error);
+  let ids = []
+  if (_.size(result.items) > 0) {
+    ids = _.map(result.items, (item) => {
+      return item.fields.referenceKey;
+    });
+  }
+  return ids;
 };

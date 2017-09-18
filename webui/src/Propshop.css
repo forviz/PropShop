@@ -546,7 +546,8 @@ img {
   #Property .content .agent-block {
     margin-bottom: 20px; }
   #Property .content .agent-info .name {
-    color: #8ebc42; }
+    color: #8ebc42;
+    font-size: 16px; }
   #Property .content .agent-info .phone {
     color: #999999;
     font-weight: bold; }

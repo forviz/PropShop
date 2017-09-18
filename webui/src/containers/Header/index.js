@@ -96,7 +96,7 @@ class Header extends Component {
       if (!mobileMode) {
         loginLabel = (
           <Dropdown overlay={menu} trigger={['click']}>
-            <a className="ant-dropdown-link" style={{ paddingLeft: 55 }}>
+            <a className="ant-dropdown-link">
               {divAvatar} {user.username} <Icon type="down" />
             </a>
           </Dropdown>

@@ -10,7 +10,7 @@ const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const logger = require('morgan');
 const chalk = require('chalk');
@@ -23,14 +23,6 @@ const upload = multer();
 
 dotenv.load({ path: '.env' });
 
-const postController = require('./controllers/post');
-const propertyController = require('./controllers/property');
-const wishlistController = require('./controllers/wishlist');
-const userController = require('./controllers/user');
-const mapController = require('./controllers/map');
-const newsController = require('./controllers/news');
-const contentController = require('./controllers/content');
-
 /**
  * Connect to MongoDB.
  */
@@ -40,6 +32,15 @@ const contentController = require('./controllers/content');
 //   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
 //   process.exit();
 // });
+
+const postController = require('./controllers/post');
+const propertyController = require('./controllers/property');
+const wishlistController = require('./controllers/wishlist');
+const userController = require('./controllers/user');
+const mapController = require('./controllers/map');
+const newsController = require('./controllers/news');
+const contentController = require('./controllers/content');
+const apiController = require('./controllers/api');
 
 /**
  * Create Express server.
@@ -118,6 +119,9 @@ app.post(`${apiPrefix}/map/distancematrix`, mapController.getDistances);
 app.get(`${apiPrefix}/news`, newsController.getNews);
 
 app.get(`${apiPrefix}/content/:id`, contentController.get);
+
+app.get(`${apiPrefix}/vendor/:vendor`, apiController.process);
+app.get(`${apiPrefix}/delete`, apiController.process2);
 
 /**
  * CIC App codebase: WEBUI

@@ -262,11 +262,7 @@ class Property extends Component {
                             <h2>รายละเอียด</h2>
                             <div className="announcementDetails">
                               {data.announceDetails &&
-                                <div>
-                                  {data.announceDetails.split('\n').map((item, key) => {
-                                    return <span key={key.toString()}>{item}<br /></span>;
-                                  })}
-                                </div>
+                                <div dangerouslySetInnerHTML={{ __html: _.replace(data.announceDetails, /\\n/g, '<br />') }} />
                               }
                             </div>
                           </section>
