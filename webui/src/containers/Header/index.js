@@ -85,9 +85,7 @@ class Header extends Component {
         };
 
         divAvatar = (
-          <div className="avatar">
-            <div style={avatarStyle} />
-          </div>
+          <span className="avatar"><img src={user.image.fields.file.url} alt="" /></span>
         );
       } else {
         divAvatar = <FontAwesome name="user-o" />;
@@ -97,7 +95,7 @@ class Header extends Component {
         loginLabel = (
           <Dropdown overlay={menu} trigger={['click']}>
             <a className="ant-dropdown-link">
-              {divAvatar} {user.username} <Icon type="down" />
+              {user.username} <Icon type="down" />
             </a>
           </Dropdown>
         );

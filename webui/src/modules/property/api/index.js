@@ -42,7 +42,7 @@ export const mapContentFulPropertyToMyField = (data, realTime = '0') => {
         id: elem.sys.id,
         address: _.get(newFields, 'location.full.th'),
         amphur: _.get(newFields, 'location.district'),
-        announceDetails: _.get(newFields, 'description.th', ''),
+        announceDetails: _.size(_.get(newFields, 'description.th')) > 0 ? _.get(newFields, 'description.th') : '',
         areaSize: _.get(newFields, 'areaSize'),
         bathroom: _.get(newFields, 'numBedrooms'),
         bedroom: _.get(newFields, 'numBathrooms'),

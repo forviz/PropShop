@@ -99,8 +99,9 @@ class Property extends Component {
   renderSlide = (item) => {
     const backgroundStyle = {
       background: `url(${item.original})`,
-      backgroundSize: 'cover',
+      backgroundSize: 'contain',
       backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
       width: '100%',
       height: '100%',
     };
@@ -231,7 +232,7 @@ class Property extends Component {
                         <div className="col-md-12">
                           <div className="main-info">
                             <div className="row">
-                              <div className="col-md-5">
+                              <div className="col-md-5 vcenter">
                                 <div className="price-block">
                                   <div className="for">{data.for}</div>
                                   <div className="price">฿{numeral(data.price).format('0,0')}</div>
@@ -239,7 +240,7 @@ class Property extends Component {
                                   <div className="last_update">(ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ {data.lastUpdate})</div>
                                 </div>
                               </div>
-                              <div className="col-md-7">
+                              <div className="col-md-7 vcenter">
                                 <div className="address-block">
                                   <div className="address_1">{data.project}</div>
                                   <div className="address_2">{data.address}</div>
