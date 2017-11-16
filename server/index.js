@@ -10,7 +10,7 @@ const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
-
+// const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const logger = require('morgan');
 const chalk = require('chalk');
@@ -23,11 +23,24 @@ const upload = multer();
 
 dotenv.load({ path: '.env' });
 
+/**
+ * Connect to MongoDB.
+ */
+// mongoose.Promise = global.Promise;
+// mongoose.connect(process.env.MONGODB_URI);
+// mongoose.connection.on('error', () => {
+//   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+//   process.exit();
+// });
+
 const postController = require('./controllers/post');
 const propertyController = require('./controllers/property');
 const wishlistController = require('./controllers/wishlist');
 const userController = require('./controllers/user');
 const mapController = require('./controllers/map');
+const newsController = require('./controllers/news');
+const contentController = require('./controllers/content');
+const apiController = require('./controllers/api');
 
 /**
  * Create Express server.
@@ -82,8 +95,11 @@ app.post(`${apiPrefix}/posts`, postController.createPost);
 
 app.get(`${apiPrefix}/properties`, propertyController.queryProperties);
 app.post(`${apiPrefix}/property`, propertyController.create);
-app.post(`${apiPrefix}/property/:id`, propertyController.update);
+app.put(`${apiPrefix}/property/:id`, propertyController.update);
 app.delete(`${apiPrefix}/property/:id`, propertyController.deleteProperty);
+app.post(`${apiPrefix}/property/:id/image`, propertyController.addImage);
+app.post(`${apiPrefix}/property/:id/images`, propertyController.addImages);
+app.post(`${apiPrefix}/property/share/email`, propertyController.shareProperty);
 
 app.post(`${apiPrefix}/user`, userController.createUser);
 app.get(`${apiPrefix}/user/:uid`, userController.getUser);
@@ -95,9 +111,18 @@ app.get(`${apiPrefix}/wishlist/:id`, wishlistController.getWishlist);
 app.post(`${apiPrefix}/wishlist/create`, wishlistController.createWishlist);
 app.put(`${apiPrefix}/wishlist/update`, wishlistController.updateWishlist);
 app.delete(`${apiPrefix}/wishlist/delete`, wishlistController.deleteWishlist);
+app.get(`${apiPrefix}/wishlist/user/:id`, wishlistController.getUserWishlist);
 
 app.post(`${apiPrefix}/map/nearbysearch`, mapController.getNearbySearch);
 app.post(`${apiPrefix}/map/distancematrix`, mapController.getDistances);
+
+app.get(`${apiPrefix}/news`, newsController.getNews);
+
+app.get(`${apiPrefix}/content/:id`, contentController.get);
+
+app.get(`${apiPrefix}/vendor/:vendor`, apiController.process);
+app.get(`${apiPrefix}/vendor/:vendor/update/:id`, apiController.process2);
+app.get(`${apiPrefix}/delete`, apiController.process3);
 
 /**
  * CIC App codebase: WEBUI

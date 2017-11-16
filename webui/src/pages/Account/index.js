@@ -33,14 +33,13 @@ class Account extends Component {
           <div className="row">
             <div className="col-md-3">
               <Menu
-                style={{ width: 240 }}
                 selectedKeys={[page]}
                 defaultOpenKeys={['sub1', 'sub2']}
                 mode="inline"
               >
                 <SubMenu key="sub1" title={<span><Icon type="home" /><span>ข้อมูลอสังหาฯ</span></span>}>
                   <Menu.Item key="property"><NavLink exact to="/account/property">รายการที่ประกาศ</NavLink></Menu.Item>
-                  <Menu.Item key="wish-list"><NavLink exact to="/account/wishlist">รายการที่บันทึกไว้</NavLink></Menu.Item>
+                  <Menu.Item key="wishlist"><NavLink exact to="/account/wishlist">รายการที่บันทึกไว้</NavLink></Menu.Item>
                 </SubMenu>
                 <SubMenu key="sub2" title={<span><Icon type="user" /><span>ข้อมูลส่วนตัว</span></span>}>
                   <Menu.Item key="profile"><NavLink exact to="/account/profile">ตั้งค่าบัญชีผู้ใช้</NavLink></Menu.Item>

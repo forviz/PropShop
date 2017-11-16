@@ -27,13 +27,13 @@ class BannerRealEstate extends Component {
     return (
       <NavLink exact to={`/property/${item.id}`}>
         <div className="image-gallery-image" style={backgroundStyle}>
-          <div className="image-gallery-gradient"></div>
+          <div className="image-gallery-gradient" />
           <div className="image-gallery-description">
             {item.topic &&
               <div className="topic">{item.topic}</div>
             }
             <div className="price">{numeral(item.price).format('0,0')} บาท</div>
-            <div className="place">{item.address.street} - {item.address.province}</div>
+            <div className="place">{item.province}</div>
             <div className="option clearfix">
               <ul>
                 <li><FontAwesome name="bed" /><span>{item.bedroom}</span></li>
@@ -61,6 +61,8 @@ class BannerRealEstate extends Component {
           showPlayButton={false}
           showNav={false}
           showBullets={true}
+          autoPlay={true}
+          slideInterval={5000}
           renderItem={this.renderSlide}
         />
       </div>

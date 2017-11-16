@@ -42,11 +42,7 @@
         font-family: $sukumvit-text;
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        /* autoprefixer: off */
-        -webkit-box-orient: vertical;
-        /* autoprefixer: on */
+        white-space: nowrap;
       }
       .description{
         font-size: 18px;

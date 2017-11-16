@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { getProperties, getPropertyById } from '../api/property';
+import { getProperties } from '../modules/property/api';
 import { handleError } from './errors';
 
 export const receivePropertyEntity = (propertyId, property) => {
@@ -24,10 +24,10 @@ const fetchingAccountProperty = (fetching) => {
   };
 };
 
-const resultAccountProperty = (result) => {
+const fetchAccountProperty = (fetch) => {
   return {
-    type: 'DOMAIN/ACCOUNT_PROPERTY/RESULT',
-    result,
+    type: 'DOMAIN/ACCOUNT_PROPERTY/FETCH',
+    fetch,
   };
 };
 
@@ -46,31 +46,26 @@ const pageAccountProperty = (page) => {
 };
 
 export const fetchPropertiesByAgent = (userId, skip, limit) => {
-  return (dispatch) => {
+  return async (dispatch) => {
+    dispatch(fetchAccountProperty(false));
     dispatch(fetchingAccountProperty(true));
-    getProperties(`?agentId=${userId}&skip=${skip}&limit=${limit}`)
-    .then((result) => {
-      if (_.size(result.data) > 0) {
-        dispatch(receiveAccountProperty(result.data));
-        dispatch(totalAccountProperty(result.total));
-        dispatch(pageAccountProperty(skip + 1));
-        dispatch(resultAccountProperty('ok'));
-      } else {
-        dispatch(resultAccountProperty('no'));
-      }
-      dispatch(fetchingAccountProperty(false));
-    })
-    .catch((error) => {
-      dispatch(handleError(error));
-    });
+    dispatch(receiveAccountProperty({}));
+    const result = await getProperties(`?agentId=${userId}&skip=${skip}&limit=${limit}&order=-sys.updatedAt`);
+    dispatch(fetchAccountProperty(true));
+    dispatch(fetchingAccountProperty(false));
+    if (_.size(result.data) > 0) {
+      dispatch(receiveAccountProperty(result.data));
+      dispatch(totalAccountProperty(result.total));
+      dispatch(pageAccountProperty(skip + 1));
+    }
   };
 };
 
 export const fetchPropertiesById = (id) => {
   return (dispatch) => {
     getProperties(`?id=${id}`)
+    // getProperties(`?id=${id}&realTime=1`)
     .then((result) => {
-      console.log('fetchPropertiesById', result);
       if (result.total === 1) {
         dispatch({
           type: 'SELL/SET/FORM',

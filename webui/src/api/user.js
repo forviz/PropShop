@@ -3,8 +3,8 @@ import mapAgentEntryToEntity from './utils/mapAgentEntryToEntity';
 
 const BASEURL = process.env.REACT_APP_MYAPI_URL;
 
-export const fetchUserAPI = (uid) => {
-  return fetch(`${BASEURL}/user/${uid}`, {
+export const fetchUserAPI = (uid, params = '') => {
+  return fetch(`${BASEURL}/user/${uid}${params}`, {
     'Content-Type': 'application/json',
   })
   .then(response => response.json())

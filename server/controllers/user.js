@@ -18,13 +18,38 @@ const clientManagement = contentfulManagement.createClient({
 
 const BASE_URL = process.env.BASE_URL;
 
+export const getUserImage = async (id) => {
+  const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+  .then(space => space.getAsset(id));
+  return response;
+};
+
 export const getUser = async (req, res) => {
   try {
     const { uid } = req.params;
-    const response = await client.getEntries({
-      content_type: 'agent',
-      'fields.uid': uid,
-    });
+    const { realTime } = req.query;
+
+    let response = {};
+
+    if (realTime === '1') {
+      response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
+      .then(space => space.getEntries({
+        content_type: 'agent',
+        'fields.uid': uid,
+      }));
+
+      const imageId = _.get(response, "items[0].fields.image['en-US'].sys.id");
+      if (imageId) {
+        const imageData = await getUserImage(imageId);
+        _.set(response, "items[0].fields.image['en-US']", imageData);
+      }
+    } else {
+      response = await client.getEntries({
+        content_type: 'agent',
+        'fields.uid': uid,
+      });
+    }
+
     res.json(response);
   } catch (e) {
     res.status(500).json({
@@ -141,10 +166,10 @@ export const updateUser = async (req, res) => {
     if (_.get(data, 'licenseNumber')) _.set(entry.fields, "licenseNumber['en-US']", data.licenseNumber);
     if (_.get(data, 'about')) _.set(entry.fields, "about['en-US']", data.about);
     if (_.get(data, 'verify')) _.set(entry.fields, "verify['en-US']", data.verify);
-    if (_.get(data, 'image.sys.id')) {
+    if (_.get(data, 'newImage')) {
       _.set(entry.fields, "image['en-US'].sys.type", 'Link');
       _.set(entry.fields, "image['en-US'].sys.linkType", 'Asset');
-      _.set(entry.fields, "image['en-US'].sys.id", data.image.sys.id);
+      _.set(entry.fields, "image['en-US'].sys.id", data.newImage);
     }
 
     const entryUpdate = await entry.update();
@@ -154,7 +179,6 @@ export const updateUser = async (req, res) => {
       res.json({
         status: 'SUCCESS',
       });
-      return false;
     } else {
       res.json({
         status: 'FAIL',
@@ -170,7 +194,7 @@ export const updateUser = async (req, res) => {
 
 export const contactAgent = async (req, res, next) => {
   try {
-    const { name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyUrl, projectName } = req.body;
+    const { name, emailFrom, emailTo, mobile, body, agentId, agentName, propertyId, projectName } = req.body;
 
     const response = await clientManagement.getSpace(process.env.CONTENTFUL_SPACE)
     .then(space => space.createEntry('contact', {
@@ -223,15 +247,43 @@ export const contactAgent = async (req, res, next) => {
       let htmlx = html;
       htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
       htmlx = htmlx.replace('%SEND_FROM%', sendFrom);
-      htmlx = htmlx.replace('%PROPERTY_URL%', propertyUrl);
+      htmlx = htmlx.replace(/\%PROPERTY_URL%/g, `${BASE_URL}/#/property/${propertyId}`);
       htmlx = htmlx.replace('%PROJECT%', projectName);
       htmlx = htmlx.replace('%OWNER%', agentName);
       htmlx = htmlx.replace('%MESSAGE%', body);
 
       const mail = new Mail({
-        from: emailFrom,
+        to: emailFrom,
+        subject: `${sendFrom}, thank you for your enquiry`,
+        html: htmlx,
+        successCallback: () => {
+        },
+        errorCallback: () => {
+        },
+      });
+      mail.send();
+    });
+
+    fs.readFile(path.join(__dirname, '../views/email/template/agent-receive', 'index.html'), 'utf8', (err, html) => {
+      if (err) {
+        throw err;
+      }
+
+      const sendFrom = name ? name : emailFrom;
+      let htmlx = html;
+      htmlx = htmlx.replace(/\%BASE_URL%/g, BASE_URL);
+      htmlx = htmlx.replace('%OWNER%', agentName);
+      htmlx = htmlx.replace('%PROJECT%', projectName);
+      htmlx = htmlx.replace('%MESSAGE%', body);
+      htmlx = htmlx.replace(/\%CONTACT_NAME%/g, sendFrom);
+      htmlx = htmlx.replace('%CONTACT_EMAIL%', emailFrom);
+      htmlx = htmlx.replace('%CONTACT_PHONE%', mobile);
+      htmlx = htmlx.replace('%CONTACT_URL%', `${BASE_URL}/#/account/contact`);
+      htmlx = htmlx.replace(/\%PROPERTY_URL%/g, `${BASE_URL}/#/property/${propertyId}`);
+
+      const mail = new Mail({
         to: emailTo,
-        subject: 'ติดต่อ Agent',
+        subject: `${sendFrom} has left you the following message about your property`,
         html: htmlx,
         successCallback: () => {
           clientManagement.getSpace(process.env.CONTENTFUL_SPACE)

@@ -20,6 +20,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Forgotpassword from './pages/Forgotpassword';
 import Account from './pages/Account';
+import Policy from './pages/Policy';
+import Agreement from './pages/Agreement';
 
 import * as UserActions from './actions/user-actions';
 
@@ -91,6 +93,20 @@ const routes = [
     footer: Footer,
     login: true,
   },
+  { path: '/policy',
+    exact: false,
+    header: Header,
+    content: Policy,
+    footer: Footer,
+    login: false,
+  },
+  { path: '/agreement',
+    exact: false,
+    header: Header,
+    content: Agreement,
+    footer: Footer,
+    login: false,
+  },
 ];
 
 const PrivateRoute = ({ component: MyComponent, ...rest }) => (
@@ -137,12 +153,13 @@ class MyRouter extends Component {
   }
 
   render() {
-    const { user, userFetchSuccess } = this.props;
+    const { user, userFetchSuccess, firebase } = this.props;
 
     if (!userFetchSuccess) return <div />;
 
-    if (user.verify === false) {
-      // notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
+    if (_.get(user, 'verify') === false) {
+      notification.warning({ message: 'กรุณายืนยันอีเมลเพื่อเข้าสู่ระบบ' });
+      firebase.logout();
     }
 
     return (

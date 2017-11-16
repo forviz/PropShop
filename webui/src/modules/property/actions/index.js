@@ -80,13 +80,15 @@ export const getLandingItems = () => {
   return (dispatch) => {
     const condoParams = toURLParam({
       propertyType: 'Condominium',
-      limit: 5,
+      limit: 6,
+      order: '-sys.updatedAt',
     });
     dispatch(search(condoParams, 'landing-condo'));
 
     const homeParams = toURLParam({
-      propertyType: 'Home',
-      limit: 5,
+      propertyType: 'House',
+      limit: 6,
+      order: '-sys.updatedAt',
     });
     dispatch(search(homeParams, 'landing-home'));
   };

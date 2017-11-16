@@ -22,14 +22,14 @@ class WishItem extends Component {
 
     return (
       <div className="WishItem col-xs-12">
-        <NavLink exact to={`/property/${item.id}`}>
+        <NavLink exact to={`/property/${item.id}?preview=true`}>
           <img src={_.get(item, 'imageUrl')} alt="" className="image" />
         </NavLink>
         <div className="detail col-xs-2 col-md-3">
-          <NavLink exact to={`/property/${item.id}`}>
+          <NavLink exact to={`/property/${item.id}?preview=true`}>
             <div className="title" title={_.get(item, 'name.th')}>{_.get(item, 'name.th')}</div>
           </NavLink>
-          <div className="price">{numeral(_.get(item, 'price.value')).format('0,0')} {_.get(item, 'price.currency')}</div>
+          <div className="price">{numeral(_.get(item, 'price.value')).format('0,0')} บาท</div>
           <div className="place">{_.get(item, 'amphur')} - {_.get(item, 'province')}</div>
           <div className="description" title={_.get(item, 'description.th')}>{_.get(item, 'description.th')}</div>
         </div>
@@ -47,7 +47,7 @@ class WishItem extends Component {
         </div>
         <div className="option">
           <div className="view">
-            <NavLink exact to={`/property/${item.id}`}>
+            <NavLink exact to={`/property/${item.id}?preview=true`}>
               <button>
                 <FontAwesome
                   name="eye"

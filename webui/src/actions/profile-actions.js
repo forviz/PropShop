@@ -11,7 +11,7 @@ const setFormData = (user) => {
 
 export const fetchUserProfile = (uid) => {
   return (dispatch) => {
-    fetchUserAPI(uid).then((user) => {
+    fetchUserAPI(uid, '?realTime=1').then((user) => {
       dispatch(setFormData(user));
     });
   };
@@ -75,12 +75,11 @@ export const updateAvatar = (id, file, oldAssetId = '') => {
     dispatch(profileEditing(true));
     dispatch(profileEditSuccess(false));
     uploadMediaAPI(file).then((result) => {
-      dispatch(profileEditing(false));
-      if (result.status === 'success') {
+      if (_.get(result, 'data.sys.id')) {
         if (oldAssetId) deleteMediaAPI(oldAssetId);
         const newAssetId = result.data.sys.id;
         const data = {};
-        _.set(data, 'image.sys.id', newAssetId);
+        _.set(data, 'newImage', newAssetId);
         updateUserAPI(id, data).then((updateResult) => {
           if (updateResult.status === 'SUCCESS') {
             dispatch(profileEditSuccess(true));
@@ -88,10 +87,12 @@ export const updateAvatar = (id, file, oldAssetId = '') => {
             dispatch(setErrorMessage('แก้ไขข้อมูลส่วนตัวล้มเหลว'));
             dispatch(profileEditSuccess(false));
           }
+          dispatch(profileEditing(false));
         });
       } else {
         dispatch(setErrorMessage('อัพโหลดรูปภาพล้มเหลว'));
         dispatch(profileEditSuccess(false));
+        dispatch(profileEditing(false));
       }
     });
   };

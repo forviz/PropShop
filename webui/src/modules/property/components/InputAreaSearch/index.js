@@ -1,30 +1,38 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 import _ from 'lodash';
-import { Row, Col, Icon } from 'antd';
+import { Row, Col, Input } from 'antd';
 import styled from 'styled-components';
 
 import filterOptions from './utils/filterOptions';
 
 import Option from './Option';
 
-const InputAreaSearchWrapper = styled.div`
+const InputAreaSearchWrapper = styled.div.attrs({
+  tabindex: '0',
+})`
+  height: 38px;
   width: 100%;
   position: relative;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  border-color: ${props => props.isFocused ? '#8ebc42' : '#ccc'};
+  padding: 0 10px;
 `;
 
 const CategoryLegend = styled.div`
-  position: absolute;
-  top: 7px;
-  left: 12px;
+  flex: 1 0 20px;
+  text-align: center;
 `;
 
 const InputArea = styled.input`
-  padding: 7px 16px;
-  padding-left: ${props => (props.hasCategory ? '50px' : '16px')};
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  width: 100%;
+  flex: 2 0 auto;
+  border: 0;
+  background: transparent;
+  outline: none;
+  padding-left: 8px;
 `;
 
 const SuggestionWrapper = styled.div`
@@ -34,7 +42,8 @@ const SuggestionWrapper = styled.div`
   right: 0;
   max-height: 400px;
   z-index: 3;
-  overflow: scroll;
+  overflow: hidden;
+  overflow-y: scroll;
 `;
 
 const SuggestionList = styled.ul`
@@ -103,7 +112,6 @@ const AreaListItem = styled.a`
 
 const OptionCategory = styled.span`
   color: #88b840;
-  margin-right: 15px;
   display: inline-block;
   font-size: 0.8em;
   font-weight: bold;
@@ -153,7 +161,15 @@ class InputAreaSearch extends Component {
       showAreaList: false,
       searchValue: getOptionLabel(props.value),
       focusAtIndex: 0,
+      isFocused: false,
     };
+  }
+
+  /* Detect click Outside */
+  componentDidMount() {
+    document.addEventListener('mousedown', this._handleDetectClickOutside);
+    window.addEventListener('load', this.handleChangeOptionPosition);
+    window.addEventListener('scroll', this.handleChangeOptionPosition);
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -164,13 +180,6 @@ class InputAreaSearch extends Component {
     }
   }
 
-  /* Detect click Outside */
-  componentDidMount() {
-    document.addEventListener('mousedown', this._handleDetectClickOutside);
-    window.addEventListener('load', this.handleChangeOptionPosition);
-    window.addEventListener('scroll', this.handleChangeOptionPosition);
-  }
-
   componentWillUnmount() {
     document.removeEventListener('mousedown', this._handleDetectClickOutside);
     window.removeEventListener('scroll', this.handleChangeOptionPosition);
@@ -178,34 +187,44 @@ class InputAreaSearch extends Component {
 
   _handleDetectClickOutside = (e) => {
     if (this.component.contains(e.target)) return;
+
+    // onClick Outside
     this.hideSuggestion();
     this.hideAreaList();
   }
   /* End of Detect click Outside */
 
-
   showSuggestion = () => {
-    this.setState({
-      showSuggestion: true,
-    });
+    if (!this.state.showSuggestion) {
+      this.setState({
+        showSuggestion: true,
+      });
+    }
   }
 
   hideSuggestion = () => {
-    this.setState({
-      showSuggestion: false,
-    });
+    if (this.state.showSuggestion) {
+      this.setState({
+        showSuggestion: false,
+        isFocused: false,
+      });
+    }
   }
 
   showAreaList = () => {
-    this.setState({
-      showAreaList: true,
-    });
+    if (!this.state.showAreaList) {
+      this.setState({
+        showAreaList: true,
+      });
+    }
   }
 
   hideAreaList = () => {
-    this.setState({
-      showAreaList: false,
-    });
+    if (this.state.showAreaList) {
+      this.setState({
+        showAreaList: false,
+      });
+    }
   }
 
   handleMouseDown = (event) => {
@@ -262,21 +281,27 @@ class InputAreaSearch extends Component {
 
   handleInputFocus = (e) => {
     // Select All Text
-    this.searchInput.setSelectionRange(0, this.searchInput.value.length);
+    const realInput = this.searchInput;
+    realInput.setSelectionRange(0, realInput.value.length);
 
+    this.setState({ isFocused: true });
     // Open Suggestion
-    this.showSuggestion();
+    this.handleSuggestion();
+  }
+
+  handleSuggestion = () => {
+    const { searchValue } = this.state;
+    searchValue ? this.showSuggestion() : this.hideSuggestion();
   }
 
   handleSearchInputChange = (e) => {
     const searchValue = e.target.value;
     this.setState({
       searchValue,
+    }, () => {
+      this.handleSuggestion();
     });
-
-    if (searchValue !== '') {
-      this.showSuggestion();
-    }
+    this.hideAreaList();
   }
 
   render() {
@@ -294,7 +319,18 @@ class InputAreaSearch extends Component {
 
     const showCategory = !_.isEmpty(value.category) && !_.isEmpty(searchValue);
     return (
-      <InputAreaSearchWrapper innerRef={c => this.component = c}>
+      <InputAreaSearchWrapper
+        innerRef={c => this.component = c}
+        isFocused={this.state.isFocused}
+      >
+        {/*<Input
+          addonBefore={showCategory ? renderCategory(value.category) : ''}
+          value={searchValue}
+          placeholder="ค้นหาทำเล"
+          ref={c => this.searchInput = c}
+          onFocus={this.handleInputFocus}
+          onChange={this.handleSearchInputChange}
+        />*/}
         { showCategory && <CategoryLegend>{renderCategory(value.category)}</CategoryLegend>}
         <InputArea
           hasCategory={showCategory}
@@ -325,9 +361,9 @@ class InputAreaSearch extends Component {
               </SuggestionList>
             </SuggestionWrapper>
         }
-        <ListButton type="button" onClick={showAreaList ? this.hideAreaList : this.showAreaList}>
+        {/*<ListButton type="button" onClick={showAreaList ? this.hideAreaList : this.showAreaList}>
           <Icon type="bars" />
-        </ListButton>
+        </ListButton>*/}
         {
           showAreaList &&
             <AreaListWrapper>

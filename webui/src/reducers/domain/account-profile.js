@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const initialState = {
   editing: false,
   editSuccess: false,
@@ -52,43 +54,43 @@ const reducers = (state = initialState, action) => {
         data: {
           ...state.data,
           email: {
-            value: action.user.email,
+            value: _.get(action.user, 'email.en-US'),
           },
           username: {
-            value: action.user.username,
+            value: _.get(action.user, 'username.en-US'),
           },
           prefixName: {
-            value: action.user.prefixName ? action.user.prefixName : [],
+            value: _.get(action.user, 'prefixName.en-US') ? _.get(action.user, 'prefixName.en-US') : [],
           },
           name: {
-            value: action.user.name,
+            value: _.get(action.user, 'name.en-US'),
           },
           lastname: {
-            value: action.user.lastname,
+            value: _.get(action.user, 'lastname.en-US'),
           },
           prefixPhone: {
             value: '0',
           },
           phone: {
-            value: action.user.phone,
+            value: _.get(action.user, 'phone.en-US'),
           },
           image: {
-            value: action.user.image,
+            value: _.get(action.user, 'image.en-US'),
           },
           rating: {
-            value: action.user.rating,
+            value: _.get(action.user, 'rating.en-US'),
           },
           company: {
-            value: action.user.company,
+            value: _.get(action.user, 'company.en-US'),
           },
           specialization: {
-            value: action.user.specialization,
+            value: _.get(action.user, 'specialization.en-US'),
           },
           licenseNumber: {
-            value: action.user.licenseNumber,
+            value: _.get(action.user, 'licenseNumber.en-US'),
           },
           about: {
-            value: action.user.about,
+            value: _.get(action.user, 'about.en-US'),
           },
         },
       };

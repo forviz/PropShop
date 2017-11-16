@@ -10,6 +10,9 @@ import _ from 'lodash';
 import queryString from 'query-string';
 
 // import ContactAgent from '../../components/ContactAgent';
+import Wishlist from '../../components/Wish';
+import PropertyShare from '../../modules/property/components/PropertyShare';
+import PropertyRelate from '../../modules/property/components/PropertyRelate';
 
 import { AgentContact } from '../../modules/agent';
 
@@ -25,6 +28,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     propertyId,
     data: property,
+    mobileMode: state.core.mobileMode,
   };
 };
 
@@ -75,6 +79,8 @@ class Property extends Component {
 
   state = {
     showStreetView: false,
+    clickWishlist: false,
+    clickShare: false,
   }
 
   handleStreerView = () => {
@@ -90,8 +96,48 @@ class Property extends Component {
     });
   }
 
+  renderSlide = (item) => {
+    const backgroundStyle = {
+      background: `url(${item.original})`,
+      backgroundSize: 'contain',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      width: '100%',
+      height: '100%',
+    };
+
+    return (
+      <div className="image-gallery-image" style={backgroundStyle} />
+    );
+  }
+
+  handleWishlist = () => {
+    this.setState({
+      clickWishlist: true,
+    });
+  }
+
+  handleShare = () => {
+    this.setState({
+      clickShare: true,
+    });
+  }
+
+  callbackWishlist = () => {
+    this.setState({
+      clickWishlist: false,
+    });
+  }
+
+  callbackShare = () => {
+    this.setState({
+      clickShare: false,
+    });
+  }
+
   render() {
-    const { data, history } = this.props;
+    const { clickWishlist, clickShare } = this.state;
+    const { data, history, mobileMode } = this.props;
 
     if (!_.size(data)) return <div />;
 
@@ -102,42 +148,38 @@ class Property extends Component {
     });
 
     if (_.size(data.images) > 0) {
-      images = _.map(data.images, (image) => {
-        return {
+      _.forEach(data.images, (image) => {
+        images.push({
           original: _.get(image, 'file.url'),
           thumbnail: _.get(image, 'file.url'),
-        };
+        });
       });
     }
+
+    images = _.uniqBy(images, 'original');
+
+    const showThumbnails = _.size(images) > 1 ? true : false;
 
     return (
       <div id="Property">
         <div className="action">
           <div className="container">
             <div className="row">
-              <div className="col-md-12">
-                <div className="clearfix" style={{ margin: '30px 0' }} >
-                  <div className="pull-left">
-                    <div>
-                      <div role="button" tabIndex={0} className="backhome" onClick={() => history.goBack()} >
-                        <FontAwesome name="angle-left" /> กลับไปที่ค้นหา
-                      </div>
-                      <div className="address">
-                        <b>สำหรับ{data.for} {'>'} {data.province} {'>'} {data.amphur} {'>'} {data.district} {'>'} </b>
-                        <span className="text-gray">{data.address} ถนน{data.street}</span>
-                      </div>
-                    </div>
-                  </div>
-                  {/*
-                  <div className="pull-right">
-                    <div style={{ display: 'inline-block', marginRight: 8 }} >
-                      <ButtonAction font="heart-o" text="บันทึก" onClick={this.handleWishList} />
-                    </div>
-                    <div style={{ display: 'inline-block' }} >
-                      <ButtonAction font="envelope-o" text="แบ่งปัน" onClick={this.handleShare} />
-                    </div>
-                  </div>
-                  */}
+              <div className="col-md-9 vcenter">
+                <div role="button" tabIndex="0" className="backhome" onClick={() => history.goBack()} >
+                  <FontAwesome name="angle-left" /> กลับไปที่ค้นหา
+                </div>
+                <div className="address">
+                  <b>สำหรับ{data.for} {'>'} {/* {data.province} {'>'} {data.amphur} {'>'} {data.district} {'>'} */} </b>
+                  <span className="text-gray">{data.address}</span>
+                </div>
+              </div>
+              <div className="col-md-3 vcenter buttons">
+                <div role="button" tabIndex="0" className="wishlist-button" onClick={this.handleWishlist}>
+                  <Wishlist item={data} isClicked={clickWishlist} onChange={this.callbackWishlist} /> บันทึก
+                </div>
+                <div role="button" tabIndex="0" className="share-button" onClick={this.handleShare}>
+                  <PropertyShare item={data} isClicked={clickShare} onChange={this.callbackShare} /> แบ่งบัน
                 </div>
               </div>
             </div>
@@ -159,14 +201,16 @@ class Property extends Component {
                     slideInterval={2000}
                     showPlayButton={false}
                     onThumbnailClick={this.handleThumbnailClick}
+                    showThumbnails={showThumbnails}
+                    renderItem={this.renderSlide}
                   />
-                  <div className="google-map">
+                  {/*<div className="google-map">
                     <div className="clearfix">
                       <div className="pull-left text-center">
                         <div role="button" tabIndex="0" onClick={this.handleStreerView}>
                           <img src={`${process.env.PUBLIC_URL} /images/googlemap/map-mark.jpg`} alt="Map View" />
                         </div>
-                        <div>Map View</div>
+                        <div>Map/Street View</div>
                       </div>
                       <div className="pull-right text-center">
                         <div role="button" tabIndex="0" onClick={this.handleStreerView}>
@@ -175,7 +219,7 @@ class Property extends Component {
                         <div>Street View</div>
                       </div>
                     </div>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </div>
@@ -188,17 +232,19 @@ class Property extends Component {
                         <div className="col-md-12">
                           <div className="main-info">
                             <div className="row">
-                              <div className="col-md-5">
+                              <div className="col-md-5 vcenter">
                                 <div className="price-block">
                                   <div className="for">{data.for}</div>
                                   <div className="price">฿{numeral(data.price).format('0,0')}</div>
                                   <div className="create_date">อยู่ในพรอพช็อปมาแล้ว {data.inWebsite} วัน</div>
+                                  <div className="last_update">(ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ {data.lastUpdate})</div>
                                 </div>
                               </div>
-                              <div className="col-md-7">
+                              <div className="col-md-7 vcenter">
                                 <div className="address-block">
-                                  <div className="address_1">{data.address}</div>
-                                  <div className="address_2">ถนน{data.street} เขต{data.amphur} {data.province} {data.zipcode}</div>
+                                  <div className="address_1">{data.project}</div>
+                                  <div className="address_2">{data.address}</div>
+                                  {/*<div className="address_2">ถนน{data.street} เขต{data.amphur} {data.province} {data.zipcode}</div>*/}
                                   <div className="options">
                                     <ul>
                                       <li><FontAwesome name="bed" /> {data.bedroom} ห้องนอน</li>
@@ -217,30 +263,26 @@ class Property extends Component {
                             <h2>รายละเอียด</h2>
                             <div className="announcementDetails">
                               {data.announceDetails &&
-                                <div>
-                                  {data.announceDetails.split('\n').map((item, key) => {
-                                    return <span key={key.toString()}>{item}<br /></span>;
-                                  })}
-                                </div>
+                                <div dangerouslySetInnerHTML={{ __html: _.replace(data.announceDetails, /\\n/g, '<br />') }} />
                               }
                             </div>
                           </section>
                         </div>
                       </div>
                     </div>
-                    {_.get(data, 'agent.id') &&
-                      <div className="col-md-4" style={{ paddingLeft: 0 }} >
+                    {_.get(data, 'agent.id') && !mobileMode &&
+                      <div className="col-sm-6 col-md-4" style={{ paddingLeft: 0 }} >
                         <div className="contact-block">
                           <div className="agent-block">
                             <div className="row">
-                              <div className="col-md-4 vcenter">
+                              <div className="col-xs-4 vcenter">
                                 <div className="agent-image">
                                   {_.get(data, 'agent.image') &&
                                     <img src={_.get(data, 'agent.image')} alt={`${_.get(data, 'agent.name')} ${_.get(data, 'agent.lastname')}`} />
                                   }
                                 </div>
                               </div>
-                              <div className="col-md-8 vcenter">
+                              <div className="col-xs-8 vcenter">
                                 <div className="agent-info">
                                   {(_.get(data, 'agent.name') || _.get(data, 'agent.lastname')) &&
                                     <div className="name">{_.get(data, 'agent.name')} {_.get(data, 'agent.lastname')}</div>
@@ -277,7 +319,6 @@ class Property extends Component {
               <div className="col-md-12">
                 <section className="info features">
                   <h2>คุณสมบัติต่างๆ</h2>
-                  <div>ข้อมูลปรับปรุงล่าสุดเมื่อวันที่ {data.lastUpdate}:</div>
                   <div className="row">
                     <div className="col-md-3">ราคา: {numeral(data.price).format('0,0')} บาท</div>
                     <div className="col-md-3">สถานะ: สำหรับ{data.for}</div>
@@ -288,7 +329,16 @@ class Property extends Component {
                   <div className="facilities-block">
                     <h4>สิ่งอำนวยความสะดวก:</h4>
                     <div className="row">
-                      {_.size(_.get(data, 'specialFeatureView')) > 0 &&
+                      {_.size(_.get(data, 'tags')) > 0 &&
+                        <span>
+                          {
+                            _.map(data.tags, (value) => {
+                              return <div className="col-md-3" key={value}><Icon type="check-circle" /> {value}</div>;
+                            })
+                          }
+                        </span>
+                      }
+                      {/*{_.size(_.get(data, 'specialFeatureView')) > 0 &&
                         <span>
                           {
                             _.map(data.specialFeatureView, (value) => {
@@ -323,7 +373,7 @@ class Property extends Component {
                             })
                           }
                         </span>
-                      }
+                      }*/}
                     </div>
                   </div>
                   <div className="row">
@@ -344,6 +394,49 @@ class Property extends Component {
                     <h2>สถานที่ใกล้เคียง</h2>
                     <NearbyPlace lat={data.location.lat} lng={data.location.lon} />
                   </section>
+                </div>
+              </div>
+            }
+            {_.get(data, 'agent.id') && mobileMode &&
+              <div className="row">
+                <div className="col-xs-12">
+                  <div className="contact-block">
+                    <div className="agent-block">
+                      <div className="row">
+                        <div className="col-xs-4 vcenter">
+                          <div className="agent-image">
+                            {_.get(data, 'agent.image') &&
+                              <img src={_.get(data, 'agent.image')} alt={`${_.get(data, 'agent.name')} ${_.get(data, 'agent.lastname')}`} />
+                            }
+                          </div>
+                        </div>
+                        <div className="col-xs-8 vcenter">
+                          <div className="agent-info">
+                            {(_.get(data, 'agent.name') || _.get(data, 'agent.lastname')) &&
+                              <div className="name">{_.get(data, 'agent.name')} {_.get(data, 'agent.lastname')}</div>
+                            }
+                            {/*
+                            <div className="rating">
+                              <Rate disabled defaultValue={data.agent.rate.rating} />
+                              <span>({agent.rate.count})</span>
+                            </div>
+                            */}
+                            {_.get(data, 'agent.phone') &&
+                              <div className="phone">{_.get(data, 'agent.phone')}</div>
+                            }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <AgentContact
+                      domain="property"
+                      agentId={data.agent.id}
+                      emailTo={data.agent.email}
+                      agentName={data.agent.username}
+                      propertyId={data.id}
+                      projectName={data.project}
+                    />
+                  </div>
                 </div>
               </div>
             }
@@ -431,6 +524,17 @@ class Property extends Component {
               </div>
             </div>
             */}
+            <div className="row">
+              <div className="col-md-12">
+                <section className="info relate">
+                  <h2>คุณสมบัติใกล้เคียง</h2>
+                  <PropertyRelate
+                    param={`?for=${data.for}&propertyType=${data.propertyType}&near=${data.locationMarker.lat},${data.locationMarker.lon},
+                    &skip=0&limit=4&order=-sys.createdAt&notId=${data.id}`}
+                  />
+                </section>
+              </div>
+            </div>
           </div>
         </div>
       </div>

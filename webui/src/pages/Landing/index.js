@@ -41,7 +41,7 @@ const mapStateToProps = (state) => {
     banner: state.banners,
     landingItems: [
       {
-        title: 'Condo',
+        title: 'Condominium',
         ...selectPropertyFromDomain(state, 'landing-condo'),
       },
       {
@@ -51,6 +51,7 @@ const mapStateToProps = (state) => {
     ],
     wishlist: state.domain.accountWishlist.data,
     user: state.user.data,
+    mobileMode: state.core.mobileMode,
   };
 };
 
@@ -77,6 +78,7 @@ const MapWrapper = styled.div`
   right: ${props => (props.hide ? '100%' : '0')};
   left: ${props => (props.hide ? '-100%' : '0')};
   visibility: ${props => (props.hide ? 'none' : 'visible')};
+  transform: translateY(${props => (props.showFooter ? -props.showFooter : '0')}px);
 
   @media (min-width: ${BREAKPOINT}px) {
     display: block;
@@ -130,21 +132,39 @@ class Landing extends Component {
 
   state = {
     displayType: 'thumbnail',
+    showFooter: 0,
     searchParameters: {
-      area: undefined,
       location: undefined,
       bound: undefined,
+      for: '',
+      propertyType: [''],
+      area: {
+        name: 'bangkok',
+      },
     },
   }
 
-  componentDidMount() {
-    document.getElementById('Footer').style.display = 'none';
-    this.headerHeight = document.getElementById('Header').clientHeight;
+  componentWillMount() {
+    this.handleShowFooter();
+  }
 
+  componentDidMount() {
+    window.addEventListener('scroll', this.handleShowFooter);
+    window.addEventListener('resize', this.handleShowFooter);
     const { onInitPage } = this.props.actions;
     onInitPage();
-
     this.settingWishlist();
+  }
+
+  componentDidUpdate() {
+    this.pageHeight = document.getElementById('root').clientHeight;
+    this.footerHeight = document.getElementById('Footer').clientHeight;
+    this.screenHeight = this.pageHeight - window.innerHeight;
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleShowFooter);
+    window.removeEventListener('resize', this.handleShowFooter);
   }
 
   settingWishlist = async () => {
@@ -180,6 +200,21 @@ class Landing extends Component {
     localStorage.wishList = JSON.stringify(_.union(localWishlist));
   }
 
+  handleShowFooter = () => {
+    if ((this.screenHeight - document.body.scrollTop) < this.footerHeight) {
+      const padding = this.footerHeight - (this.screenHeight - document.body.scrollTop);
+      this.setState({
+        showFooter: padding,
+      });
+    } else {
+      if (this.state.showFooter !== 0) {
+        this.setState({
+          showFooter: 0,
+        });
+      }
+    }
+  }
+
   delay = (() => {
     let timer = 0;
     return (callback, ms) => {
@@ -202,7 +237,7 @@ class Landing extends Component {
 
   renderSearchFilter = (loading) => {
     const { history, areas } = this.props;
-    const { searchParams } = this.state;
+    const { searchParameters } = this.state;
     return (
       <div>
         {loading === true ? (
@@ -210,9 +245,10 @@ class Landing extends Component {
         ) : (
           <PropertySearch
             activeTab="area"
-            searchParameters={searchParams}
+            searchParameters={searchParameters}
             simpleMode
             trigger="none"
+            page="home"
             onUpdate={params => this.setState({ searchParams: params })}
             onSubmit={params => history.push(convertParamsToLocationObject(params))}
           />
@@ -226,11 +262,11 @@ class Landing extends Component {
     const { landingItems } = this.props;
     return (
       <div className="result">
-        <div className="pull-right">
+        {/*<div className="pull-right">
           <div className="display-type">
             <PropertyDisplayType active={displayType} onChange={this.handleDisplayType} />
           </div>
-        </div>
+        </div>*/}
         {
           _.map(landingItems, group =>
             (<div key={group.title} className="list clearfix">
@@ -259,12 +295,12 @@ class Landing extends Component {
   }
 
   renderMobileScreen = () => {
-    const { searchParameters, realestate } = this.props;
-    const { mobileViewMode } = this.state;
+    const { searchParameters } = this.props;
+    const { mobileViewMode, showFooter } = this.state;
 
     return (
       <div id="Home">
-        <MapWrapper>
+        <MapWrapper showFooter={showFooter}>
           <BannerRealEstate />
         </MapWrapper>
         <ListWrapper mode={mobileViewMode}>
@@ -277,9 +313,9 @@ class Landing extends Component {
   }
 
   renderSplitScreen = () => {
-    const { searchParameters, realestate } = this.props;
+    const { searchParameters } = this.props;
     return (
-      <div id="Landing">
+      <div id="Home">
         <MapWrapper>
           <BannerRealEstate />
         </MapWrapper>
@@ -293,9 +329,9 @@ class Landing extends Component {
   }
 
   render() {
-    const { showSplitContent } = this.state;
+    const { mobileMode } = this.props;
 
-    if (showSplitContent) return this.renderSplitScreen();
+    if (mobileMode) return this.renderSplitScreen();
 
     // Mobile, Not split screen
     return this.renderMobileScreen();

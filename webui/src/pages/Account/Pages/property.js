@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
-import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Spin, Alert, Pagination } from 'antd';
-// import FontAwesome from 'react-fontawesome';
 import _ from 'lodash';
 
 import * as PropertyActions from '../../../actions/property-actions';
-// import RealEstateItem from '../../../components/RealEstateItem';
-// import PropertyDisplayType from '../../../components/PropertyDisplayType';
-
 import PropertyItem from '../../../modules/property/components/PropertyItem';
 
 class Property extends Component {
@@ -21,10 +16,11 @@ class Property extends Component {
     }).isRequired,
     user: T.shape().isRequired,
     fetching: T.bool.isRequired,
-    result: T.string.isRequired,
+    fetch: T.bool.isRequired,
     page: T.number.isRequired,
     limit: T.number.isRequired,
     total: T.number.isRequired,
+    data: T.shape().isRequired,
   }
 
   constructor(props) {
@@ -36,16 +32,19 @@ class Property extends Component {
     displayType: 'list',
   }
 
-  getPropertiesByAgent = () => {
-    const { user, page, limit } = this.props;
+  setData = (page) => {
+    const { user, limit } = this.props;
     const { fetchPropertiesByAgent } = this.props.actions;
     fetchPropertiesByAgent(user.id, page - 1, limit);
   }
 
+  getPropertiesByAgent = () => {
+    const { page } = this.props;
+    this.setData(page);
+  }
+
   handlePagination = (page) => {
-    const { user, limit } = this.props;
-    const { fetchPropertiesByAgent } = this.props.actions;
-    fetchPropertiesByAgent(user.id, page - 1, limit);
+    this.setData(page);
   }
 
   handleDisplayType = (displayType) => {
@@ -54,16 +53,39 @@ class Property extends Component {
     });
   }
 
-  render() {
+  renderProperties = () => {
     const { displayType } = this.state;
-    const { properties, fetching, result, page, total, limit } = this.props;
+    const { data } = this.props;
+    const render = _.map(data, (item, key) => {
+      return (
+        <div className={displayType === 'thumbnail' ? 'col-md-3' : 'col-md-12'} key={key}>
+          <div className="property-block">
+            <PropertyItem type={displayType} item={item} mode="edit" />
+          </div>
+        </div>
+      );
+    });
+    return render;
+  }
+
+  renderPagination = () => {
+    const { page, total } = this.props;
+    return (
+      <div className="property-pagination">
+        <Pagination current={page} total={total} onChange={this.handlePagination} />
+      </div>
+    );
+  }
+
+  render() {
+    const { data, fetching, fetch, total, limit } = this.props;
 
     return (
       <div id="MyProperty">
         <div className="clearfix">
           <div className="pull-left">
             <div className="topic">
-              <h1>รายการอสังหาฯของฉัน</h1>
+              <h1>รายการอสังหาฯที่ประกาศ</h1>
             </div>
           </div>
           {/* <div className="pull-right">
@@ -75,31 +97,23 @@ class Property extends Component {
         <div className="property-list">
           <div className="row">
             <Spin spinning={fetching}>
-              {result === 'ok' &&
-                _.map(properties, (item, key) => {
-                  return (
-                    <div className={displayType === 'thumbnail' ? 'col-md-3' : 'col-md-12'} key={key}>
-                      <div className="property-block">
-                        <PropertyItem type={displayType} item={item} mode="edit" />
-                      </div>
+              {fetch &&
+                <div>
+                  {_.size(data) > 0 ? (
+                    <div>
+                      {this.renderProperties()}
+                      {total > limit &&
+                        this.renderPagination()
+                      }
                     </div>
-                  );
-                })
-              }
-              {result === 'no' &&
-                <Alert
-                  message="คุณยังไม่มีรายการประกาศ"
-                  type="info"
-                />
+                  ) : (
+                    <Alert message="คุณยังไม่มีรายการประกาศ" type="info" />
+                  )}
+                </div>
               }
             </Spin>
           </div>
         </div>
-        {total > limit &&
-          <div className="property-pagination">
-            <Pagination defaultCurrent={page} total={total} onChange={this.handlePagination} />
-          </div>
-        }
       </div>
     );
   }
@@ -108,9 +122,9 @@ class Property extends Component {
 const mapStateToProps = (state) => {
   return {
     user: state.user.data,
-    properties: state.domain.accountProperty.data,
+    data: state.domain.accountProperty.data,
     fetching: state.domain.accountProperty.fetching,
-    result: state.domain.accountProperty.result,
+    fetch: state.domain.accountProperty.fetch,
     page: state.domain.accountProperty.page,
     limit: state.domain.accountProperty.limit,
     total: state.domain.accountProperty.total,

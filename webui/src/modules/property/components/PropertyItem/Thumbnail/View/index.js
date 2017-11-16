@@ -41,9 +41,11 @@ class Thumbnail extends Component {
       <div className="Thumbnail" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
         <div className="image" style={imageStyle} />
         <div className="content">
-          <div className="name">{item.project}</div>
+          <div className="name">{item.project || '\u00A0'}</div>
           <div className="price">{numeral(item.price).format('0,0')} บาท</div>
-          <div className="place">{item.street} - {item.province}</div>
+          <div className="place">{item.province || _.get(item, 'location.summary.en') ||
+            _.get(item, 'location.summary.th') || _.get(item, 'location.full.en') ||
+            _.get(item, 'location.full.th') || '\u00A0'}</div>
           {(item.bedroom > 0 || item.bathroom > 0) &&
             <div className="option">
               <ul>

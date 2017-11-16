@@ -51,57 +51,71 @@ class List extends Component {
 
     if (!item) return <div />;
 
+    const imageStyle = {
+      background: `url(${item.mainImage.file.url})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    };
+
     return (
       <div className="List">
         <div className="mode-edit">
           <div className="row">
             <div className="col-md-3 vcenter">
-              <div className="image">
-                <img src={item.mainImage.file.url} alt={item.project} />
+              <div className="image" style={imageStyle} />
+            </div>
+            <div className="col-md-5 vcenter">
+              <div className="info">
+                <div className="project">{item.project || '\u00A0'}</div>
+                <div className="price">{numeral(item.price).format('0,0')} บาท</div>
+                <div className="place">
+                  {item.province || _.get(item, 'location.summary.en') ||
+                  _.get(item, 'location.summary.th') || _.get(item, 'location.full.en') ||
+                  _.get(item, 'location.full.th') || '\u00A0'}
+                </div>
+                <div className="option">
+                  <ul>
+                    {item.bedroom > 0 &&
+                      <li><FontAwesome name="bed" /> <span>{item.bedroom}</span> ห้องนอน</li>
+                    }
+                    {item.bathroom > 0 &&
+                      <li><FontAwesome name="bath" /> <span>{item.bathroom}</span> ห้องน้ำ</li>
+                    }
+                  </ul>
+                </div>
+                <div className="post-date">
+                  <div>ประกาศเมื่อ: {item.postDate}</div>
+                </div>
+                {/*<div className="description">{item.announceDetails}</div>*/}
               </div>
             </div>
             <div className="col-md-3 vcenter">
               <div className="info">
-                <div className="project">{item.project || item.address}</div>
-                <div className="price">{numeral(item.price).format('0,0')} บาท</div>
-                <div className="place">{item.street} - {item.province}</div>
-                <div className="description">{item.announceDetails}</div>
+                <div className="status">ประกาศ: {item.for}</div>
+                <div className="property-type">{item.residentialType}</div>
+                <div className="property-status">
+                  <div>สถานะ:</div>
+                  {item.approve === true ? (
+                    <Popconfirm
+                      title={enable ? 'คุณต้องการปิดการใช้งาน?' : 'คุณต้องการเปิดการใช้งาน?'}
+                      onConfirm={this.handleChangeStatusConfirm}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <a className={`label-status ${enable ? 'enable' : 'disable'}`}>
+                        {enable &&
+                          <FontAwesome name="check" />
+                        }
+                        {enable ? 'กำลังใช้งาน' : 'ปิดการใช้งาน'}
+                      </a>
+                    </Popconfirm>
+                  ) : (
+                    <a className="waiting-approve">รอการอนุมัติ</a>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="col-md-2 vcenter">
-              <div className="status">ประกาศ: {item.for}</div>
-              <div className="post-date">
-                <div>วันที่ประกาศ:</div>
-                <div>{item.postDate}</div>
-              </div>
-            </div>
-            <div className="col-md-2 vcenter">
-              <div className="property-type">
-                <div>ประเภทอสังหาฯ:</div>
-                <div>{item.residentialType}</div>
-              </div>
-              <div className="property-status">
-                <div>สถานะ:</div>
-                {item.approve === true ? (
-                  <Popconfirm
-                    title={enable ? 'คุณต้องการปิดการใช้งาน?' : 'คุณต้องการเปิดการใช้งาน?'}
-                    onConfirm={this.handleChangeStatusConfirm}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <a className={`label-status ${enable ? 'enable' : 'disable'}`}>
-                      {enable &&
-                        <FontAwesome name="check" />
-                      }
-                      {enable ? 'กำลังใช้งาน' : 'ปิดการใช้งาน'}
-                    </a>
-                  </Popconfirm>
-                ) : (
-                  <a className="waiting-approve">รอการอนุมัติ</a>
-                )}
-              </div>
-            </div>
-            <div className="col-md-2 vcenter">
+            <div className="col-md-1 vcenter">
               <div className="property-actions">
                 <ul>
                   <li>

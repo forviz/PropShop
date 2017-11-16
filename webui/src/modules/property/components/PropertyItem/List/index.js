@@ -3,6 +3,7 @@ import T from 'prop-types';
 
 import PropertyListViewMode from './View';
 import PropertyListEditMode from './Edit';
+import PropertyListWishlistMode from './Wishlist';
 
 class PropertyItemList extends Component {
 
@@ -18,6 +19,7 @@ class PropertyItemList extends Component {
     switch (mode) {
       case 'view': return <PropertyListViewMode item={item} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
       case 'edit': return <PropertyListEditMode item={item} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
+      case 'wishlist': return <PropertyListWishlistMode item={item} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
       default: return <PropertyListViewMode item={item} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} />;
     }
   }

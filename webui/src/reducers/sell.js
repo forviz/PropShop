@@ -32,14 +32,14 @@ const initalState = {
     zipcode: '',
     googleMap: {
       zoom: 10,
-      markers: [{
+      markers: {
         position: {
           lat: 13.7248946,
           lng: 100.4930246,
         },
         key: 'Bangkok',
         defaultAnimation: 2,
-      }],
+      },
     },
   },
   step1: {},
@@ -47,6 +47,7 @@ const initalState = {
     requiredField: ['mainImage'],
     mainImage: {},
     images: [],
+    deleteImages: [],
   },
   step3: {
     acceptTerms: false,

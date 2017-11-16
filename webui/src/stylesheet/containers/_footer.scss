@@ -13,6 +13,9 @@
 	a:hover {
 		text-decoration: none;
 	}
+	.menu-right {
+		text-align: right;
+	}
 	.menu-left ul li,
 	.menu-right ul li {
 		display: inline-block;
@@ -53,5 +56,18 @@
 		vertical-align: middle;
 		margin-left: 15px;
 	}
-
+	.social-media {
+		text-align: right;
+	}
+	@media (max-width: 767px) {
+		.menu-left,
+		.menu-right,
+		.copyright,
+		.social-media {
+			text-align: center;
+		}
+		.menu-right {
+			margin-top: 10px;
+		}
+	}
 }

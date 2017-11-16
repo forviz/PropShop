@@ -92,7 +92,7 @@ class Profile extends Component {
   handleInputImage = (accepted) => {
     const data = this.props.data.image;
     if (accepted.length > 0) {
-      _.set(data, 'value.fields.file.url', accepted[0].preview);
+      _.set(data, 'value.fields.file.en-US.url', accepted[0].preview);
       _.set(data, 'value.fields.title', accepted[0].name);
       _.set(data, 'value.newImage', accepted[0]);
     }
@@ -224,7 +224,7 @@ class Profile extends Component {
     this.setInput('email', data);
   }
 
-  submit = () => {
+  submit = async () => {
     const { editing } = this.props;
 
     if (editing === true) {
@@ -248,22 +248,24 @@ class Profile extends Component {
         errorPhone === ''
       ) {
       const { updateUserProfile } = this.props.actions;
-      updateUserProfile(user.id, this.getOnlyValue(data));
+      await updateUserProfile(user.id, this.getOnlyValue(data));
+      document.getElementById('Content').scrollIntoView();
     }
   }
 
-  handleUpdateAvatar = () => {
+  handleUpdateAvatar = async () => {
     const { data, user } = this.props;
     const { updateAvatar } = this.props.actions;
     if (_.get(data, 'image.value.newImage') && _.get(data, 'image.errorMessage') === false) {
       const file = _.get(data, 'image.value.newImage');
       const oldAssetId = _.get(data, 'image.value.sys.id');
-      updateAvatar(user.id, file, oldAssetId);
+      await updateAvatar(user.id, file, oldAssetId);
+      document.getElementById('Content').scrollIntoView();
     }
   }
 
   render() {
-    const { data, editing, editSuccess } = this.props;
+    const { data, editing, editSuccess, errorMessage } = this.props;
 
     if (_.size(data) === 0) return <center><Spin /></center>;
 
@@ -275,12 +277,23 @@ class Profile extends Component {
 
               <Spin tip="Loading..." spinning={editing}>
                 <div className="layout-container">
-                  <h1>แก้ไขข้อมูลส่วนตัว</h1>
+                  <div className="topic">
+                    <h1>แก้ไขข้อมูลส่วนตัว</h1>
+                  </div>
                   {editSuccess === true &&
                     <div className="form-group" style={{ marginTop: 20 }}>
                       <Alert
                         message="แก้ไขข้อมูลส่วนตัวสำเร็จ"
                         type="success"
+                        showIcon
+                      />
+                    </div>
+                  }
+                  {errorMessage &&
+                    <div className="form-group" style={{ marginTop: 20 }}>
+                      <Alert
+                        message={errorMessage}
+                        type="error"
                         showIcon
                       />
                     </div>
@@ -295,14 +308,14 @@ class Profile extends Component {
                               รูปควรมีขนาดไม่เกิน 500 kb. และเป็นไฟล์นามสกุล .gif, .jpg หรือ .png
                             </label>
                             <Dropzone
-                              className={`uploadImage-block ${_.get(data, 'image.value.fields.file.url') ? 'has-image' : ''}`}
+                              className={`uploadImage-block ${_.get(data, 'image.value.fields.file.en-US.url') ? 'has-image' : ''}`}
                               accept="image/jpeg, image/png , image/gif"
                               maxSize={500000}
                               multiple={false}
                               onDrop={(accepted, rejected) => { this.handleInputImage(accepted, rejected); }}
                             >
-                              {_.get(data, 'image.value.fields.file.url') ? (
-                                <img src={data.image.value.fields.file.url} alt={data.image.value.fields.title} />
+                              {_.get(data, 'image.value.fields.file.en-US.url') ? (
+                                <img src={data.image.value.fields.file['en-US'].url} alt={data.image.value.fields.title} />
                               ) : (
                                 <div className="uploadImage-bg">
                                   <FontAwesome name="user" />

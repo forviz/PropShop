@@ -39,7 +39,32 @@ const store = createStoreWithFirebase(
   ),
 );
 
+const BREAKPOINT = 767;
+
 class PropShop extends Component {
+
+  componentWillMount() {
+    this.handleResize();
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize = () => {
+    const mobileMode = window.matchMedia(`(max-width: ${BREAKPOINT}px)`).matches;
+    if (mobileMode !== store.getState().core.mobileMode) {
+      store.dispatch({
+        type: 'CORE/SET/MOBILE',
+        mobileMode,
+      });
+    }
+  }
+
   render() {
     return (
       <Provider store={store} locale="th">

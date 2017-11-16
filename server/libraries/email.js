@@ -19,6 +19,7 @@ module.exports = function(params) {
       subject: params.subject,
       html: params.html,
     };
+    if (params.replyTo) options.replyTo = params.replyTo;
     transporter.sendMail(options, function(err, suc) {
       err ? params.errorCallback(err) : params.successCallback(suc);
     });

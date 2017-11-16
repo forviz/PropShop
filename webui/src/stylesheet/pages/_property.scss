@@ -4,7 +4,9 @@
 
 	.action {
 		.backhome {
+			margin: 15px 0;
 			display: inline-block;
+			vertical-align: middle;
 	    background-image: linear-gradient(to top, rgb(236, 236, 236), rgb(255, 255, 255));
 	    border: 1px solid rgb(204, 204, 204);
 	    border-radius: 4px;
@@ -20,6 +22,29 @@
 		.address {
 			display: inline-block;
     	margin-left: 15px;
+			max-width: 80%;
+    	vertical-align: middle;
+		}
+		.buttons {
+			margin: 20px 0;
+			text-align: right;
+			.wishlist-button,
+			.share-button {
+				background: #4D790A;
+				border: 1px solid #4D790A;
+				border-radius: 2px;
+				width: 84px;
+				height: 36px;
+				line-height: 36px;
+				text-align: center;
+				color: #ffffff;
+				cursor: pointer;
+				display: inline-block;
+				margin: 0 4px;
+				.fa {
+					color: #ffffff;
+				}
+			}
 		}
 	}
 
@@ -48,11 +73,17 @@
 			&.show-banner {
 				.image-gallery-slide-wrapper {
 					opacity: 1;
-    			height: auto;
+    			height: 500px;
+					.image-gallery-swipe,
+					.image-gallery-slides,
+					.image-gallery-slide {
+						width: 100%;
+						height: 100%;
+					}
 				}
 			}
 			.google-map {
-				width: 29%;
+				// width: 14%;
 		    float: right;
 		    padding-top: 8px;
 		    img {
@@ -69,10 +100,19 @@
 		    }
 			}
 			.image-gallery-thumbnails-wrapper {
-				width: 70%;
-				float: left;
+				// width: 70%;
+				// float: left;
 			}
 			.image-gallery-content.fullscreen {
+				position: absolute;
+				width: 80%;
+				left: 0;
+				right: 0;
+				margin: auto;
+				bottom: 20px;
+				.image-gallery-slide-wrapper {
+					height: 90%;
+				}
 				.image-gallery-slide {
 					text-align: center;
 					img {
@@ -87,8 +127,12 @@
 					}
 				}
 				.image-gallery-thumbnails-wrapper {
-					width: inherit;
+					width: 100%;
     			float: none;
+				}
+				.image-gallery-image {
+					width: 70%;
+					margin: auto;
 				}
 			} 
 		}
@@ -96,17 +140,23 @@
 		.main-info {
 			border: 1px solid $border-color;
     	border-top: 0;
+			@media screen and (max-width: 991px) {
+				border-right: 0;
+			}
 		}
 
 		.detail-block {
 			border-top: 1px solid $border-color;
 			border-bottom: 1px solid $border-color;
+			border-right: 1px solid $border-color;
 			margin-top: 20px;
 		}
 		
 		.price-block {
 			padding: 15px;
-			border-right: 1px solid $border-color;
+			@media screen and (min-width: 992px) {
+				border-right: 1px solid $border-color;
+			}
 			.for {
 				font-family: $sukumvit-bold;
 				font-size: 18px;
@@ -114,31 +164,58 @@
 			}
 			.price {
 				font-family: 'Myriad Pro';
-				font-size: 48px;
+				font-size: 42px;
+				@media screen and (max-width: 768px) {
+					font-size: 32px;
+				}
 			}
 			.create_date {
 				font-family: $sukumvit-bold;
 				font-size: 18px;
 			}
+			.last_update {
+				color: $text-gray;
+			}
 		}
 
 		.address-block {
 			padding: 15px;
+			@media screen and (min-width: 992px) {
+				padding-left: 0;
+			}
 			.address_1 {
 				font-family: $sukumvit-bold;
-				font-size: 30px;
+				font-size: 24px;
+				line-height: 28px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				/* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */
+				max-height: 56px;
 			}
 			.address_2 {
 				font-family: $sukumvit-bold;
-				font-size: 18px;
+				font-size: 16px;
 				color: $text-gray;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				/* autoprefixer: off */
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on */
+				max-height: 48px;
 			}
 			.options {
+				margin-top: 10px;
 				ul li {
 					display: inline-block;
 					margin: 0 10px;
 					font-family: $sukumvit-bold;
-					font-size: 18px;
+					font-size: 16px;
 				}
 				ul li:first-child {
 					margin-left: 0;
@@ -149,6 +226,10 @@
 			}
 		}
 
+		.announcementDetails {
+			line-height: 24px;
+		}
+
 		section.info {
 			padding: 15px;
 			border: 1px solid $border-color;
@@ -157,6 +238,9 @@
 				font-family: $sukumvit-bold;
 				font-size: 30px;
 				margin-bottom: 10px;
+				@media screen and (max-width: 768px) {
+					font-size: 26px;
+				}
 			}
 			h4 {
 				font-family: $sukumvit-bold;
@@ -168,7 +252,10 @@
 		section.info.detail {
 			border-right: 0;
 			border-bottom: 0;
-			min-height: 293px;
+			min-height: 215px;
+			@media screen and (max-width: 1199px) {
+				min-height: 204px;
+			}
 		}
 
 		.contact-block {
@@ -182,6 +269,7 @@
 		.agent-info {
 			.name {
 				color: $text-green;
+				font-size: 16px;
 			}
 			.phone {
 				color: $text-gray;
@@ -211,7 +299,37 @@
 
 	.facilities-block i.anticon-check-circle {
 		color: $text-green;
-		
 	}
 
+	@media screen and (max-width: 991px) {
+		.image-gallery-thumbnail {
+			width: 115px !important;
+			img {
+				height: 80px !important;
+			}
+		}
+		.google-map {
+			width: 110px;
+		}
+		.detail-block {
+			.col-md-8 {
+				padding-right: 15px !important;
+			}
+			.col-md-4 {
+				padding-left: 15px !important;
+			}
+		}
+	}
+
+}
+
+.share-list {
+	li {
+		display: inline-block;
+		margin: 0 4px;
+		.fa {
+			font-size: 20px;
+			cursor: pointer;
+		}
+	}
 }

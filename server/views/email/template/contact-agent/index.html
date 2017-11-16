@@ -1,49 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Contact Agent</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
-<body style="margin: 0;">
-	<center>
-		<div class="body" style="width: 594px;">
-			<div class="header" style="position: relative;">
-				<div class="background"><img src="%BASE_IMAGES_URL%/background.jpg"></div>
-				<div class="logo" style="position: absolute; top: 7px; left: 7px;"><img src="%BASE_IMAGES_URL%/logo.png"></div>
-			</div>
-			<div style="margin-top: 20px; line-height: 34px;">
-				<div style="font-family: 'Myriad Pro'; font-size: 24px; color: #383839;">Thank you for your enquiry, %SEND_FROM%</div>
-				<div style="font-family: 'Myriad Pro'; font-size: 16px; color: #383839;">The seller will be in contact with you shortly</div>
-				<a href="%PROPERTY_URL%" target="_blank" style="font-family: 'Myriad Pro';
-							    font-size: 16px;
-							    color: #2b5cc8;
-							    text-decoration: none;
-							    border: 1px solid #cccccc;
-							    border-radius: 4px;
-							    padding: 0 12px;
-							    display: inline-block;">
-					%PROJECT%
-				</a>
-			</div>
-			<div style="margin-top: 20px; margin-bottom: 40px; line-height: 25px; text-align: left;">
-				<div>We have forwarded your request to owner: %OWNER%</div>
-				<div><b>Message: </b>%MESSAGE%</div>
-			</div>
-			<div class="button">
-				<a href="%PROPERTY_URL%" target="_blank" style="background-image: linear-gradient(to bottom, #76ae31, #6da12d);
-											    padding: 15px;
-											    padding-bottom: 13px;
-											    width: 200px;
-											    display: block;
-											    border-radius: 4px;
-											    box-shadow: 0px 2px 0px 0px #000000;
-											    color: #ffffff;
-											    text-decoration: none;
-											    font-family: 'Myriad Pro';
-											    font-size: 18px;">
-				View the property
-			</a>
-			</div>
+<body>
+	<div style="margin: auto; font-family: Tahoma; width: 594px; color: #383839; padding-bottom: 70px;">
+		<a href="%BASE_URL%" target="_blank">
+      <img src="%BASE_URL%/images/email/header.jpg" alt="%BASE_URL%" style="margin: 0 auto 40px auto;">
+    </a>
+		<div style="text-align: center;">
+			<h3 style="margin: 0;">Thank you for your enquiry, %SEND_FROM%</h3>
+			<p>The seller will be in contact with you shortly.</p>
+			<a href="%PROPERTY_URL%" target="_blank" style="text-decoration: none; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">%PROJECT%</a>
 		</div>
-	</body>
-	</center>
+		<p style="line-height: 1.5;">We have forwarded your request to owner: %OWNER%</p>
+		<p><strong>Message: </strong>%MESSAGE%</p>
+		<br>
+		<a href="%PROPERTY_URL%" target="_blank" style="width: 300px; height: 50px; background: #76ae31; /* Old browsers */background: -moz-linear-gradient(top, #6da12d 0%, #76ae31 100%);background: -webkit-linear-gradient(top, #6da12d 0%,#76ae31 100%);background: linear-gradient(to bottom, #6da12d 0%,#76ae31 100%);box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.25);font-size: 18px;border: none;border-bottom: 2px solid #527822;border-radius: 4px;color: white; display: block; line-height: 50px; text-decoration: none; margin: auto; text-align: center;">
+			View the property
+		</a>
+	</div>
+</body>
 </html>

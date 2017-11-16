@@ -54,9 +54,18 @@
     	color: #ffffff;
     }
 	.topic {
-		font-size: 36px;
+		font-size: 28px;
 		color: #ffffff;
 		margin-bottom: 15px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		/* autoprefixer: off */
+		-webkit-box-orient: vertical;
+		/* autoprefixer: on */
+		line-height: 43px;
+		max-height: 84px;
 	}
     .price {
 	    font-size: 24px;

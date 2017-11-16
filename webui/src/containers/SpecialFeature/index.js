@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Checkbox, Button } from 'antd';
+
+import * as SellActions from '../../actions/sell-actions';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -18,9 +22,19 @@ class SpecialFeature extends Component {
 
   constructor(props) {
     super(props);
-    if (Object.keys(props.defaultValue).length > 0) {
-      this.state.selected = props.defaultValue;
-    }
+    const setValue = {
+      specialFeatureView: _.size(props.defaultValue.specialFeatureView) > 0 ?
+      _.filter(props.defaultValue.specialFeatureView, (value) => { return _.includes(props.items.specialFeatureView.data, value); }) : [],
+      specialFeatureFacilities: _.size(props.defaultValue.specialFeatureFacilities) > 0 ?
+      _.filter(props.defaultValue.specialFeatureFacilities, (value) => { return _.includes(props.items.specialFeatureFacilities.data, value); }) : [],
+      specialFeatureNearbyPlaces: _.size(props.defaultValue.specialFeatureNearbyPlaces) > 0 ?
+      _.filter(props.defaultValue.specialFeatureNearbyPlaces, (value) => { return _.includes(props.items.specialFeatureNearbyPlaces.data, value); }) : [],
+      specialFeaturePrivate: _.size(props.defaultValue.specialFeaturePrivate) > 0 ?
+      _.filter(props.defaultValue.specialFeaturePrivate, (value) => { return _.includes(props.items.specialFeaturePrivate.data, value); }) : [],
+    };
+    this.state.selected = setValue;
+    const { saveStep } = this.props.actions;
+    saveStep('step1', setValue);
   }
 
   state = {
@@ -50,7 +64,7 @@ class SpecialFeature extends Component {
   }
 
   setSelected = (key, value) => {
-    this.setState({selected: { ...this.state.selected, [key]: value }}, () => {
+    this.setState({ selected: { ...this.state.selected, [key]: value } }, () => {
       this.props.onChange(this.state.selected);
     });
   }
@@ -71,17 +85,23 @@ class SpecialFeature extends Component {
   // }
 
   render() {
-    const { items, defaultValue } = this.props;
+    const { items } = this.props;
     const { selected } = this.state;
 
     if (!items) return <div />;
 
-    const setValue = {
-      specialFeatureView: _.size(selected.specialFeatureView) > 0 ? selected.specialFeatureView : defaultValue.specialFeatureView,
-      specialFeatureFacilities: _.size(selected.specialFeatureFacilities) > 0 ? selected.specialFeatureFacilities : defaultValue.specialFeatureFacilities,
-      specialFeatureNearbyPlaces: _.size(selected.specialFeatureNearbyPlaces) > 0 ? selected.specialFeatureNearbyPlaces : defaultValue.specialFeatureNearbyPlaces,
-      specialFeaturePrivate: _.size(selected.specialFeaturePrivate) > 0 ? selected.specialFeaturePrivate : defaultValue.specialFeaturePrivate,
-    };
+    // const setValue = {
+    //   specialFeatureView: _.size(selected.specialFeatureView) > 0 ?
+    //   _.filter(selected.specialFeatureView, (value) => { return _.includes(items.specialFeatureView.data, value); }) : [],
+    //   specialFeatureFacilities: _.size(selected.specialFeatureFacilities) > 0 ?
+    //   _.filter(selected.specialFeatureFacilities, (value) => { return _.includes(items.specialFeatureFacilities.data, value); }) : [],
+    //   specialFeatureNearbyPlaces: _.size(selected.specialFeatureNearbyPlaces) > 0 ?
+    //   _.filter(selected.specialFeatureNearbyPlaces, (value) => { return _.includes(items.specialFeatureNearbyPlaces.data, value); }) : [],
+    //   specialFeaturePrivate: _.size(selected.specialFeaturePrivate) > 0 ?
+    //   _.filter(selected.specialFeaturePrivate, (value) => { return _.includes(items.specialFeaturePrivate.data, value); }) : [],
+    // };
+
+    // console.log('setValue', setValue);
 
     return (
       <div className="SpecialFeature">
@@ -103,6 +123,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeatureView.data}
                   onChange={this.onSpecialFeatureViewChange}
+                  value={selected.specialFeatureView}
                 />
               </div>
             </div>
@@ -112,6 +133,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeatureFacilities.data}
                   onChange={this.onSpecialFeatureFacilitiesChange}
+                  value={selected.specialFeatureFacilities}
                 />
               </div>
             </div>
@@ -121,6 +143,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeatureNearbyPlaces.data}
                   onChange={this.onSpecialFeatureNearbyPlacesChange}
+                  value={selected.specialFeatureNearbyPlaces}
                 />
               </div>
             </div>
@@ -130,6 +153,7 @@ class SpecialFeature extends Component {
                 <CheckboxGroup
                   options={items.specialFeaturePrivate.data}
                   onChange={this.onSpecialFeaturePrivateChange}
+                  value={selected.specialFeaturePrivate}
                 />
               </div>
             </div>
@@ -150,4 +174,18 @@ class SpecialFeature extends Component {
   }
 }
 
-export default SpecialFeature;
+const mapStateToProps = () => {
+  return {};
+};
+
+const actions = {
+  saveStep: SellActions.saveStep,
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SpecialFeature);

@@ -84,7 +84,7 @@ class Login extends Component {
     return errorMessage;
   }
 
-  submit = async () => {
+  submit = () => {
     const { firebase } = this.props;
     const { submitting } = this.state;
 
@@ -102,7 +102,7 @@ class Login extends Component {
       this.setState({
         submitting: true,
       });
-      await firebase.login({
+      firebase.login({
         email,
         password,
       });

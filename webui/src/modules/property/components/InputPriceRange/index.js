@@ -24,12 +24,21 @@ class InputPriceRange extends Component {
     expand: false,
   }
 
+  /* Detect click Outside */
+  componentDidMount() {
+    document.addEventListener('mousedown', this._handleDetectClickOutside);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (!_.isEqual(this.props.priceList && nextProps.priceList)) {
       // if pricelist change, clear value
       // this.props.onChange('priceMin', undefined);
       // this.props.onChange('priceMax', undefined);
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this._handleDetectClickOutside);
   }
 
   getPrices = (operation) => {
@@ -51,6 +60,21 @@ class InputPriceRange extends Component {
       }
       return <Option key={index} disabled={disabled} value={price.toString()}>{numeral(price).format('0,0')} ฿</Option>;
     });
+  }
+
+  _handleDetectClickOutside = (e) => {
+    if (this.component.contains(e.target)) return;
+
+    // onClick Outside
+    this.hideExpandPrice();
+  }
+
+  hideExpandPrice = () => {
+    if (this.state.expand) {
+      this.setState({
+        expand: false,
+      });
+    }
   }
 
   handleExpandPrice = () => {
@@ -76,7 +100,7 @@ class InputPriceRange extends Component {
     const priceMinActive = value.min === parseInt(value.min, 10) && value.min ? 'active' : '';
     const priceMaxActive = value.max === parseInt(value.max, 10) && value.max ? 'active' : '';
     return (
-      <div className="SelectPrice">
+      <div className="SelectPrice" ref={c => this.component = c}>
         <div role="button" tabIndex="0" className={`ant-select-selection--single ${active}`} onClick={this.handleExpandPrice}>
           <div className="clearfix">
             <div className="pull-left">
@@ -112,14 +136,24 @@ class InputPriceRange extends Component {
         </div>
         {expand &&
           <div className="price-lenght-block clearfix">
-            <div className={`price-min vcenter ${priceMinActive}`}>
-              <Select placeholder="ขั้นต่ำ" value={value.min} onChange={this.handlePriceMin}>
+            <div id="price-min" className={`price-min vcenter ${priceMinActive}`}>
+              <Select
+                placeholder="ขั้นต่ำ"
+                value={value.min}
+                onChange={this.handlePriceMin}
+                getPopupContainer={() => document.getElementById('price-min')}
+              >
                 {this.getPrices('min')}
               </Select>
             </div>
             <div className="to vcenter">-</div>
-            <div className={`price-max vcenter ${priceMaxActive}`}>
-              <Select placeholder="ไม่เกิน" value={value.max} onChange={this.handlePriceMax}>
+            <div id="price-max" className={`price-max vcenter ${priceMaxActive}`}>
+              <Select
+                placeholder="ไม่เกิน"
+                value={value.max}
+                onChange={this.handlePriceMax}
+                getPopupContainer={() => document.getElementById('price-max')}
+              >
                 {this.getPrices('max')}
               </Select>
             </div>

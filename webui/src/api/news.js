@@ -1,41 +1,17 @@
+const BASEURL = process.env.REACT_APP_MYAPI_URL;
+
 export const fetchNewsProp = (tabName, page) => {
-  let total = '';
-  const myInit = {
-    method: 'GET',
-  };
-  return fetch(`http://propholic.com/wp-json/wp/v2/${tabName}?page=${page}&per_page=9`, myInit)
-  .then((res) => {
-    total = res.headers.get('X-WP-Total');
-
-    return res.json();
+  const result = fetch(`${BASEURL}/news?tabName=${tabName}&page=${page}&perPage=9`, {
+    'Content-Type': 'application/json',
   })
-  .then((data) => {
-    let tab = '';
-    if (tabName === 'prop-now') tab = 'propNow';
-    else if (tabName === 'prop-talk') tab = 'propTalk';
-    else if (tabName === 'prop-verdict') tab = 'propVerdict';
-
-    const prop = {
-      tab,
-      data,
-      total,
-    };
-    return prop;
-  });
+  .then(response => response.json());
+  return result;
 };
 
 export const fetchNewsBanner = (tabName) => {
-  const myInit = {
-    method: 'GET',
-  };
-  return fetch(`http://propholic.com/wp-json/wp/v2/${tabName}?per_page=5`, myInit)
-  .then((res) => {
-    return res.json();
+  const result = fetch(`${BASEURL}/news?tabName=${tabName}&page=1&perPage=5`, {
+    'Content-Type': 'application/json',
   })
-  .then((data) => {
-    const prop = {
-      data,
-    };
-    return prop;
-  });
+  .then(response => response.json());
+  return result;
 };

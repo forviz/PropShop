@@ -47,15 +47,16 @@ class Header extends Component {
 
   render() {
     const { showMobileMenu } = this.state;
-    const { user, userFetchSuccess, translate, dispatch } = this.props;
+    const { user, userFetchSuccess, translate, dispatch, mobileMode } = this.props;
 
     if (!userFetchSuccess) return <div />;
 
     let loginLabel = null;
+    let divAvatar = null;
 
     if (user.username && user.verify) {
       const menu = (
-        <Menu onClick={this.handleMenuClick}>
+        <Menu onClick={this.handleMenuClick} className="user-menu">
           <Menu.Item key="property">
             <NavLink exact to="/account/property">รายการที่ประกาศ</NavLink>
           </Menu.Item>
@@ -74,24 +75,31 @@ class Header extends Component {
         </Menu>
       );
 
-      let divAvatar = null;
       if (_.get(user, 'image.fields.file.url')) {
+        const avatarStyle = {
+          background: `url(${user.image.fields.file.url})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          width: '100%',
+          height: '100%',
+        };
+
         divAvatar = (
-          <div className="avatar">
-            <img src={user.image.fields.file.url} alt={user.image.fields.file.fileName} className="img-circle" />
-          </div>
+          <span className="avatar"><img src={user.image.fields.file.url} alt="" /></span>
         );
       } else {
         divAvatar = <FontAwesome name="user-o" />;
       }
 
-      loginLabel = (
-        <Dropdown overlay={menu} trigger={['click']}>
-          <a className="ant-dropdown-link user-menu">
-            {divAvatar} {user.username} <Icon type="down" />
-          </a>
-        </Dropdown>
-      );
+      if (!mobileMode) {
+        loginLabel = (
+          <Dropdown overlay={menu} trigger={['click']}>
+            <a className="ant-dropdown-link">
+              {user.username} <Icon type="down" />
+            </a>
+          </Dropdown>
+        );
+      }
     } else {
       loginLabel = (
         <NavLink exact to="/login">
@@ -102,7 +110,7 @@ class Header extends Component {
     }
 
     return (
-      <nav id="Header" className="navbar navbar-default">
+      <nav id="Header" className="navbar navbar-default navbar-fixed-top">
         <div className="container">
           <div className="navbar-header">
             <button
@@ -124,13 +132,30 @@ class Header extends Component {
             </NavLink>
           </div>
           <div id="navbar" className={`navbar-collapse collapse ${showMobileMenu ? 'in' : ''}`}>
-            <ul className="nav navbar-nav">
-              <li><NavLink exact to="/">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
-              <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
-              { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
-              <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
-              { /* <li><NavLink exact to="/webboard">{translate('เว็บบอร์ด')}</NavLink></li> */ }
-            </ul>
+            {mobileMode && user.username && user.verify ? (
+              <ul className="nav navbar-nav">
+                <li><NavLink exact to="/condominium/for-sale/bangkok">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
+                <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
+                { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
+                <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
+                <li role="separator" className="divider" />
+                <li className="dropdown-header">บัญชีผู้ใช้</li>
+                <li><NavLink exact to="/account/property">รายการที่ประกาศ</NavLink></li>
+                <li><NavLink exact to="/account/wishlist">รายการที่บันทึกไว้</NavLink></li>
+                <li><NavLink exact to="/account/profile">การตั้งค่าบัญชีผู้ใช้</NavLink></li>
+                <li><NavLink exact to="/account/changepassword">เปลี่ยนรหัสผ่าน</NavLink></li>
+                <li role="separator" className="divider" />
+                <li><a role="button" tabIndex="0" onClick={() => this.logout()}>ออกจากระบบ</a></li>
+              </ul>
+            ) : (
+              <ul className="nav navbar-nav">
+                <li><NavLink exact to="/condominium/for-sale/bangkok">{translate('ต้องการซื้อ - เช่า')}</NavLink></li>
+                <li><NavLink exact to="/sell">{translate('ประกาศขาย - เช่า')}</NavLink></li>
+                { /* <li><NavLink exact to="/agent">{translate('ค้นหานายหน้า')}</NavLink></li> */ }
+                <li><NavLink exact to="/news">{translate('ข่าวสารและบทความ')}</NavLink></li>
+                { /* <li><NavLink exact to="/webboard">{translate('เว็บบอร์ด')}</NavLink></li> */ }
+              </ul>
+            )}
             <ul className="nav navbar-nav navbar-right">
               {/* <li className="language">
                 <a role="button" tabIndex="0" onClick={() => { dispatch(IntlActions.setLocale('th')); }}>ไทย</a>
@@ -153,6 +178,7 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.data,
     userFetchSuccess: state.user.fetchSuccess,
+    mobileMode: state.core.mobileMode,
   };
 };
 

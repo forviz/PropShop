@@ -1,6 +1,6 @@
 .NearbyPlace {
 
-	height: 500px;
+	// height: 500px;
 
 	.tabs-block {
 		.type {
@@ -48,6 +48,21 @@
 	.place-map {
 		width: 100%;
 		height: 500px;
+	}
+
+	.result-lists {
+		overflow: scroll;
+    height: 430px;
+		.clearfix {
+			.pull-left {
+				width: 80%;
+			}
+			.pull-right {
+				width: 20%;
+				padding-right: 20px;
+				text-align: right;
+			}
+		}
 	}
 	
 }

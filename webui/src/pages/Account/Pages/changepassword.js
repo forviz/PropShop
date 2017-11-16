@@ -4,7 +4,6 @@ import { Input, Spin, Alert } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 import { firebaseConnect, pathToJS } from 'react-redux-firebase';
-import _ from 'lodash';
 
 import * as ChangepasswordActions from '../../../actions/changepassword-actions';
 
@@ -18,6 +17,11 @@ class Changepassword extends Component {
     editSuccess: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string.isRequired,
     // authError: PropTypes.shape(),
+  }
+
+  componentWillUnmount() {
+    const { clearState } = this.props.actions;
+    clearState();
   }
 
   setInput = (key, value) => {
@@ -89,7 +93,9 @@ class Changepassword extends Component {
             <div className="layout-right">
               <Spin tip="Loading..." spinning={editing}>
                 <div className="layout-container">
-                  <h1>เปลี่ยนรหัสผ่าน</h1>
+                  <div className="topic">
+                    <h1>เปลี่ยนรหัสผ่าน</h1>
+                  </div>
                   {editSuccess === true &&
                     <div className="form-group" style={{ marginTop: 20 }}>
                       <Alert
@@ -152,6 +158,7 @@ const actions = {
   inputForm: ChangepasswordActions.inputForm,
   changePassword: ChangepasswordActions.changePassword,
   changePasswordError: ChangepasswordActions.changePasswordError,
+  clearState: ChangepasswordActions.clearState,
 };
 
 const mapDispatchToProps = (dispatch) => {

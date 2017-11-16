@@ -141,8 +141,12 @@
 		padding: 15px;
 		position: relative;
 		.list {
+			margin-bottom: 20px;
+			&:last-child {
+				margin-bottom: 0;
+			}
 			ul{
-				margin-top: 10px;
+				// margin-top: 10px;
 			}
 			li.item {
 				padding: 0;
@@ -151,6 +155,11 @@
 			li.item:first-child {
 				// padding-left: 15px;
 			}
+		}
+		.filter-result,
+		.display-type {
+			display: inline-block;
+    	vertical-align: middle;
 		}
 	}
 

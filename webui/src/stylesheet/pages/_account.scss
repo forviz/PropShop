@@ -1,11 +1,27 @@
 #Account {
-  margin: 40px 0;
-  h1 {
-    font-family: $sukumvit-bold;
-    color: $text-green;
-    font-size: 36px;
-  }
+  padding: 40px 0;
   .ant-menu-root {
     border: 1px solid $border-color;
+    @media screen and (max-width: 991px) {
+      display: none;
+    }
+    .ant-menu-submenu-title {
+      font-size: 14px;
+    }
+    li.ant-menu-item {
+      a {
+        font-size: 14px;
+      }
+    }
+  }
+  #Pages {
+    .topic {
+      margin-bottom: 10px;
+      h1 {
+        font-family: $sukumvit-bold;
+        color: $text-green;
+        font-size: 28px;
+      }
+    }
   }
 }

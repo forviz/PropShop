@@ -7,10 +7,10 @@
   },
   "extends": "airbnb",
   "env": {
-    "browser": true,
+    "browser": true
   },
   "globals": {
-    "google": false,
+    "google": false
   },
   "plugins": [
     "react"
@@ -25,6 +25,7 @@
     "react/forbid-prop-types": "warn",
     "import/prefer-default-export": "warn",
     "max-len": ["error", 150],
-    "linebreak-style": "off"
+    "linebreak-style": "off",
+    "no-unused-expressions": ["error", { "allowTernary": true }]
   }
 }

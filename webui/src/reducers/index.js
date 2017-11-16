@@ -6,6 +6,8 @@ import config from './config';
 import banners from './banners';
 import realestates from './realestates';
 import sell from './sell';
+import core from './core';
+import content from './content';
 
 // Entities
 import areas from './entities/areas';
@@ -33,6 +35,8 @@ export default combineReducers({
   banners,
   realestates,
   sell,
+  core,
+  content,
   entities: combineReducers({
     areas,
     properties,

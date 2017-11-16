@@ -19,7 +19,7 @@ export const getNewsProp = (tab, page) => {
     dispatch(fetchingNews(true));
     fetchNewsProp(tab, page)
     .then((result) => {
-      //if (result.status === 'ERROR') notification.error({ message: result.status, description: result.message });
+      // if (result.status === 'ERROR') notification.error({ message: result.status, description: result.message });
       dispatch(receiveNewsProp(result));
       dispatch(fetchingNews(false));
     });
@@ -37,7 +37,7 @@ export const getNewsBanner = (tab) => {
   return (dispatch) => {
     fetchNewsBanner(tab)
     .then((result) => {
-      //if (result.status === 'ERROR') notification.error({ message: result.status, description: result.message });
+      // if (result.status === 'ERROR') notification.error({ message: result.status, description: result.message });
       dispatch(receiveNewsBanner(result));
     });
   };

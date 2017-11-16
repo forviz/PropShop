@@ -3,8 +3,6 @@ import T from 'prop-types';
 import { Input, Select, Button, Spin, Form } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
-import withScriptjs from 'react-google-maps/lib/async/withScriptjs';
 import _ from 'lodash';
 import numeral from 'numeral';
 import FontAwesome from 'react-fontawesome';
@@ -13,6 +11,7 @@ import NumberFormat from 'react-number-format';
 import SelectSellType from '../../components/SelectSellType';
 import SelectResidentialType from '../../components/SelectResidentialType';
 import SelectRoom from '../../components/SelectRoom';
+import MapMarker from '../../components/Map/MapMarker';
 
 import provinceJSON from './province.json';
 import amphurJSON from './amphur.json';
@@ -22,27 +21,6 @@ import * as SellActions from '../../actions/sell-actions';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
-
-const AsyncGettingStartedExampleGoogleMap = withScriptjs(
-  withGoogleMap(
-    props => (
-      <GoogleMap
-        ref={props.onMapLoad}
-        defaultZoom={props.zoom}
-        defaultCenter={props.center}
-        onClick={props.onMapClick}
-      >
-        {props.markers.map(marker => (
-          <Marker
-            {...marker}
-            // icon="https://material.io/guidelines/static/spec/images/callouts/default.svg"
-            // onRightClick={() => props.onMarkerRightClick(marker)}
-          />
-        ))}
-      </GoogleMap>
-    ),
-  ),
-);
 
 class Step0 extends Component {
 
@@ -87,52 +65,6 @@ class Step0 extends Component {
     const { saveStep } = this.props.actions;
     return saveStep('step0', newData);
   }
-
-  handleMapLoad = this.handleMapLoad.bind(this);
-  handleMapClick = this.handleMapClick.bind(this);
-  // handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
-
-  handleMapLoad(map) {
-    this._mapComponent = map;
-    if (map) {
-      console.log('handleMapLoad', map);
-    }
-  }
-
-  handleMapClick(event) {
-    console.log('handleMapClick', event);
-
-    const nextMarkers = [
-      {
-        position: event.latLng,
-        defaultAnimation: 2,
-        key: Date.now(), // Add a key property for: http://fb.me/react-warning-keys
-      },
-    ];
-
-    const newData = {
-      ...this.props.data,
-      googleMap: {
-        ...this.props.data.googleMap,
-        markers: nextMarkers,
-      },
-    };
-    this.setData(newData);
-
-    // if (nextMarkers.length === 3) {
-    //   this.props.toast(
-    //     `Right click on the marker to remove it`,
-    //     `Also check the code!`
-    //   );
-    // }
-  }
-
-  // handleMarkerRightClick(targetMarker) {
-  //   const nextMarkers = this.state.markers.filter(marker => marker !== targetMarker);
-  //   this.setState({
-  //     markers: nextMarkers,
-  //   });
-  // }
 
   delay = (() => {
     let timer = 0;
@@ -232,7 +164,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      areaSize: value.replace(/\D/g, ''),
+      areaSize: value.replace(/[a-zA-Zก-ฮ]/g, ''),
       areaSize0: '',
       areaSize1: '',
     };
@@ -280,7 +212,7 @@ class Step0 extends Component {
     const value = e.target.value;
     const newData = {
       ...this.props.data,
-      landSize: value.replace(/\D/g, ''),
+      landSize: value.replace(/[a-zA-Zก-ฮ]/g, ''),
       landSize0: '',
       landSize1: '',
     };
@@ -446,6 +378,30 @@ class Step0 extends Component {
 
   findDistrict = (id) => {
     return _.find(districtJSON, (district) => { return district.DISTRICT_ID === id; });
+  }
+
+  handleMapMarkerChange = (lat, lng) => {
+    const newData = {
+      ...this.props.data,
+      googleMap: {
+        markers: {
+          position: {
+            lat,
+            lng,
+          },
+        },
+      },
+    };
+    this.setData(newData);
+  }
+
+  handleMapMarkerSearch = (data) => {
+    const newData = {
+      ...this.props.data,
+      project: data.name,
+      address: data.address,
+    };
+    this.setData(newData);
   }
 
   render() {
@@ -725,16 +681,48 @@ class Step0 extends Component {
                   <h4>รายละเอียดที่ตั้ง</h4>
                   <div className="row">
                     <div className="col-md-10 col-md-offset-1 custom-col">
-                      <div className="form-group">
-                        <label>
-                          {data.requiredField.includes('project') &&
-                            <span className="text-red">*&nbsp;</span>
-                          }
-                          ชื่อโครงการ
-                        </label>
-                        <Input value={data.project} onChange={this.handleProjectName} />
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div style={{ width: '100%', height: 500, marginBottom: 60 }}>
+                            <MapMarker center={data.googleMap.markers.position} onSearch={this.handleMapMarkerSearch} onChange={this.handleMapMarkerChange} />
+                          </div>
+                        </div>
                       </div>
                       <div className="row">
+                        <div className="col-md-12">
+                          <FormItem
+                            label="ชื่อโครงการ"
+                            colon={false}
+                          >
+                            {getFieldDecorator('project', {
+                              initialValue: data.project,
+                              rules: [{
+                                required: false,
+                              }],
+                            })(
+                              <Input value={data.project} onChange={this.handleProjectName} />,
+                            )}
+                          </FormItem>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <FormItem
+                            label="ที่อยู่"
+                            colon={false}
+                          >
+                            {getFieldDecorator('address', {
+                              initialValue: data.address,
+                              rules: [{
+                                required: false,
+                              }],
+                            })(
+                              <Input value={data.address} onChange={this.handleAddress} />,
+                            )}
+                          </FormItem>
+                        </div>
+                      </div>
+                      {/*<div className="row">
                         <div className="col-md-4">
                           <FormItem
                             label="จังหวัด"
@@ -874,29 +862,7 @@ class Step0 extends Component {
                             </Button>
                           </FormItem>
                         </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-12">
-                          <div style={{ width: '100%', height: 500 }}>
-                            <AsyncGettingStartedExampleGoogleMap
-                              googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&key=${process.env.REACT_APP_APIKEY}`}
-                              loadingElement={<Spin />}
-                              containerElement={
-                                <div style={{ height: '100%' }} />
-                              }
-                              mapElement={
-                                <div style={{ height: '100%' }} />
-                              }
-                              zoom={data.googleMap.zoom}
-                              center={data.googleMap.markers[0].position}
-                              onMapLoad={this.handleMapLoad}
-                              onMapClick={this.handleMapClick}
-                              markers={data.googleMap.markers}
-                              // onMarkerRightClick={this.handleMarkerRightClick}
-                            />
-                          </div>
-                        </div>
-                      </div>
+                      </div>*/}
                     </div>
                   </div>
                 </section>
