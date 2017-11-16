@@ -2,7 +2,7 @@
 // import * as contentfulManagement from 'contentful-management';
 import _ from 'lodash';
 
-import { createPropertyApi, deleteAll, deleteAll2, getPropertiesByVendor, deletePropertyApi } from './property';
+import { createPropertyApi, deleteAll, deleteAll2, getPropertiesByVendor, deletePropertyApi, getPropertiesById } from './property';
 
 import * as helpers from '../helpers';
 
@@ -27,7 +27,7 @@ const vendorList = () => {
 };
 
 const vendorFunction = {};
-vendorFunction.getVendorAp = async (vendor, updateImage = 'false') => {
+vendorFunction.getVendorAp = async (vendor, updateImage = 'false', id = '') => {
   const msg = {
     status: 'success',
     message: '',
@@ -53,7 +53,13 @@ vendorFunction.getVendorAp = async (vendor, updateImage = 'false') => {
       object: true,
     });
 
-    const properties = dataParser.document.Clients.Client.properties.Property;
+    let properties = dataParser.document.Clients.Client.properties.Property;
+
+    if (id) {
+      properties = _.filter(properties, (property) => {
+        return property.propertyid === id;
+      });
+    }
 
     const newItemIds = [];
     const oldItemIds = await getPropertiesByVendor(vendor);
@@ -108,7 +114,7 @@ vendorFunction.getVendorAp = async (vendor, updateImage = 'false') => {
           project_th: property.Project.project_th,
           areaSize: property.Description.FloorSize.floorSize,
           areaSizeUnits: property.Description.FloorSize.floorSizeUnits,
-          coverImage: _.get(property.images, 'image[0].image.$t'),
+          coverImage: _.get(property.images, 'image[0].image.$t') || _.get(property.images, 'image.image.$t'),
           images: _.get(property.images, 'image[0].image.$t') ? _.map(property.images.image, (image, index) => {
             if (index > 0) {
               return image.image.$t;
@@ -148,8 +154,6 @@ vendorFunction.getVendorAp = async (vendor, updateImage = 'false') => {
 };
 
 export const process = async (req, res) => {
-  // const result = await deleteAll();
-  // return res.json(result);
   const { vendor } = req.params;
   if (!_.includes(vendorList(), vendor)) {
     return res.json({
@@ -167,6 +171,24 @@ export const process = async (req, res) => {
 };
 
 export const process2 = async (req, res) => {
+  const { vendor, id } = req.params;
+  if (!_.includes(vendorList(), vendor)) {
+    return res.json({
+      status: 'fail',
+      error: 'no vendor',
+    });
+  }
+
+  const property = await getPropertiesById(id);
+  const referenceKey = _.get(property, 'items.0.fields.referenceKey');
+
+  const funcstr = `getVendor${helpers.capitalizeFirstLetter(vendor)}`;
+  const result = await vendorFunction[funcstr](vendor, 'true', referenceKey);
+  helpers.logs('summary.json', result);
+  return res.json(result);
+};
+
+export const process3 = async (req, res) => {
   const result = await deleteAll2();
   return res.json(result);
 };

@@ -53976,4 +53976,221 @@
       "en-US": "C11081704"
     }
   }
+}{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "zucfr6asi8cw"
+      }
+    },
+    "id": "2drBCBIJCASII4C6ciKoMK",
+    "type": "Entry",
+    "createdAt": "2017-09-14T10:32:59.577Z",
+    "updatedAt": "2017-11-16T08:02:52.867Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6JZfZNsqqdNJjj1fOYCZv6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6JZfZNsqqdNJjj1fOYCZv6"
+      }
+    },
+    "publishedCounter": 9,
+    "version": 18,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6JZfZNsqqdNJjj1fOYCZv6"
+      }
+    },
+    "publishedVersion": 17,
+    "firstPublishedAt": "2017-09-14T10:33:00.088Z",
+    "publishedAt": "2017-11-16T08:02:52.867Z",
+    "contentType": {
+      "sys": {
+        "type": "Link",
+        "linkType": "ContentType",
+        "id": "property"
+      }
+    }
+  },
+  "fields": {
+    "propertyType": {
+      "en-US": "Condominium"
+    },
+    "nameEn": {
+      "en-US": "Condominium For Sale Noble Revolve Ratchada 2 Ratchadaphisek Bangkok - C27011607 | Bangkok Citismart"
+    },
+    "nameTh": {
+      "en-US": "ขาย คอนโด โนเบิล รีวอลฟ์ รัชดา 2 รัชดาภิเษก กรุงเทพมหานคร - C27011607 | Bangkok Citismart"
+    },
+    "description": {
+      "en-US": {
+        "en": "Noble Revolve Ratchada 2 is a condominium surrounded by business area which soon will become new CBD, only 80 metres to Thailand Cultural Centre MRT. To buy, sell, or rent Noble Revolve Ratchada 2 condominium, please don’t hesitate to contact us. We, Bangkok CitiSmart, and our professional property agent are ready to help you.\\nNoble Revolve Ratchada 2 condo for sale, for rent in Bangkok\\n\\nLocations \\nSoi Ratchadaphisek 6, Ratchadapisek Road, Huaykwang, Bangkok\\n\\nBuilding Information     \\n42-storey 1 Building , 755 units.\\n\\nLand Area \\n3 - 1 - 66  Rai\\n\\nUnit Type   \\n1 bedroom 22 - 25 sq.m.\\n2 bedrooms 38 - 50 sq.m.\\n\\nProject's Owner   \\nNoble \\n",
+        "th": "Noble Revolve Ratchada 2 (โนเบิล รีวอลฟ์ รัชดา 2) คอนโดล้อมรอบไปด้วยสิ่งอำนวยความสะดวกและแหล่งธุรกิจ ที่แถวๆรัชดา-พระราม 9 กำลังจะเป็น CBD เต็มรูปแบบแห่งใหม่ในเร็ววัน โดยตัวโครงการมีจุดขายเด่นๆเลยก็คือ รถไฟฟ้า MRT สถานีศูนย์วัฒนธรรมแห่งประเทศไทย ที่อยู่ห่างจากโครงการไปเพียง 80 เมตร  ซื้อ ขาย หรือ เช่า คอนโด Noble Revolve รัชดา 2 ติดต่อหาเรา Bangkok CitiSmart ได้ทันที เพื่อให้ผู้เชี่ยวชาญของเราได้แนะนำคอนโดให้กับท่าน\\n\\nที่ตั้งโครงการ     \\nซอยรัชดาภิเษก 6 ถนนรัชดาภิเษก แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพฯ\\n\\nข้อมูลอาคาร       \\nคอนโดมิเนียม สูง 42 ชั้น จำนวน 1 อาคาร จำนวน 755 ยูนิต \\n\\nพื้นที่โครงการ  \\n3 - 1 - 66 ไร่\\n\\nรูปแบบห้องพักอาศัย \\n1 ห้องนอน  22 - 25 ตร.ม.\\n2 ห้องนอน 38 - 50 ตร.ม.\\n\\nเจ้าของโครงการ  \\nโนเบิล \\n"
+      }
+    },
+    "location": {
+      "en-US": {
+        "soi": "",
+        "full": {
+          "en": "Noble Revolve Ratchada 2, Huai Khwang, Huai Khwang, Bangkok",
+          "th": "โนเบิล รีวอลฟ์ รัชดา 2, แขวง ห้วยขวาง  ,เขต ห้วยขวาง , กรุงเทพมหานคร"
+        },
+        "areas": [],
+        "mooNo": "",
+        "street": "",
+        "unitNo": "",
+        "floorNo": "",
+        "summary": {
+          "en": "",
+          "th": ""
+        },
+        "zipcode": "",
+        "district": "",
+        "latitude": "",
+        "province": "",
+        "longitude": "",
+        "buildingNo": "",
+        "subDistrict": "",
+        "publicTransports": [
+          {
+            "name": "0",
+            "type": "BTS",
+            "distance": 0
+          },
+          {
+            "name": "0",
+            "type": "MRT",
+            "distance": 0
+          },
+          {
+            "name": "0",
+            "type": "BRT",
+            "distance": 0
+          }
+        ]
+      }
+    },
+    "attributes": {
+      "en-US": {
+        "numFloors": "",
+        "yearBuilt": "",
+        "numBedrooms": "",
+        "numBathrooms": ""
+      }
+    },
+    "areaLand": {
+      "en-US": {
+        "unit": "",
+        "value": "",
+        "width": "",
+        "detail": "",
+        "height": ""
+      }
+    },
+    "forSale": {
+      "en-US": true
+    },
+    "forRent": {
+      "en-US": false
+    },
+    "priceSale": {
+      "en-US": {
+        "type": "",
+        "until": "",
+        "value": "3410000",
+        "detail": "",
+        "currency": "THB",
+        "discount": 0
+      }
+    },
+    "priceRent": {
+      "en-US": {
+        "type": "",
+        "until": "",
+        "value": "",
+        "detail": "",
+        "currency": "THB",
+        "discount": 0
+      }
+    },
+    "coverImage": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "1E5wpur3ugc6Cc20C4QqCG"
+        }
+      }
+    },
+    "tags": {
+      "en-US": [
+        "Security",
+        "Sauna",
+        "Garden",
+        "Fitness",
+        "Lobby",
+        "Laundry",
+        "Wi-Fi Internet"
+      ]
+    },
+    "numBedrooms": {
+      "en-US": 1
+    },
+    "numBathrooms": {
+      "en-US": 1
+    },
+    "locationMarker": {
+      "en-US": {
+        "lon": 100.56912625668338,
+        "lat": 13.763416401844871
+      }
+    },
+    "priceSaleValue": {
+      "en-US": 3410000
+    },
+    "priceRentValue": {
+      "en-US": 0
+    },
+    "areaSize": {
+      "en-US": 22.58
+    },
+    "agent": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "SnPBqoICmOUOgMi4ikISq"
+        }
+      }
+    },
+    "enable": {
+      "en-US": true
+    },
+    "approve": {
+      "en-US": true
+    },
+    "projectNameEn": {
+      "en-US": "Noble Revolve Ratchada 2"
+    },
+    "projectNameTh": {
+      "en-US": "โนเบิล รีวอลฟ์ รัชดา 2"
+    },
+    "referenceName": {
+      "en-US": "ap"
+    },
+    "referenceKey": {
+      "en-US": "C27011607"
+    }
+  }
 }

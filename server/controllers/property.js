@@ -1003,3 +1003,12 @@ export const getPropertiesByVendor = async (vendor) => {
   }
   return ids;
 };
+
+export const getPropertiesById = async (id) => {
+  const result = await client.getEntries({
+    content_type: 'property',
+    'sys.id': id,
+  })
+  .catch(error => error);
+  return result;
+};

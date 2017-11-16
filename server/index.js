@@ -121,7 +121,8 @@ app.get(`${apiPrefix}/news`, newsController.getNews);
 app.get(`${apiPrefix}/content/:id`, contentController.get);
 
 app.get(`${apiPrefix}/vendor/:vendor`, apiController.process);
-app.get(`${apiPrefix}/delete`, apiController.process2);
+app.get(`${apiPrefix}/vendor/:vendor/update/:id`, apiController.process2);
+app.get(`${apiPrefix}/delete`, apiController.process3);
 
 /**
  * CIC App codebase: WEBUI

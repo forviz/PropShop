@@ -221,6 +221,8 @@
 						@media (min-width: 991px) {
 							border-right: 0;
 							border-bottom: 0;
+							height: 70px;
+    					line-height: 55px;
 							&:first-child {
 								border-top: 0;
 							}
